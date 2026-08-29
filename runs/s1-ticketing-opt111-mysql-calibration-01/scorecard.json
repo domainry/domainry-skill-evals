@@ -1,0 +1,60 @@
+{
+  "benchmark": "s1-ticketing",
+  "skill_version": "v0.0.111-local.20260824-business-flow-cases",
+  "run_id": "s1-ticketing-opt111-mysql-calibration-01",
+  "pass_at_1": false,
+  "A_source": {
+    "A1": "receipts-derived",
+    "A2": "receipts-derived",
+    "A3": "receipts-derived",
+    "A4": "not_measurable",
+    "A5": "not_measurable"
+  },
+  "A1_validate_first_pass": true,
+  "A1_validate_error_count": 0,
+  "A2_apply_first_pass": false,
+  "A3_build_first_pass": true,
+  "A4_acceptance_first_pass": null,
+  "A5_rework_rounds": null,
+  "A6_false_done": true,
+  "B1_golden_hit_rate": 0.0,
+  "B1_hit_detail": {
+    "F01": "missing",
+    "F02": "missing",
+    "F03": "missing",
+    "F04": "missing",
+    "F05": "missing",
+    "F06": "missing",
+    "F07": "missing",
+    "F08": "missing",
+    "F09": "missing",
+    "F10": "missing",
+    "F11": "missing",
+    "F12": "missing",
+    "F13": "missing",
+    "F14": "missing",
+    "F15": "missing",
+    "F16": "missing"
+  },
+  "B2_silent_downgrade_count": 0,
+  "B3_platform_reuse_rate": null,
+  "C1_wall_clock_seconds": 1986,
+  "C2_total_tokens": 19704293,
+  "C3_reading_token_ratio": null,
+  "C4_cli_invocations": 0,
+  "C4_cli_retries": 0,
+  "C5_stage_seconds": {
+    "requirements": null,
+    "model": 1515,
+    "apply": 5,
+    "implement": 107,
+    "verify": 359,
+    "acceptance": null
+  },
+  "C5_stage_seconds_source": "mtime-approx",
+  "D2_human_interventions": 0,
+  "failure_attribution": {
+    "model_capability": 3,
+    "benchmark_defect": 1
+  }
+}

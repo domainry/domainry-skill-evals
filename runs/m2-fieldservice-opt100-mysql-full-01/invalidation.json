@@ -1,0 +1,29 @@
+{
+  "contract_version": "domainry-eval-run-invalidation-v1",
+  "run_id": "m2-fieldservice-opt100-mysql-full-01",
+  "state": "invalid",
+  "reason_code": "external_environment_identity_drift",
+  "reason": "The shared installed Skill, packaged CLI, and Plane changed from the frozen Opt100 identity to Opt104 while the single Agent session was still running.",
+  "run_started_at": "2026-08-24T08:13:09+0800",
+  "drift_observed_at": "2026-08-24T10:20:33+0800",
+  "installed_gate_mtime": "2026-08-24T10:00:09+0800",
+  "frozen_identity": {
+    "version": "v0.0.100-opt100.f04828a8",
+    "skill_tree_sha256": "55db994931e34705f12e477f0ee93fa281514f0af0c8e5215b054d65b34dc6c1",
+    "cli_sha256": "fa3b2219f8c138fcf3f677b78432211fa4e7c49ad53cb9d8d5a0c17283ab9b14"
+  },
+  "observed_identity": {
+    "version": "v0.0.104-opt104.873ec559",
+    "skill_tree_sha256": "d1fa28abd223cf71f0888d8c5080f14f95a90163d0285dc1c128330740c69a41",
+    "cli_sha256": "7d226978945f1fdbe3a9c6bdb4bbd6c7285997c6dd3c5bea1d6f3f7ba3c6812c",
+    "plane_health": "9/9 passed"
+  },
+  "last_valid_interpretation": "Diagnostic evidence only; not a formal full-flow timing baseline and not pass-at-1 evidence.",
+  "human_intervention_count_before_invalidation": 0,
+  "cleanup": {
+    "preserve_all_run_artifacts": true,
+    "preserve_mysql_schema": true,
+    "stop_invalid_agent": true,
+    "stop_invalid_runtime": true
+  }
+}

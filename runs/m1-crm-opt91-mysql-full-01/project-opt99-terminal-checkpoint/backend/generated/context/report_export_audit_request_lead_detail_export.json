@@ -1,0 +1,106 @@
+{
+  "contract_version": "domainry-action-context-pack-v3",
+  "action_key": "report_export_audit.request_lead_detail_export",
+  "module_key": "crm",
+  "handler_name": "RequestLeadDetailExport",
+  "action_description": "Project-owned implementation of 申请线索明细导出",
+  "metadata_snapshot_sha256": "3d88806d18f2d7dae321c4b9c6fff108dcb7dbe1898f4e65827c93e6b5a3e4ab",
+  "domain_sdk_contract_version": "runtime-domain-sdk-v22",
+  "documentation_path": "generated/docs/report_export_audit_request_lead_detail_export.md",
+  "action_source_path": "actions/crm/report_export_audit_request_lead_detail_export.go",
+  "action_test_path": "actions/crm/report_export_audit_request_lead_detail_export_test.go",
+  "read_order": [
+    {
+      "path": "generated/docs/report_export_audit_request_lead_detail_export.md",
+      "purpose": "focused Action contract and authorized domain surface",
+      "symbols": null
+    },
+    {
+      "path": "generated/capabilities/report_export_audit_request_lead_detail_export.gen.go",
+      "purpose": "typed Handler input, output, errors, and minimum capabilities",
+      "symbols": [
+        "RequestLeadDetailExportInput",
+        "RequestLeadDetailExportOutput",
+        "RequestLeadDetailExportCapabilities"
+      ]
+    },
+    {
+      "path": "generated/schema/report_export_audit.gen.go",
+      "purpose": "authorized object types and field contracts",
+      "symbols": [
+        "ReportExportAudit"
+      ]
+    },
+    {
+      "path": "actions/crm/report_export_audit_request_lead_detail_export.go",
+      "purpose": "user-owned Action implementation",
+      "symbols": null
+    },
+    {
+      "path": "actions/crm/report_export_audit_request_lead_detail_export_test.go",
+      "purpose": "user-owned Action tests",
+      "symbols": null
+    }
+  ],
+  "input": [
+    {
+      "key": "reason",
+      "name": "导出原因",
+      "description": "",
+      "type": "text",
+      "object_key": "",
+      "field_key": "",
+      "value_domain_key": "",
+      "required": true,
+      "repeated": false
+    },
+    {
+      "key": "request_id",
+      "name": "请求 ID",
+      "description": "",
+      "type": "text",
+      "object_key": "",
+      "field_key": "",
+      "value_domain_key": "",
+      "required": true,
+      "repeated": false
+    }
+  ],
+  "output": [
+    {
+      "key": "audit_id",
+      "name": "导出审计 ID",
+      "description": "",
+      "type": "object_id",
+      "object_key": "report_export_audit",
+      "field_key": "",
+      "value_domain_key": "",
+      "required": true,
+      "repeated": false
+    },
+    {
+      "key": "status",
+      "name": "状态",
+      "description": "",
+      "type": "value_domain",
+      "object_key": "",
+      "field_key": "",
+      "value_domain_key": "report_export_audit_request_lead_detail_export_status",
+      "required": true,
+      "repeated": false
+    }
+  ],
+  "objects": [
+    {
+      "key": "report_export_audit",
+      "name": "报表导出审计",
+      "operations": [
+        "create"
+      ],
+      "schema_path": "generated/schema/report_export_audit.gen.go",
+      "data_path": "generated/data/report_export_audit.gen.go"
+    }
+  ],
+  "connectors": null,
+  "notifications": null
+}

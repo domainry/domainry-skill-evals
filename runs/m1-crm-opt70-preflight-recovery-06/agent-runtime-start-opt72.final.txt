@@ -1,0 +1,30 @@
+Runtime did not start. The fresh MySQL schema was created successfully, but the start Gate rejected its invocation before launching `domainry-cli`. Per your failure rule, I did not retry or run status.
+
+- Session: `01a02b66-07d2-7330-94e2-2dba95d68266`
+- Start Gate: `verify.managed_runtime_start_executed_once_for_the_curr.f9a70c3d` — pending
+- Status Gate: `verify.current_managed_runtime_health_is_running_curren.db7d6432` — pending
+- Diagnostic: `{"contract_version":"domainry-development-gates-error-v2","state":"failed","message":"run requires valid identity bindings"}`
+- Actual Runtime start/status command counts: `0 / 0`
+- Process receipt, PID, health, and currentness: unavailable
+- Address `127.0.0.1:19091`: not bound
+- Runtime left running: no Runtime was launched
+
+Database:
+
+- Driver/cohort: MySQL, `127.0.0.1:3306`
+- Schema: `domainry_m1_opt72_runtime_01`
+- Creation count: `1`, exit `0`, duration `0.02 s`
+- No inspection, retry, drop, truncate, reuse, SQLite access, or unrelated-schema access
+- DSN/password were never printed or persisted
+
+Frozen checkpoint hashes matched the supplied package receipt, manifest, Runtime binary, verification receipt (`10/10`), delivery, and finalized source identities.
+
+Timing and model usage:
+
+- Wall/active: `469.900778 s` (`7m49.900778s`), continuous with no blocking wait
+- Model: `gpt-5.6-sol`, high reasoning
+- Pre-final-response usage snapshot: input `2,704,702`; cached input `2,585,344`; output `18,927`; reasoning output `8,583`; total `2,723,629`
+
+The handoff is recorded in [the new session TODO](/Users/tiger/Projects/domainry-skill-evals/runs/m1-crm-opt70-preflight-recovery-06/project/.domainry/development/01a02b66-07d2-7330-94e2-2dba95d68266.md). No existing project-owned or generated source was edited.
+
+A recovery requires new authorization for a fresh schema/cohort and fresh session Gates; this schema can no longer be treated as absent. After successful start/status, the exact semantic canary is PRD journey `J07 / R07-R10,R13`: director approval of a fresh pending conversion, proving atomic terminal approval, converted lead, exactly one customer, audit and requester Inbox notification, plus sales-rep denial, second-director race, replay, and restart invariants. No canary, acceptance, or completion is claimed.

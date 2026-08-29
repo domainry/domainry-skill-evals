@@ -1,0 +1,23 @@
+{
+  "benchmark": "s1-ticketing",
+  "version": 1,
+  "note": "评分金标准。agent 不可见。probe 字段描述独立验收脚本要执行的断言;expected_mechanism 用于计算 B3 平台复用率(agent 用平台元数据能力实现记 reuse,手写 Handler 实现记 custom,未实现记 missing)。",
+  "features": [
+    {"id": "F01", "priority": "P0", "req": "1",  "feature": "工单对象与字段完整(含 select 优先级枚举)", "probe": "读取对象 schema:title 必填、priority 为 4 值枚举、含 assignee/报告人/时间字段", "expected_mechanism": "metadata_object"},
+    {"id": "F02", "priority": "P0", "req": "2",  "feature": "状态机四态与合法转换", "probe": "对 new 工单依次执行合法转换全部成功;尝试 new→closed 直接跳转被拒绝", "expected_mechanism": "metadata_state_machine"},
+    {"id": "F03", "priority": "P0", "req": "3",  "feature": "客服创建与更新自有工单", "probe": "以 agent 身份创建工单成功;更新自己名下工单成功", "expected_mechanism": "metadata_crud"},
+    {"id": "F04", "priority": "P0", "req": "4",  "feature": "主管分派 + 站内通知", "probe": "主管分派后,被分派客服的 Inbox 出现通知", "expected_mechanism": "metadata_action_plus_notification"},
+    {"id": "F05", "priority": "P0", "req": "5",  "feature": "处理人执行 start/resolve 转换", "probe": "处理人执行 new→in_progress、in_progress→resolved 成功;非处理人客服执行被拒绝", "expected_mechanism": "metadata_state_machine"},
+    {"id": "F06", "priority": "P0", "req": "6",  "feature": "仅主管可关闭(正反探针)", "probe": "主管 resolved→closed 成功;客服同操作返回权限拒绝", "expected_mechanism": "metadata_authorization"},
+    {"id": "F07", "priority": "P1", "req": "7",  "feature": "主管 reopen", "probe": "主管对 resolved 工单执行 reopen 后状态为 in_progress", "expected_mechanism": "metadata_state_machine"},
+    {"id": "F08", "priority": "P0", "req": "8",  "feature": "创建幂等", "probe": "同一幂等键提交两次,数据库仅一条工单,第二次返回幂等回执", "expected_mechanism": "platform_idempotency"},
+    {"id": "F09", "priority": "P0", "req": "9",  "feature": "处理记录一对多、只增不改", "probe": "追加 comment 成功且关联正确;update/delete comment 被拒绝", "expected_mechanism": "metadata_object_relation"},
+    {"id": "F10", "priority": "P0", "req": "10", "feature": "客服行级数据域(RLS)", "probe": "客服列表仅含自己名下工单;按 ID 直接访问他人工单被拒绝或不可见", "expected_mechanism": "metadata_data_scope"},
+    {"id": "F11", "priority": "P0", "req": "11", "feature": "主管全量可见", "probe": "主管列表含全部种子工单", "expected_mechanism": "metadata_data_scope"},
+    {"id": "F12", "priority": "P1", "req": "12", "feature": "状态变化审计", "probe": "执行一次转换后审计记录含操作者、前后状态、时间", "expected_mechanism": "platform_audit"},
+    {"id": "F13", "priority": "P1", "req": "13", "feature": "按状态统计报表 + 报表权限", "probe": "主管取得按状态计数且与数据库一致;客服请求被拒绝", "expected_mechanism": "metadata_report"},
+    {"id": "F14", "priority": "P0", "req": "14", "feature": "列表有界分页", "probe": "列表接口带 page_size/cursor 语义;超量请求被截断", "expected_mechanism": "platform_pagination"},
+    {"id": "F15", "priority": "P1", "req": "15", "feature": "角色差异化菜单", "probe": "两角色分别登录,effective-menus 与角色权限一致(客服无报表入口)", "expected_mechanism": "metadata_menu"},
+    {"id": "F16", "priority": "P0", "req": "验收数据", "feature": "验收身份与种子数据", "probe": "两个非人类验收身份可登录;种子含 ≥3 条不同状态/处理人的工单", "expected_mechanism": "metadata_seed"}
+  ]
+}

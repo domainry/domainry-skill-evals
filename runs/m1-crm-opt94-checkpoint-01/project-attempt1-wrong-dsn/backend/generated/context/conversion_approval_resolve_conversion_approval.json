@@ -1,0 +1,193 @@
+{
+  "contract_version": "domainry-action-context-pack-v3",
+  "action_key": "conversion_approval.resolve_conversion_approval",
+  "module_key": "crm",
+  "handler_name": "ResolveConversionApproval",
+  "action_description": "Project-owned implementation of 处理转化审批",
+  "metadata_snapshot_sha256": "3d88806d18f2d7dae321c4b9c6fff108dcb7dbe1898f4e65827c93e6b5a3e4ab",
+  "domain_sdk_contract_version": "runtime-domain-sdk-v22",
+  "documentation_path": "generated/docs/conversion_approval_resolve_conversion_approval.md",
+  "action_source_path": "actions/crm/conversion_approval_resolve_conversion_approval.go",
+  "action_test_path": "actions/crm/conversion_approval_resolve_conversion_approval_test.go",
+  "read_order": [
+    {
+      "path": "generated/docs/conversion_approval_resolve_conversion_approval.md",
+      "purpose": "focused Action contract and authorized domain surface",
+      "symbols": null
+    },
+    {
+      "path": "generated/capabilities/conversion_approval_resolve_conversion_approval.gen.go",
+      "purpose": "typed Handler input, output, errors, and minimum capabilities",
+      "symbols": [
+        "ResolveConversionApprovalInput",
+        "ResolveConversionApprovalOutput",
+        "ResolveConversionApprovalCapabilities"
+      ]
+    },
+    {
+      "path": "generated/schema/conversion_approval.gen.go",
+      "purpose": "authorized object types and field contracts",
+      "symbols": [
+        "ConversionApproval"
+      ]
+    },
+    {
+      "path": "generated/schema/customer.gen.go",
+      "purpose": "authorized object types and field contracts",
+      "symbols": [
+        "Customer"
+      ]
+    },
+    {
+      "path": "generated/schema/lead.gen.go",
+      "purpose": "authorized object types and field contracts",
+      "symbols": [
+        "Lead"
+      ]
+    },
+    {
+      "path": "actions/crm/conversion_approval_resolve_conversion_approval.go",
+      "purpose": "user-owned Action implementation",
+      "symbols": null
+    },
+    {
+      "path": "actions/crm/conversion_approval_resolve_conversion_approval_test.go",
+      "purpose": "user-owned Action tests",
+      "symbols": null
+    }
+  ],
+  "input": [
+    {
+      "key": "comment",
+      "name": "审批意见",
+      "description": "",
+      "type": "long_text",
+      "object_key": "",
+      "field_key": "",
+      "value_domain_key": "",
+      "required": false,
+      "repeated": false
+    },
+    {
+      "key": "expected_updated_at",
+      "name": "预期版本",
+      "description": "",
+      "type": "datetime",
+      "object_key": "",
+      "field_key": "",
+      "value_domain_key": "",
+      "required": false,
+      "repeated": false
+    },
+    {
+      "key": "request_id",
+      "name": "请求 ID",
+      "description": "",
+      "type": "text",
+      "object_key": "",
+      "field_key": "",
+      "value_domain_key": "",
+      "required": true,
+      "repeated": false
+    },
+    {
+      "key": "resolution",
+      "name": "审批结果",
+      "description": "",
+      "type": "value_domain",
+      "object_key": "",
+      "field_key": "",
+      "value_domain_key": "conversion_approval_resolve_conversion_approval_resolution",
+      "required": true,
+      "repeated": false
+    }
+  ],
+  "output": [
+    {
+      "key": "approval_id",
+      "name": "审批 ID",
+      "description": "",
+      "type": "object_id",
+      "object_key": "conversion_approval",
+      "field_key": "",
+      "value_domain_key": "",
+      "required": true,
+      "repeated": false
+    },
+    {
+      "key": "customer_id",
+      "name": "客户 ID",
+      "description": "",
+      "type": "object_id",
+      "object_key": "customer",
+      "field_key": "",
+      "value_domain_key": "",
+      "required": false,
+      "repeated": false
+    },
+    {
+      "key": "lead_id",
+      "name": "线索 ID",
+      "description": "",
+      "type": "object_id",
+      "object_key": "lead",
+      "field_key": "",
+      "value_domain_key": "",
+      "required": true,
+      "repeated": false
+    },
+    {
+      "key": "resolution",
+      "name": "审批结果",
+      "description": "",
+      "type": "value_domain",
+      "object_key": "",
+      "field_key": "",
+      "value_domain_key": "conversion_approval_resolve_conversion_approval_resolution",
+      "required": true,
+      "repeated": false
+    }
+  ],
+  "objects": [
+    {
+      "key": "conversion_approval",
+      "name": "转化审批",
+      "operations": [
+        "conditional_update",
+        "get_for_update"
+      ],
+      "schema_path": "generated/schema/conversion_approval.gen.go",
+      "data_path": "generated/data/conversion_approval.gen.go"
+    },
+    {
+      "key": "customer",
+      "name": "客户",
+      "operations": [
+        "create"
+      ],
+      "schema_path": "generated/schema/customer.gen.go",
+      "data_path": "generated/data/customer.gen.go"
+    },
+    {
+      "key": "lead",
+      "name": "销售线索",
+      "operations": [
+        "conditional_update",
+        "get_for_update"
+      ],
+      "schema_path": "generated/schema/lead.gen.go",
+      "data_path": "generated/data/lead.gen.go"
+    }
+  ],
+  "connectors": null,
+  "notifications": [
+    {
+      "operation_key": "notification.intent.dispatch",
+      "event_type": "lead.conversion_approved"
+    },
+    {
+      "operation_key": "notification.intent.dispatch",
+      "event_type": "lead.conversion_rejected"
+    }
+  ]
+}

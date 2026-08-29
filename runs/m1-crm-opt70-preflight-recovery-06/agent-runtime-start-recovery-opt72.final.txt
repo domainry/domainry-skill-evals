@@ -1,0 +1,35 @@
+Recovery stopped at the first Gate, as required.
+
+- Session: `01a02b6e-c4c7-7fe1-bb2a-e01b867d98da`
+- TODO: [01a02b6e-c4c7-7fe1-bb2a-e01b867d98da.md](/Users/tiger/Projects/domainry-skill-evals/runs/m1-crm-opt70-preflight-recovery-06/project/.domainry/development/01a02b6e-c4c7-7fe1-bb2a-e01b867d98da.md)
+- CLI: `v0.18.0-opt72.d9d0874`
+- Gates created: exactly 2
+  - Start: `verify.managed_runtime_start_executes_exactly_once_thro.007dde79`
+  - Status: `verify.managed_runtime_status_executes_exactly_once_onl.900423f6`
+
+First Gate invocation failed during pre-execution validation:
+
+```json
+{"contract_version":"domainry-development-gates-error-v2","state":"failed","message":"managed Runtime start/status requires its dedicated start or current-health Gate"}
+```
+
+The TODO label did not satisfy the runner’s dedicated managed-start Gate classification. Per the no-retry/stop-on-failure instruction, I stopped.
+
+Results:
+
+- Gate-run invocation: 1; exit `2`; active duration `0.000002084s`
+- `runtime-process start`: `0` executions
+- `runtime-process status`: `0` executions
+- Process receipt/PID: none
+- Address/health/currentness: not established
+- Runtime left running: no Runtime was started by this session
+- Database actions/inspection: `0`
+- Cohort remained unconsumed: `domainry_m1_opt72_runtime_01`
+- Upstream model/source/verify/package commands: `0`
+- Semantic canary, acceptance, evaluator, scorer, cleanup: `0`
+
+The supplied checkpoint identities were not mutated or consumed. Gate sync observed source closure `85c907392323328055fe003957f516503cc858b1411d1ef94b2036d0aeef6754`; the caller-frozen finalized-source identity remains `fa63fcbc059050e4967f8b6e2d6482a2e5fb3b0ab38aff4fa1c1a68ee18311e2`.
+
+Remaining gaps are Runtime start, current-health status, and then the next semantic-canary node: formal identity/context resolution → highest-risk command → persisted effect → actor-visible read-back.
+
+Requested model configuration was `gpt-5.6-sol` / high. Exact turn-level outer/active timing and token usage were not exposed by the Host, so I cannot report them without fabrication.

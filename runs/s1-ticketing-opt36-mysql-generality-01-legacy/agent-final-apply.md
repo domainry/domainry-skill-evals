@@ -1,0 +1,4 @@
+- apply 命令次数：**1**
+- 结果身份：delivery `sha256:0c77014e…eabac`；materialization receipt `512a8c1c…ba64`；最终状态 `source finalization failed`，failure receipt `93fd8bd4…64c1`。
+- 生成 inventory：Domain source 17 文件；project source seed 12 文件；物化 40 文件；Runtime Client 25 文件。源码 gap 为 `ticket_assign.go` 及配套 `ticket_assign_test.go`。
+- 纯阶段耗时：**219 秒**。因 Handler 占位导致 apply Gate 未完整通过，`apply.ended` 依约未写入；停止于 post-apply 边界。

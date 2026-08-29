@@ -1,0 +1,22 @@
+[
+  {
+    "stage": "model",
+    "owner": "agent",
+    "note": "首次 model check 因 identity default 缺失返工一次。"
+  },
+  {
+    "stage": "verify",
+    "owner": "agent",
+    "note": "SQLite 报表实现从 Dataset 演化为 object_sql_v1，以满足有界分页运行时能力。"
+  },
+  {
+    "stage": "acceptance",
+    "owner": "benchmark",
+    "note": "probe_derive 将 owner_department_id/owner_department_path 等只读治理字段加入 TICKET_FIELDS，golden probe 在 F03 创建时提交这些字段，触发 backend.validation.field_not_writable，并导致依赖该新工单的 F08/F10/F05/F02/F06/F07/F04/F09 级联失真。"
+  },
+  {
+    "stage": "acceptance",
+    "owner": "benchmark",
+    "note": "golden probe 硬编码 report key ticket_status_summary，而候选模型发布的合法 report key 为 ticket_status_counts，F13 无法用于判定候选能力。"
+  }
+]

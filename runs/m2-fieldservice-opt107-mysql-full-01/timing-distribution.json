@@ -1,0 +1,84 @@
+{
+  "contract_version": "domainry-eval-timing-distribution-v1",
+  "run_id": "m2-fieldservice-opt107-mysql-full-01",
+  "outcome": "verification_blocked",
+  "baseline_eligible": false,
+  "preparation": {"wall_ms": 396000, "included_in_agent_e2e": false},
+  "agent_outer": {"started_epoch": 1787549054, "ended_epoch": 1787555588, "wall_ms": 6534000},
+  "stage_attempt_accounting": {
+    "wall_ms": 6226236,
+    "initial_ms": 4540428,
+    "repair_ms": 1685808,
+    "cli_active_ms": 478134,
+    "orchestration_idle_ms": 5748102,
+    "unallocated_outer_ms": 307764
+  },
+  "stages": {
+    "requirements": {"wall_ms": 384264, "initial_ms": 378672, "repair_ms": 5592, "cli_active_ms": 2071, "orchestration_idle_ms": 382193, "attempts": 2, "outer_percent": 5.881},
+    "model": {"wall_ms": 1267089, "initial_ms": 1267089, "repair_ms": 0, "cli_active_ms": 2087, "orchestration_idle_ms": 1265002, "attempts": 1, "outer_percent": 19.392},
+    "apply": {"wall_ms": 425716, "initial_ms": 425716, "repair_ms": 0, "cli_active_ms": 5278, "orchestration_idle_ms": 420438, "attempts": 1, "outer_percent": 6.515},
+    "implement": {"wall_ms": 909275, "initial_ms": 909275, "repair_ms": 0, "cli_active_ms": 4948, "orchestration_idle_ms": 904327, "attempts": 1, "outer_percent": 13.916},
+    "verify": {"wall_ms": 978854, "initial_ms": 978854, "repair_ms": 0, "cli_active_ms": 42223, "orchestration_idle_ms": 936631, "attempts": 1, "outer_percent": 14.981},
+    "acceptance": {"wall_ms": 2261038, "initial_ms": 580822, "repair_ms": 1680216, "cli_active_ms": 421527, "orchestration_idle_ms": 1839511, "attempts": 2, "outer_percent": 34.604}
+  },
+  "outer_allocation_percent": {"initial": 69.489, "repair": 25.801, "cli_active": 7.318, "orchestration_idle": 87.972, "unallocated": 4.710},
+  "unallocated": {"pre_stage_ms": 21481, "requirements_inter_attempt_ms": 94335, "acceptance_inter_attempt_ms": 72, "post_stage_ms": 191876},
+  "acceptance_history": [
+    {"run": "initial", "passed": 89, "total": 119, "duration_ms": 261515.787, "formal_check": false},
+    {"run": "repair_1", "passed": 96, "total": 119, "duration_ms": 18099.577, "formal_check": false},
+    {"run": "repair_2", "passed": 96, "total": 119, "duration_ms": 19485.836, "formal_check": false},
+    {"run": "repair_3", "passed": 101, "total": 119, "duration_ms": 23362.287, "formal_check": false},
+    {"run": "repair_4_final", "passed": 94, "total": 119, "duration_ms": 21961.096, "formal_check": false}
+  ],
+  "required_independent_final_rounds": [
+    {"file": "full-standard-01.json", "passed": 94, "total": 119, "duration_ms": 21961.096, "formal_check": false},
+    {"file": "full-standard-02.json", "state": "missing"},
+    {"file": "full-standard-03.json", "state": "missing"}
+  ],
+  "milestones": {
+    "requirements_settled_epoch_ms": 1787549454153,
+    "first_model_validate": "2026-08-24T05:57:19.576386Z",
+    "model_valid": "2026-08-24T05:58:59.452173Z",
+    "initial_apply_stage_complete_epoch_ms": 1787551246885,
+    "first_project_check": "2026-08-24T06:06:05.817152Z",
+    "focused_tests_pass": "2026-08-24T06:15:28.634441Z",
+    "source_finalize": "2026-08-24T06:15:35.553407Z",
+    "verify": "2026-08-24T06:17:53.566272Z",
+    "package": "2026-08-24T06:21:30.712724Z",
+    "runtime_healthy": "2026-08-24T06:22:21.309238Z",
+    "highest_risk_canary_first_pass": "2026-08-24T06:31:44.993453Z",
+    "final_cohort_canary_pass": null,
+    "acceptance_round_1_pass": null,
+    "acceptance_round_2_pass": null,
+    "acceptance_round_3_pass": null,
+    "terminal_done": null,
+    "terminal_blocked_epoch": 1787555588
+  },
+  "command_inventory": {
+    "completed_shell_command_items": 397,
+    "formal_gate_command_receipts": 76,
+    "formal_gate_product_commands": 68,
+    "estimated_total_embedded_cli_processes": 99,
+    "gate_run_invocations": 79,
+    "gate_ledger_entries": 161,
+    "gate_generations": 161,
+    "sync_invocations": 19,
+    "attach_invocations": 12,
+    "rebind_operations": 3,
+    "reconcile_invocations": 8,
+    "identity_migrations": 0,
+    "identity_only_product_replays": 0,
+    "no_progress_observations": 3,
+    "formal_gate_product_duplicate_invocations": 49
+  },
+  "repairs": {
+    "model": ["report stable ordering", "scheduler permissions", "technician scope trial then restored department scope", "expected seed bindings"],
+    "source": ["notification variables", "forbidden raw ObjectKey", "overdue notification work_order_id"],
+    "tests": ["focused handler regression updates"],
+    "runtime": ["reverify/repackage/restart across evolved cohorts", "final inventory residue left all seeded parts at zero"],
+    "acceptance": ["four repair reruns", "five prepare calls, once per evolved cohort", "business harness and fixture blockers unresolved"]
+  },
+  "driver_probe": {"wall_ms": 657000, "golden_execution_ms": 4080, "golden_passed": 16, "golden_total": 23, "adapter_assisted": true},
+  "target_comparison": {"target_ms": 2280000, "actual_outer_ms": 6534000, "over_target_ms": 4254000, "actual_over_target_ratio": 2.866},
+  "opt100_comparison": {"status": "invalidated", "reported_same_scope_elapsed_ms": 4620000, "milestone": "not_yet_verify", "caution": "Opt100 drifted to Opt104 and is not a valid baseline; only the elapsed/not-yet-verify fact is compared."}
+}

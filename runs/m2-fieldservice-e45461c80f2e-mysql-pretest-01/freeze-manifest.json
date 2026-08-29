@@ -1,0 +1,28 @@
+{
+  "contract_version": "domainry-skill-evaluation-stage-freeze-v1",
+  "run_id": "m2-fieldservice-e45461c80f2e-mysql-pretest-01",
+  "parent_run_id": "m2-fieldservice-e45461c80f2e-mysql-01",
+  "cohort": "convergence",
+  "stage_scope": "pretest_through_source_finalize",
+  "frozen_epoch": 1787277149,
+  "parent_agent_session_id": "01a021df-09b0-7b10-a9b4-c4dc87f3202a",
+  "parent_checkpoint_project_tree_sha256": "b171f774fc1ddcd4bdc1727d4fda2505a2b7214ac34118c9aace7c813725f521",
+  "continuation_prompt_sha256": "3e87e828a1117d33ad1c3ab9074a01f699d9fad75c50777f2684b494eacb21f9",
+  "requirements_sha256": "b9d06d5d5717e586c361870392aadec780ab3dd12e9306d04c936c43ecb3cc56",
+  "skill_tree_sha256": "e45461c80f2e382e8de4734f38616298b8f9710c87af3cf559dcaf6d9d9a00e4",
+  "delivery_model": "gpt-5.6-sol",
+  "delivery_reasoning_effort": "high",
+  "database_driver": "mysql",
+  "database_endpoint": "127.0.0.1:3306",
+  "database_name": "domainry_m2_fieldservice_e45461c80f2e_mysql01",
+  "excluded_commands": [
+    "go test",
+    "project verify",
+    "project package",
+    "runtime-process start",
+    "project acceptance prepare",
+    "project acceptance run",
+    "project acceptance check",
+    "golden probe"
+  ]
+}

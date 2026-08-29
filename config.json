@@ -1,0 +1,9 @@
+{
+  "note": "与 plane 仓库解耦的唯一连接点:身份清单、安装父目录、CLI 相对路径与地址。公开 Skill 名由身份清单解析。",
+  "skill_identity": "/Users/tiger/Projects/domainry-framework/skills/builder/skill-identity.json",
+  "skill_install_parent": "/Users/tiger/.codex/skills",
+  "cli_relative": "bin/domainry-cli",
+  "plane_repo": "/Users/tiger/Projects/domainry-framework",
+  "plane_url": "http://127.0.0.1:8283",
+  "cli_note": "macOS arm64 当前安装 Skill 自带 CLI;run 必须记录 version --json 输出"
+}

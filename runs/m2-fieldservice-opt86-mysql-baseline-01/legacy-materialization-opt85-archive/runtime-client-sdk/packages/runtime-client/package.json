@@ -1,0 +1,20 @@
+{
+  "name": "@domainry/runtime-client",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "build": "tsc --noEmit -p tsconfig.json && tsc --noEmit -p tsconfig.compat.json",
+    "test": "node --experimental-transform-types --test test/*.test.ts"
+  },
+  "exports": {
+    ".": "./src/index.ts",
+    "./react": "./src/react.tsx",
+    "./contract": "./runtime-domain-api-v1.json",
+    "./business-capabilities": "./runtime-business-capability-disclosure-v1.json"
+  },
+  "peerDependencies": {
+    "@tanstack/react-query": "^5.0.0",
+    "react": "^19.0.0"
+  }
+}

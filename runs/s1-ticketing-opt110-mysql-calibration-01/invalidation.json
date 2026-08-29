@@ -1,0 +1,10 @@
+{
+  "contract_version": "domainry-eval-run-invalidation-v1",
+  "run_id": "s1-ticketing-opt110-mysql-calibration-01",
+  "invalidated_epoch": 1787564311,
+  "reason": "Frozen Opt110 candidate exposed an internal workflow-contract inconsistency before requirements authoring: installed SKILL.md and TODO checker describe five stages while the frozen evaluator contract requires the advertised six-stage machine-owned ledger. The user requested a candidate repair. The measured agent was stopped and this run will not be resumed or scored.",
+  "agent_exit_code": 1,
+  "human_interventions_before_stop": 0,
+  "candidate_repair_task": "client-new-thread:2221b7a2-247b-41b2-aff9-18fbd05cd3c7",
+  "reuse_as_pass_at_1_forbidden": true
+}

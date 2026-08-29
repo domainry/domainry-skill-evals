@@ -1,0 +1,26 @@
+{
+  "benchmark": "m1-crm",
+  "version": 1,
+  "note": "M 级金标准,agent 不可见。新增覆盖:workflow 审批、事务性跨对象创建、金额精确值、部门数据域、scheduler、报表导出通道。",
+  "features": [
+    {"id": "M01", "priority": "P0", "req": "1",  "feature": "线索对象字段完整(金额 exact-decimal、来源 select 4 值)", "probe": "schema:金额为精确小数类型非浮点;来源枚举;公司名必填", "expected_mechanism": "metadata_object"},
+    {"id": "M02", "priority": "P0", "req": "2",  "feature": "五态状态机与终态", "probe": "合法链全通;converted/lost 上任何转换被拒;qualified→lost 可行", "expected_mechanism": "metadata_state_machine"},
+    {"id": "M03", "priority": "P0", "req": "3",  "feature": "销售创建默认负责人/部门 + 名下更新", "probe": "创建后 owner=本人、dept=本人部门;更新他人线索被拒", "expected_mechanism": "metadata_crud_plus_automation"},
+    {"id": "M04", "priority": "P0", "req": "4",  "feature": "负责人执行 contacted/qualified 转换", "probe": "负责人两步转换成功;非负责人(同部门可见)执行被拒", "expected_mechanism": "metadata_state_machine"},
+    {"id": "M05", "priority": "P0", "req": "5",  "feature": "创建幂等", "probe": "同幂等键两次提交仅一条", "expected_mechanism": "platform_idempotency"},
+    {"id": "M06", "priority": "P0", "req": "6",  "feature": "金额阈值路由:小额直转/大额进审批", "probe": "<100000 转化直达 converted;≥100000 转化产生待审批任务且状态未变", "expected_mechanism": "handler_plus_workflow"},
+    {"id": "M07", "priority": "P0", "req": "7",  "feature": "审批通过=转化+建客户同事务", "probe": "总监通过后:lead=converted 且 customer 存在且字段承接;拒绝后:lead 回 qualified+原因留痕", "expected_mechanism": "workflow_approval"},
+    {"id": "M08", "priority": "P0", "req": "8",  "feature": "转化幂等", "probe": "同线索重复发起转化,customer 仅一条", "expected_mechanism": "platform_idempotency"},
+    {"id": "M09", "priority": "P1", "req": "9",  "feature": "审批结果站内通知发起人", "probe": "通过与拒绝各产生一条发起销售的 Inbox 通知", "expected_mechanism": "metadata_notification"},
+    {"id": "M10", "priority": "P0", "req": "10", "feature": "客户只读", "probe": "任何角色 update/delete customer 被拒", "expected_mechanism": "metadata_authorization"},
+    {"id": "M11", "priority": "P0", "req": "11", "feature": "部门级 RLS(同部门可见/跨部门不可见)", "probe": "华东销售可见同部门同事线索、不可见华北线索;更新仅限自己名下", "expected_mechanism": "metadata_department_scope"},
+    {"id": "M12", "priority": "P0", "req": "12", "feature": "总监全量可见", "probe": "总监列表含两部门全部种子", "expected_mechanism": "metadata_data_scope"},
+    {"id": "M13", "priority": "P1", "req": "13", "feature": "状态与审批审计", "probe": "转换与审批动作在审计表留痕含操作者", "expected_mechanism": "platform_audit"},
+    {"id": "M14", "priority": "P1", "req": "14", "feature": "超时跟进定时提醒", "probe": "存在 scheduler 定义(工作日 cron);触发一次后逾期线索负责人收到提醒且同日去重", "expected_mechanism": "metadata_scheduler"},
+    {"id": "M15", "priority": "P0", "req": "15", "feature": "漏斗报表(计数+金额合计)+ 权限", "probe": "总监取数与 DB 一致(含金额合计精确);销售被拒", "expected_mechanism": "metadata_report"},
+    {"id": "M16", "priority": "P0", "req": "16", "feature": "受控 CSV 导出", "probe": "总监经受控导出通道得到 CSV(权限过滤、审计);销售导出被拒", "expected_mechanism": "platform_export_governance"},
+    {"id": "M17", "priority": "P0", "req": "17", "feature": "列表有界分页", "probe": "page_size 语义 + 截断", "expected_mechanism": "platform_pagination"},
+    {"id": "M18", "priority": "P1", "req": "18", "feature": "角色差异化菜单", "probe": "effective-menus 与角色一致", "expected_mechanism": "metadata_menu"},
+    {"id": "M19", "priority": "P0", "req": "19", "feature": "两部门验收身份 + 全状态种子", "probe": "2 部门×销售 + 总监可登录;种子覆盖 5 状态、两部门、双侧金额阈值", "expected_mechanism": "metadata_seed"}
+  ]
+}

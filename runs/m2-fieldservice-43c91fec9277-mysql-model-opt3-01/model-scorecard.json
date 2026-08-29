@@ -1,0 +1,85 @@
+{
+  "contract_version": "domainry-model-stage-scorecard-v1",
+  "run_id": "m2-fieldservice-43c91fec9277-mysql-model-opt3-01",
+  "stage": "model",
+  "outcome": "valid",
+  "blueprint_sha256": "2f8679310a1db2cba188f31792de028be14adaf6bb2f1a5c9bfe71f6fabc9e80",
+  "model_sha256": "0df25ce49b6d64d3759fb90193feb15c2e3ba149228333cf246e06eaf289b1e8",
+  "source_model_file_sha256": "b67c4fe29a2fe1544475b3ecaef6c62f14b5df4b55c6c45588422bff6c693297",
+  "requirements_unchanged": true,
+  "accepted_prd_unchanged": true,
+  "inventory": {
+    "files": 1,
+    "sql_files": 3,
+    "items": 17,
+    "requirements": 7,
+    "roles": 4,
+    "objects": 10,
+    "actions": 9,
+    "workflows": 2,
+    "scheduled_jobs": 1,
+    "reports": 3,
+    "behaviors": 22,
+    "acceptance_scenarios": 22,
+    "plan_creates": 17,
+    "plan_updates": 0,
+    "plan_deletes": 0
+  },
+  "primary_validation": {
+    "calls": 4,
+    "diagnostic_sequence": [1, 29, 35, 0],
+    "failed_calls": 3,
+    "valid_calls": 1,
+    "round_1_loader_issue": "no_executable_behavior_reason requires empty behaviors",
+    "round_2_issue_count": 29,
+    "round_3_issue_count": 35
+  },
+  "effective_tool_calls_including_evidence_gates": {
+    "model_validate": 5,
+    "model_plan": 2
+  },
+  "report_hypothesis": {
+    "preflight_executed": true,
+    "value_key_checked": true,
+    "join_cardinality_closed_shape_checked": true,
+    "sql_order_and_limit_1_to_10000_checked": true,
+    "opt2_report_diagnostic_classes_remaining": 0,
+    "targeted_contract_result": "passed"
+  },
+  "non_report_regressions": {
+    "action_payload_or_output_config_diagnostics": 20,
+    "identity_or_workforce_diagnostics": 5,
+    "workflow_or_export_control_diagnostics": 3,
+    "strict_ledger_decode_diagnostics": 1,
+    "object_field_config_required_diagnostics": 35,
+    "preflight_only_relation_target_read_repair": 1
+  },
+  "timing_seconds": {
+    "agent_reported_model": 1156,
+    "driver_outer_model": 1215,
+    "stage_start_delay": 59,
+    "opt1_keep_outer_model": 1095,
+    "delta_vs_opt1_keep": 120,
+    "percent_vs_opt1_keep": 10.96,
+    "opt2_outer_model": 1399,
+    "delta_vs_opt2": -184,
+    "percent_vs_opt2": -13.15
+  },
+  "agent_usage": {
+    "command_executions": 117,
+    "input_tokens": 13466589,
+    "cached_input_tokens": 13197568,
+    "output_tokens": 55421,
+    "reasoning_output_tokens": 19269
+  },
+  "model_evidence_gates": {
+    "passed": 24,
+    "pending": 0,
+    "failed": 0,
+    "stale": 0,
+    "blocking_findings": 0
+  },
+  "excluded_later_stage_commands_executed": false,
+  "verdict": "rework",
+  "verdict_reason": "The exact Report contract hypothesis worked, but the promised first-pass-valid target failed; primary validation calls rose from opt1's 3 to 4, effective calls reached 5, and outer model time was 10.96% slower than the opt1 keep baseline."
+}

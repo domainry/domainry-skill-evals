@@ -1,0 +1,27 @@
+The single J07 recovery canary failed before any HTTP session or business mutation. No repair or rerun was performed.
+
+- Exact failure: `AcceptanceDatabase.from_runtime_state` invoked the explicit in-memory PyMySQL connector, which failed under the canonical secret-redacting boundary: `external acceptance database connector failed without exposing its DSN`.
+- Blocked assertions: all eight downstream session, target-resolution, customer, denied, positive, Inbox, replay, and conflict checks.
+- Gate: `apply.one_highest_risk_j07_approval_conversion_semanti.b5b7504a` — **failed**
+- Duration: outer Gate `104.737 ms`; pure active `0.040933 s`
+- Counts: default resolver `1`; Builder CLI identity command `1`; real canary commands `1`; Gates declared `3` (`1` executed/failed, `2` pending); Gate sync/list/run `1/1/1`
+- Runtime commands, acceptance prepare/run/check, verification, packaging: `0`
+
+Non-secret identities:
+
+- Runtime: healthy, `127.0.0.1:19095`, MySQL
+- Database cohort: `11b1a578f5bcb02d73a4967dbba483ff7a9b13da438811daff397bd3e77d7672`
+- DSN identity hash: `9c482dab12286ec644d72ca7ce33ff8904857a2064dabde4877cdd3823616c71`
+- Runtime cohort binding: `354ec93acfcbd7346e4d89cb0b6714e93b139931c9deff2bb19839a04f6973f1`
+- Runtime manifest: `9fc87cfd2258f9fea988b4f962dcc8321f360907ba3ca5f4ddd6139a4d93f37c`
+- Upstream requirements/source/Blueprint: `374b56d1…c9fb7` / `bc790b61…e4d7` / `7c073573…a1a9`
+- Package/verification/finalization: `5395ed0a…a989` / `98a638a9…5274` / `4d1cc561…0829`
+
+Evidence:
+
+- [TODO](/Users/tiger/Projects/domainry-skill-evals/runs/m1-crm-opt77-backend-only-08/project/.domainry/development/m1-opt80-semantic-canary-03.md)
+- [Canary result](/Users/tiger/Projects/domainry-skill-evals/runs/m1-crm-opt77-backend-only-08/project/.domainry/development/m1-opt80-semantic-canary-03/semantic-canary-result.json)
+- [Gate receipt](/Users/tiger/Projects/domainry-skill-evals/runs/m1-crm-opt77-backend-only-08/project/.domainry/builder/evidence/development-gates/m1-opt80-semantic-canary-03/apply_one_highest_risk_j07_approval_conversion_s-20260823T045524488172Z.json)
+- [Thin harness](/Users/tiger/Projects/domainry-skill-evals/runs/m1-crm-opt77-backend-only-08/project/.domainry/development/m1-opt80-semantic-canary-03/semantic_canary.py)
+
+No whole-project completion is claimed.

@@ -1,0 +1,12 @@
+[
+  {
+    "stage": "preflight",
+    "owner": "skill_tooling",
+    "note": "Installed Opt111 Skill/CLI exposes a five-stage model/apply/verify contract and no required full-flow resolver, six-stage ledger, acceptance prepare/run/check, or standard denominator; agent stopped before project mutation."
+  },
+  {
+    "stage": "driver_probe",
+    "owner": "skill_tooling",
+    "note": "No managed Runtime or delivery was produced, so all 23 frozen M2 golden checks are missing."
+  }
+]

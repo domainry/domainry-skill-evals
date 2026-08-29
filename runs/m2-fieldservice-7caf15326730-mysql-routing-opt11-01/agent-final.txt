@@ -1,0 +1,19 @@
+Focused-test evidence node completed successfully. Execution stopped immediately after recipe 3 passed.
+
+- Resolver/profile invocations: `1`
+- Independent Gate `sync` / `list`: `0` / `0`
+- Gate runner executions: `3`
+- Product commands: `3` total
+  - `domainry-cli project check`: `1`
+  - `domainry-cli project source finalize`: `1`
+  - `go test ./actions/...`: `1`
+
+| Gate | Status | Duration | Receipt kind/path |
+|---|---|---:|---|
+| `continuation.valid_actions_project_check.c962afb7` | passed | 1176.553 ms | `command_receipt` — `.domainry/builder/evidence/development-gates/01a0252a-ac46-7741-8cae-b34094e54bad/continuation_valid_actions_project_check_c962afb-20260821T163301920620Z.json` |
+| `continuation.current_local_composition_is_finalized.de627f44` | passed | 128.890 ms | `command_receipt` — `.domainry/builder/evidence/development-gates/01a0252a-ac46-7741-8cae-b34094e54bad/continuation_current_local_composition_is_finali-20260821T163309530408Z.json` |
+| `continuation.module_focused_tests_pass.005b51f7` | passed | 791.632 ms | `command_receipt` — `.domainry/builder/evidence/development-gates/01a0252a-ac46-7741-8cae-b34094e54bad/continuation_module_focused_tests_pass_005b51f7-20260821T163317151257Z.json` |
+
+Total recipe-command duration: `2097.075 ms`.
+
+The development guide, TODO template, and whole-project authoring bundle were not read. No direct product commands, reruns, attachments, historical receipt searches, semantic canary, verification, packaging, Runtime, acceptance, evaluator, golden, or scorer commands were run. The inherited stage ledger was preserved and `verify.ended` remains absent.

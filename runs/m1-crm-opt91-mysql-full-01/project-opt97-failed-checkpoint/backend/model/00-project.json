@@ -1,0 +1,48 @@
+{
+  "contract_version": "domainry-backend-model-v1",
+  "items": [
+    {
+      "module": "project",
+      "kind": "project",
+      "key": "project",
+      "payload": {
+        "blueprint": {
+          "schema_version": "1",
+          "id": "m1_sales_crm",
+          "name": "销售线索 CRM",
+          "description": "B2B sales lead lifecycle, governed conversion approval, reminders, reporting, and export",
+          "project_source_layout": "module_v1",
+          "identity_bootstrap": {
+            "version": "1",
+            "departments": [
+              {"id": "east", "name": "华东区", "sort_order": 10, "status": "active"},
+              {"id": "north", "name": "华北区", "sort_order": 20, "status": "active"}
+            ],
+            "workforce_profiles": [
+              {"id": "sales_director_workforce", "identity_user_id": "sales_director", "organization_id": "default", "worker_no": "CRM-DIR-001", "worker_type": "employee", "work_status": "active", "primary_assignment_id": "sales_director_primary"},
+              {"id": "sales_director_reject_workforce", "identity_user_id": "sales_director_reject", "organization_id": "default", "worker_no": "CRM-DIR-002", "worker_type": "employee", "work_status": "active", "primary_assignment_id": "sales_director_reject_primary"},
+              {"id": "east_sales_workforce", "identity_user_id": "east_sales", "organization_id": "default", "worker_no": "CRM-EAST-001", "worker_type": "employee", "work_status": "active", "primary_assignment_id": "east_sales_primary"},
+              {"id": "north_sales_workforce", "identity_user_id": "north_sales", "organization_id": "default", "worker_no": "CRM-NORTH-001", "worker_type": "employee", "work_status": "active", "primary_assignment_id": "north_sales_primary"}
+            ],
+            "workforce_assignments": [
+              {"id": "sales_director_primary", "workforce_profile_id": "sales_director_workforce", "organization_unit_id": "east", "assignment_type": "primary", "status": "active"},
+              {"id": "sales_director_reject_primary", "workforce_profile_id": "sales_director_reject_workforce", "organization_unit_id": "east", "assignment_type": "primary", "status": "active"},
+              {"id": "east_sales_primary", "workforce_profile_id": "east_sales_workforce", "organization_unit_id": "east", "manager_workforce_profile_id": "sales_director_workforce", "assignment_type": "primary", "status": "active"},
+              {"id": "north_sales_primary", "workforce_profile_id": "north_sales_workforce", "organization_unit_id": "north", "manager_workforce_profile_id": "sales_director_workforce", "assignment_type": "primary", "status": "active"}
+            ],
+            "menus": [
+              {"id": "menu_my_leads", "key": "my_leads", "label": "我的线索", "route": "business.my_leads", "sort_order": 10, "status": "active"},
+              {"id": "menu_all_leads", "key": "all_leads", "label": "全部线索", "route": "business.all_leads", "sort_order": 20, "status": "active"},
+              {"id": "menu_reports", "key": "reports", "label": "报表", "route": "business.reports", "sort_order": 30, "status": "active"}
+            ],
+            "role_menus": [
+              {"role_id": "sales_rep", "menu_id": "menu_my_leads"},
+              {"role_id": "sales_director", "menu_id": "menu_all_leads"},
+              {"role_id": "sales_director", "menu_id": "menu_reports"}
+            ]
+          }
+        }
+      }
+    }
+  ]
+}

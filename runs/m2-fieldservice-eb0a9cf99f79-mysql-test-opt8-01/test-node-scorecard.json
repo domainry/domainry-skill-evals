@@ -1,0 +1,66 @@
+{
+  "contract_version": "domainry-m2-focused-test-node-scorecard-v1",
+  "run_id": "m2-fieldservice-eb0a9cf99f79-mysql-test-opt8-01",
+  "state": "passed",
+  "pre_test_scaffold_gate": {
+    "first_inventory_complete": true,
+    "diagnostic_count": 8,
+    "affected_handlers": 8,
+    "repair_rounds": 1,
+    "post_repair_state": "valid"
+  },
+  "focused_tests": {
+    "package_command_count": 1,
+    "isolated_diagnostic_command_count": 0,
+    "first_pass_failure_count": 0,
+    "post_test_repair_rounds": 0,
+    "invalidated_reruns": 0,
+    "passed_handler_tests": 8,
+    "failed_handler_tests": 0
+  },
+  "correctness": {
+    "requirements_unchanged": true,
+    "backend_model_unchanged": true,
+    "production_action_source_unchanged": true,
+    "current_finalization_snapshot": true,
+    "autonomous_pass_at_1": true,
+    "evaluator_interventions": 0,
+    "forbidden_downstream_commands": 0,
+    "sqlite_observed": false
+  },
+  "comparison_to_opt07_autonomous": {
+    "outer_seconds_before": 636,
+    "outer_seconds_after": 579,
+    "outer_seconds_delta": -57,
+    "outer_seconds_delta_percent": -9.0,
+    "startup_before_verify_seconds_before": 366,
+    "startup_before_verify_seconds_after": 429,
+    "startup_before_verify_seconds_delta": 63,
+    "verify_to_exit_seconds_before": 270,
+    "verify_to_exit_seconds_after": 150,
+    "verify_to_exit_seconds_delta": -120,
+    "verify_to_exit_seconds_delta_percent": -44.4,
+    "go_test_commands_before": 11,
+    "go_test_commands_after": 1,
+    "go_test_commands_delta_percent": -90.9,
+    "input_tokens_before": 4872398,
+    "input_tokens_after": 2975158,
+    "input_tokens_delta": -1897240,
+    "input_tokens_delta_percent": -38.9
+  },
+  "comparison_to_opt07_valid_checkpoint": {
+    "wall_seconds_before": 973,
+    "wall_seconds_after": 579,
+    "wall_seconds_delta": -394,
+    "wall_seconds_delta_percent": -40.5,
+    "go_test_commands_before": 12,
+    "go_test_commands_after": 1,
+    "go_test_commands_delta_percent": -91.7,
+    "input_tokens_before": 12691847,
+    "input_tokens_after": 2975158,
+    "input_tokens_delta_percent": -76.6,
+    "evaluator_interventions_before": 1,
+    "evaluator_interventions_after": 0
+  },
+  "verdict": "keep_and_promote_latest_focused_test_node_baseline"
+}

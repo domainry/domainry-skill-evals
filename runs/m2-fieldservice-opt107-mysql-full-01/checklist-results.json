@@ -1,0 +1,166 @@
+{
+ "note": "M2 golden-probe @ http://127.0.0.1:19115, RUN_TAG=opt107-full-01-driver-final3",
+ "results": [
+  {
+   "id": "N23",
+   "priority": "P0",
+   "status": "pass",
+   "mechanism": "probe",
+   "evidence": "seeds reqs=200 states=['completed', 'dispatched', 'in_repair', 'submitted'] parts=3 stocks=[('part_part_filter', 0.0), ('part_part_motor', 0.0), ('part_part_seal', 0.0)]"
+  },
+  {
+   "id": "N05",
+   "priority": "P0",
+   "status": "pass",
+   "mechanism": "probe",
+   "evidence": "quote_type=DECIMAL(19,2) missing-device http=400 code=backend.validation.required"
+  },
+  {
+   "id": "N02",
+   "priority": "P0",
+   "status": "pass",
+   "mechanism": "probe",
+   "evidence": "own-device http=200 rid=work_order_1787556110594416000; other-device http=404 code=backend.record.not_found"
+  },
+  {
+   "id": "N03",
+   "priority": "P0",
+   "status": "pass",
+   "mechanism": "probe",
+   "evidence": "replay http=200 same_id=True (work_order_1787556110594416000)"
+  },
+  {
+   "id": "N04",
+   "priority": "P0",
+   "status": "pass",
+   "mechanism": "probe",
+   "evidence": "B list=1 leak=False; B direct http=404"
+  },
+  {
+   "id": "N01",
+   "priority": "P0",
+   "status": "pass",
+   "mechanism": "probe",
+   "evidence": "customer dispatch=403(backend.action.permission_denied) report=404 complete=403"
+  },
+  {
+   "id": "N07",
+   "priority": "P0",
+   "status": "pass",
+   "mechanism": "probe",
+   "evidence": "dispatch http=200; tech inbox notif=True"
+  },
+  {
+   "id": "N08",
+   "priority": "P0",
+   "status": "pass",
+   "mechanism": "probe",
+   "evidence": "cross-site start=404(backend.record.not_found) manager start=403 assignee start=200"
+  },
+  {
+   "id": "N06",
+   "priority": "P0",
+   "status": "pass",
+   "mechanism": "probe",
+   "evidence": "submitted->in_repair 未经分派被拒 http=404 code=backend.record.not_found"
+  },
+  {
+   "id": "N09",
+   "priority": "P0",
+   "status": "fail",
+   "mechanism": "probe",
+   "evidence": "no suitable part in seeds"
+  },
+  {
+   "id": "N10",
+   "priority": "P0",
+   "status": "fail",
+   "mechanism": "probe",
+   "evidence": "no suitable part in seeds"
+  },
+  {
+   "id": "N11",
+   "priority": "P0",
+   "status": "pass",
+   "mechanism": "probe",
+   "evidence": "completed update=403 delete=403 restart=400(work_order.not_dispatched)"
+  },
+  {
+   "id": "N15",
+   "priority": "P1",
+   "status": "fail",
+   "mechanism": "probe",
+   "evidence": "waiver http=400 replay=400"
+  },
+  {
+   "id": "N12",
+   "priority": "P0",
+   "status": "fail",
+   "mechanism": "probe",
+   "evidence": "approve http=0 waiver_id=None final=None(expect 800.00); small-order complete=400 waiver http=400 final=None(expect 200.00); tech inbox approved-notif=False"
+  },
+  {
+   "id": "N13",
+   "priority": "P0",
+   "status": "fail",
+   "mechanism": "probe",
+   "evidence": "complete2 http=400 waiver http=400 reject http=0 waiver_status=None reason='None' order_final=None(expect 1000.00 unchanged); assignee inbox rejected-notif=False"
+  },
+  {
+   "id": "N16",
+   "priority": "P0",
+   "status": "pass",
+   "mechanism": "probe",
+   "evidence": "east=158 west=1 overlap=0 manager=270(total=270)"
+  },
+  {
+   "id": "N17",
+   "priority": "P0",
+   "status": "pass",
+   "mechanism": "probe",
+   "evidence": "_audit_events=3150"
+  },
+  {
+   "id": "N18",
+   "priority": "P1",
+   "status": "fail",
+   "mechanism": "probe",
+   "evidence": "aged=1(rid3 only) scan http=403 out=None rid3-remind=0; rescan http=403 rid3-remind=0(same-day dedupe)"
+  },
+  {
+   "id": "N19",
+   "priority": "P0",
+   "status": "pass",
+   "mechanism": "probe",
+   "evidence": "manager thru=200 parts=200; tech=404 customer=404(应拒)"
+  },
+  {
+   "id": "N20",
+   "priority": "P1",
+   "status": "pass",
+   "mechanism": "probe",
+   "evidence": "manager export(action)=200({'audit_id': 'report_export_audit_1787556113649872000'}); tech export=403(backend.action.permission_denied)"
+  },
+  {
+   "id": "N21",
+   "priority": "P1",
+   "status": "pass",
+   "mechanism": "probe",
+   "evidence": "workspace page2=2 keys=['has_next', 'items', 'page', 'page_size', 'total']; portal page1=1"
+  },
+  {
+   "id": "N22",
+   "priority": "P1",
+   "status": "pass",
+   "mechanism": "probe",
+   "evidence": "tech=['menu_technician_work'] manager=['menu_manager_reports', 'menu_manager_work']"
+  },
+  {
+   "id": "N14",
+   "priority": "P1",
+   "status": "fail",
+   "mechanism": "probe",
+   "evidence": "portal detail http=200 fee=None final=None"
+  }
+ ]
+}

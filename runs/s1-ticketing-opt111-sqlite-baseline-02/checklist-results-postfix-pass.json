@@ -1,0 +1,117 @@
+{
+  "note": "golden-probe 实测 @ http://127.0.0.1:19119,RUN_TAG=1787582066",
+  "results": [
+    {
+      "id": "F16",
+      "priority": "P0",
+      "status": "pass",
+      "mechanism": "reuse",
+      "evidence": "manager 可见种子 20 条,状态集 ['closed', 'in_progress', 'new', 'resolved'],处理人集大小 2"
+    },
+    {
+      "id": "F11",
+      "priority": "P0",
+      "status": "pass",
+      "mechanism": "reuse",
+      "evidence": "manager list=20 vs DB total=None"
+    },
+    {
+      "id": "F14",
+      "priority": "P0",
+      "status": "pass",
+      "mechanism": "reuse",
+      "evidence": "page_size=2 返回 2 条,响应元数据键 ['has_next', 'items', 'page', 'page_size', 'total']"
+    },
+    {
+      "id": "F03",
+      "priority": "P0",
+      "status": "pass",
+      "mechanism": "reuse",
+      "evidence": "create=201 code=None id=ticket_1787582066355682000 update=200 update_code=None"
+    },
+    {
+      "id": "F01",
+      "priority": "P0",
+      "status": "pass",
+      "mechanism": "reuse",
+      "evidence": "非法 priority 被拒绝 http=400 code=backend.validation.invalid_option"
+    },
+    {
+      "id": "F08",
+      "priority": "P0",
+      "status": "pass",
+      "mechanism": "reuse",
+      "evidence": "重放返回同一记录 id=ticket_1787582066355682000 replayed_header=true"
+    },
+    {
+      "id": "F10",
+      "priority": "P0",
+      "status": "pass",
+      "mechanism": "reuse",
+      "evidence": "B 直读 A 工单 http=404;B 列表 7 条,无泄漏=True"
+    },
+    {
+      "id": "F05",
+      "priority": "P0",
+      "status": "pass",
+      "mechanism": "reuse",
+      "evidence": "处理人 start=200 resolve=200"
+    },
+    {
+      "id": "F02",
+      "priority": "P0",
+      "status": "pass",
+      "mechanism": "reuse",
+      "evidence": "new→close 非法跳转被拒 http=400 code=backend.transition.invalid_transition"
+    },
+    {
+      "id": "F06",
+      "priority": "P0",
+      "status": "pass",
+      "mechanism": "reuse",
+      "evidence": "agent close http=403 code=backend.action.permission_denied;manager close http=200"
+    },
+    {
+      "id": "F07",
+      "priority": "P1",
+      "status": "pass",
+      "mechanism": "reuse",
+      "evidence": "reopen http=200,当前状态=in_progress"
+    },
+    {
+      "id": "F04",
+      "priority": "P0",
+      "status": "pass",
+      "mechanism": "reuse",
+      "evidence": "assign http=200 code=None;B inbox http=200 条数=6 含分派通知=True"
+    },
+    {
+      "id": "F09",
+      "priority": "P0",
+      "status": "pass",
+      "mechanism": "reuse",
+      "evidence": "comment create=201 update=400 delete=403(后两者应被拒)"
+    },
+    {
+      "id": "F13",
+      "priority": "P1",
+      "status": "pass",
+      "mechanism": "reuse",
+      "evidence": "manager report http=200;agent http=404(应拒绝)"
+    },
+    {
+      "id": "F12",
+      "priority": "P1",
+      "status": "pass",
+      "mechanism": "reuse",
+      "evidence": "审计表 _audit_events 记录数=172"
+    },
+    {
+      "id": "F15",
+      "priority": "P1",
+      "status": "pass",
+      "mechanism": "reuse",
+      "evidence": "effective-menus agent http=200 manager http=200(菜单差异化取决于发布后 Identity 配置)"
+    }
+  ]
+}

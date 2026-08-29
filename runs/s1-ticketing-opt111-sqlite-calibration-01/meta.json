@@ -1,0 +1,19 @@
+{
+  "run_id": "s1-ticketing-opt111-sqlite-calibration-01",
+  "benchmark": "s1-ticketing",
+  "cohort": "calibration",
+  "run_kind": "formal-single-chain-full-flow",
+  "skill_version": "v0.0.111-local.20260824-business-flow-cases",
+  "model": "gpt-5.6-sol",
+  "reasoning_effort": "high",
+  "database_driver": "sqlite",
+  "database_path": ".domainry/builder/runtime/runtime.db",
+  "runtime_address": "127.0.0.1:19118",
+  "agent_session_count": 1,
+  "agent_declared_done": true,
+  "human_interventions": 0,
+  "state": "completed",
+  "started_epoch": 1787576801,
+  "ended_epoch": 1787578816,
+  "project_workspace": "/Users/tiger/DomainryEvalWorkspaces/s1-ticketing-opt111-sqlite-calibration-01"
+}

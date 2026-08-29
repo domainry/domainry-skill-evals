@@ -1,0 +1,14 @@
+{
+  "contract_version": "domainry-eval-result-validity-v1",
+  "run_id": "s1-ticketing-opt111-mysql-calibration-01",
+  "valid_for_candidate_pass_at_1": false,
+  "valid_for_delivery_process_observation": true,
+  "reason": "The frozen S1 golden probe aborted before its first assertion because it requires SQLite metadata queries and a legacy credential flow while this frozen cohort uses MySQL and rotating managed-Runtime credentials.",
+  "scorecard_interpretation": {
+    "pass_at_1": "not_measurable; serialized false is a legacy scorer fallback",
+    "B1_golden_hit_rate": "not_measurable; serialized 0.0 represents 16 not_executed rows, not 16 observed failures",
+    "A6_false_done": "not_measurable; serialized true is downstream of the missing golden results and does not contradict TODO 32/32 or BF01-BF10 10/10"
+  },
+  "frozen_inputs_modified_after_start": false,
+  "golden_denominator_replaced": false
+}

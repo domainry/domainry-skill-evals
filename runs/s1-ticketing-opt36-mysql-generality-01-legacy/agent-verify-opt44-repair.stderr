@@ -1,0 +1,1 @@
+2026-08-22T04:20:34.062687Z  WARN codex_core::session::rollout_reconstruction: ignored world-state patch without a full snapshot

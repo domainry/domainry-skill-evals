@@ -1,0 +1,29 @@
+Fresh `runtime-process-continuation` node succeeded, leaving the managed Runtime running.
+
+- Invocation counts: resolver `1`, `runtime_start` `1`, `runtime_status` `1`
+- Active durations: resolver ~`1.3 s` wall time; start `3638.333 ms`; status `325.136 ms`
+- Process: PID/PGID `56544`, state `running`, started `2026-08-23T06:18:48.833563Z`
+- Address: requested and actual listener both `127.0.0.1:19096`
+- Listener proof: `domainry-runtime-listener-proof-v1`, log-event SHA-256 `bb48c673fb06d72ae0f8f711cbf0875372f16ea631f50c959b53ca74f5c7d2ff`
+- Health/currentness: HTTP `200`, healthy `true`; both cohort states `current`; status Gate passed with `expectation_met=true`
+- Managed-process receipt: [runtime-process.json](/Users/tiger/Projects/domainry-skill-evals/runs/m1-crm-opt77-backend-only-08/project/.domainry/builder/runtime/runtime-process.json), `domainry-managed-runtime-process-v3`, SHA-256 `2138907e391cc9971b2835caa7fe5cf1da5f168f11ffe91ea412dd47e95e6675`
+- MySQL cohort: driver `mysql`; DSN-identity SHA-256 `9194466831041e7a3ce66411a3b5798bc67d69b0922ec7d34048e02360f0d828`; database-identity SHA-256 `61159080584c992948e1de604d9335bc25638c67e6c0a53fcc26e0cd42980f0a`
+
+Bound profile identities:
+
+- Requirements: `374b56d1629144c8c5122b3ee5bb5b99635a6813e653d8a9af69607c5f0c9fb7`
+- Source: `bc790b61740e9efa4e8ffc930a85bb456adae85ce29bdd48b64d8b43510ae4d7`
+- Blueprint: `7c073573a371fcc04b99074665b74e2361c38f80855d290b918f3c42e768a1a9`
+- Runtime manifest: `9fc87cfd2258f9fea988b4f962dcc8321f360907ba3ca5f4ddd6139a4d93f37c`
+- Runtime cohort: `a1dd1446fb5893044b0ff1e7549c3ed33e440864f25ca0c1f8d33be948537e55`
+
+Managed upstream identities:
+
+- Runtime binary: `822456f794372ad3a006d7b56686deb6a635149eb84efe3cec358d45018d44da`
+- Bundle manifest: `0e63ddec12f39d4fb28e953c42f04fb0dd1775c6d14f50f7f64cd27fdd42e22d`
+- Project source tree: `fa63fcbc059050e4967f8b6e2d6482a2e5fb3b0ab38aff4fa1c1a68ee18311e2`
+- Finalization receipt: `4d1cc561ce548da12755562a0c4a213659104e7df6edd5ff4c68425d756c0829`
+- Verification receipt: `98a638a9b225e24145b0d342f497c6421fe7079b54bfae3e955964f8c9c25274`
+- Package receipt: `5395ed0a1d5ef15f895649c9586118e882f9099df351f42e384613e25c65a989`
+
+No canary, acceptance, or completion claim is made.

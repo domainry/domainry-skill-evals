@@ -1,0 +1,40 @@
+Stopped at a precise project-source blocker before packaging or Runtime startup.
+
+`project verify` found 10 checks: 9 passed, 1 failed, 0 skipped. The sole failure is `go_format`, naming four frozen production files:
+
+- `service_request_complete_repair.go`
+- `service_request_request_warranty_waiver.go`
+- `service_request_send_overdue_reminder.go`
+- `warranty_waiver_decide_warranty_waiver.go`
+
+Repairing them would modify frozen production source, invalidate finalization, and require prohibited upstream reruns.
+
+| Operation | Calls | Timing/result |
+| --- | ---: | --- |
+| Resolver | 1 | 1.13 s |
+| CLI identity | 1 | 0.45 s; v2.4.0 |
+| Project verify | 1 | 7,242.816 ms; failed |
+| Package | 0 | Not reached |
+| Runtime start/status | 0 / 0 | Port 38283 not started |
+| Authentication/context | 0 | Not reached |
+| Setup | 0 | Not reached |
+| Action | 0 | Not reached |
+| Read-back | 0 | Not reached |
+| Negative/replay probes | 0 | Not reached |
+| Canary executions | 0 | Blocked |
+| Upstream check/finalize/test reruns | 0 / 0 / 0 | Absent |
+| Production repairs | 0 | Frozen |
+| Diagnostic reruns | 1 | Read-only shell-probe variable correction |
+
+The intended highest-risk journey remains frozen row J06: assigned-technician repair completion, crossing principal context, record scope, the real Action, atomic request/stock/usage/ledger/audit persistence, read-back, negative/conflict controls, replay, and restart durability. Its Gate remains pending because verification did not pass.
+
+Checkpoint identity is current: source SHA `4b2f…32ed`, Blueprint SHA `2ecd…c905`, finalization receipt SHA-256 `51d9…65e3`, with all 21 finalized source files matching.
+
+Database backend remains inherited local MySQL; it was not contacted. No SQLite database was created. All acceptance prepare/run/check/stale-report commands were absent.
+
+Evidence:
+
+- [Current TODO](/private/tmp/domainry-m2-fieldservice-7caf15326730-mysql-opt11-canary01/.domainry/development/01a0253a-c386-7d92-9909-22daa0515a3b.md)
+- [Verification failure inventory](/private/tmp/domainry-m2-fieldservice-7caf15326730-mysql-opt11-canary01/.domainry/builder/receipts/verification-failed.json)
+- [Verification Gate receipt](/private/tmp/domainry-m2-fieldservice-7caf15326730-mysql-opt11-canary01/.domainry/builder/evidence/development-gates/01a0253a-c386-7d92-9909-22daa0515a3b/verify_project_verify_json_passes_for_the_unchan-20260821T165519647291Z.json)
+- [Inherited checkpoint Gate](/private/tmp/domainry-m2-fieldservice-7caf15326730-mysql-opt11-canary01/.domainry/builder/development-gates/01a0252a-ac46-7741-8cae-b34094e54bad.json)

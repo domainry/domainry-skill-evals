@@ -1,0 +1,9 @@
+# M2 Opt-11 routed Skill shell continuation baseline
+
+This run evaluated the routed Skill entrypoint from template commit `c7259cc4a2958b262308cd23cfffeb77faeda0e8`. The complete host-loaded `SKILL.md` was reduced from 305 lines / 46,698 bytes to 80 lines / 10,505 bytes, while whole-project authority moved behind a mandatory complete `development-guide.md` route. The explicit `source-finalization-continuation` remained self-contained and prohibited guide/template loading.
+
+The run used `gpt-5.6-sol/high`, a fresh isolated Skill install, the same frozen M2 source checkpoint, and a new empty local MySQL database. The Agent loaded the complete 80-line Skill, called the continuation resolver exactly once, and executed the returned check, finalize, and focused-test recipes exactly once each. All three Gates passed with current dedicated command receipts. It did not read the development guide or TODO template, build whole-project context, call Gate sync/list independently, rerun a product command, or execute a downstream verification command.
+
+Independent audit found the frozen backend tree, requirements, model, production Actions, tests, PRD, source identity, and Blueprint identity unchanged. The project contained no SQLite file, the fresh MySQL database still had zero tables, and `verify.ended` remained absent.
+
+Compared with Opt-10's equivalent continuation node, outer time fell from 98 to 71 seconds (−27.6%), input tokens from 173,294 to 114,370 (−34.0%), and startup to the first project check from about 56 to 35 seconds (−37.5%). Product validation depth remained check/finalize/test `1/1/1`; their combined duration was 2.097 seconds. Opt-11 therefore passes both the routing-correctness and continuation-efficiency hypotheses and becomes the latest focused-test continuation baseline.

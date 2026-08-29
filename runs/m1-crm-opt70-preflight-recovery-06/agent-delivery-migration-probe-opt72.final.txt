@@ -1,0 +1,62 @@
+The Opt72 v22 migration stopped atomically during staged source finalization. Publication and staged materialization succeeded, but nothing was promoted: all live product-owned, generated, domain, contract, receipt, and delivery files remain byte-identical.
+
+### Migration boundary
+
+| Stage | Result |
+| --- | --- |
+| Publication | Signed staged delivery created: `sha256:4d249113d044b08698c733db486ebda84b1fa93859823922ea0ed0eafedbee64` |
+| v22 generation/materialization | Succeeded in evolution staging; 126 files, dependencies resolved |
+| Source finalization | Failed: 8 checks passed, 1 failed, 1 dependency-skipped |
+| Promotion | Did not occur |
+| Rollback/no-promotion | Live Opt70 delivery and materialization remain current |
+
+Complete diagnostic batch—exactly one diagnostic:
+
+```text
+backend/actions/crm/lead_dispatch_stale_reminders.go:48:
+generated capability I/O inside a loop is forbidden;
+use a bounded batch/query capability
+```
+
+This is the preserved `project.action_capability_loop_io` defect class. Evidence: [staged failure receipt](/Users/tiger/Projects/domainry-skill-evals/runs/m1-crm-opt70-preflight-recovery-06/project/.domainry/builder/evolution/4d8cb9d504cbf86699fbe118eacac8892660ecafecee118c89ec8193ec6b9794/staging/.domainry/builder/receipts/finalization-failed.json).
+
+### Command accounting
+
+| Product command | Count | Duration | Result |
+| --- | ---: | ---: | --- |
+| `model preflight` | 1 | 301.028 ms | Valid, zero issues |
+| `model validate --json` | 1 | 229.879 ms | Exit 0, valid |
+| Initial `model apply --json` | 1 | 1622.082 ms | Formal evolution audit requested |
+| Audit-bound `model apply --json` | 1 | 2154.842 ms | Staged finalization failed |
+
+Total product-command time: `4307.831 ms`. The two apply invocations were the Skill’s deterministic protocol: one audit-only checkpoint followed by one actual audit-authorized migration execution. No Gate was rerun.
+
+All forbidden product commands had zero invocations: capability discovery, model authoring/plan, source prepare/finalize, project check/verify/package, Go tests, Runtime, database, acceptance, evaluator, and scorer. Neither SQLite nor MySQL was used, and `--skip-dependency-resolution` was never passed.
+
+### Identities
+
+- New session: `01a02b30-29d9-7c33-8598-965abe264f1e`
+- CLI: `v0.18.0-opt72.d9d0874`; template commit `d9d0874496adbbd89e90f59a8582f7b3b88d3530`
+- Evolution audit: `4d8cb9d504cbf86699fbe118eacac8892660ecafecee118c89ec8193ec6b9794`
+- Staged Project Delivery contract: `0363458391d5647658f72145a1aedd8b243b7bbab497caf06363150d0531dd5f`
+- Staged materialization receipt: `dd4e1e78fd40d00136336a31543091179c2359adc0c73fc3734ba53430a004af`
+- Staged finalization-failure receipt: `e221ca1cc406899aa2f524699cba818f5053a52e048a28e97e67b2c41bb174ab`
+- Live delivery remains `sha256:83ea2c5b59b9cc64f5741c5f87f47484763f40ed6fd6d5e6371451e6cd044250`
+- Live materialization remains `474a2cdefc826bf7b49486442d3be528f58f688a7e42528b786101ae95dfedf0`
+
+The frozen closures for requirements, model, Report SQL, Action source/tests, generated source, domain source, contracts, project delivery, and receipts all matched before and after. Live changed-file count: zero. Only the new TODO/Gates/evidence and managed audit/evolution staging state were created.
+
+Gate receipts:
+
+- [Preflight](/Users/tiger/Projects/domainry-skill-evals/runs/m1-crm-opt70-preflight-recovery-06/project/.domainry/builder/evidence/development-gates/01a02b30-29d9-7c33-8598-965abe264f1e/apply_gate_owned_local_model_preflight_runs_exac-20260822T204035917372Z.json)
+- [Validate](/Users/tiger/Projects/domainry-skill-evals/runs/m1-crm-opt70-preflight-recovery-06/project/.domainry/builder/evidence/development-gates/01a02b30-29d9-7c33-8598-965abe264f1e/apply_gate_owned_canonical_model_validate_json_r-20260822T204044486554Z.json)
+- [Audit-bound migration](/Users/tiger/Projects/domainry-skill-evals/runs/m1-crm-opt70-preflight-recovery-06/project/.domainry/builder/evidence/development-gates/01a02b30-29d9-7c33-8598-965abe264f1e/apply_round_2_evolution_audit_bound_canonical_mo-20260822T204217797036Z.json)
+- [Session TODO](/Users/tiger/Projects/domainry-skill-evals/runs/m1-crm-opt70-preflight-recovery-06/project/.domainry/development/01a02b30-29d9-7c33-8598-965abe264f1e.md)
+
+### Exact next repair node
+
+Start a new Opt72 session for the stale-reminder Handler/test-double repair. Replace the per-item `Exists`, `Create`, and notification `Dispatch` capability calls in [lead_dispatch_stale_reminders.go](/Users/tiger/Projects/domainry-skill-evals/runs/m1-crm-opt70-preflight-recovery-06/project/backend/actions/crm/lead_dispatch_stale_reminders.go:48) with staged v22 `ExistsBatch`, `CreateBatch`, and `DispatchBatch` operations, preserving dedupe, receipt-before-notification atomicity, owner targeting, counts, and fail-closed cardinality checks. Then use entirely fresh repair/test/check/migration Gates.
+
+Overall pre-final snapshot: wall/active time `796 s` (`13m16s`), model `gpt-5.6-sol`, high reasoning. Usage: `8,137,652` input, `7,887,872` cached input, `33,336` output, `12,085` reasoning-output, `8,170,988` total tokens.
+
+Source finalization success, Runtime readiness, acceptance, project verification, and completion are not claimed.

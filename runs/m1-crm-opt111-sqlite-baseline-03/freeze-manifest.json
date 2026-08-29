@@ -1,0 +1,27 @@
+{
+  "run_id": "m1-crm-opt111-sqlite-baseline-03",
+  "frozen_epoch": 1787583814,
+  "cohort": "calibration_baseline",
+  "model": "gpt-5.6-sol",
+  "reasoning_effort": "high",
+  "database_driver": "sqlite",
+  "runtime_address": "127.0.0.1:19120",
+  "files": {
+    "requirements": {
+      "path": "/Users/tiger/Projects/domainry-skill-evals/benchmarks/m1-crm/requirements.md",
+      "sha256": "e0efeb60fc61f13ed0fd7f66d925660e282096b149f1850ab05ac0886e9a6d37"
+    },
+    "golden_checklist": {
+      "path": "/Users/tiger/Projects/domainry-skill-evals/benchmarks/m1-crm/golden-checklist.json",
+      "sha256": "4c13b2a69cfaa8abae7490cb4828acb1b3ada9e8d6f115de6c97deee6df9b925"
+    },
+    "golden_probe": {
+      "path": "/Users/tiger/Projects/domainry-skill-evals/benchmarks/m1-crm/golden-probe.py",
+      "sha256": "960c55bdcc218e002e3b8f2815d6bdab6bc2a33f6de11a03a31df490cb307751"
+    },
+    "driver_prompt": {
+      "path": "/Users/tiger/Projects/domainry-skill-evals/runs/m1-crm-opt111-sqlite-baseline-03/driver-prompt-full.md",
+      "sha256": "0a4d95aec6365e943b0b6cfadeb14f9347c4ecd18a347b998afe3d90bba10882"
+    }
+  }
+}

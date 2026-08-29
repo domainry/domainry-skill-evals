@@ -1,0 +1,14 @@
+{
+  "contract_version": "domainry-evaluation-artifact-redactions-v1",
+  "redacted_epoch": 1787278020,
+  "artifact": "agent-events.jsonl",
+  "redactions": [
+    {
+      "match": "hard-coded password example in loaded Skill documentation",
+      "replacement": "[REDACTED]",
+      "occurrences": 2,
+      "reason": "The documentation example happened to equal the user-provided local MySQL password. It was not sourced from the Runtime environment, but was removed to avoid retaining the same credential literal in evaluation artifacts."
+    }
+  ],
+  "redacted_artifact_sha256": "ad27f7b8118dedb1e1015dff6d06e8175dc167de21b825350229e6af3ebadeda"
+}

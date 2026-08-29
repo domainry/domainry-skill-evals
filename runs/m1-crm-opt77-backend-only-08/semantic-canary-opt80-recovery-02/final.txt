@@ -1,0 +1,40 @@
+The single J07 canary Gate failed. No repair, rerun, broader acceptance, Runtime operation, or production change was performed.
+
+- Gate: `apply.one_highest_risk_j07_approval_conversion_semanti.815307cc`
+- Result: `failed`, command exit `1`
+- Exact failure: director’s first business read, `GET /objects/conversion_approval/actions`, returned HTTP `403`
+- Mutation: not reached; denied/positive, durable read-back, Inbox, replay, and terminal-conflict assertions remain blocked—not independently failed
+- Canonical sessions: all three actors authenticated, credentials were persisted in the cohort-bound `0600` secret store, and exactly one Runtime-returned workforce context was selected for each actor
+- Outer duration: `0.621148s`
+- Pure active duration: `0.528909s`
+
+Counts:
+
+- Default resolver: `1`
+- Real canary product execution: `1`
+- Gate execution: `1` (`failed`)
+- Setup/control only: CLI version `1`, Gate sync `1`, Gate list `1`
+
+Non-secret identities:
+
+| Identity | Value |
+|---|---|
+| Runtime address | `127.0.0.1:19095` |
+| Runtime contract | `domainry-managed-runtime-process-v3` |
+| Database/cohort | MySQL / `11b1a578f5bcb02d73a4967dbba483ff7a9b13da438811daff397bd3e77d7672` |
+| Runtime cohort SHA | `354ec93acfcbd7346e4d89cb0b6714e93b139931c9deff2bb19839a04f6973f1` |
+| Runtime manifest SHA | `9fc87cfd2258f9fea988b4f962dcc8321f360907ba3ca5f4ddd6139a4d93f37c` |
+| Package receipt SHA | `5395ed0a1d5ef15f895649c9586118e882f9099df351f42e384613e25c65a989` |
+| Verification receipt SHA | `98a638a9b225e24145b0d342f497c6421fe7079b54bfae3e955964f8c9c25274` |
+| Finalization receipt SHA | `4d1cc561ce548da12755562a0c4a213659104e7df6edd5ff4c68425d756c0829` |
+| Project source-tree SHA | `fa63fcbc059050e4967f8b6e2d6482a2e5fb3b0ab38aff4fa1c1a68ee18311e2` |
+| Gate-bound requirements/source/Blueprint | `374b56d1…` / `bc790b61…` / `7c073573…` |
+
+Evidence:
+
+- [Session TODO](/Users/tiger/Projects/domainry-skill-evals/runs/m1-crm-opt77-backend-only-08/project/.domainry/development/m1-opt80-semantic-canary-02.md)
+- [Canary result](/Users/tiger/Projects/domainry-skill-evals/runs/m1-crm-opt77-backend-only-08/project/.domainry/development/m1-opt80-semantic-canary-02/semantic-canary-result.json)
+- [Gate receipt](/Users/tiger/Projects/domainry-skill-evals/runs/m1-crm-opt77-backend-only-08/project/.domainry/builder/evidence/development-gates/m1-opt80-semantic-canary-02/apply_one_highest_risk_j07_approval_conversion_s-20260823T044312226803Z.json)
+- [Recovered thin harness](/Users/tiger/Projects/domainry-skill-evals/runs/m1-crm-opt77-backend-only-08/project/.domainry/development/m1-opt80-semantic-canary-02/semantic_canary.py)
+
+No whole-project completion or acceptance claim is made.

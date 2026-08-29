@@ -1,0 +1,54 @@
+{
+  "contract_version": "domainry-eval-test-node-scorecard-v1",
+  "run_id": "m2-fieldservice-8b146f6da346-mysql-test-opt6-01",
+  "parent_checkpoint": "m2-fieldservice-8b146f6da346-mysql-implement-opt6-03",
+  "node": "focused_go_tests",
+  "result": "passed_after_repair",
+  "timing": {
+    "outer_seconds": 608,
+    "startup_before_verify_started_seconds": 227,
+    "verify_started_to_agent_exit_seconds": 381,
+    "startup_share_of_outer": 0.3734
+  },
+  "first_failure_inventory": {
+    "root_cause": "project-owned Handler source referenced status constants from the capabilities package although generated constants live in the schema package",
+    "compiler_diagnostic_count": 12,
+    "affected_handler_count": 6
+  },
+  "second_failure_inventory": {
+    "nil_capability_panics": 6,
+    "obsolete_not_implemented_scaffold_expectations": 8,
+    "owner": "project source and project tests"
+  },
+  "convergence": {
+    "repair_rounds": 2,
+    "actual_go_test_invocations": 15,
+    "test_bearing_shell_commands": 8,
+    "project_check_after_each_source_round": true,
+    "source_finalize_after_each_source_round": true,
+    "final_test_count": 8,
+    "final_pass_count": 8
+  },
+  "quality_disclosure": {
+    "tests_are_behavioral_unit_tests": false,
+    "tests_only_prove_zero_input_fail_closed_error_codes": true,
+    "mysql_exercised": false,
+    "runtime_exercised": false,
+    "semantic_canary_exercised": false
+  },
+  "observed_efficiency_findings": [
+    "A new continuation session spent 227 seconds before verify.started loading broad Skill/TODO/evidence context.",
+    "The first evidence-wrapped test suppressed diagnostic text, forcing a repeated test command.",
+    "Default compiler error truncation forced an unlimited-error repeat to inventory all 12 compile failures.",
+    "Package panic abort forced eight isolated test invocations to inventory all cases.",
+    "The evidence runner executes from project root, rejected go -C backend as proof, and caused two wrong-working-directory attempts.",
+    "Source identity changes made earlier Gate bindings stale and required manual reattachment after convergence."
+  ],
+  "protocol": {
+    "mysql_only": true,
+    "sqlite_observed": false,
+    "model_mutation_observed": false,
+    "runtime_or_acceptance_observed": false,
+    "node_boundary_respected": true
+  }
+}

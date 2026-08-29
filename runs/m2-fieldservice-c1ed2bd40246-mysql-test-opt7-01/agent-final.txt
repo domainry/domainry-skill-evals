@@ -1,0 +1,26 @@
+Focused-test checkpoint passed.
+
+Pre-test compile gate:
+
+- Initial inventory: 11 project-owned diagnostics.
+- Second bounded round: 2 additional diagnostics revealed after Go’s “too many errors” cutoff cleared.
+- Cause: Action handlers referenced value-domain constants from `capabilities` instead of generated `schema`.
+- All 13 findings repaired across two compile-repair rounds.
+- Final `project check --json --scope actions`: `state:"valid"`.
+- Source finalized successfully.
+
+First-pass focused tests:
+
+- Set: `go test ./actions/...`, covering all eight Handler test files.
+- Eight project-test failures: six nil-Execution panics and two obsolete `*.not_implemented` expectations.
+- One test-repair round updated the stale scaffolds with typed execution stubs and current behavioral assertions.
+- Final focused rerun passed.
+
+Final state:
+
+- Actual Go test command count: 11, including eight isolated diagnostic invocations required after the package-level panic aborted discovery.
+- Repair rounds: 3 total—2 compile, 1 test.
+- Blockers: none; every finding was project-owned.
+- `verify.started` recorded; inherited `implement` timestamps preserved; `verify.ended` intentionally absent.
+- [Session TODO](/private/tmp/domainry-m2-fieldservice-c1ed2bd40246-mysql-opt7-test01/.domainry/development/01a02492-45c4-7de3-b28f-076a02de26fb.md) remains at `Current stage: verify`.
+- Frozen requirements and `backend/model/*.json` were untouched. No semantic canary, broad verification, packaging, Runtime, acceptance, evaluator, golden, or scorer command ran.

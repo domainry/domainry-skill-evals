@@ -1,0 +1,52 @@
+{
+  "evidence_version": "1",
+  "backup_id": "m2-opt15-mysql-20260821T193256Z-270ae3b3",
+  "engine": "mysql",
+  "backup_type": "mysqldump-single-transaction",
+  "provider": "local-mysqldump",
+  "region": "local",
+  "fault_domain": "developer-workstation",
+  "owner": "domainry-evaluation",
+  "created_at": "2026-08-21T19:32:56Z",
+  "verified_at": "2026-08-21T19:32:56Z",
+  "schema_version": "008_identity_account_directory",
+  "checksum": "270ae3b363c03ea245e3a34ada304d6cfefe8e641802421067afdbffcbe86ca1",
+  "size": 611635,
+  "encrypted": true,
+  "immutable_until": "2026-09-21T19:32:56Z",
+  "rpo_seconds": 0,
+  "rto_seconds": 300,
+  "integrity_verified": true,
+  "artifacts": [
+    {
+      "kind": "database",
+      "path": "/private/tmp/domainry-m2-fieldservice-e235a3d6e4fb-mysql-opt12-canary01/.domainry/builder/runtime/migration-backup/opt15/database.sql",
+      "checksum": "270ae3b363c03ea245e3a34ada304d6cfefe8e641802421067afdbffcbe86ca1",
+      "size": 611635
+    },
+    {
+      "kind": "manifest",
+      "path": "/private/tmp/domainry-m2-fieldservice-e235a3d6e4fb-mysql-opt12-canary01/.domainry/builder/project-delivery/runtime-manifest.json",
+      "checksum": "6714383fa1974ee2ea732eb9df11135e23d80dd597551dcf97f26315f715d6e1",
+      "size": 588398
+    },
+    {
+      "kind": "uploads",
+      "path": "/private/tmp/domainry-m2-fieldservice-e235a3d6e4fb-mysql-opt12-canary01/.domainry/builder/runtime/migration-backup/opt15/uploads.tar.gz",
+      "checksum": "8cf5b036aac3c17e08ccd9b66e1f6a771934d05e175322024faa2c1b95f58ca6",
+      "size": 357
+    },
+    {
+      "kind": "key_versions",
+      "path": "/private/tmp/domainry-m2-fieldservice-e235a3d6e4fb-mysql-opt12-canary01/.domainry/builder/runtime/migration-backup/opt15/key-versions.json",
+      "checksum": "975c34d110fb1e5e040fd3a7a8f9bb2cec402d3ebc471c6b9be2697d2c663227",
+      "size": 235
+    },
+    {
+      "kind": "runtime_artifact",
+      "path": "/private/tmp/domainry-m2-fieldservice-e235a3d6e4fb-mysql-opt12-canary01/.domainry/builder/artifacts/packages/6bf966012b9b8ba09ce1cee287daf583b928a75d9989e02dcb1f4f9d8725eaf2/bin/domainry-runtime",
+      "checksum": "8018aaa94fd4708727b45360b77819f9cdccf2ad6fb8074d62369e13a104c134",
+      "size": 88028754
+    }
+  ]
+}

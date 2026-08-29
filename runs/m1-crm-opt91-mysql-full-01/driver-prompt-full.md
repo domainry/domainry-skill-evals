@@ -1,0 +1,21 @@
+Use the installed `domainry-builder-v1` Skill and its packaged CLI to complete this fresh M1 CRM backend project end to end in one uninterrupted Agent session, from the sole business input `requirements.md` through terminal `done`.
+
+This is a formal full-flow timing baseline, not an optimization or staged checkpoint run. Work continuously in one Host/Agent session and one project-visible development TODO. Do not pause for stage confirmation, ask the caller to resume, create another Agent, or stop on an ordinary diagnostic. A recoverable Gate/check/acceptance failure is work to diagnose and repair at its named owner in this same workflow; rerun only invalidated checks and continue automatically. Stop only for a genuinely unrecoverable external condition after exhausting authorized recovery and recording typed evidence.
+
+Frozen environment and boundaries:
+
+- Evaluation model is `gpt-5.6-sol` with high reasoning.
+- Use the installed Skill/CLI rooted in the active isolated `CODEX_HOME` and the active Plane at `http://127.0.0.1:8283`. Do not modify or reinstall the Skill, CLI, Plane, evaluator, or Runtime framework.
+- Use local MySQL only. The process inherits `DATABASE_DRIVER=mysql` and a secret `DATABASE_DSN` targeting the fresh empty schema `domainry_m1_opt91_full_01`. Never use or fall back to SQLite. Never print, inspect, serialize, or persist the DSN, password, tokens, cookies, or credentials.
+- Reserve `127.0.0.1:19111` for the managed Runtime. Leave the final matching Runtime running and healthy for independent verification.
+- This project has no frontend. Build only the source-owned backend/model and project-owned Action/tests required by the business requirements. Do not create, fetch, copy, generate, validate, or materialize `frontend/**`, a frontend component contract, or a Runtime Client SDK.
+- Do not inspect the parent evaluation repository, any `benchmarks`, `golden`, `scorer`, harness evaluator code, other runs, scorecards, or prior M1/M2 solutions. `requirements.md` is the only business requirement input.
+- Do not add compatibility layers, bypasses, weaker acceptance oracles, reduced denominator scope, broad administrative grants, or project-name/case-specific logic.
+
+Maintain `.domainry/development/stages.json` in real time with epoch-second `started` and `ended` values for exactly these stages as they occur: `requirements`, `model`, `apply`, `implement`, `verify`, `acceptance`. A stage ends when its authoritative checkpoint is current; normal repair time remains charged to the affected stage. Do not backfill guessed times at the end.
+
+Run the installed Skill's normal whole-project resolver and complete its complete requirements/domain-truth/model/apply/source/focused-test/verify/package/managed-Runtime/canary/acceptance/TODO workflow. Use machine-owned continuation recipes when the resolver makes them applicable. Do not rerun a current upstream checkpoint merely to be safe. Preserve full business semantics, authorization/data-scope boundaries, transactions, idempotency, workflow, scheduler, notifications, reporting/export, audit, pagination, and MySQL behavior required by `requirements.md`.
+
+After the highest-risk real semantic canary passes, run `project acceptance prepare` once for the current cohort. Then run the complete standard denominator three independent times with `--parallel 8`, writing distinct result files `.domainry/development/acceptance-results/full-standard-01.json`, `full-standard-02.json`, and `full-standard-03.json`. On failure, repair the named owner without reducing the denominator and continue in the same session. Run formal acceptance check against every required passing result, close automatic requirement coverage and all applicable Gates, run the TODO consistency check, and reach exact terminal `done` with zero failed/skipped/gap/unproved/blocking applicable rows.
+
+Finish with a concise factual report containing exact Skill/CLI/Plane version, Runtime address/PID and non-secret MySQL database identity, model/apply/source/verify/package/canary outcomes, each acceptance result path and pass/total/duration, repair inventory, TODO path and terminal state. Also report the stage timings from the maintained stages file. Do not claim success unless the installed Skill's evidence ledger and TODO both prove terminal `done`.

@@ -1,0 +1,36 @@
+Requirements/PRD node completed in 768 active seconds.
+
+- Canonical PRD: [backend-requirements-prd.md](/Users/tiger/Projects/domainry-skill-evals/runs/m1-crm-opt63-mysql-generality-01/project/docs/backend-requirements-prd.md)
+- Development TODO: [session TODO](/Users/tiger/Projects/domainry-skill-evals/runs/m1-crm-opt63-mysql-generality-01/project/.domainry/development/01a02950-7e14-7053-b074-51556ceee574.md)
+- Stage ledger: [stages.json](/Users/tiger/Projects/domainry-skill-evals/runs/m1-crm-opt63-mysql-generality-01/project/.domainry/development/stages.json)
+- Requirements SHA-256: `e0efeb60fc61f13ed0fd7f66d925660e282096b149f1850ab05ac0886e9a6d37`
+- PRD SHA-256: `a4385bf2d8aa0cd55010b93889f058fc1c8b70ff7116b9afca549cdb45bd7b38`
+- `requirements.md` remains byte-identical; Git diff exit `0`.
+- Requirements Gate: passed, `7/7`.
+- TODO consistency check: passed for `requirements`.
+- Stage timing: `1787399625`–`1787400393`; only `requirements` was opened and closed.
+
+Unresolved ambiguities are recorded as D-001–D-011, principally:
+
+- Amount currency, requiredness, and validation limits.
+- Approval-pending identity, interim state, edits, cancellation/resubmission, and concurrency.
+- Customer read scope.
+- Scheduler timezone, morning time, and workday calendar.
+- Report/list ordering, totals, zero/missing-value semantics, and CSV schema.
+- Contact/phone masking and export policy.
+- Stable error, idempotency-mismatch, and optimistic-concurrency contracts.
+- Acceptance-director count, department membership, and requester-only export contrast.
+- Reporting-line behavior, Inbox presentation, and literal navigation paths.
+
+Critical ambiguity-affected model resources remain explicitly blocked; no assumptions were promoted to confirmed facts.
+
+Final Git status contains four untracked project artifacts:
+
+```text
+?? .domainry/builder/development-gates/01a02950-7e14-7053-b074-51556ceee574.json
+?? .domainry/development/01a02950-7e14-7053-b074-51556ceee574.md
+?? .domainry/development/stages.json
+?? docs/backend-requirements-prd.md
+```
+
+Exact next node: `model`, beginning with resolution of D-001–D-008 before affected capability selection or metadata authoring. No database, model validation/apply, source implementation, Runtime, verification, packaging, or acceptance work was performed.

@@ -1,0 +1,111 @@
+{
+  "contract_version": "domainry-skill-evaluation-model-stage-scorecard-v1",
+  "run_id": "m2-fieldservice-6bd4a3a28483-mysql-model-opt2-01",
+  "parent_run_id": "m2-fieldservice-fc706dc393be-mysql-pretest-opt1-01",
+  "parent_checkpoint": "requirements-complete",
+  "benchmark": "m2-fieldservice",
+  "scope": "model_validate_and_plan_only",
+  "environment": {
+    "template_commit": "8932b2e4e8cb3e0b752fa43fd38072083d3cbc0f",
+    "skill_version": "6bd4a3a28483",
+    "model": "gpt-5.6-sol",
+    "reasoning_effort": "high",
+    "database_driver": "mysql",
+    "database_server": "MySQL 9.5.0",
+    "database_name": "domainry_m2_fieldservice_6bd4a3a28483_mysql_opt2_model01",
+    "sqlite_used": false
+  },
+  "checkpoint_integrity": {
+    "requirements_sha256": "b9d06d5d5717e586c361870392aadec780ab3dd12e9306d04c936c43ecb3cc56",
+    "accepted_prd_sha256": "470cb63d33362fe3bccab3d2e987178db9f54388cf12c9f540608ae014618d69",
+    "requirements_unchanged": true,
+    "accepted_prd_unchanged": true,
+    "fresh_mysql_database": true,
+    "mysql_tables_created": 0
+  },
+  "model": {
+    "status": "valid_after_report_contract_repair",
+    "complete_inventory_before_first_validate": true,
+    "primary_validate_invocations": 3,
+    "primary_validate_sequence": [
+      "1_loader_issue:model.report_sql_path_invalid",
+      "6_aggregate_issues:report_join_cardinality_and_limit",
+      "0_issues:valid"
+    ],
+    "effective_validate_invocations_including_evidence_gate": 4,
+    "primary_plan_invocations": 1,
+    "effective_plan_invocations_including_evidence_gate": 2,
+    "post_valid_regressions_observed": false,
+    "targeted_opt01_diagnostic_classes_remaining": 0,
+    "targeted_opt01_diagnostic_classes_eliminated": [
+      "identity.acceptance_effective_menu_unbound",
+      "schema errors for Identity menus and role_menus",
+      "object field validation.minimum",
+      "object-valued expected_reports.metrics",
+      "compose.action_role_relation_target_read_missing",
+      "compose.export_control_grants_incomplete",
+      "ledger.report_export_control_property_unsupported",
+      "ledger.behavior_owner_mismatch"
+    ],
+    "newly_exposed_diagnostics": [
+      "model.report_sql_path_invalid because Report value omitted key",
+      "backend.report.join_cardinality_invalid plus strict alias shape",
+      "backend.report.object_sql_limit_invalid above 10000"
+    ],
+    "evidence_gates_passed": 13,
+    "evidence_gates_total": 13,
+    "final_inventory": {
+      "ledger_items": 30,
+      "requirements": 8,
+      "roles": 4,
+      "objects": 10,
+      "actions": 9,
+      "behaviors": 22,
+      "acceptance_scenarios_declared": 10,
+      "source_owned_sql_files": 3
+    },
+    "model_sha256": "dc7da6d636ebf8a98d8ddfd3ea67deb8bb5b6ce45b706005ab3647d684d4a889",
+    "blueprint_sha256": "a40b3117b38451014e235da0ba9848d1c9baff018fe489a985f53c23760b50e3"
+  },
+  "timing": {
+    "agent_reported_model_seconds": 1093,
+    "agent_process_to_model_end_seconds": 1399,
+    "unreported_pre_model_loading_seconds": 306,
+    "comparison_seconds": 1399,
+    "opt01_model_seconds": 1095,
+    "delta_seconds": 304,
+    "delta_percent": 27.8,
+    "measurement_rule": "driver outer boundary overrides delayed agent stage start"
+  },
+  "efficiency": {
+    "command_executions": 88,
+    "input_tokens": 11058019,
+    "cached_input_tokens": 10765824,
+    "output_tokens": 64580,
+    "reasoning_output_tokens": 22465
+  },
+  "excluded_and_unexecuted": {
+    "model_apply": true,
+    "source_implementation": true,
+    "go_tests": true,
+    "project_verify": true,
+    "project_package": true,
+    "runtime_started": false,
+    "acceptance": true,
+    "golden_probe": true,
+    "scorer": true
+  },
+  "verdict": {
+    "decision": "rework",
+    "hypothesis_target_met": false,
+    "direction_supported": true,
+    "reasons": [
+      "all 30 targeted opt-01 diagnostic classes disappeared",
+      "the first full aggregate validation still had 6 issues, missing the at-most-5 target by one",
+      "effective validation calls increased from 3 to 4 because the evidence gate reran validation",
+      "driver-adjusted model time regressed from 1095 to 1399 seconds",
+      "remaining findings share one narrow Report authoring-contract root suitable for a follow-up batch"
+    ],
+    "promotion": "do not use the opt-02 experimental model output as the parent for another model-stage A/B; restart from the same requirements-complete checkpoint"
+  }
+}

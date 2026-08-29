@@ -1,0 +1,8 @@
+=== RUN   TestRuntimeBusinessFlows
+    runtime_acceptance_test.go:212: login tech_west: status=403 body={"code":"auth.invalid_credentials","contract_version":"runtime-authoring-v1","error":"auth.invalid_credentials","message":"auth.invalid_credentials","message_key":"auth.invalid_credentials","params":null,"request_id":"req_038a861c69aee96b3d3d2308cb7e5b14"}
+--- FAIL: TestRuntimeBusinessFlows (0.07s)
+=== RUN   TestRequirementTraceabilityIsComplete
+--- PASS: TestRequirementTraceabilityIsComplete (0.00s)
+FAIL
+FAIL	example.com/domainry/m2-fieldservice/tests/businessflow	1.100s
+FAIL

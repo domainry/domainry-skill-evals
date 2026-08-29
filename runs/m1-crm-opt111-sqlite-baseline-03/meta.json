@@ -1,0 +1,19 @@
+{
+  "run_id": "m1-crm-opt111-sqlite-baseline-03",
+  "benchmark": "m1-crm",
+  "cohort": "baseline",
+  "run_kind": "formal-single-chain-full-flow",
+  "skill_version": "v0.0.111-local.20260824-business-flow-cases",
+  "model": "gpt-5.6-sol",
+  "reasoning_effort": "high",
+  "database_driver": "sqlite",
+  "database_path": ".domainry/builder/runtime/runtime.db",
+  "runtime_address": "127.0.0.1:19120",
+  "agent_session_count": 1,
+  "agent_declared_done": true,
+  "human_interventions": 0,
+  "state": "completed_clean_cohort_pass",
+  "started_epoch": 1787583814,
+  "ended_epoch": 1787588227,
+  "project_workspace": "/Users/tiger/DomainryEvalWorkspaces/m1-crm-opt111-sqlite-baseline-03"
+}

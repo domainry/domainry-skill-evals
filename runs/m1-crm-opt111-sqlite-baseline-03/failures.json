@@ -1,0 +1,5 @@
+[
+  {"stage":"verify","owner":"model_capability","note":"Agent convergence repaired optimistic target mutation, workflow request identity, export mapping, and report indexing before done."},
+  {"stage":"acceptance","owner":"benchmark_defect","note":"Legacy M1 Python probe hard-codes retired action keys, field names, identities, and default credentials; final reconciliation used frozen semantic IDs against independent opt111 business-flow execution."},
+  {"stage":"acceptance","owner":"cli_platform","note":"After BF-08 pressure fixtures grew lead data into the thousands, scheduler record dispatch omitted a newly appended stale lead. Fresh-cohort BF-06 passed; retain as scale-stability finding, not baseline-scale failure."}
+]

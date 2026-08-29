@@ -1,0 +1,74 @@
+{
+  "contract_version": "domainry-eval-freeze-manifest-v1",
+  "frozen_at": "2026-08-24T09:35:13Z",
+  "run_id": "s1-ticketing-opt110-mysql-calibration-01",
+  "benchmark": "s1-ticketing",
+  "cohort": "calibration-formal-full-flow",
+  "requirements_sha256": "6a6e7a1dbc40adf1566daaec8c6df66b1a7cc586947bd9c33db2a7cb7371699d",
+  "public_semantic_ids_sha256": "2adfef290c73291dbd933bcc294520e9dda2ee42162d9120b324a825b49422a0",
+  "benchmark_denominator": {
+    "count": 16,
+    "checklist_sha256": "81059eda5a507b1ad105136df37f28c02c851453a6e9f9e10149fcf44bc6e92e",
+    "golden_probe_sha256": "2ad82a401b7864462b7bb5bfab78563e47302580486d1d88905d4f2347596c4a"
+  },
+  "driver_prompt_sha256": "6af6406d2aab5c66d61d47e014fee8c2faf9a8cc7cd3057e51273a47a29bedb8",
+  "scorer_sha256": "4a26b063e592d5cbc1d697ddf0dd1452763cfe18dd70841e596e9ce1d2d9cbaf",
+  "outcome_schema_sha256": "6a93526ad2a48501a2f2dab6fe1f8006935357403aea8c2e967f23b213d04d43",
+  "run_protocol_sha256": "2fdefd66cbdf42963ee9896da1982520c6823af40550aa6c99d929b5a1a014bd",
+  "skill": {
+    "name": "domainry-builder-v1",
+    "version": "v0.0.110-local.20260824-cli-stages",
+    "tree_sha256": "ed2a78fef70f03f3d44d096771c864e6828e46aa5aae9fe49389e96c56765f4f",
+    "package_manifest_sha256": "6ac790dcdb31048132fcfb18c29083c981f4d37601b1ecdd908d25a91f62034f",
+    "identity_sha256": "ebd64d96025aeabc3ec803e2cef1d6330e670533269edbfc0dda8172909aaceb"
+  },
+  "cli": {
+    "version": "v0.0.110-local.20260824-cli-stages",
+    "sha256": "a2b48a00d739b5e6e5239ccd5fc00582756b837ad6ca59e5209beabfbbfa1648"
+  },
+  "plane": {
+    "url": "http://127.0.0.1:8283",
+    "version": "v0.0.110-local.20260824-cli-stages",
+    "health_sha256": "a6a67bbbce28763464cbcb5257ca36e5ba6a0f5a25f287884dbb9d397f248694",
+    "health_checks": "9/9 passed"
+  },
+  "runtime": {
+    "module": "github.com/codeck-backend/verdent-template@v0.0.0-source-eea5ce547f0260e4",
+    "api_contract_version": "runtime-domain-api-v1",
+    "api_contract_sha256": "fdde97e582d83dd3bdec714e1f1a1f04009866db3689f6e75764f9daa194ef2b",
+    "reserved_address": "127.0.0.1:19116"
+  },
+  "database": {
+    "driver": "mysql",
+    "server_version": "9.5.0",
+    "host": "127.0.0.1",
+    "port": 3306,
+    "schema": "domainry_s1_opt110_calibration_01",
+    "initial_tables": 0,
+    "secret_material_persisted": false
+  },
+  "agent": {
+    "model": "gpt-5.6-sol",
+    "reasoning_effort": "high",
+    "host_cli": "codex-cli 0.146.0",
+    "session_count": 1,
+    "human_intervention_budget": 0
+  },
+  "material_run_settings": {
+    "workflow": "requirements->domain-truth->model->apply->implement->tests->verify->package->managed-runtime->canary->acceptance->terminal-done",
+    "acceptance_prepare_maximum": 1,
+    "acceptance_standard_repetitions": 3,
+    "acceptance_parallelism": 8,
+    "project_business_inputs": ["requirements.md"],
+    "sqlite_forbidden": true,
+    "frontend_project_source_forbidden": true
+  },
+  "project_seed": {
+    "git_commit": "391952872d548f3dadb36c865b59df8b66c4c3ab",
+    "business_files": ["requirements.md"]
+  },
+  "evaluator_repository": {
+    "commit": "4ea968eda5626df4b2ea235b322d8c5ca2c16db9",
+    "working_tree_status_sha256": "7dbd69ee00afaef146aa331d611300f44ac41708657484241c320c02ff325163"
+  }
+}

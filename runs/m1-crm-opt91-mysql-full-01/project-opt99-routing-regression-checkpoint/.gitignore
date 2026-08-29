@@ -1,0 +1,6 @@
+.domainry/
+.idea/
+dist/
+dist-*/
+backend/runtime-data/
+backend/work/

@@ -1,0 +1,53 @@
+Packaging passed exactly once through the fresh Gate. Runtime was not started.
+
+### Package result
+
+- Session: `01a02b5e-364a-7fe1-8d8b-cbb7cc1bbbee`
+- Gate: `verify.canonical_project_package_json_runs_exactly_once.13edb125`
+- Command count: `project package --json` = `1`
+- Exit/duration: `0`, `7008.576 ms`
+- State/contract: `packaged`, `domainry-project-package-receipt-v6`
+- Package receipt identity: `3bd62d3f3f480030def3c584dfb19e89870647f01a62162e3f4fa3babd60fbd0`
+- Receipt file SHA: `d897087bf553ae1e6fdca35580c4d537ab15609a8b34c191e6dad4849bd44076`
+- Manifest/package identity: `a464d36e8cf470946463f394577553fcfd9ec60b47b2c60321eebe8a0f8bd622`
+- Gate receipt SHA: `ed0efc6a6e82de6dd76d8e80e303da6bcabf2bf7f0c7f80d84af489af3749f42`
+- Target: `darwin/arm64`, CGO disabled, Go `1.26.5`
+- Signature: Ed25519, key `37245b78740f6f9b`
+
+Primary artifact hashes:
+
+- Runtime binary: `822456f794372ad3a006d7b56686deb6a635149eb84efe3cec358d45018d44da`
+- Manifest: `a464d36e8cf470946463f394577553fcfd9ec60b47b2c60321eebe8a0f8bd622`
+- Provenance: `3e3d80c7752cbf84f8393d62b943cfc3a9e5a8e08474e2a4ce00ff86fcb858a6`
+- SBOM: `33aafc0068f68eb5cfe70143820fff49c8fb1ec4203768b332c40dd7f5133e4e`
+
+Artifacts: [package receipt](/Users/tiger/Projects/domainry-skill-evals/runs/m1-crm-opt70-preflight-recovery-06/project/.domainry/builder/receipts/package.json), [signed manifest](/Users/tiger/Projects/domainry-skill-evals/runs/m1-crm-opt70-preflight-recovery-06/project/.domainry/builder/artifacts/packages/a464d36e8cf470946463f394577553fcfd9ec60b47b2c60321eebe8a0f8bd622/manifest.json), [Gate receipt](/Users/tiger/Projects/domainry-skill-evals/runs/m1-crm-opt70-preflight-recovery-06/project/.domainry/builder/evidence/development-gates/01a02b5e-364a-7fe1-8d8b-cbb7cc1bbbee/verify_canonical_project_package_json_runs_exact-20260822T213015464724Z.json), [session TODO](/Users/tiger/Projects/domainry-skill-evals/runs/m1-crm-opt70-preflight-recovery-06/project/.domainry/development/01a02b5e-364a-7fe1-8d8b-cbb7cc1bbbee.md).
+
+### Frozen checkpoint
+
+All supplied checkpoint identities matched:
+
+- Delivery: `sha256:4d249113…bee64`
+- Materialization: `f63ae295…2558`
+- Finalized source: `fa63fcbc…11e2`
+- Finalization receipt file: `a7e0cec1…ab42`
+- Verification identity/file: `c2bdefe3…e081` / `cb83d7a8…265e`
+- Verification: `10/10` passed, zero failed/skipped
+- Gate bindings: requirements `374b56d1…9fb7`, source `85c90739…754`, Blueprint `7c073573…8a1a9`, Runtime manifest `9fc87cfd…37c`
+
+Requirements, PRD, frontend absence, ten model files, Report SQL, project-owned source/tests, and generated/domain source remained unchanged. No forbidden product command ran; SQLite/MySQL use was zero.
+
+### Timing and usage
+
+- Host interval: `2026-08-22T21:26:29.787Z`–`21:32:42.027393Z`
+- Wall/active time: `372.240393 s`; continuous work, no blocking wait
+- Model: `gpt-5.6-sol`, high reasoning
+- Usage snapshot: input `2,320,379`, cached input `2,214,144`, output `15,070`, reasoning output `5,068`, total `2,335,449` tokens
+- Required CLI version command: `1`, `0.06 s`
+- Package product command: `1`, `7.008576 s`
+
+### Remaining bounded gaps
+
+No Runtime cohort/process identity, MySQL schema, health proof, semantic canary, acceptance denominator/results, evaluator, or scorer exists from this node. Runtime readiness, acceptance, and completion are not claimed.
+
+The exact next node is a brand-new session-owned light-batch managed-Runtime startup/status node using this bundle, `DATABASE_DRIVER=mysql`, an authorized secret `DATABASE_DSN` targeting one fresh local MySQL schema, and a dedicated loopback port. It should run fresh Gates for `runtime-process start` and then `runtime-process status`, stopping after the matching v3 process is running/current/HTTP-healthy and before semantic canary or acceptance.

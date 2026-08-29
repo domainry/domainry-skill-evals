@@ -1,0 +1,19 @@
+{
+  "run_id": "s1-ticketing-opt110-mysql-calibration-01",
+  "benchmark": "s1-ticketing",
+  "cohort": "calibration",
+  "run_kind": "formal-single-chain-full-flow",
+  "skill_version": "v0.0.110-local.20260824-cli-stages",
+  "skill_tree_sha256": "ed2a78fef70f03f3d44d096771c864e6828e46aa5aae9fe49389e96c56765f4f",
+  "model": "gpt-5.6-sol",
+  "reasoning_effort": "high",
+  "database_driver": "mysql",
+  "database_schema": "domainry_s1_opt110_calibration_01",
+  "runtime_address": "127.0.0.1:19116",
+  "agent_session_count": 1,
+  "agent_declared_done": false,
+  "human_interventions": 0,
+  "state": "invalidated_candidate_repair_requested",
+  "ended_epoch": 1787564311,
+  "project_workspace": "/Users/tiger/DomainryEvalWorkspaces/s1-ticketing-opt110-mysql-calibration-01"
+}

@@ -1,0 +1,71 @@
+{
+  "contract_version": "domainry-skill-eval-checkpoint-scorecard-v1",
+  "case": "m1-crm",
+  "scope": "cold legacy checkpoint continuation",
+  "skill_version": "v2.4.0-7d219ec9",
+  "template_commit": "7d219ec9b907e8b9f0f4a6cef38fa83a03033b73",
+  "model": "gpt-5.6-sol",
+  "reasoning_effort": "high",
+  "database_driver": "mysql",
+  "session_id": "01a02e52-413b-70f3-a458-0f5dc74cefcc",
+  "wall_seconds": 281,
+  "workflow_wall_seconds_reported": 3.4,
+  "shell_command_count": 8,
+  "workflow_cli_call_count": 4,
+  "shell_nonzero_count": 0,
+  "product_command_replay_count": 0,
+  "acceptance_rerun_count": 0,
+  "input_tokens": 271917,
+  "cached_input_tokens": 225536,
+  "output_tokens": 13167,
+  "reasoning_output_tokens": 6784,
+  "event_bytes": 41369,
+  "workflow_stdout_bytes": 9164,
+  "skill_load_stdout_bytes": 19905,
+  "state": "done",
+  "before_blocking_gates": 300,
+  "after_blocking_gates": 0,
+  "final_gate_counts": {
+    "pending": 0,
+    "passed": 38,
+    "not_applicable": 31,
+    "superseded": 300,
+    "failed_or_stale": 0
+  },
+  "receipt_selection": {
+    "candidates": 8,
+    "selected": 3,
+    "excluded_non_passing": 2,
+    "excluded_identity_mismatch": 3
+  },
+  "stdout_bytes": {
+    "development_context": 2819,
+    "resume_envelope": 277,
+    "resume_packet": 3503,
+    "close_checkpoint": 1496,
+    "terminal_status": 1069,
+    "runtime_listener": 162
+  },
+  "verified_successes": [
+    "cold resolver selected one unique close route",
+    "three current-identity formal acceptance rounds were selected from eight candidates",
+    "300 legacy blockers were settled through three typed stage-settlement gates",
+    "terminal status passed with zero blockers",
+    "no product command or acceptance suite was replayed",
+    "runtime PID 8557 and the inherited MySQL cohort were not restarted or mutated",
+    "the Agent did not open the full closure, coverage, close report, ledger, guide, or CLI source"
+  ],
+  "remaining_optimization_findings": [
+    "workflow execution completed in about 3.4 seconds while outer Agent wall was 281 seconds",
+    "the installed SKILL.md contributed 19905 stdout bytes before the compact continuation",
+    "the detailed final report increased output tokens to 13167 and dominated post-terminal latency"
+  ],
+  "authoritative_artifacts": {
+    "events": "agent-events.jsonl",
+    "stderr": "agent-stderr.log",
+    "prompt": "driver-prompt.md",
+    "started_epoch": "started-epoch.txt",
+    "finished_epoch": "finished-epoch.txt",
+    "exit_code": "exit-code.txt"
+  }
+}

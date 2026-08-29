@@ -1,0 +1,29 @@
+The apply node is closed at its permitted evidence ceiling. I am not claiming apply success or project completion.
+
+- `model preflight`: 1 invocation, `323.851 ms`, exit `0`, valid, zero issues.
+- `model validate --json`: 1 invocation, `248.856 ms`, exit `0`, valid, zero diagnostics.
+- `model apply --json`: 1 invocation, `1742.242 ms`, exit `1`; not rerun.
+- Total product-command duration: `2314.949 ms`.
+- Apply interval replaced only in this recovery copy: epoch `1787422487..1787423004` (`517 s`). Requirements/model intervals were preserved.
+
+The apply failure occurred after successful publication and materialization:
+
+- Model counts: `0 create / 1 update / 0 delete / 36 unchanged`; resulting signed inventory: `37` items.
+- Delivery: `sha256:83ea2c5b59b9cc64f5741c5f87f47484763f40ed6fd6d5e6371451e6cd044250`.
+- Project Delivery contract: `142525c71ae3fd580c4d41b7cb44ffeb904a3c001ea05542ff2df852b35f688a`.
+- Materialization receipt: `474a2cdefc826bf7b49486442d3be528f58f688a7e42528b786101ae95dfedf0`.
+- Application Delivery: `v0.18.0-opt70.255f12b`, manifest `cc2a9c4d…d71f`.
+- Runtime module: `github.com/codeck-backend/verdent-template@v0.0.0-source-033be9b8a575fd1c`.
+- Project template: `97bd764d…1d2d`; SDK: `3287eaf5…2fe89`.
+- Signer: `domainry-project-delivery-opt70-255f12b-8283`; trust domain `local.domainry.project-delivery.opt70.255f12b.8283`, revision `1`, bundle `450e5868…6d57b`.
+- Dependencies resolved normally.
+
+Materialization installed `98` files: `59` generated backend files, `9` Handler skeletons, and `9` matching tests. It installed zero `frontend/**` files.
+
+Automatic finalization correctly failed closed on exactly `9` unimplemented Handler gaps—one per published Action—with `9` corresponding generated-capability non-use diagnostics. Finalization checks were `8 passed / 1 failed / 1 skipped_dependency`. No successful finalization or model-apply completion receipt exists.
+
+The Gate state is therefore intentionally blocked: `8 passed / 2 failed / 4 stale / 2 pending`. The one-time preflight and validation receipts became stale when publication advanced the bound Blueprint identity; rerunning them would violate the requested command limits. TODO consistency consequently remains blocked.
+
+Exact next node: implement the nine delivered Action Handlers using generated capabilities, then run Gate-owned valid `project check --scope actions` → `project source finalize` → module-focused Go tests. The compact source-finalization continuation is not yet applicable.
+
+Evidence: [session TODO](/Users/tiger/Projects/domainry-skill-evals/runs/m1-crm-opt70-preflight-recovery-06/project/.domainry/development/01a02aae-b55d-7e21-b590-33282342230a.md), [signed delivery](/Users/tiger/Projects/domainry-skill-evals/runs/m1-crm-opt70-preflight-recovery-06/project/.domainry/builder/contracts/project_delivery-142525c71ae3fd580c4d41b7cb44ffeb904a3c001ea05542ff2df852b35f688a.json), [materialization](/Users/tiger/Projects/domainry-skill-evals/runs/m1-crm-opt70-preflight-recovery-06/project/.domainry/builder/receipts/materialization.json), [finalization failure](/Users/tiger/Projects/domainry-skill-evals/runs/m1-crm-opt70-preflight-recovery-06/project/.domainry/builder/receipts/finalization-failed.json).

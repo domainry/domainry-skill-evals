@@ -1,0 +1,17 @@
+{
+  "artifact": {
+    "binary_name": "domainry-runtime",
+    "main_package": "./cmd/runtime",
+    "signing_key_id": "be24ab83f6d21641",
+    "signing_public_key_base64": "MbrZH765uiGI5DnT4dEQRLc1VfDPFv7J1dtFWnXJ3C0=",
+    "source_date_epoch": 0
+  },
+  "build_tags": [],
+  "contract_version": "domainry-project-build-lock-v3",
+  "go_version_minimum": "1.26.0",
+  "target": {
+    "cgo_enabled": false,
+    "goarch": "arm64",
+    "goos": "darwin"
+  }
+}

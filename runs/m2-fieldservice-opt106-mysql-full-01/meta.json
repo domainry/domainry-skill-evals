@@ -1,0 +1,20 @@
+{
+  "run_id": "m2-fieldservice-opt106-mysql-full-01",
+  "benchmark": "m2-fieldservice",
+  "run_kind": "formal-single-chain-full-flow",
+  "skill_version": "v0.0.106-opt106.b66a37b0",
+  "skill_tree_sha256": "9b87a81c1be855dedb4334d41cd128a003cee1c8de1c60ac79e9b6cdc43f4bda",
+  "model": "gpt-5.6-sol",
+  "reasoning_effort": "high",
+  "database_driver": "mysql",
+  "database_schema": "domainry_m2_opt106_full_01",
+  "runtime_address": "127.0.0.1:19113",
+  "agent_session_count": 1,
+  "agent_declared_done": false,
+  "human_interventions": 0,
+  "state": "running",
+  "started_epoch": 1787542465,
+  "ended_epoch": null,
+  "outer_wall_seconds": null,
+  "project_workspace": "/Users/tiger/DomainryEvalWorkspaces/m2-fieldservice-opt106-mysql-full-01"
+}

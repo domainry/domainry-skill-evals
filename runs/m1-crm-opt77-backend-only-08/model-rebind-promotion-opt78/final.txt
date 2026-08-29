@@ -1,0 +1,59 @@
+Promotion succeeded with all three one-shot Gates passed: canonical preflight, canonical validation, and the single audit-bound apply.
+
+### Identities
+
+- Delivery: `sha256:d89f0ecb6373808bb569822561d9af850258284326f93fc8e2f798099a2f2e7d`
+- Materialization receipt: `5ad2ea14a3198c905babfa7413b41947919ffa1b7249315e2bdf74d9180e37df`
+- Finalization receipt: `4d1cc561ce548da12755562a0c4a213659104e7df6edd5ff4c68425d756c0829`
+- Finalized source tree: `fa63fcbc059050e4967f8b6e2d6482a2e5fb3b0ab38aff4fa1c1a68ee18311e2`
+- Local composition: `a1c19cf0290af5a6c2c9ac3efe869ab94f65a803d27cbb298f0902676dd50edf`
+- Generated tree: `ff7c662d1d8bd2133796fe7ae7dba40539f7ce7faf03c134e94e5e9aa7833789`
+
+Binding contract:
+
+- Contract: `domainry-builder-application-delivery-binding-v1`
+- Identity: `5eae2310259721af0084ce94527e39926733ffa26e104112465b48077b4407e9`
+- Bound Application Delivery: `domainry-application-delivery-v5`
+- Application Delivery SHA-256: `5991aac6a9868acd173d5ba929ddbdb7991971c5e2da553d05a132df60cb1b76`
+
+### Protected hashes
+
+All before/after hashes are identical:
+
+| Protected content | Before and after SHA-256 |
+|---|---|
+| `requirements.md` | `e0efeb60fc61f13ed0fd7f66d925660e282096b149f1850ab05ac0886e9a6d37` |
+| Backend PRD | `c25c7882646be6febfb0e44f081919908e48081172375aa4beb5d5c8f51d062d` |
+| 10 model files | `dc3ef05ee0b864106606b329ec00b972bce301775e04725e4a66c36e6b7e5752` |
+| 2 report SQL files | `73cae3ca320492e3473904b2114d61dbcd5a611f13dfb5766794a7e0eb160b19` |
+| 18 Action source/test files | `c76eb721c37704c8849029372fe94a5f8916eabb5dcde68a13249bc2e95d59ee` |
+| `backend/go.mod` | `217cdb7767dc1bfc09cd7d44a6075b1a1e5f2b249ca01e4ca718a4374befa08b` |
+| `backend/go.sum` | `064ffa7600cf46dbeb7855b6a3848ffa374f93afacb8c40137d67bdc576445df` |
+
+### Materialization counts
+
+Total: `95` files.
+
+| Owner | Files |
+|---|---:|
+| `contract_cache` | 8 |
+| `contract_index` | 1 |
+| `domain_source.capabilities` | 19 |
+| `domain_source.composition` | 4 |
+| `domain_source.context` | 9 |
+| `domain_source.data` | 8 |
+| `domain_source.docs` | 9 |
+| `domain_source.schema` | 10 |
+| `domain_source_manifest` | 1 |
+| `project_contract` | 1 |
+| `project_source_seed` | 18 |
+| `project_source_seed_manifest` | 1 |
+| `project_template` | 5 |
+| `runtime_manifest` | 1 |
+
+Frontend project paths: `0`; frontend materialization files: `0`.  
+Runtime Client SDK project paths: `0`; SDK materialization files: `0`.
+
+Receipts: [model apply](/Users/tiger/Projects/domainry-skill-evals/runs/m1-crm-opt77-backend-only-08/project/.domainry/builder/model-apply.json), [materialization](/Users/tiger/Projects/domainry-skill-evals/runs/m1-crm-opt77-backend-only-08/project/.domainry/builder/receipts/materialization.json), [finalization](/Users/tiger/Projects/domainry-skill-evals/runs/m1-crm-opt77-backend-only-08/project/.domainry/builder/receipts/finalization.json), [session TODO](/Users/tiger/Projects/domainry-skill-evals/runs/m1-crm-opt77-backend-only-08/project/.domainry/development/01a02c89-12f9-7f50-9c02-1b3988c2de35.md).
+
+No verification, packaging, Runtime, database, canary, acceptance, evaluator, or scorer operation was run.

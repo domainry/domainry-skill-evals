@@ -1,0 +1,24 @@
+Backend publication/materialization completed and stopped at the authorized Action-skeleton boundary.
+
+- Execution counts and active durations:
+  - Resolver: `1` — `0.002541 ms` wrapper-reported
+  - Model preflight: `1` — `298.814 ms`, valid, `37` items, `0` issues
+  - Model validate: `1` — `246.464 ms`, passed
+  - Model apply: `1` — `2579.613 ms`, exited `1` at expected source finalization
+- Delivery ID: `sha256:7b39f3f1dc3bce4106acd5c6745cb5664526f2d3e1dbe4b9c7c27c3d083e4e97`
+- Materialization receipt identity: `7a98bc466d2ac3459171a8a235e3a744c63646145feb584bbcdfe8f0db5dd965`
+- Application delivery SHA: `65185a2357025cdded07d8b1741824cb9417a61247f7e8577c2efb6177998534`
+- Dependency resolution: successful
+- Materialized files: `95`
+  - Generated backend files: `59`
+  - Project-owned files: `23` (`18` Action/test skeletons + `5` template files)
+  - Managed contract/manifest files: `13`
+  - CLI-owned Ledger files under `domain/**`: `37`, outside the materialization receipt
+- Finalization diagnostics: `18`; the sole failed check was `backend_technical_contract`, reporting fail-closed Action source placeholders. Eight checks passed and composition was dependency-skipped.
+- Frozen committed inputs: `14`, byte-for-byte unchanged
+- Written `frontend/**` files: `0`
+- Written project-side Runtime Client SDK files: `0`
+
+Receipts: [materialization.json](/Users/tiger/Projects/domainry-skill-evals/runs/m1-crm-opt76-backend-only-07/project/.domainry/builder/receipts/materialization.json), [finalization-failed.json](/Users/tiger/Projects/domainry-skill-evals/runs/m1-crm-opt76-backend-only-07/project/.domainry/builder/receipts/finalization-failed.json). Session ledger: [m1-opt76-model-apply-01.md](/Users/tiger/Projects/domainry-skill-evals/runs/m1-crm-opt76-backend-only-07/project/.domainry/development/m1-opt76-model-apply-01.md).
+
+Apply was not rerun. Source finalization, implementation, tests, verification, packaging, Runtime, database, canary, and acceptance are not complete or claimed.

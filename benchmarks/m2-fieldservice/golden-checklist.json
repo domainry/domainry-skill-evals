@@ -1,0 +1,30 @@
+{
+  "benchmark": "m2-fieldservice",
+  "version": 1,
+  "note": "M2 金标准,agent 不可见。新增覆盖:Consumer Portal 双 Surface 隔离、identity 绑定行级域、事务性多对象库存扣减、并发安全非负库存(CAS/算术效应)、门户侧幂等、跨 Surface 凭据隔离。沿袭覆盖:workflow 审批、scheduler、部门域、精确金额、受控导出。",
+  "features": [
+    {"id": "N01", "priority": "P0", "req": "1", "feature": "Consumer Portal 独立 Surface 与会话隔离", "probe": "门户客户可登录门户并访问自己数据;同一凭据调用内部运维操作(分派/完成/报表)全部被拒", "expected_mechanism": "customer_portal_entrypoint"},
+    {"id": "N02", "priority": "P0", "req": "2,3", "feature": "客户身份绑定与仅本人设备可报修", "probe": "客户 A 为自己设备报修成功;为客户 B 的设备报修被拒(行级)", "expected_mechanism": "identity_bound_data_scope"},
+    {"id": "N03", "priority": "P0", "req": "3", "feature": "门户侧报修创建幂等", "probe": "同幂等键重复提交只建一单,重放返回同一单", "expected_mechanism": "idempotent_create"},
+    {"id": "N04", "priority": "P0", "req": "4", "feature": "客户只见自己的报修单", "probe": "客户 A 列表不含客户 B 的单;直读 B 的单被拒/404", "expected_mechanism": "identity_bound_data_scope"},
+    {"id": "N05", "priority": "P0", "req": "5", "feature": "工单字段完整(报价 exact-decimal、设备引用必填)", "probe": "schema:金额为精确小数类型;缺设备引用被拒", "expected_mechanism": "metadata_object"},
+    {"id": "N06", "priority": "P0", "req": "6", "feature": "四态状态机+撤派回退+终态", "probe": "合法链全通;completed 上任何转换被拒;dispatched→submitted 可行", "expected_mechanism": "metadata_state_machine"},
+    {"id": "N07", "priority": "P0", "req": "7", "feature": "经理分派+工程师站内通知;撤派清空", "probe": "分派后工单落站点与工程师且其 Inbox 出现通知;撤派后分派字段清空", "expected_mechanism": "handler_plus_notification"},
+    {"id": "N08", "priority": "P0", "req": "8,16", "feature": "仅被分派工程师可开始/完成", "probe": "分派人 start/complete 成功;同站点非分派人被拒;跨站点被拒", "expected_mechanism": "assignee_scoped_actions"},
+    {"id": "N09", "priority": "P0", "req": "9", "feature": "完成维修事务性:扣库存+耗用明细+状态一体", "probe": "完成后库存减少=耗用量、明细记录存在、状态 completed;三者同现同灭", "expected_mechanism": "transactional_handler"},
+    {"id": "N10", "priority": "P0", "req": "12", "feature": "库存非负与并发安全", "probe": "库存不足时完成失败且库存/状态无变化;同幂等键重复完成只扣一次", "expected_mechanism": "conditional_arithmetic_mutation"},
+    {"id": "N11", "priority": "P0", "req": "10", "feature": "完成后的工单与耗用明细只读", "probe": "对 completed 工单与明细的 update/delete 全角色被拒", "expected_mechanism": "immutable_after_terminal"},
+    {"id": "N12", "priority": "P0", "req": "13,14", "feature": "≥500 减免走审批;通过生效并落账", "probe": "≥500 发起进入审批;经理通过后减免生效、费用为减免后金额;<500 直接生效", "expected_mechanism": "workflow_approval"},
+    {"id": "N13", "priority": "P0", "req": "14", "feature": "审批拒绝回退并留原因;双向站内通知", "probe": "拒绝后减免不生效、原因可查;两种结果工程师 Inbox 有通知", "expected_mechanism": "workflow_approval"},
+    {"id": "N14", "priority": "P1", "req": "14", "feature": "客户门户可见最终费用与减免结果", "probe": "审批完成后客户侧详情显示减免后费用", "expected_mechanism": "portal_projection"},
+    {"id": "N15", "priority": "P1", "req": "15", "feature": "减免幂等", "probe": "同一工单重复发起减免不产生第二次减免", "expected_mechanism": "idempotent_handler"},
+    {"id": "N16", "priority": "P0", "req": "16,17", "feature": "站点级数据域", "probe": "工程师见本站点全部、跨站点不可见;经理全量", "expected_mechanism": "department_scope"},
+    {"id": "N17", "priority": "P0", "req": "18", "feature": "审计留痕", "probe": "状态变化/库存扣减/审批结果均有审计记录", "expected_mechanism": "audit_trail"},
+    {"id": "N18", "priority": "P1", "req": "19", "feature": "48h 未开修定时提醒(每日去重)", "probe": "DB 老化 fixture 后触发调度:超时单的分派工程师收到提醒且同日不重复", "expected_mechanism": "scheduler_dispatch"},
+    {"id": "N19", "priority": "P0", "req": "20", "feature": "经理报表(吞吐+备件耗用精确求和);他人无权", "probe": "经理两报表 200 且金额合计与明细一致;工程师/客户被拒", "expected_mechanism": "report_with_permission"},
+    {"id": "N20", "priority": "P1", "req": "21", "feature": "受控导出通道", "probe": "经理导出 CSV 成功且走受控通道(有界、审计、requester 专属);工程师被拒", "expected_mechanism": "governed_export"},
+    {"id": "N21", "priority": "P1", "req": "22", "feature": "服务端有界分页(工作区+门户)", "probe": "page_size 生效、有分页元数据;门户列表同样有界", "expected_mechanism": "bounded_pagination"},
+    {"id": "N22", "priority": "P1", "req": "23", "feature": "角色菜单差异化+门户独立导航", "probe": "工程师/经理 effective-menus 差异化;门户不出现内部菜单", "expected_mechanism": "role_menus_dual_surface"},
+    {"id": "N23", "priority": "P0", "req": "24", "feature": "验收身份与种子数据齐备", "probe": "2 站点×工程师+经理+2 门户客户可登录;种子覆盖全状态/两站点/库存不足备件/两档减免金额", "expected_mechanism": "seeded_acceptance_identities"}
+  ]
+}

@@ -1,0 +1,40 @@
+The single J07 canary failed and was not rerun. No HTTP session/business mutation was reached; Runtime and database state were unchanged.
+
+- Result: `failed`
+- Checkpoint: `runtime_and_database_binding`
+- Error: `HarnessError` — `external acceptance database cohort differs from managed Runtime`
+- Outer Gate duration: `0.157301s`
+- Pure harness duration: `0.074923s`
+- Blocked assertions: formal sessions/workforce contexts, opaque Action/target resolution, customer nonexistence, requester denial unchanged, director approval/durable change, requester Inbox, idempotent replay unchanged, and second-director terminal conflict unchanged.
+
+Counts:
+
+- Resolver: `1`
+- Builder product commands: `1` (`version --json`)
+- Gate operations: `3` (`sync`, `list`, one real `run`)
+- Gate results: `1 failed`, `2 pending`, `0 passed`
+- Canary executions: `1`
+
+Non-secret identities:
+
+- Session: `m1-opt81-semantic-canary-04`
+- CLI: `2.4.0-opt81.2893aeb0`
+- Runtime: healthy `127.0.0.1:19095`, MySQL
+- Database identity: `11b1a578…77d7672`
+- Runtime cohort binding: `354ec93a…5034353f1`
+- Runtime manifest: `9fc87cfd…93f37c`
+- Bundle manifest: `0e63ddec…d42e22d`
+- Binary: `822456f7…44da`
+- Package receipt: `5395ed0a…65a989`
+- Verification receipt: `98a638a9…c25274`
+- Finalization receipt: `4d1cc561…c0829`
+- Project source tree: `fa63fcbc…8311e2`
+
+Evidence:
+
+- [TODO](/Users/tiger/Projects/domainry-skill-evals/runs/m1-crm-opt77-backend-only-08/project/.domainry/development/m1-opt81-semantic-canary-04.md)
+- [Canary result](/Users/tiger/Projects/domainry-skill-evals/runs/m1-crm-opt77-backend-only-08/project/.domainry/development/m1-opt81-semantic-canary-04/semantic-canary-result.json)
+- [Thin harness](/Users/tiger/Projects/domainry-skill-evals/runs/m1-crm-opt77-backend-only-08/project/.domainry/development/m1-opt81-semantic-canary-04/semantic_canary.py)
+- [Gate receipt](/Users/tiger/Projects/domainry-skill-evals/runs/m1-crm-opt77-backend-only-08/project/.domainry/builder/evidence/development-gates/m1-opt81-semantic-canary-04/apply_one_highest_risk_j07_approval_conversion_s-20260823T051704750773Z.json)
+
+No whole-project completion, acceptance, verification, package, or restart claim is made.

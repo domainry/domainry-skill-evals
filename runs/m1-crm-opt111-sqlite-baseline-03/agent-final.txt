@@ -1,0 +1,14 @@
+Completed end to end with exact terminal `done`.
+
+- Identity: Skill `domainry-builder-v1`, SHA-256 `41397518…970cd`; CLI/compiler `v0.0.111-local.20260824-business-flow-cases`; Plane `local` at `http://127.0.0.1:8283`, signing key `7ed3958ead7d9ae6`; Runtime API `runtime-domain-api-v1`, hash `fdde97e…4ef2b`.
+- Model/apply: model valid, 0 issues; blueprint `cfc6a375…e1658`; delivery `sha256:e73c5b27…e61a4`; materialized successfully.
+- Source/verify/package: finalization `d2226fa1…1d9e`; structural verification `439def94…2b39`; package manifest `67c1bff3…7288`; SDK-tagged complete Go tree passed.
+- Business flows: BF-01 through BF-08 passed, **8/8**. Final affected reruns covered BF-05/BF-08; post-restart highest-risk BF-03 canary passed in 24.67s.
+- Export evidence: exact 0/1000 synchronous and 1001 asynchronous routing, governed downloads, requester denial, unique terminal notification, fingerprint replay, and SQLite indexed traversal.
+- Runtime: `http://127.0.0.1:19120`, PID `683`, `running`, `healthy=true`, cohort `current`. SQLite path `.domainry/builder/runtime/runtime.db`, identity `6bf98d3b…ecb9`.
+- Main repairs: optimistic conversion target mutation; scheduler data gate and record-scoped workflow request identity; report audit/download authorization; legal typed object-SQL predicate; persisted async download token; export rate-limit retry/deadlock handling; durable pagination oracle; indexed report predicate. A stale pre-acceptance authentication cohort was recoverably archived.
+- Changed source areas: PRD, `backend/model`, report SQL, six Action implementations/tests, business-flow tests, Go module metadata, and the single development TODO. Frontend scope remained `backend_only`.
+- TODO: [.domainry/development/20260824T150428Z.md](/Users/tiger/DomainryEvalWorkspaces/m1-crm-opt111-sqlite-baseline-03/.domainry/development/20260824T150428Z.md), terminal stage `done`; consistency checker passed **32/32**, zero diagnostics.
+- Timings: requirements 153s; model 487s; apply 421s; verify 3,210s; done 51s.
+
+The final matching Runtime remains running for independent verification.

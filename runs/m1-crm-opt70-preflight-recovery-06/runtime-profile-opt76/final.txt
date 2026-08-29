@@ -1,0 +1,7 @@
+Stopped immediately after managed Runtime start failed.
+
+- Resolver: 1 command, 1.124 s
+- Start: 1 command, 21.962 ms — failed because stdout was not one valid JSON document
+- Status: 0 commands, not run
+
+The Runtime status node was not completed.

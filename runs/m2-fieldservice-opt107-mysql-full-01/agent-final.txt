@@ -1,0 +1,68 @@
+The project did not reach terminal `done`. I stopped with recorded state `verification_blocked` after exhausting authorized repairs; claiming success would contradict the acceptance ledger and TODO.
+
+### Final state
+
+- Skill/CLI: `v0.0.107-opt107.ddf84df5`
+- Plane: `http://127.0.0.1:8283`, environment `local`
+- Runtime: healthy and running at `127.0.0.1:19114`, PID `46196`
+- Database: MySQL, schema `domainry_m2_opt107_full_01`
+- Non-secret database identity: `99faa7d03a505327bc90e5b31f0f903b00a4bf876152852e19789ce24d7c99af`
+- No frontend or Runtime Client SDK was created.
+- TODO: [m2-opt107-full-01-20260824.md](/Users/tiger/DomainryEvalWorkspaces/m2-fieldservice-opt107-mysql-full-01/.domainry/development/m2-opt107-full-01-20260824.md)
+- TODO state: `verification_blocked`; current stage remains `verify`, not `done`
+- TODO consistency: blocked, 27/150 checked, 164 diagnostics
+- Open typed findings: 2
+
+### Delivery outcomes
+
+- Requirements/PRD completed: [backend-requirements-prd.md](/Users/tiger/DomainryEvalWorkspaces/m2-fieldservice-opt107-mysql-full-01/docs/backend-requirements-prd.md)
+- Final model preflight, validation, plan, reviewed evolution, and apply passed.
+- Delivery ID: `sha256:082120da9732de5990630c30c6ee8a37e58b916ecd38e73df7259b80ef8390e5`
+- Nine project-owned Actions implemented; source checks, focused tests, finalization, and cross-module Go tests passed.
+- Project verification passed all 10 checks, including formatting, vet, module verification, and `go test ./...`.
+- Verification receipt: `f9c6624faa6ca22c6946a10bcf68bb0e2e2debf83deec4c68c2034ae3493becf`
+- Package passed; manifest `7c2907ae665ac6b1bbdf8a686d5be28f02eaf29aa05e718985838e25dae24f50`
+- Package receipt: `1310f35ad1b45c6daa38fa67f2265ca0165ddee1fa619bcc2b086393afc504dc`
+- Highest-risk atomic canary passed on repair cohort 3. The final cohort canary was blocked by acceptance residue exhausting seeded stock and returning `inventory.insufficient_stock`.
+
+### Acceptance
+
+- [full-standard-01.json](/Users/tiger/DomainryEvalWorkspaces/m2-fieldservice-opt107-mysql-full-01/.domainry/development/acceptance-results/full-standard-01.json): current merged result `94/119` passed.
+  - Initial complete run: `89/119`, `261515.787 ms`
+  - Latest targeted repair rerun: `21961.096 ms`
+  - The merged result format has no aggregate duration field.
+- Remaining: 16 `needs_business_harness`, 9 `blocked_dependency`.
+- `full-standard-02.json` and `full-standard-03.json` were not produced.
+- Formal acceptance checks were not run against failing results.
+- Acceptance preparation ran five times—once per evolved cohort. The final preparation was inadvertently invoked after the failed cohort-4 canary because the Gate wrapper exited zero despite the embedded product failure. Therefore the requested final ordering is not satisfied.
+
+The irreducible nine runner failures are:
+
+- Six waiver-initiation cases where the frozen runner creates unassigned, site-less work orders invisible under the required same-site technician scope.
+- Three notification/restart cases where the frozen fixture resolver requires direct `object_create` authority, although the business contract intentionally exposes only project Actions.
+
+Exact-assignee scope, required same-site scope with explicit seed bindings, and explicit scheduler permissions were each tested. Adding direct create authority or widening technician visibility would be a prohibited bypass/broad grant.
+
+### Repair inventory
+
+- Added scheduler work-order write and read permissions.
+- Corrected report ordering to the observable stable `id` order.
+- Tested exact-assignee technician scope, then restored required same-site visibility.
+- Added exact expected seed bindings.
+- Added the overdue notification’s required `work_order_id` variable and regression assertion.
+- Revalidated, applied, verified, packaged, restarted, and reran only invalidated acceptance rows after each cohort change.
+
+### Machine stage timings
+
+| Stage / attempt | Wall ms | CLI-active ms | Orchestration-idle ms |
+|---|---:|---:|---:|
+| requirements initial | 378672 | 1575 | 377097 |
+| requirements repair | 5592 | 496 | 5096 |
+| model initial | 1267089 | 2087 | 1265002 |
+| apply initial | 425716 | 5278 | 420438 |
+| implement initial | 909275 | 4948 | 904327 |
+| verify initial | 978854 | 42223 | 936631 |
+| acceptance initial | 580822 | 262653 | 318169 |
+| acceptance repair | 1680216 | 158874 | 1521342 |
+
+Ledger totals: `6226236 ms` wall, `478134 ms` CLI-active, `5748102 ms` orchestration-idle. The managed Runtime remains running for independent inspection.

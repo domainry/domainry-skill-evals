@@ -1,0 +1,9 @@
+bin/
+runs/*/project/
+runs/*/workspace/
+*.log
+.claude/
+.DS_Store
+.idea/
+__pycache__/
+*.py[cod]

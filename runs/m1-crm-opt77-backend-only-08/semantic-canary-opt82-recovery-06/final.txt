@@ -1,0 +1,67 @@
+The one-shot recovery-06 canary failed and was not rerun or repaired.
+
+Exact result:
+
+- Checkpoint: `runtime_and_database_binding`
+- Error: `HarnessError`
+- Reason: `canonical MySQL cohort did not resolve exactly one customer persistence relation`
+- The inherited external binding passed far enough for the canonical core to open its read-only MySQL connection and query metadata.
+- No HTTP request, session creation, or business mutation occurred.
+
+Blocked assertions:
+
+- Formal sessions/workforce contexts
+- Action and target resolution
+- Customer nonexistence
+- Requester denied Action/unchanged state
+- Director approval and durable change
+- Requester Inbox
+- Idempotent replay
+- Second-director terminal conflict
+
+Counts:
+
+- Resolver: 1
+- CLI identity checks: 1
+- Canary executions: 1
+- Other product/upstream commands: 0
+- Gate sync: 2 attempts—one pre-execution failure from the temporary patch-root mistake, then one successful sync
+- Gate runs: 1
+- Administrative attachments: 2
+- Final Gates: 3 total—1 failed, 2 passed
+- Result failure inventory: 1
+- Gate finding rows: 0
+
+The misplaced temporary files and their exact session directory were removed; no canary or Gate state was created by that failed sync attempt.
+
+Timing:
+
+- Harness pure active: `0.167192s`
+- Gate duration: `242.432ms`
+- Resumed outer wall: `0.399713s`
+
+Non-secret identities:
+
+- Runtime: `127.0.0.1:19095`, existing receipt `running/healthy`, driver `mysql`
+- Database identity: `11b1a578f5bcb02d73a4967dbba483ff7a9b13da438811daff397bd3e77d7672`
+- Runtime cohort: `354ec93acfcbd7346e4d89cb0b6714e93b139931c9deff2bb19839a04f6973f1`
+- Requirements: `374b56d1629144c8c5122b3ee5bb5b99635a6813e653d8a9af69607c5f0c9fb7`
+- Source: `bc790b61740e9efa4e8ffc930a85bb456adae85ce29bdd48b64d8b43510ae4d7`
+- Blueprint: `7c073573a371fcc04b99074665b74e2361c38f80855d290b918f3c42e768a1a9`
+- Runtime manifest: `9fc87cfd2258f9fea988b4f962dcc8321f360907ba3ca5f4ddd6139a4d93f37c`
+- Finalization: `4d1cc561ce548da12755562a0c4a213659104e7df6edd5ff4c68425d756c0829`
+- Verification: `98a638a9b225e24145b0d342f497c6421fe7079b54bfae3e955964f8c9c25274`
+- Package: `5395ed0a1d5ef15f895649c9586118e882f9099df351f42e384613e25c65a989`
+- Bundle: `0e63ddec12f39d4fb28e953c42f04fb0dd1775c6d14f50f7f64cd27fdd42e22d`
+- Binary: `822456f794372ad3a006d7b56686deb6a635149eb84efe3cec358d45018d44da`
+- Harness: `a8db8c85fdeb698a8e35c9ae0616000c96b93ecd1bf9a02e780d2c2976ff1595`
+
+Evidence:
+
+- [Canary result](/Users/tiger/Projects/domainry-skill-evals/runs/m1-crm-opt77-backend-only-08/project/.domainry/development/m1-opt82-semantic-canary-06/semantic-canary-result.json)
+- [Gate receipt](/Users/tiger/Projects/domainry-skill-evals/runs/m1-crm-opt77-backend-only-08/project/.domainry/builder/evidence/development-gates/m1-opt82-semantic-canary-06/apply_one_highest_risk_j07_approval_conversion_s-20260823T055117071853Z.json)
+- [Gate state](/Users/tiger/Projects/domainry-skill-evals/runs/m1-crm-opt77-backend-only-08/project/.domainry/builder/development-gates/m1-opt82-semantic-canary-06.json)
+- [Session TODO](/Users/tiger/Projects/domainry-skill-evals/runs/m1-crm-opt77-backend-only-08/project/.domainry/development/m1-opt82-semantic-canary-06.md)
+- [Thin harness](/Users/tiger/Projects/domainry-skill-evals/runs/m1-crm-opt77-backend-only-08/project/.domainry/development/m1-opt82-semantic-canary-06/semantic_canary.py)
+
+No whole-project completion or scenario-verification claim is made.

@@ -1,0 +1,14 @@
+{
+  "contract_version": "domainry-eval-result-validity-v1",
+  "run_id": "s1-ticketing-opt111-sqlite-calibration-01",
+  "valid_for_candidate_pass_at_1": false,
+  "valid_for_delivery_process_observation": true,
+  "reason": "The frozen probe executed, but its derived create payload included Runtime-owned governance fields and was rejected before creating the shared test ticket. Eight later checks depend on that ticket and therefore became cascading false failures. The probe also hard-codes a report key different from the model-published report key.",
+  "scorecard_interpretation": {
+    "pass_at_1": "not measurable; serialized false is based on a benchmark-invalid golden run",
+    "B1_golden_hit_rate": "raw observed 7/16 only; it is not a candidate capability score because at least eight failures cascade from F03's malformed evaluator payload and F13 targets the wrong report key",
+    "A6_false_done": "not measurable; the candidate's project-owned TODO and runtime suite passed, while the independent oracle was invalid"
+  },
+  "frozen_inputs_modified_after_start": false,
+  "golden_denominator_replaced": false
+}

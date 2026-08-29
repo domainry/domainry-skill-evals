@@ -1,0 +1,37 @@
+{
+  "contract_version": "domainry-m2-implementation-optimization-scorecard-v1",
+  "candidate_run_id": "m2-fieldservice-b6f4fe96721f-mysql-implement-opt5-01",
+  "control_run_id": "m2-fieldservice-43c91fec9277-mysql-implement-control-02",
+  "candidate": {
+    "stage_seconds": 645,
+    "outer_seconds": 733,
+    "input_tokens": 4224388,
+    "project_source_prepare_calls": 1,
+    "action_context_invocations": 0,
+    "first_project_check_issue_count": 1,
+    "final_check_valid": true,
+    "source_finalize_succeeded": true
+  },
+  "control": {
+    "stage_seconds": 757,
+    "outer_seconds": 826,
+    "input_tokens": 5197700,
+    "project_source_prepare_calls": 1,
+    "action_context_invocations": 17,
+    "first_project_check_issue_count": 3,
+    "final_check_valid": true,
+    "source_finalize_succeeded": true
+  },
+  "delta_candidate_vs_control": {
+    "stage_seconds": -112,
+    "stage_percent": -14.8,
+    "outer_seconds": -93,
+    "outer_percent": -11.3,
+    "input_tokens": -973312,
+    "input_tokens_percent": -18.7,
+    "action_context_invocations": -17,
+    "first_project_check_issues": -2
+  },
+  "verdict": "keep",
+  "reason": "The batch implementation packet reduced fair fresh-agent checkpoint time and input tokens while producing fewer first-check diagnostics; both arms reached a valid finalized implementation checkpoint."
+}

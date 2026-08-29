@@ -1,0 +1,21 @@
+The single J07 semantic canary failed at its first Runtime authorization boundary. Execution stopped without repair, rerun, broad acceptance, or Runtime process changes.
+
+- Selected journey: J07 / R07–R10, R13, `conversion_approval.approve_conversion`.
+- Highest risk because it spans director/requester/competing-director identities, global authorization, a project Action, atomic approval/lead/customer persistence, audit/Inbox effects, actor-visible read-back, idempotent replay, and terminal conflict handling.
+- Formal context: all three actors authenticated and returned `domainry-principal-context-v1`, `known:true`, workspace `default`, with identity and workforce contexts. Workforce identities included `east_rep_primary_workforce`, `sales_director_primary_workforce`, and `sales_director_secondary_workforce`.
+- Exact blocker: the director’s first formal Action-definition read, `GET /objects/conversion_approval/actions`, returned HTTP 403. All three principal responses exposed empty top-level `role_keys`. This blocks formal Action-key resolution and every downstream target, positive, denied, persistence, read-back, replay, and conflict probe. Ownership remains shared between Runtime identity/role-context binding and canary subject-context selection; no second probe was authorized.
+- Business mutation: not reached. No opaque approval, lead, customer, or Inbox identity was resolved, and no durable-state claim is made.
+- Positive/denied/replay/read-back: not reached; therefore none passed.
+- Resolver calls: 1.
+- Product commands: 1 (`version --json` only).
+- Gate commands: 3 (`sync`, `list`, one `run`); Gate set contains one terminal failed apply Gate and two intentionally pending verify/done Gates.
+- Pure active duration: harness `0.759930s`; Gate receipt `0.854684s`.
+- Model token usage: unavailable.
+
+Evidence:
+
+- [Canary result](/Users/tiger/Projects/domainry-skill-evals/runs/m1-crm-opt77-backend-only-08/project/.domainry/development/m1-opt80-semantic-canary-01/semantic-canary-result.json)
+- [Gate receipt](/Users/tiger/Projects/domainry-skill-evals/runs/m1-crm-opt77-backend-only-08/project/.domainry/builder/evidence/development-gates/m1-opt80-semantic-canary-01/apply_one_highest_risk_j07_approval_conversion_s-20260823T043004189006Z.json)
+- [Session TODO](/Users/tiger/Projects/domainry-skill-evals/runs/m1-crm-opt77-backend-only-08/project/.domainry/development/m1-opt80-semantic-canary-01.md:40)
+
+The Runtime remains running at the accepted listener. No credential, token, cookie, session secret, or DSN was written to evidence.

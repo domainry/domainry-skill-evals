@@ -1,0 +1,11 @@
+# M2 Opt-10 compact source-finalization continuation baseline
+
+This run used the explicit `source-finalization-continuation` profile added at template commit `62f57edd7812134ec62c96ab731919cb569e5312`. It continued the same frozen, valid Opt-08/Opt-09 M2 source checkpoint with `gpt-5.6-sol/high` and a fresh local MySQL database.
+
+The host-required complete `SKILL.md` load remained. After that, the Agent called `domainry-development-context.py` once with the explicit continuation profile and `./actions/...`. The resolver returned only a compact continuation envelope containing the validated current finalization/source identity, an atomically created three-Gate TODO, synchronized Gate IDs, and exact run recipes. The Agent did not read the whole-project development guide or TODO template, did not construct the whole-project authoring bundle, did not manually create the TODO, and did not independently call Gate sync or list.
+
+All three recipes executed once and passed: valid Actions check, current source finalization, and focused Go test. Each bound its own current command receipt. Independent audit confirmed three passed Gates, no attach or duplicate command, unchanged frozen backend tree and requirements/PRD, no forbidden downstream command, no project SQLite file, and zero tables in the fresh MySQL database.
+
+Compared with Opt-09's equivalent evidence continuation, outer time fell from 186 to 98 seconds (−47.3%), input tokens from 501,507 to 173,294 (−65.4%), and startup to the first check from about 116 to 56 seconds (−51.7%). Product validation depth did not change: both runs executed check/finalize/test exactly once with dedicated receipts. Opt-10 therefore meets both the correctness and speed hypotheses and becomes the latest focused-test continuation baseline.
+
+The remaining 98 seconds still contain only about 2.0 seconds of product commands. The dominant residue is now the host-required complete `SKILL.md` load and model narration between three already-specified recipes. The next candidate is careful Skill router/core extraction: move whole-project-only detail to its already-required guide/references while preserving all authority, so explicit continuations load a smaller complete Skill. This is higher risk than Opt-10 and must be guarded by whole-project release-contract tests.

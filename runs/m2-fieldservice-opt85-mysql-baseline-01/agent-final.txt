@@ -1,0 +1,21 @@
+Terminal state: `acceptance_failed`. The backend passed model, apply, verification, packaging, Runtime, and canary Gates, but the installed acceptance runner could not close the fixed 122-case denominator.
+
+- Skill/CLI/Plane: `domainry-builder-v1` / CLI / Plane Opt85 version `2.4.0-opt85.c10c6402`
+- Plane: `http://127.0.0.1:8283`
+- Runtime API: `runtime-domain-api-v1`, hash `fdde97e582d83dd3bdec714e1f1a1f04009866db3689f6e75764f9daa194ef2b`
+- Migration receipt audited: `33cb185ca495d73b39ed795cf71d1c08319355106eca8c792abe7bcccf9db2e9`
+- Delivery: `sha256:d7befd85c4fb5b4a744a314850b18c7c4d0b47ad5e8c97fd06b73b3c4316c480`
+- Model/apply/source-finalization/verify/package: passed
+- J06 semantic canary: passed positive, denial, insufficient-stock, conflict, replay, and durable-effect oracles
+- Runtime: healthy at `127.0.0.1:19101`, PID `98323`
+- Database: MySQL `domainry_m2_opt85_baseline_01`, identity `61e56c52b7d7eed4643a95f0de9d736860a8a24895dfbdae4b1e8c13c88d3338`
+
+Acceptance, denominator hash `38e0b1d5f89486d9563d5b6afa4421ae7c95f3bf55681ff9998ea00c6fc53312`, all with `--parallel 8`:
+
+- [Run 1](/Users/tiger/Projects/domainry-skill-evals/runs/m2-fieldservice-opt85-mysql-baseline-01/project/.domainry/development/acceptance-results/opt85-standard-01.json): 107/122; 69.120s cumulative, final repair writer 8.895s
+- [Run 2](/Users/tiger/Projects/domainry-skill-evals/runs/m2-fieldservice-opt85-mysql-baseline-01/project/.domainry/development/acceptance-results/opt85-standard-02.json): 108/122; 71.575s
+- [Run 3](/Users/tiger/Projects/domainry-skill-evals/runs/m2-fieldservice-opt85-mysql-baseline-01/project/.domainry/development/acceptance-results/opt85-standard-03.json): 106/122; 33.238s
+
+Remaining failures are all owner `runner`: ten rejected runner-generated MySQL query profiles per run, notification/export staging races, and shared evidence paths that made runs 1–2 stale after later runs. No row was eligible for a custom business harness. Authorized repairs included Opt85 apply evolution review, J06 harness corrections, and native MySQL EXPLAIN JSON v1 selection.
+
+[TODO](/Users/tiger/Projects/domainry-skill-evals/runs/m2-fieldservice-opt85-mysql-baseline-01/project/.domainry/development/01a02d7c-67b5-77b0-9654-3efdcb17ada4.md) is at `done`: 50/50 checks, zero Gate blockers, and the final consistency checker passed. The managed Runtime remains healthy.

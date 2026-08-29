@@ -1,0 +1,11 @@
+Continue this same M1 workflow and project-visible TODO from the exact current state. Do not restart requirements, model authoring, implementation, or any current upstream checkpoint.
+
+An external platform-owner repair has now been completed and installed because the current run proved a compiler/Runtime contract mismatch. Installed Skill/CLI and Plane are now version `2.4.0-opt92.41bf28be`, commit `41bf28beaef768d6f464295272bbc8b2d00a9950`; Plane is healthy at `http://127.0.0.1:8283`. The repair narrowly allows the implicit system stable key `id` to be declared in precise `export_rules.fields`, while ordinary unknown fields remain rejected.
+
+Important current-state correction: `backend/model/30-access.json` currently contains the interrupted broad workaround `export_rules:[{"object_key":"lead","mode":"allow","fields":[]}]`. This was not approved or applied. Replace it with the prior exact nine business fields plus the required stable system key `id`: `id`, `company_name`, `contact_name`, `contact_phone`, `expected_amount`, `source`, `status`, `owner_user`, `owner_department_id`, `status_changed_at`. Do not use an empty list or any broad permission.
+
+Then resume only the invalidated model preflight/validate/plan/audit/apply and downstream source/verify/package/managed-Runtime/cohort checks. Keep MySQL and the existing database/cohort; do not use SQLite. The Runtime may currently be stopped because the interrupted apply sequence stopped it. Restart the exact current package on 127.0.0.1:19111 when required.
+
+Before interruption, standard run 01 had 90/111 mechanical passes and the project-owned business harness raised it to 106/111. The remaining honest work was one conversion-approval notification case plus four governed export cases. After the exact export fix is applied and verified, complete those harness assertions without weakening the denominator. Then produce three independent complete standard results full-standard-01.json, full-standard-02.json, full-standard-03.json, run formal checks for every required result, close the TODO and reach terminal done. Preserve prior evidence and do not claim pass for a failing Runtime behavior.
+
+Continue autonomously in this same session until terminal done or a genuinely unrecoverable external condition is proven.

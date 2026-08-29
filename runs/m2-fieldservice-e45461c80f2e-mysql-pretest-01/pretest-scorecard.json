@@ -1,0 +1,130 @@
+{
+  "contract_version": "domainry-skill-evaluation-pretest-scorecard-v1",
+  "run_id": "m2-fieldservice-e45461c80f2e-mysql-pretest-01",
+  "parent_run_id": "m2-fieldservice-e45461c80f2e-mysql-01",
+  "benchmark": "m2-fieldservice",
+  "cohort": "convergence",
+  "scope": "pretest_through_source_finalize",
+  "disposition": "pretest_checkpoint_reached_with_convergence",
+  "full_m2_baseline": false,
+  "pass_at_1_measured": false,
+  "environment": {
+    "skill_version": "e45461c80f2e",
+    "cli_version": "v2.4.0",
+    "model": "gpt-5.6-sol",
+    "reasoning_effort": "high",
+    "database_driver": "mysql",
+    "database_server": "MySQL 9.5.0",
+    "database_endpoint": "127.0.0.1:3306",
+    "database_name": "domainry_m2_fieldservice_e45461c80f2e_mysql01",
+    "sqlite_used": false
+  },
+  "stages": {
+    "requirements": {
+      "status": "passed",
+      "first_pass": true,
+      "evidence_gates_passed": 15,
+      "evidence_gates_total": 15,
+      "seconds": 358
+    },
+    "model": {
+      "status": "passed_after_convergence",
+      "first_pass": false,
+      "validate_invocations": 15,
+      "validate_failed": 10,
+      "validate_passed": 5,
+      "primary_convergence_sequence": [
+        "9_issues",
+        "60_issues",
+        "report_sql_path_shape_error",
+        "6_issues",
+        "2_issues",
+        "1_issue",
+        "0_issues"
+      ],
+      "post_pass_regressions_observed": true,
+      "plan_invocations": 2,
+      "plan_failed": 0,
+      "evidence_gates_passed": 10,
+      "evidence_gates_total": 10,
+      "final_inventory": {
+        "ledger_items": 28,
+        "requirements": 8,
+        "roles": 4,
+        "objects": 11,
+        "actions": 11,
+        "behaviors": 16,
+        "acceptance_scenarios_declared": 24
+      },
+      "seconds": 1788
+    },
+    "apply": {
+      "status": "materialized_then_fail_closed_on_generated_placeholders",
+      "first_pass": false,
+      "model_apply_invocations": 1,
+      "model_apply_exit_codes": [1],
+      "materialization_receipt_present": true,
+      "source_prepare_exit_codes": [0],
+      "full_release_convergence_complete": false,
+      "evidence_gates_passed": 0,
+      "evidence_gates_total": 23,
+      "seconds": 41
+    },
+    "implement": {
+      "status": "source_finalized_after_static_check_repair",
+      "handlers_implemented": 10,
+      "handlers_total": 10,
+      "not_implemented_handlers_remaining": 0,
+      "project_check_first_pass": false,
+      "project_check_exit_codes": [1, 0],
+      "first_static_failure": "forbidden raw Metadata key identifier ObjectKey",
+      "source_finalize_first_pass": true,
+      "source_finalize_exit_codes": [0],
+      "project_source_tree_sha256": "5ec25f7d49f2ab4df163d7184a940cb5a4bced272f7fa9ce8b81828aea5bf82c",
+      "seconds": 779
+    }
+  },
+  "timing": {
+    "stage_seconds_total": 2966,
+    "wall_seconds_from_full_run_freeze_to_checkpoint": 3075,
+    "continuation_seconds": 550
+  },
+  "efficiency": {
+    "command_executions": 153,
+    "parent_command_executions": 144,
+    "continuation_command_executions": 9,
+    "session_cumulative_token_usage_source": "turn.completed usage emitted by resumed Codex session",
+    "session_cumulative_input_tokens": 17174263,
+    "session_cumulative_cached_input_tokens": 16676864,
+    "session_cumulative_output_tokens": 112974,
+    "session_cumulative_reasoning_output_tokens": 26814
+  },
+  "excluded_and_unexecuted": {
+    "go_tests": true,
+    "project_verify": true,
+    "project_package": true,
+    "runtime_started": false,
+    "acceptance": true,
+    "golden_probe": true,
+    "mysql_tables_created": 0
+  },
+  "verdict": {
+    "pretest_checkpoint_valid": true,
+    "pretest_pass_at_1": false,
+    "strengths": [
+      "requirements and domain-truth evidence closed 15 of 15 gates",
+      "final model validates and both model plans pass",
+      "all ten Handler placeholders were replaced",
+      "static action check converged to zero issues",
+      "source finalization passed on its first attempt",
+      "no SQLite, tests, Runtime, acceptance, or evaluator probes were used"
+    ],
+    "weaknesses": [
+      "model validate failed first pass and required substantial convergence",
+      "the model regressed after reaching a valid state",
+      "model apply never returned success in this staged run",
+      "static action check failed first pass",
+      "all 23 apply-stage evidence gates remain pending because integration and verification were intentionally excluded"
+    ]
+  }
+}

@@ -1,0 +1,85 @@
+{
+  "contract_version": "domainry-m2-baseline-v1",
+  "benchmark": "m2-fieldservice",
+  "baseline_id": "m2-fieldservice-opt36-mysql-20260822",
+  "recorded_at": "2026-08-22T09:11:06+08:00",
+  "status": "passed",
+  "evaluation": {
+    "model": "gpt-5.6-sol",
+    "reasoning_effort": "high",
+    "database_driver": "mysql",
+    "fresh_bootstrap": true,
+    "database_name": "domainry_m2_fieldservice_opt35_reportseed_fresh01",
+    "database_identity_sha256": "7656a8f437564cf4759dd8f615fd695d7c1b0c5484d90b06407e3d8032f7ec1c"
+  },
+  "delivery": {
+    "plane_version": "v0.18.0-opt36.1ebe449",
+    "template_commit": "1ebe449fdb8eccf24e2d073b3eedc1ee90deebf4",
+    "blueprint_sha256": "1e7979b4d6cae4dc582bc901f25dedcfa884aea2db75befb7f98b37689e3c9ac",
+    "delivery_id": "sha256:2e66ac0391e92830c1f86e69a2a5cab983756bbf8d397d752964e7911049a383",
+    "package_receipt_sha256": "068cdd66c701cfeb0e24269aadae9aed1458cf2577ac87fef12b699764904252",
+    "bundle_manifest_sha256": "f9dcbb307d14424e47d8c6ad26697ed138f4354cea2b86737e013077a10d4fec"
+  },
+  "acceptance": {
+    "denominator_sha256": "018fece84c4d8b5986418c576db829a4a99b808ce7e47692636bc3173de70fb3",
+    "runtime_identity_sha256": "44255f300a4f86acd14db12cc5676df3cd36f6705336ec5cc319c10feadedf1e",
+    "expected_cases": 122,
+    "formal_check": "passed",
+    "prepare_seconds": 0.79,
+    "consecutive_runs": [
+      {
+        "sequence": 1,
+        "passed": 122,
+        "failed": 0,
+        "not_passed": 0,
+        "seconds": 73.42
+      },
+      {
+        "sequence": 2,
+        "passed": 122,
+        "failed": 0,
+        "not_passed": 0,
+        "seconds": 67.65
+      },
+      {
+        "sequence": 3,
+        "passed": 122,
+        "failed": 0,
+        "not_passed": 0,
+        "seconds": 69.81
+      }
+    ],
+    "timing_seconds": {
+      "mean": 70.29,
+      "median": 69.81,
+      "minimum": 67.65,
+      "maximum": 73.42,
+      "range": 5.77
+    }
+  },
+  "restart_evidence": {
+    "job_id": "record_batch:b7dc4820a14db347455aa93b",
+    "attempts": 2,
+    "resumed": true,
+    "duplicate_effects": 0,
+    "old_process_exited": true,
+    "new_process_healthy": true
+  },
+  "model_evolution_audits": {
+    "pending_waiver_notification": "dcc96cafff2c45fcd2fd1f007ba901e5cbf98bcc163df96db645a3dd758c1d8f",
+    "report_seed_cohort": "d171341e7212a3d4f626c171f9924e30202a5eb1d5b730bb6c8f74fbfd75d470",
+    "opt36_compiler": "f85ae6c25286ebcc94653c2492fe1d416ec1b6a828068a1d66f2066154011fe6"
+  },
+  "template_commit_chain": [
+    "3e0138a6798f93b548c35796f6b5de3b28f3226c",
+    "e6114fddc3b0325fd8f4eca76525730b96d8af7a",
+    "c0823be9da2137a5f13c2344f22119c602c8e405",
+    "483e39a1370bdc884d8bfe65018dbdfedf3c05c4",
+    "1ebe449fdb8eccf24e2d073b3eedc1ee90deebf4"
+  ],
+  "notes": [
+    "All acceptance runs used the same fresh local MySQL cohort; SQLite was not used.",
+    "The rejected global waiver-fixture change produced 105/122 and was rolled back before this baseline.",
+    "The previous MySQL database and Runtime state were preserved for audit and rollback."
+  ]
+}

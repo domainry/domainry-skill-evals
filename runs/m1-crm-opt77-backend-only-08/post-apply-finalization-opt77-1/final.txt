@@ -1,0 +1,29 @@
+The compact continuation completed successfully and stopped after focused tests.
+
+| Operation | Count | Result | Active duration |
+|---|---:|---|---:|
+| Profile resolver | 1 | Resolved | 1,148.158 ms |
+| Actions project check | 1 | Passed | 1,022.903 ms |
+| Source finalize | 1 | Passed | 325.194 ms |
+| Focused Go test | 1 | Passed, 2 packages | 1,120.164 ms |
+
+Total elapsed across resolver and recipes: **3,616.419 ms**.
+
+Identities:
+
+- Finalization/delivery identity: `sha256:6a01dec1eb3cbe5dc3742500d40f6eca30749bd0cde9f61708c3940c7cf276d4`
+- Validated checkpoint source-tree SHA-256: `2257a89b1b6f9119ea061ffe5fbb791a874182b31d2f63949705e9867b37d29f`
+- Finalized source binding SHA-256: `bc790b61740e9efa4e8ffc930a85bb456adae85ce29bdd48b64d8b43510ae4d7`
+- Finalization Gate receipt SHA-256: `e996d790f955d6c9076ba9caaa61d5cc752141b53e7250a335391489e01ed709`
+
+Diagnostics and paths:
+
+- Frozen failure diagnostics: **9 total**
+- Action placeholder diagnostics: **9**
+- Non-placeholder diagnostics: **0**
+- Diagnostics after check/finalize: **0**
+- Restored project-owned Action paths: **18** — 9 handlers and 9 tests
+- Frontend paths: **0**
+- Runtime Client SDK paths: **0**
+
+No later canary, Runtime, acceptance, packaging, verification, or completion node is claimed.

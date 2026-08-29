@@ -1,0 +1,25 @@
+无法开始正式流水线：这是不可恢复的已安装工具包合同不匹配，并非项目诊断失败。
+
+已确认：
+
+- CLI 版本：`v0.0.111-local.20260824-business-flow-cases`
+- Plane：`http://127.0.0.1:8283`
+- CLI SHA-256 与 `skill-package.json` 完全一致：`a91051189f36fda9a825754b26dec351b16dd30d1a96f15ba6bf0430e12deffb`
+- 项目初态仅有 [requirements.md](/Users/tiger/DomainryEvalWorkspaces/m2-fieldservice-opt111-mysql-full-01/requirements.md)
+- 未读取或输出 DSN、密码、令牌或其他凭据
+- 未修改任何项目文件
+- `127.0.0.1:19120` 未启动 Runtime
+
+阻塞证据：
+
+- 已安装 [SKILL.md](/Users/tiger/.codex/skills/domainry-builder-v1/SKILL.md) 明确规定仅有 `requirements → model → apply → verify → done` 五阶段，并明确否认独立 stage ledger、continuation route 和 acceptance denominator。
+- TODO 模板同样仅支持五阶段。
+- TODO 检查器的 `--expected-stage` 只接受上述五个值。
+- 打包 CLI 仅提供 `model`、`apply`、`verify`、`migrate`。
+- 实际调用以下入口均返回未知命令：
+  - `project acceptance prepare`
+  - `acceptance`
+  - `resolve`
+- Skill 包内不存在六阶段账本初始化器、whole-project resolver、Opt111 recovery recipe 或标准 acceptance runner。
+
+因此无法真实维护要求的六阶段时间账本，也无法执行三次标准 denominator 或正式 acceptance check。手写账本、另造 runner、修改或重装 Skill/CLI 都会直接违反冻结边界，所以不能合法推进或声称 terminal `done`。需要提供内容与所要求六阶段/acceptance 合同一致的 Skill/CLI 包后重新运行。

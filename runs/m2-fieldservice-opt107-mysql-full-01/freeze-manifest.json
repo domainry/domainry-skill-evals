@@ -1,0 +1,80 @@
+{
+  "contract_version": "domainry-eval-freeze-manifest-v1",
+  "frozen_at": "2026-08-24T05:22:50Z",
+  "run_id": "m2-fieldservice-opt107-mysql-full-01",
+  "benchmark": "m2-fieldservice",
+  "cohort": "calibration-formal-full-flow",
+  "requirements_sha256": "b9d06d5d5717e586c361870392aadec780ab3dd12e9306d04c936c43ecb3cc56",
+  "public_semantic_ids_sha256": "aa533d460a9c96b4afeb995d103236ec8ded5db47a971a11c60dc86e33e6640b",
+  "benchmark_denominator": {
+    "count": 23,
+    "checklist_sha256": "81f97a03037213a7de812a7881e62c6fda795c4c6146838f82021e9696116b7d",
+    "golden_probe_sha256": "4fea2552c2a45b8d6fee0b07e08648c9ae33525dc7e431d516a577e1e0a4e5b7"
+  },
+  "driver_prompt_sha256": "8b93b531f31d54ef9119229e0e3d30ad00e0bf667245e76a0764ec94e5ac2c8b",
+  "scorer_sha256": "4a26b063e592d5cbc1d697ddf0dd1452763cfe18dd70841e596e9ce1d2d9cbaf",
+  "outcome_schema_sha256": "6a93526ad2a48501a2f2dab6fe1f8006935357403aea8c2e967f23b213d04d43",
+  "run_protocol_sha256": "2fdefd66cbdf42963ee9896da1982520c6823af40550aa6c99d929b5a1a014bd",
+  "skill": {
+    "name": "domainry-builder-v1",
+    "version": "v0.0.107-opt107.ddf84df5",
+    "tree_sha256": "388aa12430c56d8308fd85ffa71ac9c82d87af0f202383c5e9fee55ceec3ed89",
+    "package_manifest_sha256": "dae2fe133e0e83983b6d41a860add42c15608e68a5b4505abc3c3f4a081cee13",
+    "package_sha256": "feecd23af19b5242e2c020f97492b30576fa7c9d0038ea54f8a8fd7ec204699e"
+  },
+  "cli": {
+    "version": "v0.0.107-opt107.ddf84df5",
+    "sha256": "3635e57471dd1a06340aaeaa2956f0ff4c603176ebe9741a6e2d27fc280d1479",
+    "version_capture_sha256": "d23c5b1445d701e1c64658d14fc2ed998d5b817f0919b091bbae2cf235df390f"
+  },
+  "plane": {
+    "url": "http://127.0.0.1:8283",
+    "version": "v0.0.107-opt107.ddf84df5",
+    "health_sha256": "b46773f3d1541869a60305e486e02cdf12575d134a1ebc16044d20043d9ca15e",
+    "health_checks": "9/9 passed",
+    "ready_checks": "9/9 passed"
+  },
+  "runtime": {
+    "module": "github.com/codeck-backend/verdent-template@v0.0.0-source-eea5ce547f0260e4",
+    "api_contract_version": "runtime-domain-api-v1",
+    "api_contract_sha256": "fdde97e582d83dd3bdec714e1f1a1f04009866db3689f6e75764f9daa194ef2b",
+    "reserved_address": "127.0.0.1:19114"
+  },
+  "database": {
+    "driver": "mysql",
+    "server_version": "9.5.0",
+    "host": "127.0.0.1",
+    "port": 3306,
+    "schema": "domainry_m2_opt107_full_01",
+    "initial_tables": 0,
+    "secret_material_persisted": false
+  },
+  "agent": {
+    "model": "gpt-5.6-sol",
+    "reasoning_effort": "high",
+    "host_cli": "codex-cli 0.146.0",
+    "session_count": 1,
+    "human_intervention_budget": 0
+  },
+  "material_run_settings": {
+    "workflow": "requirements->domain-truth->model->apply->implement->focused/cross-module-tests->verify->package->managed-runtime->highest-risk-canary->acceptance->terminal-done",
+    "acceptance_prepare_maximum": 1,
+    "acceptance_standard_repetitions": 3,
+    "acceptance_parallelism": 8,
+    "acceptance_formal_checks": 3,
+    "project_business_inputs": ["requirements.md"],
+    "stage_attempt_kinds": ["initial", "repair", "resume"],
+    "stage_metric_fields": ["started_epoch", "ended_epoch", "wall_seconds", "cli_active_seconds", "orchestration_idle_seconds"],
+    "sqlite_forbidden": true,
+    "frontend_project_source_forbidden": true,
+    "terminal_correctness_overrides_38_minute_target": true
+  },
+  "project_seed": {
+    "git_commit": "1a914aff3f4c9153ab1d0d490e9451522fbd7bc6",
+    "business_files": ["requirements.md"]
+  },
+  "evaluator_repository": {
+    "commit": "4ea968eda5626df4b2ea235b322d8c5ca2c16db9",
+    "working_tree_status_sha256": "89d322f4f85aa8bb0454726d476247f429bb3d130c27d3ae8059c294e5f27c7f"
+  }
+}

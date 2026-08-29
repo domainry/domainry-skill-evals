@@ -1,0 +1,121 @@
+{
+  "contract_version": "domainry-backend-model-v1",
+  "items": [
+    {
+      "module":"crm","kind":"action_authorization","key":"lead_actions",
+      "requirement_keys":["lead_management","conversion_approval"],
+      "depends_on":["crm/object_relation/crm_domain","crm/actor_role/crm_access","crm/requirement/lead_management","crm/requirement/conversion_approval"],
+      "payload":{"emits":[
+        {"collection":"actions","key":"lead.create_lead","value":{"key":"lead.create_lead","name":"创建线索","object_key":"lead","kind":"object_operation","audit_event":"lead.created","payload_fields":[
+          {"key":"request_id","name":"请求 ID","type":"text","required":true},
+          {"key":"company_name","name":"公司名","type":"text","required":true},
+          {"key":"contact_name","name":"联系人","type":"text","required":false},
+          {"key":"contact_phone","name":"联系电话","type":"phone","required":false},
+          {"key":"expected_amount","name":"预计金额","type":"currency","source_object_key":"lead","source_field_key":"expected_amount","required":true},
+          {"key":"source","name":"来源","type":"select","options":["website","exhibition","referral","outbound"],"required":true}
+        ],"idempotency_keys":["request_id"],"authorization":{"allowed_roles":["sales_rep"]},"handler":{"data_access":[{"object_key":"lead","operations":["create"]}],"output":[
+          {"key":"lead_id","name":"线索 ID","type":"relation","target_object_key":"lead","required":true},
+          {"key":"status","name":"状态","type":"select","options":["new","contacted","qualified","converted","lost"],"required":true}
+        ]}}},
+        {"collection":"actions","key":"lead.update_owned_lead","value":{"key":"lead.update_owned_lead","name":"更新本人线索","object_key":"lead","kind":"record_operation","audit_event":"lead.updated","optimistic_concurrency":true,"payload_fields":[
+          {"key":"request_id","name":"请求 ID","type":"text","required":true},
+          {"key":"expected_updated_at","name":"预期版本","type":"datetime","required":false},
+          {"key":"contact_name","name":"联系人","type":"text","required":true},
+          {"key":"contact_phone","name":"联系电话","type":"phone","required":false},
+          {"key":"expected_amount","name":"预计金额","type":"currency","source_object_key":"lead","source_field_key":"expected_amount","required":false},
+          {"key":"source","name":"来源","type":"select","options":["website","exhibition","referral","outbound"],"required":false}
+        ],"idempotency_keys":["request_id"],"authorization":{"allowed_roles":["sales_rep"]},"handler":{"data_access":[{"object_key":"lead","operations":["get_for_update","conditional_update"]}],"output":[{"key":"lead_id","name":"线索 ID","type":"relation","target_object_key":"lead","required":true},{"key":"updated","name":"已更新","type":"boolean","required":true}]}}},
+        {"collection":"actions","key":"lead.mark_lead_contacted","value":{"key":"lead.mark_lead_contacted","name":"标记已跟进","object_key":"lead","kind":"record_operation","audit_event":"lead.contacted","optimistic_concurrency":true,"payload_fields":[{"key":"request_id","name":"请求 ID","type":"text","required":true},{"key":"expected_updated_at","name":"预期版本","type":"datetime","required":false}],"idempotency_keys":["request_id"],"authorization":{"allowed_roles":["sales_rep"]},"handler":{"data_access":[{"object_key":"lead","operations":["get_for_update","conditional_update"]}],"output":[{"key":"lead_id","name":"线索 ID","type":"relation","target_object_key":"lead","required":true},{"key":"status","name":"状态","type":"select","options":["contacted"],"required":true}]}}},
+        {"collection":"actions","key":"lead.mark_lead_qualified","value":{"key":"lead.mark_lead_qualified","name":"标记合格","object_key":"lead","kind":"record_operation","audit_event":"lead.qualified","optimistic_concurrency":true,"payload_fields":[{"key":"request_id","name":"请求 ID","type":"text","required":true},{"key":"expected_updated_at","name":"预期版本","type":"datetime","required":false}],"idempotency_keys":["request_id"],"authorization":{"allowed_roles":["sales_rep"]},"handler":{"data_access":[{"object_key":"lead","operations":["get_for_update","conditional_update"]}],"output":[{"key":"lead_id","name":"线索 ID","type":"relation","target_object_key":"lead","required":true},{"key":"status","name":"状态","type":"select","options":["qualified"],"required":true}]}}},
+        {"collection":"actions","key":"lead.mark_lead_lost","value":{"key":"lead.mark_lead_lost","name":"标记流失","object_key":"lead","kind":"record_operation","audit_event":"lead.lost","optimistic_concurrency":true,"payload_fields":[{"key":"request_id","name":"请求 ID","type":"text","required":true},{"key":"expected_updated_at","name":"预期版本","type":"datetime","required":false}],"idempotency_keys":["request_id"],"authorization":{"allowed_roles":["sales_rep"]},"handler":{"data_access":[{"object_key":"lead","operations":["get_for_update","conditional_update"]}],"output":[{"key":"lead_id","name":"线索 ID","type":"relation","target_object_key":"lead","required":true},{"key":"status","name":"状态","type":"select","options":["lost"],"required":true}]}}},
+        {"collection":"actions","key":"lead.request_lead_conversion","value":{"key":"lead.request_lead_conversion","name":"发起线索转化","object_key":"lead","kind":"record_operation","audit_event":"lead.conversion_requested","optimistic_concurrency":true,"payload_fields":[{"key":"request_id","name":"请求 ID","type":"text","required":true},{"key":"expected_updated_at","name":"预期版本","type":"datetime","required":false}],"idempotency_keys":["request_id"],"authorization":{"allowed_roles":["sales_rep"]},"handler":{"data_access":[
+          {"object_key":"lead","operations":["get_for_update","conditional_update"]},
+          {"object_key":"conversion_approval","operations":["create"]},
+          {"object_key":"customer","operations":["create"]}
+        ],"output":[
+          {"key":"lead_id","name":"线索 ID","type":"relation","target_object_key":"lead","required":true},
+          {"key":"result","name":"转化结果","type":"select","options":["converted","approval_pending"],"required":true},
+          {"key":"customer_id","name":"客户 ID","type":"relation","target_object_key":"customer","required":false},
+          {"key":"approval_id","name":"审批 ID","type":"relation","target_object_key":"conversion_approval","required":false}
+        ]}}}
+      ]}
+    },
+    {
+      "module":"crm","kind":"action_authorization","key":"conversion_resolution_action",
+      "requirement_keys":["conversion_approval"],
+      "depends_on":["crm/action_authorization/lead_actions","crm/actor_role/crm_access","crm/object_relation/crm_domain"],
+      "payload":{"emits":[
+        {"collection":"actions","key":"conversion_approval.resolve_conversion_approval","value":{"key":"conversion_approval.resolve_conversion_approval","name":"处理转化审批","object_key":"conversion_approval","kind":"record_operation","audit_event":"conversion_approval.resolved","optimistic_concurrency":true,"payload_fields":[
+          {"key":"request_id","name":"请求 ID","type":"text","required":true},
+          {"key":"expected_updated_at","name":"预期版本","type":"datetime","required":false},
+          {"key":"resolution","name":"审批结果","type":"select","options":["approved","rejected"],"required":true},
+          {"key":"comment","name":"审批意见","type":"long_text","required":false}
+        ],"idempotency_keys":["request_id"],"authorization":{"allowed_roles":["sales_director"]},"handler":{"notification_event_types":["lead.conversion_approved","lead.conversion_rejected"],"data_access":[
+          {"object_key":"conversion_approval","operations":["get_for_update","conditional_update"]},
+          {"object_key":"lead","operations":["get_for_update","conditional_update"]},
+          {"object_key":"customer","operations":["create"]}
+        ],"output":[
+          {"key":"approval_id","name":"审批 ID","type":"relation","target_object_key":"conversion_approval","required":true},
+          {"key":"lead_id","name":"线索 ID","type":"relation","target_object_key":"lead","required":true},
+          {"key":"resolution","name":"审批结果","type":"select","options":["approved","rejected"],"required":true},
+          {"key":"customer_id","name":"客户 ID","type":"relation","target_object_key":"customer","required":false}
+        ]}}}
+      ]}
+    },
+    {
+      "module":"crm","kind":"workflow_connector","key":"conversion_approval_workflow",
+      "requirement_keys":["conversion_approval"],
+      "depends_on":["crm/action_authorization/conversion_resolution_action","crm/actor_role/crm_access"],
+      "payload":{"emits":[
+        {"collection":"workflows","key":"lead_conversion_approval","value":{"key":"lead_conversion_approval","name":"大额线索转化审批","enabled":true,"run_as":"sales_director","trigger":{"type":"record_created","object_key":"conversion_approval"},"condition":{},"action":{"type":"workflow_graph"},"trigger_contract":{"type":"record_created","object_key":"conversion_approval"},"graph":{"version":2,"nodes":[
+          {"id":"trigger","type":"trigger","name":"审批创建"},
+          {"id":"director_approval","type":"approval","name":"销售总监审批","contract":{"approval":{"mode":"any","resolver_mode":"first_match","empty_assignee_policy":"fail","resolvers":[{"type":"role","role_key":"sales_director"}]}}},
+          {"id":"approved","type":"action","name":"执行通过结果","contract":{"action":{"action_key":"conversion_approval.resolve_conversion_approval","object_key":"conversion_approval","record_id":"$record.id","input":{"request_id":"$workflow.request_id","resolution":"$workflow.approval_decision","comment":"$workflow.approval_comment"},"on_error":"fail"}}},
+          {"id":"rejected","type":"action","name":"执行拒绝结果","contract":{"action":{"action_key":"conversion_approval.resolve_conversion_approval","object_key":"conversion_approval","record_id":"$record.id","input":{"request_id":"$workflow.request_id","resolution":"$workflow.approval_decision","comment":"$workflow.approval_comment"},"on_error":"fail"}}}
+        ],"edges":[
+          {"id":"trigger_to_approval","source":"trigger","target":"director_approval"},
+          {"id":"approval_to_approved","source":"director_approval","target":"approved","branch":"approved"},
+          {"id":"approval_to_rejected","source":"director_approval","target":"rejected","branch":"rejected"}
+        ]}}}
+      ]}
+    },
+    {
+      "module":"crm","kind":"action_authorization","key":"reminder_action",
+      "requirement_keys":["stale_lead_reminders"],
+      "depends_on":["crm/object_relation/crm_domain","crm/actor_role/crm_access"],
+      "payload":{"emits":[
+        {"collection":"actions","key":"lead.process_stale_lead_reminders","value":{"key":"lead.process_stale_lead_reminders","name":"处理逾期跟进提醒","object_key":"lead","kind":"object_operation","audit_event":"lead.stale_reminders_processed","payload_fields":[{"key":"run_date","name":"运行日期","type":"date","required":true}],"idempotency_keys":["run_date"],"authorization":{"allowed_roles":["sales_director"]},"handler":{"notification_event_types":["lead.stale_followup"],"data_access":[
+          {"object_key":"lead","operations":["list","get_for_update"]},
+          {"object_key":"lead_reminder_delivery","operations":["list","create","conditional_update"]}
+        ],"output":[{"key":"scanned_count","name":"扫描数","type":"integer","required":true},{"key":"reminded_count","name":"提醒数","type":"integer","required":true}]}}}
+      ]}
+    },
+    {
+      "module":"crm","kind":"workflow_connector","key":"reminder_workflow",
+      "requirement_keys":["stale_lead_reminders"],
+      "depends_on":["crm/action_authorization/reminder_action"],
+      "payload":{"emits":[
+        {"collection":"workflows","key":"stale_lead_reminder_workflow","value":{"key":"stale_lead_reminder_workflow","name":"逾期线索提醒流程","enabled":true,"run_as":"sales_director","trigger":{"type":"scheduled"},"condition":{},"action":{"type":"workflow_graph"},"trigger_contract":{"type":"scheduled"},"graph":{"version":2,"nodes":[
+          {"id":"trigger","type":"trigger","name":"计划触发"},
+          {"id":"process","type":"action","name":"扫描并提醒","contract":{"action":{"action_key":"lead.process_stale_lead_reminders","object_key":"lead","input":{"run_date":"$today"},"on_error":"fail"}}}
+        ],"edges":[{"id":"trigger_to_process","source":"trigger","target":"process"}]}}}
+      ]}
+    },
+    {
+      "module":"crm","kind":"resource","key":"reminder_schedule",
+      "requirement_keys":["stale_lead_reminders"],
+      "depends_on":["crm/workflow_connector/reminder_workflow"],
+      "payload":{"emits":[
+        {"collection":"scheduled_jobs","key":"weekday_stale_lead_reminder","value":{"key":"weekday_stale_lead_reminder","name":"工作日逾期线索提醒","status":"enabled","target_type":"workflow","target_key":"stale_lead_reminder_workflow","schedule":{"type":"cron","expression":"0 9 * * 1-5","timezone":"Asia/Shanghai"},"missed_window_policy":"catch_up_one","max_attempts":3,"timeout_seconds":300}}
+      ]}
+    },
+    {
+      "module":"crm","kind":"action_authorization","key":"report_export_action",
+      "requirement_keys":["reporting_export"],
+      "depends_on":["crm/object_relation/crm_domain","crm/actor_role/crm_access"],
+      "payload":{"emits":[
+        {"collection":"actions","key":"report_export_audit.request_lead_detail_export","value":{"key":"report_export_audit.request_lead_detail_export","name":"申请线索明细导出","object_key":"report_export_audit","kind":"object_operation","audit_event":"report_export.lead_detail_requested","payload_fields":[{"key":"request_id","name":"请求 ID","type":"text","required":true},{"key":"reason","name":"导出原因","type":"text","required":true}],"idempotency_keys":["request_id"],"authorization":{"allowed_roles":["sales_director"]},"handler":{"data_access":[{"object_key":"report_export_audit","operations":["create"]}],"output":[{"key":"audit_id","name":"导出审计 ID","type":"relation","target_object_key":"report_export_audit","required":true},{"key":"status","name":"状态","type":"select","options":["requested"],"required":true}]}}}
+      ]}
+    }
+  ]
+}
