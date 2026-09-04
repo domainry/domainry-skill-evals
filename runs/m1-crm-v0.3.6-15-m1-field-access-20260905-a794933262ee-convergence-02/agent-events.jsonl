@@ -900,3 +900,4 @@
 {"type":"item.completed","item":{"id":"item_335","type":"command_execution","command":"/bin/zsh -lc 'date +%s'","aggregated_output":"1788562699\n","exit_code":0,"status":"completed"}}
 {"type":"item.started","item":{"id":"item_336","type":"file_change","changes":[{"path":"/private/tmp/domainry-m1-v15-convergence.itjjpe/project/.domainry/development/stages.json","kind":"update"}],"status":"in_progress"}}
 {"type":"item.completed","item":{"id":"item_336","type":"file_change","changes":[{"path":"/private/tmp/domainry-m1-v15-convergence.itjjpe/project/.domainry/development/stages.json","kind":"update"}],"status":"completed"}}
+{"type":"item.started","item":{"id":"item_337","type":"command_execution","command":"/bin/zsh -lc '/private/tmp/domainry-m1-v15-convergence.itjjpe/codex-home/skills/domainry-builder-v1/bin/domainry-cli verify --json --project . --address 127.0.0.1:19284'","aggregated_output":"","exit_code":null,"status":"in_progress"}}
