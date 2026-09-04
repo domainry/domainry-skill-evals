@@ -1,0 +1,16 @@
+{
+  "family": "model_plan",
+  "command": "/bin/zsh -lc '/private/tmp/domainry-m1-baseline.HuB3Y7/codex-home/skills/domainry-builder-v1/bin/domainry-cli model plan --json --project /private/tmp/domainry-m1-baseline.HuB3Y7/project'",
+  "exit_code": 1,
+  "output": {
+    "artifact": ".domainry/builder/disposable/model-preflight-result.json",
+    "contract_version": "domainry-model-preflight-envelope-v1",
+    "identity": "d40ba0f222d4eedef60c7c5cac11d1b91f917290f5af1bd0f93e78bb6b913d22",
+    "issue_count": 1,
+    "sha256": "0f915a924326035911cc177476113ab4bc5d7ace7531a730f2d57bf2a0fa08d6",
+    "state": "repair_required"
+  },
+  "raw_output": "{\"artifact\":\".domainry/builder/disposable/model-preflight-result.json\",\"contract_version\":\"domainry-model-preflight-envelope-v1\",\"identity\":\"d40ba0f222d4eedef60c7c5cac11d1b91f917290f5af1bd0f93e78bb6b913d22\",\"issue_count\":1,\"sha256\":\"0f915a924326035911cc177476113ab4bc5d7ace7531a730f2d57bf2a0fa08d6\",\"state\":\"repair_required\"}\nmodel.action_field_constraint_mismatch: Action conversion_request.reject field rejection_reason modifier min_length does not match Object field conversion_request.rejection_reason\nerror: Builder validation found 1 issue(s)\n",
+  "event_item_id": "item_36",
+  "event_line": 72
+}

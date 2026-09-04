@@ -1,5 +1,0 @@
-behavior.transition_edge_duplicate: State machine "lead_lifecycle" declares transition "qualified" -> "converted" more than once; Action or Workflow bindings do not make a directed edge unique.
-error: Builder validation found 1 issue(s)
-real 0.30
-user 0.21
-sys 0.04

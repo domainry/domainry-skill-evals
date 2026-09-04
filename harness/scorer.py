@@ -4,7 +4,7 @@
 读取一个 run 目录(见 docs/run-protocol.md),按 docs/metrics-spec.md 输出 scorecard.json。
 
 run 目录约定:
-  meta.json               {benchmark, skill_version, run_id, agent_declared_done, human_interventions,
+  meta.json               {benchmark, candidate_id, skill_version, run_id, agent_declared_done, human_interventions,
                            started_epoch, ended_epoch}
   cli/NNN-<family>.json   capture.sh 产出的 CLI 工件
   tokens.json             可选 {total_tokens, reading_tokens}
@@ -27,17 +27,15 @@ def load(path, default=None):
     return json.loads(p.read_text())
 
 
-C5_STAGES = ("requirements", "model", "apply", "implement", "verify")
+C5_STAGES = ("requirements", "model", "apply", "verify")
 BUILDER_STATE_RELATIVE = Path(".domainry/builder")
 BUILDER_STATE_PARENT_RELATIVE = Path(".domainry")
 LEGACY_BUILDER_STATE_PREFIX = "builder-"
 
 # 阶段产物时间戳来源(run/project/.domainry/builder 下,best-effort):
 #   model      journal/model-sync-*.json、blueprint-validation.json
-#   apply      model-apply.json、receipts/materialization*.json、audits/、journal/delivery-*.json
-#   implement  evidence/development-gates/*/apply_*.json(文件名内嵌 UTC 时间戳)、receipts/finalization*.json
-#   verify     evidence verify_*/accept*、receipts/verification*.json、receipts/package.json、
-#              Runtime 业务旅程证据目录
+#   apply      model-apply.json、receipts/materialization*.json、receipts/finalization*.json
+#   verify     receipts/verification*.json、receipts/package.json、runtime/runtime-process.json
 # 局限:回执/域源文件被后续 evolution 轮覆盖时 mtime 只保留最后一次,首轮建模耗时会归并
 # 到相邻阶段;requirements 无可靠产物时间戳,恒为 null。
 
@@ -92,24 +90,15 @@ def approx_stage_seconds(run, meta):
             ts = (_fname_ts(p.name) if prefer_name else None) or p.stat().st_mtime
             events.append((ts, stage))
 
-    gates = state / "evidence" / "development-gates"
     add("model", state.glob("journal/model-sync-*.json"))
     add("model", [state / "blueprint-validation.json"])
     add("apply", [state / "model-apply.json",
                   state / "receipts" / "materialization.json",
                   state / "receipts" / "runtime-client-materialization.json"])
-    add("apply", state.glob("audits/project-delivery-*.json"))
-    add("apply", state.glob("journal/delivery-audit-*.json"))
-    add("apply", state.glob("journal/delivery-repair-*.json"))
-    add("implement", gates.glob("*/apply_*.json"), prefer_name=True)
-    add("implement", state.glob("receipts/finalization*.json"))
-    add("verify", gates.glob("*/verify_*.json"), prefer_name=True)
+    add("apply", state.glob("receipts/finalization*.json"))
     add("verify", state.glob("receipts/verification*.json"))
     add("verify", [state / "receipts" / "package.json"])
-    add("verify", gates.glob("*/accept*.json"), prefer_name=True)
-    acc_dir = state / "acceptance"
-    if acc_dir.is_dir():
-        add("verify", acc_dir.rglob("*"))
+    add("verify", [state / "runtime" / "runtime-process.json"])
 
     if not events:
         return None
@@ -137,7 +126,7 @@ def first_of(artifacts, family):
 
 
 def derive_a_from_receipts(run):
-    """Agent-driven run 回退:从 project/.domainry/ 回执推导 A1-A4 首过事实。
+    """Agent-driven run 回退:从 project/.domainry/ 回执推导 A1-A4 最终事实。
 
     语义与局限:回执多为"最后状态"文件(演化轮覆盖),推导口径是
     「成功回执存在、状态干净、且无对应失败回执」——与 cli-capture 的
@@ -150,7 +139,8 @@ def derive_a_from_receipts(run):
     if not state.is_dir():
         return out
 
-    # A1:blueprint-validation.json 诊断数 + model-apply preflight 诊断数
+    # A1:model plan 的完整模型诊断。model-apply preflight 只作为无 CLI capture 时
+    # 对最终模型可受理性的补充证据，不把 apply 成功冒充 plan 首过。
     bp = load(state / "blueprint-validation.json")
     ma = load(state / "model-apply.json")
     if isinstance(bp, dict) and bp.get("parse_status"):
@@ -163,28 +153,35 @@ def derive_a_from_receipts(run):
         out["A1"] = errs == 0
         out["A1_errors"] = errs
 
-    # A2:model apply 事务回执 state=applied,且 model-sync journal 全部 committed
+    # A2:apply model 事务回执 state=applied,且 model-sync journal 全部 committed
     # (whole-model sync 为原子事务,失败不落 committed journal)
     if isinstance(ma, dict) and ma.get("state"):
         syncs = [load(p) for p in state.glob("journal/model-sync-*.json")]
         out["A2"] = ma["state"] == "applied" and all(
             isinstance(s, dict) and s.get("state") == "committed" for s in syncs)
 
-    # A3:project verification 回执 checks 全 passed。
-    # 口径与 cli-capture 漏斗对齐:A3 只看 project_verify(finalize 拒收轮
-    # 属 source_finalize family,从不进 A1-A4;其返工计入 A5,而 A5 在
-    # receipts 模式下不可测,见 A_source)。
-    ver = load(state / "receipts" / "verification.json")
-    if isinstance(ver, dict) and isinstance(ver.get("checks"), list) and ver["checks"]:
-        out["A3"] = all(c.get("status") == "passed" for c in ver["checks"])
+    # A3:apply finalize 回执存在且 checks 全 passed。
+    finalization = load(state / "receipts" / "finalization.json")
+    final_checks = finalization.get("checks") if isinstance(finalization, dict) else None
+    if isinstance(finalization, dict):
+        if isinstance(final_checks, list) and final_checks:
+            out["A3"] = all(c.get("status") == "passed" for c in final_checks)
+        elif finalization.get("receipt_sha256"):
+            out["A3"] = True
 
-    # A4:验收结果回执 0 failed(declared_gap 是 typed 声明缺口,非失败,
-    # 与 done/passed_with_declared_gaps 终态一致)
-    acc = load(run / "project" / ".domainry" / "development" /
-               "acceptance-evidence" / "backend-acceptance-results.json")
-    results = acc.get("results") if isinstance(acc, dict) else None
-    if isinstance(results, list) and results:
-        out["A4"] = all(r.get("state") in ("passed", "declared_gap") for r in results)
+    # A4:verify 必须同时留下结构验证、包与已停止的同 cohort Runtime 证据。
+    ver = load(state / "receipts" / "verification.json")
+    package = load(state / "receipts" / "package.json")
+    runtime = load(state / "runtime" / "runtime-process.json")
+    if isinstance(ver, dict) and isinstance(ver.get("checks"), list) and ver["checks"]:
+        out["A4"] = (
+            all(c.get("status") == "passed" for c in ver["checks"])
+            and isinstance(package, dict) and bool(package.get("receipt_sha256"))
+            and isinstance(runtime, dict)
+            and runtime.get("state") == "stopped"
+            and runtime.get("cohort_state") == "current"
+            and bool(runtime.get("stopped_at"))
+        )
 
     return out
 
@@ -219,9 +216,10 @@ def main(run_dir, out_path=None):
     ] if (run / "cli").exists() else []
 
     # A. 准确率漏斗
-    v1 = first_of(artifacts, "model_validate")
-    a1 = first_of(artifacts, "model_apply")
-    b1 = first_of(artifacts, "project_verify")
+    v1 = first_of(artifacts, "model_plan")
+    a1 = first_of(artifacts, "apply_model")
+    f1 = first_of(artifacts, "apply_finalize")
+    b1 = first_of(artifacts, "verify")
     acc = first_of(artifacts, "acceptance_check")
 
     def error_count(art):
@@ -234,19 +232,21 @@ def main(run_dir, out_path=None):
             for key in ("errors", "diagnostics", "findings"):
                 if isinstance(out.get(key), list):
                     return len(out[key])
-            # CLI 可能 exit 0 但 state=repair_required
-            if out.get("state") not in (None, "ok", "clean", "ready"):
+            # CLI 可能 exit 0 但仍显式返回失败状态。
+            if out.get("state") in {
+                "repair_required", "failed", "invalid", "blocked", "error", "stale",
+            }:
                 return 1
         return 0 if art["exit_code"] == 0 else 1
 
-    # 返工轮数:同 family 出现第 2+ 次且前一次未有效通过(exit!=0 或仍有诊断);
-    # 设计内交接(apply 停在 fail-closed 骨架)不计失败
+    # 返工轮数:同 family 出现第 2+ 次且前一次未有效通过。
     rework = 0
     seen = {}
     for a in artifacts:
         fam = a["family"]
-        failed = (a["exit_code"] != 0 or (error_count(a) or 0) > 0) and \
-            "fail-closed project source placeholder remains" not in str(a.get("output", ""))
+        if fam == "model_capability":
+            continue
+        failed = a["exit_code"] != 0 or (error_count(a) or 0) > 0
         if fam in seen and seen[fam]:
             rework += 1
         seen[fam] = failed
@@ -291,10 +291,6 @@ def main(run_dir, out_path=None):
 
     declared_done = bool(meta.get("agent_declared_done"))
 
-    def designed_handoff(art):
-        # apply 停在 fail-closed Handler 骨架是两阶段流程的设计内交接,不计失败
-        return "fail-closed project source placeholder remains" in str(art.get("output", ""))
-
     # A 组数据源:cli-capture 工件优先;agent-driven run 无 cli/ 时逐字段回退
     # 到 .domainry 回执推导;两边都推不出 → not_measurable(值 null)。
     rec = derive_a_from_receipts(run)
@@ -302,13 +298,14 @@ def main(run_dir, out_path=None):
     a1_first = (v1["exit_code"] == 0 and error_count(v1) == 0) if v1 is not None \
         else rec.get("A1")
     a1_errors = error_count(v1) if v1 is not None else rec.get("A1_errors")
-    a2_first = (a1["exit_code"] == 0 or designed_handoff(a1)) if a1 is not None \
+    a2_first = (a1["exit_code"] == 0 and error_count(a1) == 0) if a1 is not None \
         else rec.get("A2")
-    a3_first = b1["exit_code"] == 0 if b1 is not None else rec.get("A3")
-    a4_first = acc["exit_code"] == 0 if acc is not None else rec.get("A4")
-    # A5 定义为 cli 工件序列的返工轮数(metrics-spec:数据源=artifacts 序号),
-    # 无 cli 捕获时不可测。
-    a5_rework = rework if artifacts else None
+    a3_first = (f1["exit_code"] == 0 and error_count(f1) == 0) if f1 is not None \
+        else rec.get("A3")
+    a4_first = (b1["exit_code"] == 0 and error_count(b1) == 0) if b1 is not None \
+        else rec.get("A4")
+    a5_first = acc["exit_code"] == 0 if acc is not None else golden_all_pass
+    a6_rework = rework if artifacts else None
 
     def a_src(art, key):
         if art is not None:
@@ -318,40 +315,45 @@ def main(run_dir, out_path=None):
     a_source = {
         "A1": a_src(v1, "A1"),
         "A2": a_src(a1, "A2"),
-        "A3": a_src(b1, "A3"),
-        "A4": a_src(acc, "A4"),
-        "A5": "cli-capture" if artifacts else "not_measurable",
+        "A3": a_src(f1, "A3"),
+        "A4": a_src(b1, "A4"),
+        "A5": "cli-capture" if acc is not None else "golden-result",
+        "A6": "cli-capture" if artifacts else "not_measurable",
     }
 
-    # pass@1 只依据可测得的字段:
-    #   基础条件(恒可测):done 声明、金标准全过、零人工干预;
-    #   漏斗条件:仅纳入非 not_measurable 的首过字段与 A5;
-    #   漏斗全部 not_measurable 且基础条件成立 → null(不可判),而不是 false。
-    funnel = [x for x in (a1_first, a2_first, a3_first, a4_first) if x is not None]
-    if a5_rework is not None:
-        funnel.append(a5_rework == 0)
+    # 严格 pass@1 必须由当前四条评分 CLI family 的首次捕获证明。
+    # 最终回执只能辅助定位，无法证明第一次调用；基础条件失败仍直接为 false。
+    funnel = [x for x in (a1_first, a2_first, a3_first, a4_first, a5_first) if x is not None]
+    if a6_rework is not None:
+        funnel.append(a6_rework == 0)
+    first_pass_captured = all(a is not None for a in (v1, a1, f1, b1))
     base_ok = (declared_done and golden_all_pass
                and meta.get("human_interventions", 0) == 0)
     if not base_ok:
         pass_at_1 = False
+    elif not first_pass_captured:
+        pass_at_1 = None
     elif funnel:
         pass_at_1 = all(funnel)
     else:
         pass_at_1 = None
 
     scorecard = {
+        "scorer_schema": "domainry-builder-eval-v2",
         "benchmark": meta.get("benchmark"),
+        "candidate_id": meta.get("candidate_id"),
         "skill_version": meta.get("skill_version"),
         "run_id": meta.get("run_id"),
         "pass_at_1": pass_at_1,
         "A_source": a_source,
-        "A1_validate_first_pass": a1_first,
-        "A1_validate_error_count": a1_errors,
+        "A1_plan_first_pass": a1_first,
+        "A1_plan_error_count": a1_errors,
         "A2_apply_first_pass": a2_first,
-        "A3_build_first_pass": a3_first,
-        "A4_acceptance_first_pass": a4_first,
-        "A5_rework_rounds": a5_rework,
-        "A6_false_done": declared_done and not golden_all_pass,
+        "A3_finalize_first_pass": a3_first,
+        "A4_verify_first_pass": a4_first,
+        "A5_acceptance_first_pass": a5_first,
+        "A6_rework_rounds": a6_rework,
+        "A7_false_done": declared_done and not golden_all_pass,
         "B1_golden_hit_rate": None if total_w is None else round(hit_w / total_w, 4),
         "B1_hit_detail": {f["id"]: f.get("status") for f in checklist},
         "B2_silent_downgrade_count": sum(1 for f in checklist if f.get("silent_downgrade")),

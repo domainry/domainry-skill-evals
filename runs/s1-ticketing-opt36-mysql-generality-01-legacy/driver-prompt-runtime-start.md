@@ -1,9 +1,0 @@
-继续同一 S1 checkpoint，只执行 managed Runtime start + identity/health 节点。不要重读或重做 requirements、model、apply、implementation、verify、package；不要修改 PRD、backend/model、source、generated source、verification/package receipt 或 package artifact。
-
-固定环境：Opt39 template commit `a013ba7a4a68e2a350ae2e57aac3296bbdffc82c`，Plane `http://127.0.0.1:8283`，package bundle `.domainry/builder/artifacts/packages/395d73506b4cf5a78badef4a80830993dfecab3c619200d5f1e497e16f735d6e`，dedicated address `127.0.0.1:38285`。本轮进程已继承 `DATABASE_DRIVER=mysql` 和本地 MySQL `DATABASE_DSN`；数据库 `domainry_s1_opt36_generality_01` 已由 evaluator 确认为存在且 0 tables。禁止使用或回退 SQLite，禁止打印、echo、读取或把 DSN/密码写入 argv、TODO、receipt/note、日志摘录或最终报告；只允许确认 driver 为 mysql 且敏感配置被 redacted/hash。
-
-当前完整 TODO 没有“仅 Runtime start”的精确 checkbox；不要错误地用一次 start 命令关闭更宽的 `Matching managed Runtime ... identities/sessions/data ready` Gate。仅在当前 session TODO 的 verify 区增加一个精确 pending checkbox：Managed Runtime starts once at `127.0.0.1:38285` from the current package bundle with MySQL, and the managed receipt/health bind exact package, Runtime manifest and cohort identity；Evidence pending。刷新 Gate，确保这个新 Gate 独立，宽 Gate 仍 pending。
-
-记录当前 epoch 到 `runtime_start.started`。按 installed Skill recipe，通过新增 Gate 首次且仅一次执行：`domainry-cli runtime-process start --project <project> --bundle <bundle> --address 127.0.0.1:38285`，并绑定适用 source/runtime identities。若失败，不重跑、不猜测、不修复；只读取 managed failure receipt 与经过 redaction 的有界 diagnostics，记录并停止。若成功，只用 `runtime-process status` 和公开 loopback health/readiness endpoint 核对：managed state healthy/running、PID/port、package/verification/finalization/blueprint/source/runtime-manifest/cohort identities、database driver mysql、DSN redacted。不要直接查询业务/identity API，不创建 session/data。
-
-成功后写 `runtime_start.ended` 并保持 Runtime 运行，为下一节点 semantic canary 使用。禁止 acceptance prepare/run/check、数据库私有查询、semantic canary 或其他业务请求。最终报告 active 秒数、正式 start 命令次数、receipt/state/identity/health、宽 Gate 仍 pending，以及是否发现通用 Skill/CLI 问题。

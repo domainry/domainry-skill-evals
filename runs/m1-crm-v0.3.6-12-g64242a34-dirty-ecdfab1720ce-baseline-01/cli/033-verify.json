@@ -1,0 +1,9 @@
+{
+  "family": "verify",
+  "command": "/bin/zsh -lc '/private/tmp/domainry-m1-baseline.HuB3Y7/codex-home/skills/domainry-builder-v1/bin/domainry-cli verify --json --project /private/tmp/domainry-m1-baseline.HuB3Y7/project --address 127.0.0.1:19283'",
+  "exit_code": 1,
+  "output": "[domainry] verify: run structural checks and complete backend tests done (59.264s)\n[domainry] verify: build and sign exact Runtime package...\n[domainry] verify: build and sign exact Runtime package done (30.488s)\n[domainry] verify: compile managed Runtime business-flow tests...\n[domainry] verify: compile managed Runtime business-flow tests done (1.69s)\n[domainry] verify: start initial managed Runtime...\n[domainry] verify: start initial managed Runtime failed (1.503s)\nerror: verify initial Runtime start: managed Runtime process failed: Runtime exited before health became ready; inspect /private/tmp/domainry-m1-baseline.HuB3Y7/project/.domainry/builder/runtime/runtime.log",
+  "raw_output": "[domainry] verify: run structural checks and complete backend tests done (59.264s)\n[domainry] verify: build and sign exact Runtime package...\n[domainry] verify: build and sign exact Runtime package done (30.488s)\n[domainry] verify: compile managed Runtime business-flow tests...\n[domainry] verify: compile managed Runtime business-flow tests done (1.69s)\n[domainry] verify: start initial managed Runtime...\n[domainry] verify: start initial managed Runtime failed (1.503s)\nerror: verify initial Runtime start: managed Runtime process failed: Runtime exited before health became ready; inspect /private/tmp/domainry-m1-baseline.HuB3Y7/project/.domainry/builder/runtime/runtime.log\n",
+  "event_item_id": "item_186",
+  "event_line": 363
+}

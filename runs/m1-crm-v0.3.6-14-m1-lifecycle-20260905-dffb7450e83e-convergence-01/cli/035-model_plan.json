@@ -1,0 +1,33 @@
+{
+  "family": "model_plan",
+  "command": "/bin/zsh -lc '/private/tmp/domainry-m1-v14-convergence.n6S4q9/codex-home/skills/domainry-builder-v1/bin/domainry-cli model plan --json --project /private/tmp/domainry-m1-v14-convergence.n6S4q9/project'",
+  "exit_code": 0,
+  "output": {
+    "artifact": ".domainry/builder/disposable/model-preflight-result.json",
+    "contract_version": "domainry-model-preflight-envelope-v1",
+    "create_items": [
+      "crm/resource/roles.conversion_workflow"
+    ],
+    "creates": 1,
+    "delete_items": [],
+    "deletes": 0,
+    "files": 5,
+    "identity": "12af269fae4b34a5670dfae1a55bf589471a5f683e2e1c121fa6c6ffbcb0c894",
+    "issue_count": 0,
+    "items": 38,
+    "sha256": "050f2838ee36b175b831d548cb7e530010721b34cc460eefe9fdf56d8bbe9dce",
+    "sql_files": 2,
+    "state": "valid",
+    "unchanged": 33,
+    "update_items": [
+      "crm/resource/actions.sales_lead.approve_conversion",
+      "crm/resource/actions.sales_lead.reject_conversion",
+      "crm/resource/roles.sales_director",
+      "crm/resource/workflows.large_lead_conversion_approval"
+    ],
+    "updates": 4
+  },
+  "raw_output": "{\"artifact\":\".domainry/builder/disposable/model-preflight-result.json\",\"contract_version\":\"domainry-model-preflight-envelope-v1\",\"create_items\":[\"crm/resource/roles.conversion_workflow\"],\"creates\":1,\"delete_items\":[],\"deletes\":0,\"files\":5,\"identity\":\"12af269fae4b34a5670dfae1a55bf589471a5f683e2e1c121fa6c6ffbcb0c894\",\"issue_count\":0,\"items\":38,\"sha256\":\"050f2838ee36b175b831d548cb7e530010721b34cc460eefe9fdf56d8bbe9dce\",\"sql_files\":2,\"state\":\"valid\",\"unchanged\":33,\"update_items\":[\"crm/resource/actions.sales_lead.approve_conversion\",\"crm/resource/actions.sales_lead.reject_conversion\",\"crm/resource/roles.sales_director\",\"crm/resource/workflows.large_lead_conversion_approval\"],\"updates\":4}\n",
+  "event_item_id": "item_100",
+  "event_line": 198
+}

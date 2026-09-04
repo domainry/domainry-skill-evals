@@ -1,0 +1,9 @@
+{
+  "family": "acceptance_check",
+  "command": "python3 harness/run_m1_baseline.py --project /private/tmp/domainry-m1-baseline.HuB3Y7/project --run-dir runs/m1-crm-v0.3.6-12-g64242a34-dirty-ecdfab1720ce-baseline-01 --verify-result runs/m1-crm-v0.3.6-12-g64242a34-dirty-ecdfab1720ce-baseline-01/cli/050-verify.json",
+  "exit_code": 1,
+  "started": 1788542751.827129000,
+  "ended": 1788542751.894669000,
+  "duration_seconds": 0.06754016876220703,
+  "output": "Traceback (most recent call last):\n  File \"/Users/tiger/Projects/domainry-skill-evals/harness/run_m1_baseline.py\", line 320, in <module>\n    sys.exit(main())\n             ^^^^^^\n  File \"/Users/tiger/Projects/domainry-skill-evals/harness/run_m1_baseline.py\", line 275, in main\n    facts, lead_table, seed_count = manifest_facts(manifest)\n                                    ^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/Users/tiger/Projects/domainry-skill-evals/harness/run_m1_baseline.py\", line 84, in manifest_facts\n    role_permissions = {key: set(value.get(\"permissions\") or [])\n                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/Users/tiger/Projects/domainry-skill-evals/harness/run_m1_baseline.py\", line 84, in <dictcomp>\n    role_permissions = {key: set(value.get(\"permissions\") or [])\n                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nTypeError: unhashable type: 'dict'"
+}

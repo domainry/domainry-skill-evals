@@ -1,0 +1,28 @@
+{
+  "family": "model_plan",
+  "command": "/bin/zsh -lc '/private/tmp/domainry-m1-v14-convergence.n6S4q9/codex-home/skills/domainry-builder-v1/bin/domainry-cli model plan --json --project /private/tmp/domainry-m1-v14-convergence.n6S4q9/project'",
+  "exit_code": 0,
+  "output": {
+    "artifact": ".domainry/builder/disposable/model-preflight-result.json",
+    "contract_version": "domainry-model-preflight-envelope-v1",
+    "create_items": [],
+    "creates": 0,
+    "delete_items": [],
+    "deletes": 0,
+    "files": 5,
+    "identity": "55d4ac32ce617e4bd00e9d815faf233756930cf307315c12e168374d50735f57",
+    "issue_count": 0,
+    "items": 38,
+    "sha256": "fb1f46941c42a3aef43121a122488b8854a77d250c993452bf42256d2a535c37",
+    "sql_files": 2,
+    "state": "valid",
+    "unchanged": 37,
+    "update_items": [
+      "crm/resource/roles.sales_rep"
+    ],
+    "updates": 1
+  },
+  "raw_output": "{\"artifact\":\".domainry/builder/disposable/model-preflight-result.json\",\"contract_version\":\"domainry-model-preflight-envelope-v1\",\"create_items\":[],\"creates\":0,\"delete_items\":[],\"deletes\":0,\"files\":5,\"identity\":\"55d4ac32ce617e4bd00e9d815faf233756930cf307315c12e168374d50735f57\",\"issue_count\":0,\"items\":38,\"sha256\":\"fb1f46941c42a3aef43121a122488b8854a77d250c993452bf42256d2a535c37\",\"sql_files\":2,\"state\":\"valid\",\"unchanged\":37,\"update_items\":[\"crm/resource/roles.sales_rep\"],\"updates\":1}\n",
+  "event_item_id": "item_339",
+  "event_line": 661
+}

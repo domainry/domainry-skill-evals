@@ -1,0 +1,102 @@
+{
+  "candidate": {
+    "apply_target_args": [
+      "--service",
+      "http://127.0.0.1:8283"
+    ],
+    "apply_target_flag": "--service",
+    "apply_target_value": "http://127.0.0.1:8283",
+    "candidate_id": "v0.3.6-15-m1-field-access-20260905+a794933262ee",
+    "cli": "/Users/tiger/.codex/skills/domainry-builder-v1/bin/domainry-cli",
+    "cli_binary_sha256": "b91b86d0ea3eebe0d3377bf2cc0991b1ca407ae4d6f512df5086b29630d984e4",
+    "package_metadata_sha256": "827cb9eee56cbd5daec8370cbcd179cacb6763bef22ebfd019c466bacccbe593",
+    "runtime_api_contract_hash": "4fe655cbfd4fa0bc0b0c04c89b86926fc6aceb059c9fccf5b09eec9b459330f7",
+    "runtime_api_contract_version": "runtime-domain-api-v1",
+    "skill_identity_sha256": "ebd64d96025aeabc3ec803e2cef1d6330e670533269edbfc0dda8172909aaceb",
+    "skill_name": "domainry-builder-v1",
+    "skill_root": "/Users/tiger/.codex/skills/domainry-builder-v1",
+    "skill_tree_sha256": "a794933262ee0de59a915d54e1a32ff44226908b51d02b3dd2439f89c0dd092d",
+    "skill_version": "v0.3.6-15-m1-field-access-20260905"
+  },
+  "contract_version": "domainry-eval-preflight-v1",
+  "diagnostics": [],
+  "pass": true,
+  "service": {
+    "health": {
+      "checks": [
+        {
+          "detail": "v0.3.6-15-m1-field-access-20260905",
+          "name": "application_delivery",
+          "status": "passed"
+        },
+        {
+          "detail": "runtime-domain-api-v1 + runtime-authoring-v1",
+          "name": "runtime_contract",
+          "status": "passed"
+        },
+        {
+          "detail": "github.com/domainry/domainry-runtime@v0.0.0-source-bb7de016448bed9c",
+          "name": "runtime_module",
+          "status": "passed"
+        },
+        {
+          "detail": "github.com/domainry/domainry-identity@v0.999.0-domainry.a77e7e12338fabbc",
+          "name": "identity_module",
+          "status": "passed"
+        },
+        {
+          "detail": "github.com/domainry/domainry-notification-sdk@v0.999.0-domainry.114fb05f448db043",
+          "name": "notification_sdk",
+          "status": "passed"
+        },
+        {
+          "detail": "github.com/domainry/domainry-notification@v0.999.0-domainry.32ffd3d5df359b15",
+          "name": "notification_module",
+          "status": "passed"
+        },
+        {
+          "detail": "domainry-project-template_v0.3.6-15-m1-field-access-20260905.tar.gz sha256:9f42f06ff630bd4d7eec330ee1d70e57ca73af98918b4c5029d85d162be4af40",
+          "name": "project_template",
+          "status": "passed"
+        },
+        {
+          "detail": "domainry-runtime-client-sdk_v0.3.6-15-m1-field-access-20260905.tar.gz sha256:6a478d047feb0ced5229473d02b55f7bb94677948e8a3233831b1300fdcf5d64",
+          "name": "runtime_client_sdk",
+          "status": "passed"
+        },
+        {
+          "detail": "domainry-frontend-product_v0.3.6-15-m1-field-access-20260905.tar.gz sha256:cdf4842f3c0e782a90376d2431a7126e5c8251175e327d3b856c2e7499573b2e",
+          "name": "frontend_product",
+          "status": "passed"
+        },
+        {
+          "detail": "1 platforms",
+          "name": "skill_packages",
+          "status": "passed"
+        },
+        {
+          "detail": "local.domainry.project-delivery revision 1",
+          "name": "project_delivery_trust",
+          "status": "passed"
+        },
+        {
+          "detail": "domainry-project-delivery-local-development",
+          "name": "project_delivery_signer",
+          "status": "passed"
+        },
+        {
+          "detail": "available",
+          "name": "project_delivery_store",
+          "status": "passed"
+        }
+      ],
+      "contract_version": "domainry-control-plane-health-v1",
+      "discovery": "/.well-known/domainry-plane",
+      "service_kind": "template-control-plane",
+      "status": "healthy",
+      "version": "v0.3.6-15-m1-field-access-20260905"
+    },
+    "http_status": 200,
+    "state": "healthy"
+  }
+}

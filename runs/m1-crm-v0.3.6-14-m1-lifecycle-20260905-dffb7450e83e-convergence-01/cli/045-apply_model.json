@@ -1,0 +1,79 @@
+{
+  "family": "apply_model",
+  "command": "/bin/zsh -lc '/private/tmp/domainry-m1-v14-convergence.n6S4q9/codex-home/skills/domainry-builder-v1/bin/domainry-cli apply model --json --project /private/tmp/domainry-m1-v14-convergence.n6S4q9/project --go-module-path example.com/domainry-m1-crm/backend --service http://127.0.0.1:8283'",
+  "exit_code": 0,
+  "output": {
+    "contract_version": "domainry-model-apply-v3",
+    "created_source_files": 0,
+    "implementation_packet": {
+      "contract_version": "domainry-action-implementation-packet-v4",
+      "path": ".domainry/builder/source/implementation-packets/7dd885a61db6e019e17ce10a496c710c876f73b65e0f880204336397715e5412.json",
+      "file_sha256": "7dd885a61db6e019e17ce10a496c710c876f73b65e0f880204336397715e5412",
+      "bytes": 2800,
+      "actions": [
+        {
+          "action_key": "sales_lead.approve_conversion",
+          "path": ".domainry/builder/source/implementation-packets/actions/0a8eafd789b2f12f765bd655c58a2171f77f8625a83198bf4e229c9359cefb5f.json",
+          "sha256": "0a8eafd789b2f12f765bd655c58a2171f77f8625a83198bf4e229c9359cefb5f",
+          "bytes": 38874
+        },
+        {
+          "action_key": "sales_lead.convert_direct",
+          "path": ".domainry/builder/source/implementation-packets/actions/8dc2cf4d496c9acc68b14cb26c64b320ba3e6f65304beb9f1264ddc475c4600d.json",
+          "sha256": "8dc2cf4d496c9acc68b14cb26c64b320ba3e6f65304beb9f1264ddc475c4600d",
+          "bytes": 28569
+        },
+        {
+          "action_key": "sales_lead.create_lead",
+          "path": ".domainry/builder/source/implementation-packets/actions/3cf2eca470be1653fc04aa39bb44e7cfbf0698432506e8ee8f6c4b8dc2d334a3.json",
+          "sha256": "3cf2eca470be1653fc04aa39bb44e7cfbf0698432506e8ee8f6c4b8dc2d334a3",
+          "bytes": 16731
+        },
+        {
+          "action_key": "sales_lead.mark_contacted",
+          "path": ".domainry/builder/source/implementation-packets/actions/7b28d115401bd8ce71a83255717d4bf8385199960a87925daa7aad9cf01c5991.json",
+          "sha256": "7b28d115401bd8ce71a83255717d4bf8385199960a87925daa7aad9cf01c5991",
+          "bytes": 21280
+        },
+        {
+          "action_key": "sales_lead.mark_lost",
+          "path": ".domainry/builder/source/implementation-packets/actions/d821f756a55fe135fd6c2f8b09f4351a441d5bd47821875a016f00c75c280f6c.json",
+          "sha256": "d821f756a55fe135fd6c2f8b09f4351a441d5bd47821875a016f00c75c280f6c",
+          "bytes": 21194
+        },
+        {
+          "action_key": "sales_lead.mark_qualified",
+          "path": ".domainry/builder/source/implementation-packets/actions/875284124b30d9b2a74871dabeeaf17d690970cd0e6b5fc9c140abbd964b774c.json",
+          "sha256": "875284124b30d9b2a74871dabeeaf17d690970cd0e6b5fc9c140abbd964b774c",
+          "bytes": 21298
+        },
+        {
+          "action_key": "sales_lead.reject_conversion",
+          "path": ".domainry/builder/source/implementation-packets/actions/b90102f27ed442997a5da60720047a0c193ec57d3da7a3379b7295ce13d757b8.json",
+          "sha256": "b90102f27ed442997a5da60720047a0c193ec57d3da7a3379b7295ce13d757b8",
+          "bytes": 31452
+        },
+        {
+          "action_key": "sales_lead.send_overdue_reminders",
+          "path": ".domainry/builder/source/implementation-packets/actions/9a111bdf88d1c3c475114fd5a9edbcde060d03e506ae755aa091126a38d90951.json",
+          "sha256": "9a111bdf88d1c3c475114fd5a9edbcde060d03e506ae755aa091126a38d90951",
+          "bytes": 29529
+        },
+        {
+          "action_key": "sales_lead.update_details",
+          "path": ".domainry/builder/source/implementation-packets/actions/be1ce067c2cf5703f5fb69e482c62dd5cf6ba07c4894578bcc1532e056d6cea5.json",
+          "sha256": "be1ce067c2cf5703f5fb69e482c62dd5cf6ba07c4894578bcc1532e056d6cea5",
+          "bytes": 22649
+        }
+      ],
+      "delivery_id": "sha256:1cfe64f673b281542ef8ab5e9dad7ef4d0623f28c2347e36ebe792f240643c58",
+      "materialization_receipt_sha256": "64c52a772dd5790a33bef06c63e1a96cec295b4258a44b2b43cf769d41abe121",
+      "materialization_file_sha256": "fdb5d366ed83b0d6366ae5b98ac89b87f6c6b2a0abdb7e0ed00d4f19daa97076"
+    },
+    "receipt": ".domainry/builder/model-apply.json",
+    "state": "implementation_ready"
+  },
+  "raw_output": "[domainry] apply model: load and preflight model done (1.137s)\n[domainry] apply model: synchronize Blueprint Ledger...\n[domainry] apply model: synchronize Blueprint Ledger done (59ms)\n[domainry] apply model: validate compiled Blueprint...\n[domainry] apply model: validate compiled Blueprint done (526ms)\n[domainry] apply model: publish immutable project delivery...\n[domainry] apply model: publish immutable project delivery done (642ms)\n[domainry] apply model: fetch signed delivery artifacts...\n[domainry] apply model: fetch signed delivery artifacts done (121ms)\n[domainry] apply model: materialize backend and resolve Go dependencies...\n[domainry] apply model: materialize backend and resolve Go dependencies done (83ms)\n[domainry] apply model: prepare project implementation packet...\n[domainry] apply model: prepare project implementation packet done (102ms)\n{\"contract_version\":\"domainry-model-apply-v3\",\"created_source_files\":0,\"implementation_packet\":{\"contract_version\":\"domainry-action-implementation-packet-v4\",\"path\":\".domainry/builder/source/implementation-packets/7dd885a61db6e019e17ce10a496c710c876f73b65e0f880204336397715e5412.json\",\"file_sha256\":\"7dd885a61db6e019e17ce10a496c710c876f73b65e0f880204336397715e5412\",\"bytes\":2800,\"actions\":[{\"action_key\":\"sales_lead.approve_conversion\",\"path\":\".domainry/builder/source/implementation-packets/actions/0a8eafd789b2f12f765bd655c58a2171f77f8625a83198bf4e229c9359cefb5f.json\",\"sha256\":\"0a8eafd789b2f12f765bd655c58a2171f77f8625a83198bf4e229c9359cefb5f\",\"bytes\":38874},{\"action_key\":\"sales_lead.convert_direct\",\"path\":\".domainry/builder/source/implementation-packets/actions/8dc2cf4d496c9acc68b14cb26c64b320ba3e6f65304beb9f1264ddc475c4600d.json\",\"sha256\":\"8dc2cf4d496c9acc68b14cb26c64b320ba3e6f65304beb9f1264ddc475c4600d\",\"bytes\":28569},{\"action_key\":\"sales_lead.create_lead\",\"path\":\".domainry/builder/source/implementation-packets/actions/3cf2eca470be1653fc04aa39bb44e7cfbf0698432506e8ee8f6c4b8dc2d334a3.json\",\"sha256\":\"3cf2eca470be1653fc04aa39bb44e7cfbf0698432506e8ee8f6c4b8dc2d334a3\",\"bytes\":16731},{\"action_key\":\"sales_lead.mark_contacted\",\"path\":\".domainry/builder/source/implementation-packets/actions/7b28d115401bd8ce71a83255717d4bf8385199960a87925daa7aad9cf01c5991.json\",\"sha256\":\"7b28d115401bd8ce71a83255717d4bf8385199960a87925daa7aad9cf01c5991\",\"bytes\":21280},{\"action_key\":\"sales_lead.mark_lost\",\"path\":\".domainry/builder/source/implementation-packets/actions/d821f756a55fe135fd6c2f8b09f4351a441d5bd47821875a016f00c75c280f6c.json\",\"sha256\":\"d821f756a55fe135fd6c2f8b09f4351a441d5bd47821875a016f00c75c280f6c\",\"bytes\":21194},{\"action_key\":\"sales_lead.mark_qualified\",\"path\":\".domainry/builder/source/implementation-packets/actions/875284124b30d9b2a74871dabeeaf17d690970cd0e6b5fc9c140abbd964b774c.json\",\"sha256\":\"875284124b30d9b2a74871dabeeaf17d690970cd0e6b5fc9c140abbd964b774c\",\"bytes\":21298},{\"action_key\":\"sales_lead.reject_conversion\",\"path\":\".domainry/builder/source/implementation-packets/actions/b90102f27ed442997a5da60720047a0c193ec57d3da7a3379b7295ce13d757b8.json\",\"sha256\":\"b90102f27ed442997a5da60720047a0c193ec57d3da7a3379b7295ce13d757b8\",\"bytes\":31452},{\"action_key\":\"sales_lead.send_overdue_reminders\",\"path\":\".domainry/builder/source/implementation-packets/actions/9a111bdf88d1c3c475114fd5a9edbcde060d03e506ae755aa091126a38d90951.json\",\"sha256\":\"9a111bdf88d1c3c475114fd5a9edbcde060d03e506ae755aa091126a38d90951\",\"bytes\":29529},{\"action_key\":\"sales_lead.update_details\",\"path\":\".domainry/builder/source/implementation-packets/actions/be1ce067c2cf5703f5fb69e482c62dd5cf6ba07c4894578bcc1532e056d6cea5.json\",\"sha256\":\"be1ce067c2cf5703f5fb69e482c62dd5cf6ba07c4894578bcc1532e056d6cea5\",\"bytes\":22649}],\"delivery_id\":\"sha256:1cfe64f673b281542ef8ab5e9dad7ef4d0623f28c2347e36ebe792f240643c58\",\"materialization_receipt_sha256\":\"64c52a772dd5790a33bef06c63e1a96cec295b4258a44b2b43cf769d41abe121\",\"materialization_file_sha256\":\"fdb5d366ed83b0d6366ae5b98ac89b87f6c6b2a0abdb7e0ed00d4f19daa97076\"},\"receipt\":\".domainry/builder/model-apply.json\",\"state\":\"implementation_ready\"}\n",
+  "event_item_id": "item_137",
+  "event_line": 271
+}

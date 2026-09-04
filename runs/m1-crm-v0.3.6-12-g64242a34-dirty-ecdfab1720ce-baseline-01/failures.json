@@ -1,0 +1,27 @@
+[
+  {
+    "stage": "verify",
+    "owner": "cli_platform",
+    "note": "verify did not forward first-tenant bootstrap credentials, so the first managed Runtime could not become ready without explicit environment injection"
+  },
+  {
+    "stage": "verify",
+    "owner": "cli_platform",
+    "note": "a failed managed Runtime bootstrap left a partially initialized fixed SQLite cohort that a later delivery reused and hit definition_version_conflict"
+  },
+  {
+    "stage": "verify",
+    "owner": "skill_doc",
+    "note": "the final manifest omitted an approval workflow for M07 although the Agent declared BF03/BF04 complete"
+  },
+  {
+    "stage": "verify",
+    "owner": "skill_doc",
+    "note": "the final manifest omitted report_export_controls for M16 although the Agent declared BF08 complete"
+  },
+  {
+    "stage": "acceptance",
+    "owner": "benchmark_defect",
+    "note": "the M1 checker initially crashed on structured role permissions and failed to recognize the overdue follow-up scheduler naming; both checker defects were fixed with regression tests before final scoring"
+  }
+]

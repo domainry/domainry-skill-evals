@@ -1,0 +1,16 @@
+{
+  "family": "model_plan",
+  "command": "/bin/zsh -lc '/private/tmp/domainry-m1-v14-convergence.n6S4q9/codex-home/skills/domainry-builder-v1/bin/domainry-cli model plan --json --project /private/tmp/domainry-m1-v14-convergence.n6S4q9/project'",
+  "exit_code": 1,
+  "output": {
+    "artifact": ".domainry/builder/disposable/model-preflight-result.json",
+    "contract_version": "domainry-model-preflight-envelope-v1",
+    "identity": "10fc1d5521de4aa3bd6ff02e43b17d508d6e8413d3bd15f3ad5c1f750ec9378e",
+    "issue_count": 1,
+    "sha256": "94e05b1e8673b79bb8c7a75837d5a1196a2c8f464403dd48381c59401118d397",
+    "state": "repair_required"
+  },
+  "raw_output": "model.write_ownership_conflict: role sales_rep grants direct CRUD permission lead.create while Handler owns writes to lead\nerror: Builder validation found 1 issue(s)\n{\"artifact\":\".domainry/builder/disposable/model-preflight-result.json\",\"contract_version\":\"domainry-model-preflight-envelope-v1\",\"identity\":\"10fc1d5521de4aa3bd6ff02e43b17d508d6e8413d3bd15f3ad5c1f750ec9378e\",\"issue_count\":1,\"sha256\":\"94e05b1e8673b79bb8c7a75837d5a1196a2c8f464403dd48381c59401118d397\",\"state\":\"repair_required\"}\n",
+  "event_item_id": "item_37",
+  "event_line": 75
+}

@@ -1,0 +1,16 @@
+{
+  "family": "model_plan",
+  "command": "/bin/zsh -lc '/private/tmp/domainry-m1-baseline.HuB3Y7/codex-home/skills/domainry-builder-v1/bin/domainry-cli model plan --json --project /private/tmp/domainry-m1-baseline.HuB3Y7/project'",
+  "exit_code": 1,
+  "output": {
+    "artifact": ".domainry/builder/disposable/model-preflight-result.json",
+    "contract_version": "domainry-model-preflight-envelope-v1",
+    "identity": "0eb9755ab22744f27e921f131a9796d07941bd4c4e46c0bad03ea34fe69a447c",
+    "issue_count": 2,
+    "sha256": "601868f95b3a5d2ec3abf4a61f47bca3ebcf071ae3c0bb7bb7cb9f8f9c96d4d1",
+    "state": "repair_required"
+  },
+  "raw_output": "{\"artifact\":\".domainry/builder/disposable/model-preflight-result.json\",\"contract_version\":\"domainry-model-preflight-envelope-v1\",\"identity\":\"0eb9755ab22744f27e921f131a9796d07941bd4c4e46c0bad03ea34fe69a447c\",\"issue_count\":2,\"sha256\":\"601868f95b3a5d2ec3abf4a61f47bca3ebcf071ae3c0bb7bb7cb9f8f9c96d4d1\",\"state\":\"repair_required\"}\nmodel.field_modifier_invalid: field lead_id modifier unique is only valid on Object fields and has no value\nmodel.field_modifier_invalid: field source_lead_id modifier unique is only valid on Object fields and has no value\nerror: Builder validation found 2 issue(s)\n",
+  "event_item_id": "item_33",
+  "event_line": 67
+}

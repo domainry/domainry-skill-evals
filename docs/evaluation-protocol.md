@@ -13,7 +13,7 @@ The holdout pool and its golden assets live in evaluator-controlled storage outs
 
 ## Freeze manifest and two denominators
 
-Before revealing the selected holdout PRD to the delivery agent, persist one immutable freeze manifest containing hashes and versions for the PRD, public semantic IDs, driver prompt, benchmark denominator, golden/oracle, fixture generator, scorer and outcome schema, Skill tree, CLI, Plane, Runtime, model, and material run settings.
+Before revealing the selected holdout PRD to the delivery agent, persist one immutable freeze manifest containing hashes and versions for the PRD, public semantic IDs, driver prompt, benchmark denominator, golden/oracle, fixture generator, scorer and outcome schema, installed Skill tree, packaged CLI, declared external service target, Runtime contract, model, and material run settings. Do not resolve any candidate or platform identity from a source checkout.
 
 Keep two denominators distinct:
 
@@ -24,7 +24,7 @@ Both hashes and their explicit case-set reconciliation belong in every result. A
 
 ## Measured run and lineage
 
-Use a new standalone Git project, fresh Agent session, frozen candidate package, and zero human clarification or repair. Capture every command/event needed to measure the first validate, apply, build, and acceptance attempts; a `not_measurable` first-pass funnel is not strict holdout evidence. Golden assertions must actually execute, not merely finish setup.
+Use a new standalone Git project, fresh Agent session, frozen installed candidate package, and zero human clarification or repair. Capture every command/event needed to measure the first `model plan`, `apply model`, `apply finalize`, `verify`, and evaluator acceptance attempts; a `not_measurable` first-pass funnel is not strict holdout evidence. Golden assertions must actually execute, not merely finish setup.
 
 Write the first run once to an immutable run directory containing the freeze manifest, raw event stream, complete exact-set results, scorer output, token/time accounting, and every failure. Never overwrite it. Later repairs use a separate `convergence` run with `parent_run_id`, changed component hashes, changed-case inventory, and a reference to the preserved first run. Convergence is never named pass-at-1.
 

@@ -1,0 +1,77 @@
+{
+  "family": "model_capability",
+  "command": "/bin/zsh -lc '/private/tmp/domainry-m1-baseline.HuB3Y7/codex-home/skills/domainry-builder-v1/bin/domainry-cli model capability --json --project /private/tmp/domainry-m1-baseline.HuB3Y7/project --key data_exchange.transfer'",
+  "exit_code": 0,
+  "output": {
+    "category": {
+      "key": "data_exchange.transfer",
+      "name": "Batch transfer",
+      "description": "Validate common import/export job envelopes before a Records, Report, or other source owner supplies provider-specific options and content."
+    },
+    "contracts": [
+      {
+        "kind": "data_exchange.validation_schema",
+        "key": "data_exchange.export",
+        "schema": {
+          "additionalProperties": false,
+          "properties": {
+            "idempotency_key": {
+              "type": "string"
+            },
+            "object_key": {
+              "type": "string"
+            },
+            "provider": {
+              "type": "string"
+            },
+            "reference_id": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "idempotency_key",
+            "object_key",
+            "provider"
+          ],
+          "type": "object"
+        }
+      },
+      {
+        "kind": "data_exchange.validation_schema",
+        "key": "data_exchange.import",
+        "schema": {
+          "additionalProperties": false,
+          "properties": {
+            "content_type": {
+              "type": "string"
+            },
+            "filename": {
+              "type": "string"
+            },
+            "idempotency_key": {
+              "type": "string"
+            },
+            "max_bytes": {
+              "type": "integer"
+            },
+            "object_key": {
+              "type": "string"
+            },
+            "provider": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "idempotency_key",
+            "object_key",
+            "provider"
+          ],
+          "type": "object"
+        }
+      }
+    ]
+  },
+  "raw_output": "{\"category\":{\"key\":\"data_exchange.transfer\",\"name\":\"Batch transfer\",\"description\":\"Validate common import/export job envelopes before a Records, Report, or other source owner supplies provider-specific options and content.\"},\"contracts\":[{\"kind\":\"data_exchange.validation_schema\",\"key\":\"data_exchange.export\",\"schema\":{\"additionalProperties\":false,\"properties\":{\"idempotency_key\":{\"type\":\"string\"},\"object_key\":{\"type\":\"string\"},\"provider\":{\"type\":\"string\"},\"reference_id\":{\"type\":\"string\"}},\"required\":[\"idempotency_key\",\"object_key\",\"provider\"],\"type\":\"object\"}},{\"kind\":\"data_exchange.validation_schema\",\"key\":\"data_exchange.import\",\"schema\":{\"additionalProperties\":false,\"properties\":{\"content_type\":{\"type\":\"string\"},\"filename\":{\"type\":\"string\"},\"idempotency_key\":{\"type\":\"string\"},\"max_bytes\":{\"type\":\"integer\"},\"object_key\":{\"type\":\"string\"},\"provider\":{\"type\":\"string\"}},\"required\":[\"idempotency_key\",\"object_key\",\"provider\"],\"type\":\"object\"}}]}\n",
+  "event_item_id": "item_27",
+  "event_line": 55
+}

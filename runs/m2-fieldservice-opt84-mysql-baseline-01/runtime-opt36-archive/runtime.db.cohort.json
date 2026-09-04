@@ -1,5 +1,0 @@
-{
-  "contract_version": "domainry-managed-runtime-database-cohort-v1",
-  "database_relative_path": ".domainry/builder/runtime/runtime.db",
-  "database_identity_sha256": "4ca223eaf951b34102683f8b4ae3497ca24571f4dc3c8e8fc63a75f301e860e5"
-}

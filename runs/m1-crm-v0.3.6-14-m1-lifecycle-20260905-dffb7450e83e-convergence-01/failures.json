@@ -1,0 +1,17 @@
+[
+  {
+    "stage": "verify",
+    "owner": "cli_platform",
+    "note": "the signed Runtime published project roles and record scopes, but effective field_access was empty; authorized record and action responses therefore projected business data as an empty object"
+  },
+  {
+    "stage": "verify",
+    "owner": "cli_platform",
+    "note": "the same missing effective field grants caused governed funnel and CSV export requests to fail with backend.report.object_sql_field_denied"
+  },
+  {
+    "stage": "model",
+    "owner": "skill_doc",
+    "note": "task-relevant capability lookup examples used report_export_controls and notification keys that do not exist in the installed capability catalog"
+  }
+]

@@ -1,7 +1,0 @@
-# S1 Opt111 SQLite calibration driver notes
-
-The candidate completed the installed five-stage workflow in one Agent session with zero human intervention. Its unique TODO reached `done` with 33/33 checks, the project-owned runtime business-flow suites passed, the restart canary passed, and the final managed SQLite Runtime remained healthy on port 19118.
-
-The frozen golden probe executed all 16 rows and produced a raw 7/16 result, but that number is not a valid candidate score. `probe_derive.py` exported every ticket model field as `TICKET_FIELDS`, including Runtime-owned `owner_department_id` and `owner_department_path`. The golden probe copied those fields into its F03 create payload, which the Runtime correctly rejected with `backend.validation.field_not_writable`. F08, F10, F05, F02, F06, F07, F04, and F09 then operated on the missing shared ticket and failed transitively. Independently, F13 calls the hard-coded `ticket_status_summary` route while this model publishes `ticket_status_counts`.
-
-The frozen probe, derivation helper, denominator, and scorer were not changed. The scorecard therefore preserves raw output (`pass_at_1=false`, `B1=0.4286`, `A6_false_done=true`), while `result-validity.json` marks candidate pass@1 as not measurable. Process observations remain valid: 2015 seconds wall time, 23,553,262 total tokens, zero human interventions, final structure/package receipts present, and healthy SQLite Runtime.

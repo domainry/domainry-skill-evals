@@ -1,0 +1,10 @@
+{
+  "benchmark": "m1-crm",
+  "candidate_id": "v0.3.6-12-g64242a34-dirty+ecdfab1720ce",
+  "skill_version": "v0.3.6-12-g64242a34-dirty",
+  "run_id": "m1-crm-v0.3.6-12-g64242a34-dirty-ecdfab1720ce-baseline-01",
+  "agent_declared_done": true,
+  "human_interventions": 0,
+  "started_epoch": 1788538895,
+  "ended_epoch": 1788542726
+}

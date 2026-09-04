@@ -1,9 +1,10 @@
 {
-  "note": "与 plane 仓库解耦的唯一连接点:身份清单、安装父目录、CLI 相对路径与地址。公开 Skill 名由身份清单解析。",
-  "skill_identity": "/Users/tiger/Projects/domainry-framework/skills/builder/skill-identity.json",
-  "skill_install_parent": "/Users/tiger/.codex/skills",
+  "note": "评测对象是当前已安装的 Builder Skill。身份、包版本、Skill 树和 CLI 均从候选 Skill 根目录自校验；不读取任何源码仓库。",
+  "candidate_skill_root": "/Users/tiger/.codex/skills/domainry-builder-v1",
   "cli_relative": "bin/domainry-cli",
-  "plane_repo": "/Users/tiger/Projects/domainry-framework",
-  "plane_url": "http://127.0.0.1:8283",
-  "cli_note": "macOS arm64 当前安装 Skill 自带 CLI;run 必须记录 version --json 输出"
+  "apply_target": {
+    "flag": "--service",
+    "value": "http://127.0.0.1:8283"
+  },
+  "cli_note": "run 必须在启动 Agent 前冻结候选 Skill 树和 CLI 哈希，并在结束后重验；apply target 只是外部服务边界，不是源码仓库依赖。"
 }

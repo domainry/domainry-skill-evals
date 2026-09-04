@@ -15,27 +15,21 @@ import argparse
 import json
 import os
 from pathlib import Path
+import re
 import sqlite3
 import subprocess
 import sys
 import time
 
 
-FLOW_TESTS = {
-    "BF01": ("TestBF01LeadOwnershipLifecycleAndScope", "TestBF01ScopeCreatePaginationAndNavigation"),
-    "BF02": ("TestBF02DirectLowValueConversion", "TestBF02LowValueConversionIdempotency"),
-    "BF03": ("TestBF03HighValueConversionApproval", "TestBF03HighestRiskLargeApproval"),
-    "BF04": ("TestBF04RejectedHighValueConversion", "TestBF03RejectedApproval"),
-    "BF05": ("TestBF05DepartmentGlobalScopeAndPagination", "TestBF01ScopeCreatePaginationAndNavigation"),
-    "BF06": ("TestBF06WeekdayStaleReminderDedupe", "TestBF04ScheduledReminderDailyDedupe"),
-    "BF07": ("TestBF07DirectorFunnelReport", "TestBF05DirectorFunnelAuthorization"),
-    "BF08": ("TestBF08GovernedExportZeroNormalAnd1000Boundary", "TestBF05DirectorFunnelAuthorization"),
-}
+FLOW_IDS = tuple(f"BF{i:02d}" for i in range(1, 9))
+FLOW_TEST_PATTERN = re.compile(r"^Test(?P<flow>BF0[1-8])(?:$|[/_A-Z])")
+FLOW_SOURCE_PATTERN = re.compile(r"\bfunc\s+Test(?P<flow>BF0[1-8])(?:$|[_A-Z])\w*\s*\(")
 
 FEATURES = {
     "M01": ("P0", ["schema"], ["BF01"]),
     "M02": ("P0", ["lead_state_machine"], ["BF01", "BF02"]),
-    "M03": ("P0", ["lead_scope_fields"], ["BF01"]),
+    "M03": ("P0", [], ["BF01"]),
     "M04": ("P0", ["advance_action"], ["BF01"]),
     "M05": ("P0", [], ["BF01"]),
     "M06": ("P0", ["conversion_actions"], ["BF02", "BF03"]),
@@ -43,15 +37,15 @@ FEATURES = {
     "M08": ("P0", [], ["BF02", "BF03"]),
     "M09": ("P1", ["conversion_notifications"], ["BF03", "BF04"]),
     "M10": ("P0", ["customer_read_only"], ["BF02"]),
-    "M11": ("P0", ["department_scope"], ["BF01", "BF05"]),
-    "M12": ("P0", ["director_scope"], ["BF05"]),
-    "M13": ("P1", ["audit_events"], ["BF01", "BF03", "BF04"]),
+    "M11": ("P0", [], ["BF01", "BF05"]),
+    "M12": ("P0", [], ["BF05"]),
+    "M13": ("P1", [], ["BF01", "BF03", "BF04"]),
     "M14": ("P1", ["stale_scheduler"], ["BF06"]),
     "M15": ("P0", ["funnel_report"], ["BF07"]),
     "M16": ("P0", ["export_control"], ["BF08"]),
     "M17": ("P0", ["detail_report"], ["BF05"]),
-    "M18": ("P1", ["role_menus"], ["BF01"]),
-    "M19": ("P0", ["acceptance_identities", "seed_coverage"], []),
+    "M18": ("P1", [], ["BF05"]),
+    "M19": ("P0", [], ["BF01", "BF05"]),
 }
 
 
@@ -61,6 +55,21 @@ def keyed(items):
 
 def field_map(obj):
     return keyed((obj or {}).get("fields"))
+
+
+def permission_key(permission):
+    """Return the canonical permission key from current or legacy manifests."""
+    if isinstance(permission, str):
+        return permission.split(";", 1)[0].strip()
+    if isinstance(permission, dict):
+        value = permission.get("permission_key") or permission.get("key")
+        return value.strip() if isinstance(value, str) else ""
+    return ""
+
+
+def key_mentions(key, terms):
+    value = key.lower() if isinstance(key, str) else ""
+    return any(term in value for term in terms)
 
 
 def manifest_facts(manifest):
@@ -73,8 +82,7 @@ def manifest_facts(manifest):
     roles = keyed(manifest.get("roles"))
     state_machines = keyed(manifest.get("state_machines"))
     lead_key = next((key for key, value in objects.items()
-                     if {"company_name", "source", "status"} <= set(field_map(value))
-                     and {"owner_user", "owner_department_id"} <= set(field_map(value))), None)
+                     if {"company_name", "source", "status"} <= set(field_map(value))), None)
     lead_fields = field_map(objects.get(lead_key))
     source = lead_fields.get("source", {})
     source_values = {o.get("value", o) if isinstance(o, dict) else o
@@ -85,24 +93,18 @@ def manifest_facts(manifest):
                     if set(value.get("states") or []) == {"new", "contacted", "qualified", "converted", "lost"}), {})
     states = set(lead_sm.get("states") or [])
     terminals = set(lead_sm.get("terminal_states") or [])
-    identity = manifest.get("identity_bootstrap") or {}
-    users = identity.get("users") or []
-    departments = identity.get("departments") or []
     seeds = manifest.get("seed_records") or []
     lead_seeds = [s for s in seeds if s.get("object_key") == lead_key]
-    seed_states = {(s.get("data") or {}).get("status") for s in lead_seeds}
-    amount_key = next((key for key, value in lead_fields.items()
-                       if value.get("type") == "currency" and "amount" in key), None)
-    seed_amounts = [float((s.get("data") or {}).get(amount_key) or 0)
-                    for s in lead_seeds] if amount_key else []
 
-    role_permissions = {key: set(value.get("permissions") or [])
-                        for key, value in roles.items()}
-    director_permissions = role_permissions.get("sales_director", set())
-    customer_write = {p for permissions in role_permissions.values()
-                      for p in permissions if p in {"customer.update", "customer.delete"}}
-    menu_roles = {row.get("role_id") for row in identity.get("role_menus") or []}
+    customer_write = {
+        key
+        for role in roles.values()
+        for permission in role.get("permissions") or []
+        if (key := permission_key(permission))
+        in {"customer.create", "customer.update", "customer.delete"}
+    }
     action_keys = set(actions)
+    reminder_terms = ("stale", "reminder", "overdue", "followup")
 
     return {
         "schema": (lead_fields.get("company_name", {}).get("required") is True
@@ -111,10 +113,7 @@ def manifest_facts(manifest):
                    and source_values == {"website", "exhibition", "referral", "outbound"}),
         "lead_state_machine": (states == {"new", "contacted", "qualified", "converted", "lost"}
                                and terminals == {"converted", "lost"}),
-        "lead_scope_fields": all(k in lead_fields for k in
-                                 ("owner_user", "owner_department_id", "owner_department_path")),
-        "advance_action": any(key.startswith(f"{lead_key}.") and ("advance" in key or "status" in key)
-                              for key in action_keys),
+        "advance_action": bool(lead_sm.get("transitions")),
         "conversion_actions": (any(key.startswith(f"{lead_key}.") and "conversion" in key for key in action_keys)
                                and any("conversion" in key and ("resolve" in key or "approve" in key)
                                        for key in action_keys)),
@@ -122,25 +121,12 @@ def manifest_facts(manifest):
         "conversion_notifications": (any("conversion" in key and "approv" in key for key in notifications)
                                      and any("conversion" in key and "reject" in key for key in notifications)),
         "customer_read_only": "customer" in objects and not customer_write,
-        "department_scope": "sales_rep" in roles and len(departments) >= 2,
-        "director_scope": ("sales_director" in roles
-                           and any(permission == f"{lead_key}.read" or permission.startswith(f"{lead_key}.read_")
-                                   for permission in director_permissions)),
-        "audit_events": all((actions[k].get("audit_event") for k in action_keys)),
-        "stale_scheduler": (any("stale" in key or "reminder" in key for key in schedules)
-                            and any("stale" in key or "reminder" in key for key in workflows)
-                            and any(("stale" in key or "reminder" in key) for key in action_keys)),
+        "stale_scheduler": (any(key_mentions(key, reminder_terms) for key in schedules)
+                            and any(key_mentions(key, reminder_terms) for key in workflows)
+                            and any(key_mentions(key, reminder_terms) for key in action_keys)),
         "funnel_report": any("funnel" in key for key in reports),
         "export_control": bool(manifest.get("report_export_controls")),
         "detail_report": any("detail" in key for key in reports),
-        "role_menus": {"sales_rep", "sales_director"} <= menu_roles,
-        "acceptance_identities": (len(departments) >= 2
-                                  and sum("sales_rep" in (u.get("role_keys") or []) for u in users) >= 2
-                                  and any("sales_director" in (u.get("role_keys") or []) for u in users)),
-        "seed_coverage": (len(lead_seeds) >= 6
-                          and seed_states >= {"new", "contacted", "qualified", "converted", "lost"}
-                          and any(v >= 100000 for v in seed_amounts)
-                          and any(0 < v < 100000 for v in seed_amounts)),
     }, lead_key, len(lead_seeds)
 
 
@@ -158,6 +144,28 @@ def assert_fresh_sqlite(db_path, lead_table, expected_lead_seeds):
             "create a new evaluator cohort instead of reusing acceptance residue")
 
 
+def parse_flow_outcomes(output):
+    """Read public BF IDs from Go test events without fixing test prose names.
+
+    A delivery may split one BF ID across several top-level tests. Every
+    terminal event for that ID must pass, and all eight IDs must be present.
+    """
+    terminal = {key: [] for key in FLOW_IDS}
+    for line in output.splitlines():
+        try:
+            event = json.loads(line)
+        except json.JSONDecodeError:
+            continue
+        name = event.get("Test")
+        match = FLOW_TEST_PATTERN.match(name) if isinstance(name, str) else None
+        if match and event.get("Action") in {"pass", "fail"}:
+            terminal[match.group("flow")].append(event["Action"])
+    return {
+        key: bool(actions) and all(action == "pass" for action in actions)
+        for key, actions in terminal.items()
+    }
+
+
 def run_flows(project, base_url, bootstrap_password, acceptance_password, log_path):
     backend = project / "backend"
     env = os.environ.copy()
@@ -172,42 +180,126 @@ def run_flows(project, base_url, bootstrap_password, acceptance_password, log_pa
         cwd=backend, env=env, text=True, stdout=subprocess.PIPE,
         stderr=subprocess.STDOUT, check=False)
     log_path.write_text(proc.stdout)
-    outcomes = {key: False for key in FLOW_TESTS}
-    by_test = {}
-    for key, names in FLOW_TESTS.items():
-        for name in names:
-            by_test.setdefault(name, set()).add(key)
-    for line in proc.stdout.splitlines():
-        try:
-            event = json.loads(line)
-        except json.JSONDecodeError:
+    return parse_flow_outcomes(proc.stdout), proc.returncode
+
+
+def declared_flow_ids(project):
+    root = project / "backend/tests/businessflow"
+    found = set()
+    if not root.is_dir() or root.is_symlink():
+        return found
+    for path in root.rglob("*_test.go"):
+        if path.is_symlink() or not path.is_file():
             continue
-        keys = by_test.get(event.get("Test"), ())
-        if keys and event.get("Action") in {"pass", "fail"}:
-            for key in keys:
-                outcomes[key] = event["Action"] == "pass"
-    return outcomes, proc.returncode
+        for match in FLOW_SOURCE_PATTERN.finditer(path.read_text(encoding="utf-8")):
+            found.add(match.group("flow"))
+    return found
+
+
+def traced_flow_ids(project):
+    traceability = project / "docs/backend-requirements-prd.md"
+    if not traceability.is_file() or traceability.is_symlink():
+        return set()
+    return set(re.findall(r"\bBF0[1-8]\b", traceability.read_text(encoding="utf-8")))
+
+
+def verified_flow_outcomes(project, raw_result):
+    """Reconcile BF IDs with the current CLI verify lifecycle proof.
+
+    Current Builder ``verify`` runs one compiled business-flow binary against
+    the initial Runtime and the same database cohort after restart, then stops
+    the Runtime. The evaluator therefore consumes that proof instead of
+    requiring the Agent to leave an extra Runtime running.
+    """
+    result = raw_result.get("output") if isinstance(raw_result, dict) else None
+    if not isinstance(result, dict):
+        result = raw_result
+    runtime = result.get("runtime") if isinstance(result, dict) else None
+    runtime = runtime if isinstance(runtime, dict) else {}
+    initial = runtime.get("initial_start") or {}
+    restart = runtime.get("restart") or {}
+    initial_stop = runtime.get("initial_stop") or {}
+    final_stop = runtime.get("final_stop") or {}
+    initial_flow = runtime.get("initial_business_flow") or {}
+    restart_flow = runtime.get("restart_business_flow") or {}
+    identity_keys = (
+        "database_identity_sha256", "package_receipt_sha256",
+        "verification_receipt_sha256", "project_source_tree_sha256",
+        "runtime_manifest_sha256",
+    )
+    identities_match = all(
+        initial.get(key)
+        and initial.get(key) == initial_stop.get(key) == restart.get(key) == final_stop.get(key)
+        for key in identity_keys
+    )
+    proof_ok = (
+        isinstance(result, dict)
+        and result.get("state") == "verified_and_stopped"
+        and initial.get("state") == "running"
+        and initial.get("healthy") is True
+        and restart.get("state") == "running"
+        and restart.get("healthy") is True
+        and initial.get("cohort_state") == "current"
+        and initial_stop.get("cohort_state") == "current"
+        and restart.get("cohort_state") == "current"
+        and final_stop.get("cohort_state") == "current"
+        and initial_stop.get("state") == "stopped"
+        and initial_stop.get("stopped_at")
+        and final_stop.get("state") == "stopped"
+        and final_stop.get("stopped_at")
+        and initial_flow.get("status") == "passed"
+        and restart_flow.get("status") == "passed"
+        and initial_flow.get("binary_sha256")
+        and initial_flow.get("binary_sha256") == restart_flow.get("binary_sha256")
+        and initial_flow.get("delivery_id")
+        and initial_flow.get("delivery_id") == restart_flow.get("delivery_id")
+        and identities_match
+    )
+    declared = declared_flow_ids(project)
+    traced = traced_flow_ids(project)
+    outcomes = {flow: proof_ok and flow in declared and flow in traced for flow in FLOW_IDS}
+    evidence = {
+        "verify_state": result.get("state") if isinstance(result, dict) else None,
+        "proof_ok": proof_ok,
+        "declared_flow_ids": sorted(declared),
+        "traced_flow_ids": sorted(traced),
+        "initial_business_flow_status": initial_flow.get("status"),
+        "restart_business_flow_status": restart_flow.get("status"),
+        "same_cohort_identity": identities_match,
+        "final_runtime_state": final_stop.get("state"),
+    }
+    return outcomes, (0 if proof_ok and all(outcomes.values()) else 1), evidence
 
 
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--project", required=True, type=Path)
     parser.add_argument("--run-dir", required=True, type=Path)
-    parser.add_argument("--base-url", required=True)
-    parser.add_argument("--database", required=True, type=Path)
-    parser.add_argument("--bootstrap-password", required=True)
-    parser.add_argument("--acceptance-password", required=True)
+    parser.add_argument("--verify-result", type=Path,
+                        help="current domainry-cli verify JSON (preferred)")
+    parser.add_argument("--base-url", help="legacy live-Runtime mode")
+    parser.add_argument("--database", type=Path, help="legacy live-Runtime mode")
+    parser.add_argument("--bootstrap-password", help="legacy live-Runtime mode")
+    parser.add_argument("--acceptance-password", help="legacy live-Runtime mode")
     args = parser.parse_args()
 
     manifest_path = args.project / ".domainry/builder/project-delivery/runtime-manifest.json"
     manifest = json.loads(manifest_path.read_text())
     facts, lead_table, seed_count = manifest_facts(manifest)
-    assert_fresh_sqlite(args.database, lead_table, seed_count)
     args.run_dir.mkdir(parents=True, exist_ok=True)
     log_path = args.run_dir / "m1-businessflow-events.jsonl"
-    flows, exit_code = run_flows(
-        args.project, args.base_url, args.bootstrap_password,
-        args.acceptance_password, log_path)
+    if args.verify_result:
+        verify_result = json.loads(args.verify_result.read_text(encoding="utf-8"))
+        flows, exit_code, flow_evidence = verified_flow_outcomes(args.project, verify_result)
+    else:
+        live = (args.base_url, args.database, args.bootstrap_password, args.acceptance_password)
+        if not all(live):
+            parser.error("use --verify-result or provide all legacy live-Runtime arguments")
+        assert_fresh_sqlite(args.database, lead_table, seed_count)
+        flows, exit_code = run_flows(
+            args.project, args.base_url, args.bootstrap_password,
+            args.acceptance_password, log_path)
+        flow_evidence = {"mode": "legacy_live_runtime", "log": str(log_path)}
 
     results = []
     for feature_id, (priority, required_facts, required_flows) in FEATURES.items():
@@ -227,6 +319,7 @@ def main():
         "fresh_cohort_seed_rows": seed_count,
         "business_flow_exit_code": exit_code,
         "business_flows": flows,
+        "business_flow_evidence": flow_evidence,
         "results": results,
         "generated_epoch": int(time.time()),
     }

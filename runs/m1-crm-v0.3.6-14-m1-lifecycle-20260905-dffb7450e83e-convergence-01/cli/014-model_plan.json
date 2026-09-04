@@ -1,0 +1,16 @@
+{
+  "family": "model_plan",
+  "command": "/bin/zsh -lc '/private/tmp/domainry-m1-v14-convergence.n6S4q9/codex-home/skills/domainry-builder-v1/bin/domainry-cli model plan --json --project /private/tmp/domainry-m1-v14-convergence.n6S4q9/project'",
+  "exit_code": 1,
+  "output": {
+    "artifact": ".domainry/builder/disposable/model-preflight-result.json",
+    "contract_version": "domainry-model-preflight-envelope-v1",
+    "identity": "d1df5b0e7cc97fce3d9929b3d9a19272f7a25230c90e2363ccc77b36aaa05e0a",
+    "issue_count": 1,
+    "sha256": "510faa7ecdf2e8f78ea7da436245960bbfd96e05a00fab4adcadb053479c92f4",
+    "state": "repair_required"
+  },
+  "raw_output": "{\"artifact\":\".domainry/builder/disposable/model-preflight-result.json\",\"contract_version\":\"domainry-model-preflight-envelope-v1\",\"identity\":\"d1df5b0e7cc97fce3d9929b3d9a19272f7a25230c90e2363ccc77b36aaa05e0a\",\"issue_count\":1,\"sha256\":\"510faa7ecdf2e8f78ea7da436245960bbfd96e05a00fab4adcadb053479c92f4\",\"state\":\"repair_required\"}\nmodel.action_field_source_not_found: Action lead.mark_lost lead.mark_lost.input field reason requires same-key Object field lead.reason\nerror: Builder validation found 1 issue(s)\n",
+  "event_item_id": "item_35",
+  "event_line": 71
+}

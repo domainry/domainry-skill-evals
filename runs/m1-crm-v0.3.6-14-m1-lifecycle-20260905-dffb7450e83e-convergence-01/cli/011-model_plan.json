@@ -1,0 +1,16 @@
+{
+  "family": "model_plan",
+  "command": "/bin/zsh -lc '/private/tmp/domainry-m1-v14-convergence.n6S4q9/codex-home/skills/domainry-builder-v1/bin/domainry-cli model plan --json --project /private/tmp/domainry-m1-v14-convergence.n6S4q9/project'",
+  "exit_code": 1,
+  "output": {
+    "artifact": ".domainry/builder/disposable/model-preflight-result.json",
+    "contract_version": "domainry-model-preflight-envelope-v1",
+    "identity": "5e01e0582cae2c16ccfeb3b30c3cf67d5fb7b3902f1f0b27a1c3e59fac2d7ccd",
+    "issue_count": 1,
+    "sha256": "c1cb13b2fa9fd3dde7152845a2a1f526748e725bd175d413ff122ee699d68d0a",
+    "state": "repair_required"
+  },
+  "raw_output": "{\"artifact\":\".domainry/builder/disposable/model-preflight-result.json\",\"contract_version\":\"domainry-model-preflight-envelope-v1\",\"identity\":\"5e01e0582cae2c16ccfeb3b30c3cf67d5fb7b3902f1f0b27a1c3e59fac2d7ccd\",\"issue_count\":1,\"sha256\":\"c1cb13b2fa9fd3dde7152845a2a1f526748e725bd175d413ff122ee699d68d0a\",\"state\":\"repair_required\"}\nmodel.empty_value_forbidden: report_export_controls.lead_detail_export.record_mapping must be omitted instead of declaring an empty object\nerror: Builder validation found 1 issue(s)\n",
+  "event_item_id": "item_29",
+  "event_line": 59
+}

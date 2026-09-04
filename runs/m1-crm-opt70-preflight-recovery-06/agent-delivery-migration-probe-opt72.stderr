@@ -1,5 +1,0 @@
-2026-08-22T20:48:27.892970Z ERROR codex_core::tools::router: error=apply_patch verification failed: Failed to find expected lines in /Users/tiger/Projects/domainry-skill-evals/runs/m1-crm-opt70-preflight-recovery-06/project/.domainry/development/01a02b30-29d9-7c33-8598-965abe264f1e.md:
-- [x] Handoff reports exact wall/active time, model usage, every product-command count/duration, new session/Gate/receipt identities, frozen identity verification, changed-file classification, complete migration diagnostics, and exact next repair node
-  - Evidence: gate:done.handoff_reports_exact_wall_active_time_model_usa.02191739 .domainry/development/01a02b30-29d9-7c33-8598-965abe264f1e.md
-- [ ] Source finalization, Runtime readiness, acceptance, project verification, and project completion are explicitly not claimed; this session stops at the migration-probe evidence ceiling
-  - Evidence: pending

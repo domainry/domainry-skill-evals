@@ -1,0 +1,116 @@
+{
+  "contract_version": "domainry-eval-freeze-v2",
+  "benchmark": "m1-crm",
+  "run_id": "m1-crm-v0.3.6-14-m1-lifecycle-20260905-dffb7450e83e-convergence-01",
+  "frozen_epoch": 1788545139,
+  "model": "gpt-5.6-sol",
+  "reasoning_effort": "high",
+  "candidate": {
+    "apply_target_args": [
+      "--service",
+      "http://127.0.0.1:8283"
+    ],
+    "apply_target_flag": "--service",
+    "apply_target_value": "http://127.0.0.1:8283",
+    "candidate_id": "v0.3.6-14-m1-lifecycle-20260905+dffb7450e83e",
+    "cli": "/Users/tiger/.codex/skills/domainry-builder-v1/bin/domainry-cli",
+    "cli_binary_sha256": "5c996e79c3a8102ded2aa2df7dc46f8eff70f0973d6df5f2c71e9040626cbbe7",
+    "package_metadata_sha256": "64a7cded37d1933e74428875189d62ded7d43828803bdaebeda8839c9abbc7f0",
+    "runtime_api_contract_hash": "4fe655cbfd4fa0bc0b0c04c89b86926fc6aceb059c9fccf5b09eec9b459330f7",
+    "runtime_api_contract_version": "runtime-domain-api-v1",
+    "skill_identity_sha256": "ebd64d96025aeabc3ec803e2cef1d6330e670533269edbfc0dda8172909aaceb",
+    "skill_name": "domainry-builder-v1",
+    "skill_root": "/Users/tiger/.codex/skills/domainry-builder-v1",
+    "skill_tree_sha256": "dffb7450e83e6a793265554f5bf8f5a02ce40749671dc1822e1376d06d99f186",
+    "skill_version": "v0.3.6-14-m1-lifecycle-20260905"
+  },
+  "candidate_copy": "/private/tmp/domainry-m1-v14-convergence.n6S4q9/codex-home/skills/domainry-builder-v1",
+  "requirements_sha256": "399d9b501d121e44ce72a32926a6c7605133085da69c44fa8a5ce2b7c4a1c2e3",
+  "prompt_sha256": "a1b0821ba4f4b2f7a190108b20846cea036fbe14ac1abdff024f95dda599eb40",
+  "project_initial_entries": [
+    ".git/",
+    "requirements.md"
+  ],
+  "project_delivery_store_initial_entries": [],
+  "verification_address": "127.0.0.1:19284",
+  "plane": {
+    "pid": 20272,
+    "health": {
+      "contract_version": "domainry-control-plane-health-v1",
+      "status": "healthy",
+      "service_kind": "template-control-plane",
+      "version": "v0.3.6-14-m1-lifecycle-20260905",
+      "discovery": "/.well-known/domainry-plane",
+      "checks": [
+        {
+          "name": "application_delivery",
+          "status": "passed",
+          "detail": "v0.3.6-14-m1-lifecycle-20260905"
+        },
+        {
+          "name": "runtime_contract",
+          "status": "passed",
+          "detail": "runtime-domain-api-v1 + runtime-authoring-v1"
+        },
+        {
+          "name": "runtime_module",
+          "status": "passed",
+          "detail": "github.com/domainry/domainry-runtime@v0.0.0-source-161e3cafc5055301"
+        },
+        {
+          "name": "identity_module",
+          "status": "passed",
+          "detail": "github.com/domainry/domainry-identity@v0.999.0-domainry.7b54d4c868025dc0"
+        },
+        {
+          "name": "notification_sdk",
+          "status": "passed",
+          "detail": "github.com/domainry/domainry-notification-sdk@v0.999.0-domainry.782181d4702f7eba"
+        },
+        {
+          "name": "notification_module",
+          "status": "passed",
+          "detail": "github.com/domainry/domainry-notification@v0.999.0-domainry.2ba601d4654d0a07"
+        },
+        {
+          "name": "project_template",
+          "status": "passed",
+          "detail": "domainry-project-template_v0.3.6-14-m1-lifecycle-20260905.tar.gz sha256:9f42f06ff630bd4d7eec330ee1d70e57ca73af98918b4c5029d85d162be4af40"
+        },
+        {
+          "name": "runtime_client_sdk",
+          "status": "passed",
+          "detail": "domainry-runtime-client-sdk_v0.3.6-14-m1-lifecycle-20260905.tar.gz sha256:6a478d047feb0ced5229473d02b55f7bb94677948e8a3233831b1300fdcf5d64"
+        },
+        {
+          "name": "frontend_product",
+          "status": "passed",
+          "detail": "domainry-frontend-product_v0.3.6-14-m1-lifecycle-20260905.tar.gz sha256:cdf4842f3c0e782a90376d2431a7126e5c8251175e327d3b856c2e7499573b2e"
+        },
+        {
+          "name": "skill_packages",
+          "status": "passed",
+          "detail": "1 platforms"
+        },
+        {
+          "name": "project_delivery_trust",
+          "status": "passed",
+          "detail": "local.domainry.project-delivery revision 1"
+        },
+        {
+          "name": "project_delivery_signer",
+          "status": "passed",
+          "detail": "domainry-project-delivery-local-development"
+        },
+        {
+          "name": "project_delivery_store",
+          "status": "passed",
+          "detail": "available"
+        }
+      ]
+    },
+    "binary_sha256": "6f0ac2c0bdd010dbd8db5c51cb05bba1bf7318502513daad249bb427ae4b7196",
+    "application_manifest_sha256": "576395815cb379bb4005a6934e1fb85a40ecc7dcfa2570201bd046dd6ad7cb53",
+    "isolated_project_delivery_store": "/private/tmp/domainry-m1-v14-convergence.n6S4q9/plane-project-delivery"
+  }
+}

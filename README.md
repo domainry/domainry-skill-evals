@@ -1,6 +1,6 @@
 # domainry-skill-evals
 
-Builder Skill 的评估与优化闭环仓库。**与 plane 仓库(domainry-framework)运行实现解耦**,只通过 `config.json` 引用权威身份清单、安装父目录、CLI 相对路径与 Plane 地址。
+Builder Skill 的评估与优化闭环仓库。评测对象是 `config.json` 指向的**当前已安装、已打包 Skill**；评估器直接校验该目录内的 identity、package metadata、Skill 树和 CLI，不读取或构建任何 Skill/Plane 源码仓库。Domainry Plane 仅作为 `apply model` 的外部服务边界。
 
 ```
 优化循环:baseline 评估 → 失败归因 → 优化假设 → 改 Skill → 重跑受影响层级 → scorecard 对比
@@ -22,10 +22,13 @@ Builder Skill 的评估与优化闭环仓库。**与 plane 仓库(domainry-frame
 ## 快速开始
 
 ```bash
-# 计算当前 Skill 版本号
-tar -cf - -C "$(python3 harness/eval_config.py --field skill_root)" --exclude bin . | sha256sum | cut -c1-12
+# 校验并冻结当前候选 Skill 身份
+python3 harness/eval_config.py --json
 
-# 跑一个 L1 建模微评估:见 tasks/l1-model-authoring.md
+# 候选身份 + 外部服务健康预检（失败时不得启动测量 run）
+python3 harness/preflight.py
+
+# 跑一个 L1 建模微评估：见 tasks/l1-model-authoring.md
 
 # 评分
 python3 harness/scorer.py runs/<run-dir>

@@ -1,0 +1,9 @@
+{
+  "family": "apply_model",
+  "command": "/bin/zsh -lc \"ps -eo pid,etime,command | rg 'domainry-cli apply model' | rg -v 'rg ' || true; stat -f '%Sm %N' .domainry/builder/model-apply.json\"",
+  "exit_code": 0,
+  "output": "47274       00:33 /private/tmp/domainry-m1-v14-convergence.n6S4q9/codex-home/skills/domainry-builder-v1/bin/domainry-cli apply model --json --project /private/tmp/domainry-m1-v14-convergence.n6S4q9/project --go-module-path example.com/domainry-m1-crm/backend --service http://127.0.0.1:8283 --evolution-audit-sha256 1fb9edd699e3d3a3816a04fb001902e363f542b7cefb17083ce34b166410b6af --evolution-reason Grant the sales recipient the exact Notification Inbox list permission required to verify durable CRM notifications\nSep  5 02:57:51 2026 .domainry/builder/model-apply.json",
+  "raw_output": "47274       00:33 /private/tmp/domainry-m1-v14-convergence.n6S4q9/codex-home/skills/domainry-builder-v1/bin/domainry-cli apply model --json --project /private/tmp/domainry-m1-v14-convergence.n6S4q9/project --go-module-path example.com/domainry-m1-crm/backend --service http://127.0.0.1:8283 --evolution-audit-sha256 1fb9edd699e3d3a3816a04fb001902e363f542b7cefb17083ce34b166410b6af --evolution-reason Grant the sales recipient the exact Notification Inbox list permission required to verify durable CRM notifications\nSep  5 02:57:51 2026 .domainry/builder/model-apply.json\n",
+  "event_item_id": "item_343",
+  "event_line": 668
+}

@@ -1,0 +1,307 @@
+{
+  "contract_version": "domainry-m1-evaluator-result-v2",
+  "pass": false,
+  "runtime_manifest": "runs/m1-crm-v0.3.6-12-g64242a34-dirty-ecdfab1720ce-baseline-01/project/.domainry/builder/project-delivery/runtime-manifest.json",
+  "fresh_cohort_seed_rows": 0,
+  "business_flow_exit_code": 0,
+  "business_flows": {
+    "BF01": true,
+    "BF02": true,
+    "BF03": true,
+    "BF04": true,
+    "BF05": true,
+    "BF06": true,
+    "BF07": true,
+    "BF08": true
+  },
+  "business_flow_evidence": {
+    "verify_state": "verified_and_stopped",
+    "proof_ok": true,
+    "declared_flow_ids": [
+      "BF01",
+      "BF02",
+      "BF03",
+      "BF04",
+      "BF05",
+      "BF06",
+      "BF07",
+      "BF08"
+    ],
+    "traced_flow_ids": [
+      "BF01",
+      "BF02",
+      "BF03",
+      "BF04",
+      "BF05",
+      "BF06",
+      "BF07",
+      "BF08"
+    ],
+    "initial_business_flow_status": "passed",
+    "restart_business_flow_status": "passed",
+    "same_cohort_identity": true,
+    "final_runtime_state": "stopped"
+  },
+  "results": [
+    {
+      "id": "M01",
+      "priority": "P0",
+      "status": "pass",
+      "mechanism": "custom",
+      "evidence": {
+        "manifest_facts": {
+          "schema": true
+        },
+        "business_flows": {
+          "BF01": true
+        }
+      }
+    },
+    {
+      "id": "M02",
+      "priority": "P0",
+      "status": "pass",
+      "mechanism": "custom",
+      "evidence": {
+        "manifest_facts": {
+          "lead_state_machine": true
+        },
+        "business_flows": {
+          "BF01": true,
+          "BF02": true
+        }
+      }
+    },
+    {
+      "id": "M03",
+      "priority": "P0",
+      "status": "pass",
+      "mechanism": "custom",
+      "evidence": {
+        "manifest_facts": {},
+        "business_flows": {
+          "BF01": true
+        }
+      }
+    },
+    {
+      "id": "M04",
+      "priority": "P0",
+      "status": "pass",
+      "mechanism": "custom",
+      "evidence": {
+        "manifest_facts": {
+          "advance_action": true
+        },
+        "business_flows": {
+          "BF01": true
+        }
+      }
+    },
+    {
+      "id": "M05",
+      "priority": "P0",
+      "status": "pass",
+      "mechanism": "custom",
+      "evidence": {
+        "manifest_facts": {},
+        "business_flows": {
+          "BF01": true
+        }
+      }
+    },
+    {
+      "id": "M06",
+      "priority": "P0",
+      "status": "pass",
+      "mechanism": "custom",
+      "evidence": {
+        "manifest_facts": {
+          "conversion_actions": true
+        },
+        "business_flows": {
+          "BF02": true,
+          "BF03": true
+        }
+      }
+    },
+    {
+      "id": "M07",
+      "priority": "P0",
+      "status": "fail",
+      "mechanism": "custom",
+      "evidence": {
+        "manifest_facts": {
+          "approval_workflow": false
+        },
+        "business_flows": {
+          "BF03": true,
+          "BF04": true
+        }
+      }
+    },
+    {
+      "id": "M08",
+      "priority": "P0",
+      "status": "pass",
+      "mechanism": "custom",
+      "evidence": {
+        "manifest_facts": {},
+        "business_flows": {
+          "BF02": true,
+          "BF03": true
+        }
+      }
+    },
+    {
+      "id": "M09",
+      "priority": "P1",
+      "status": "pass",
+      "mechanism": "custom",
+      "evidence": {
+        "manifest_facts": {
+          "conversion_notifications": true
+        },
+        "business_flows": {
+          "BF03": true,
+          "BF04": true
+        }
+      }
+    },
+    {
+      "id": "M10",
+      "priority": "P0",
+      "status": "pass",
+      "mechanism": "custom",
+      "evidence": {
+        "manifest_facts": {
+          "customer_read_only": true
+        },
+        "business_flows": {
+          "BF02": true
+        }
+      }
+    },
+    {
+      "id": "M11",
+      "priority": "P0",
+      "status": "pass",
+      "mechanism": "custom",
+      "evidence": {
+        "manifest_facts": {},
+        "business_flows": {
+          "BF01": true,
+          "BF05": true
+        }
+      }
+    },
+    {
+      "id": "M12",
+      "priority": "P0",
+      "status": "pass",
+      "mechanism": "custom",
+      "evidence": {
+        "manifest_facts": {},
+        "business_flows": {
+          "BF05": true
+        }
+      }
+    },
+    {
+      "id": "M13",
+      "priority": "P1",
+      "status": "pass",
+      "mechanism": "custom",
+      "evidence": {
+        "manifest_facts": {},
+        "business_flows": {
+          "BF01": true,
+          "BF03": true,
+          "BF04": true
+        }
+      }
+    },
+    {
+      "id": "M14",
+      "priority": "P1",
+      "status": "pass",
+      "mechanism": "custom",
+      "evidence": {
+        "manifest_facts": {
+          "stale_scheduler": true
+        },
+        "business_flows": {
+          "BF06": true
+        }
+      }
+    },
+    {
+      "id": "M15",
+      "priority": "P0",
+      "status": "pass",
+      "mechanism": "custom",
+      "evidence": {
+        "manifest_facts": {
+          "funnel_report": true
+        },
+        "business_flows": {
+          "BF07": true
+        }
+      }
+    },
+    {
+      "id": "M16",
+      "priority": "P0",
+      "status": "fail",
+      "mechanism": "custom",
+      "evidence": {
+        "manifest_facts": {
+          "export_control": false
+        },
+        "business_flows": {
+          "BF08": true
+        }
+      }
+    },
+    {
+      "id": "M17",
+      "priority": "P0",
+      "status": "pass",
+      "mechanism": "custom",
+      "evidence": {
+        "manifest_facts": {
+          "detail_report": true
+        },
+        "business_flows": {
+          "BF05": true
+        }
+      }
+    },
+    {
+      "id": "M18",
+      "priority": "P1",
+      "status": "pass",
+      "mechanism": "custom",
+      "evidence": {
+        "manifest_facts": {},
+        "business_flows": {
+          "BF05": true
+        }
+      }
+    },
+    {
+      "id": "M19",
+      "priority": "P0",
+      "status": "pass",
+      "mechanism": "custom",
+      "evidence": {
+        "manifest_facts": {},
+        "business_flows": {
+          "BF01": true,
+          "BF05": true
+        }
+      }
+    }
+  ],
+  "generated_epoch": 1788542857
+}

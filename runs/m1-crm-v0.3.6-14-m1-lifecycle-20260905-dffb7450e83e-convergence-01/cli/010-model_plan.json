@@ -1,0 +1,16 @@
+{
+  "family": "model_plan",
+  "command": "/bin/zsh -lc '/private/tmp/domainry-m1-v14-convergence.n6S4q9/codex-home/skills/domainry-builder-v1/bin/domainry-cli model plan --json --project /private/tmp/domainry-m1-v14-convergence.n6S4q9/project'",
+  "exit_code": 1,
+  "output": {
+    "artifact": ".domainry/builder/disposable/model-preflight-result.json",
+    "contract_version": "domainry-model-preflight-envelope-v1",
+    "identity": "4dd1619f14bfefe4783b99762d7b2d703e7ab1e614cbe145ca41acfbc3f1374b",
+    "issue_count": 3,
+    "sha256": "2ca4ca518774fbc3ed551b973ed46410da4777305ae1f70ade927adb9add1b85",
+    "state": "repair_required"
+  },
+  "raw_output": "{\"artifact\":\".domainry/builder/disposable/model-preflight-result.json\",\"contract_version\":\"domainry-model-preflight-envelope-v1\",\"identity\":\"4dd1619f14bfefe4783b99762d7b2d703e7ab1e614cbe145ca41acfbc3f1374b\",\"issue_count\":3,\"sha256\":\"2ca4ca518774fbc3ed551b973ed46410da4777305ae1f70ade927adb9add1b85\",\"state\":\"repair_required\"}\nmodel.field_modifier_invalid: field source_lead_id modifier unique is only valid on Object fields and has no value\nmodel.field_modifier_invalid: field audit_id modifier unique is only valid on Object fields and has no value\nmodel.unknown_field: report_export_controls.lead_detail_export.record_mapping contains unknown field \"audit_job_id_field\"\nerror: Builder validation found 3 issue(s)\n",
+  "event_item_id": "item_26",
+  "event_line": 53
+}

@@ -1,0 +1,15 @@
+{
+  "family": "apply_model",
+  "command": "/bin/zsh -lc '/private/tmp/domainry-m1-baseline.HuB3Y7/codex-home/skills/domainry-builder-v1/bin/domainry-cli apply model --json --project /private/tmp/domainry-m1-baseline.HuB3Y7/project --go-module-path example.com/domainry-m1-crm/backend --service http://127.0.0.1:8283'",
+  "exit_code": 1,
+  "output": {
+    "contract_version": "domainry-model-apply-v3",
+    "evolution_audit_path": ".domainry/builder/audits/project-delivery-b793e455dc37701486a0cc0a3eb45c9e1f713158d28dd2442d26172a6e5ab11b.json",
+    "evolution_audit_sha256": "b793e455dc37701486a0cc0a3eb45c9e1f713158d28dd2442d26172a6e5ab11b",
+    "receipt": ".domainry/builder/model-apply.json",
+    "state": "evolution_review_required"
+  },
+  "raw_output": "[domainry] apply model: load and preflight model...\n[domainry] apply model: load and preflight model done (1.372s)\n[domainry] apply model: synchronize Blueprint Ledger...\n[domainry] apply model: synchronize Blueprint Ledger done (72ms)\n[domainry] apply model: validate compiled Blueprint...\n[domainry] apply model: validate compiled Blueprint done (648ms)\n[domainry] apply model: publish immutable project delivery...\n[domainry] apply model: publish immutable project delivery done (700ms)\n[domainry] apply model: fetch signed delivery artifacts...\n[domainry] apply model: fetch signed delivery artifacts done (161ms)\n[domainry] apply model: materialize backend and resolve Go dependencies...\n[domainry] apply model: materialize backend and resolve Go dependencies done (23ms)\n{\"contract_version\":\"domainry-model-apply-v3\",\"evolution_audit_path\":\".domainry/builder/audits/project-delivery-b793e455dc37701486a0cc0a3eb45c9e1f713158d28dd2442d26172a6e5ab11b.json\",\"evolution_audit_sha256\":\"b793e455dc37701486a0cc0a3eb45c9e1f713158d28dd2442d26172a6e5ab11b\",\"receipt\":\".domainry/builder/model-apply.json\",\"state\":\"evolution_review_required\"}\nerror: existing Builder project requires reviewed evolution; inspect .domainry/builder/audits/project-delivery-b793e455dc37701486a0cc0a3eb45c9e1f713158d28dd2442d26172a6e5ab11b.json and rerun apply model with --evolution-audit-sha256 b793e455dc37701486a0cc0a3eb45c9e1f713158d28dd2442d26172a6e5ab11b --evolution-reason <reason>\n",
+  "event_item_id": "item_105",
+  "event_line": 207
+}

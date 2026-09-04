@@ -1,0 +1,15 @@
+{
+  "family": "apply_model",
+  "command": "/bin/zsh -lc '/private/tmp/domainry-m1-v14-convergence.n6S4q9/codex-home/skills/domainry-builder-v1/bin/domainry-cli apply model --json --project . --go-module-path example.com/domainry-m1-crm/backend --service http://127.0.0.1:8283'",
+  "exit_code": 1,
+  "output": {
+    "contract_version": "domainry-model-apply-v3",
+    "evolution_audit_path": ".domainry/builder/audits/project-delivery-bb90d4c24e52a51a56080b2bedb9b64d791c2277cd01cd0721e23922980145a3.json",
+    "evolution_audit_sha256": "bb90d4c24e52a51a56080b2bedb9b64d791c2277cd01cd0721e23922980145a3",
+    "receipt": ".domainry/builder/model-apply.json",
+    "state": "evolution_review_required"
+  },
+  "raw_output": "[domainry] apply model: load and preflight model done (1.138s)\n[domainry] apply model: synchronize Blueprint Ledger...\n[domainry] apply model: synchronize Blueprint Ledger done (111ms)\n[domainry] apply model: validate compiled Blueprint...\n[domainry] apply model: validate compiled Blueprint done (503ms)\n[domainry] apply model: publish immutable project delivery...\n[domainry] apply model: publish immutable project delivery done (621ms)\n[domainry] apply model: fetch signed delivery artifacts...\n[domainry] apply model: fetch signed delivery artifacts done (169ms)\n[domainry] apply model: materialize backend and resolve Go dependencies...\n[domainry] apply model: materialize backend and resolve Go dependencies done (43ms)\n{\"contract_version\":\"domainry-model-apply-v3\",\"evolution_audit_path\":\".domainry/builder/audits/project-delivery-bb90d4c24e52a51a56080b2bedb9b64d791c2277cd01cd0721e23922980145a3.json\",\"evolution_audit_sha256\":\"bb90d4c24e52a51a56080b2bedb9b64d791c2277cd01cd0721e23922980145a3\",\"receipt\":\".domainry/builder/model-apply.json\",\"state\":\"evolution_review_required\"}\nerror: existing Builder project requires reviewed evolution; inspect .domainry/builder/audits/project-delivery-bb90d4c24e52a51a56080b2bedb9b64d791c2277cd01cd0721e23922980145a3.json and rerun apply model with --evolution-audit-sha256 bb90d4c24e52a51a56080b2bedb9b64d791c2277cd01cd0721e23922980145a3 --evolution-reason <reason>\n",
+  "event_item_id": "item_241",
+  "event_line": 475
+}

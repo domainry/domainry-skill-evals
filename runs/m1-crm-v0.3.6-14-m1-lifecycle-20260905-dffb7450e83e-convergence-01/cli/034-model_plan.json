@@ -1,0 +1,29 @@
+{
+  "family": "model_plan",
+  "command": "/bin/zsh -lc '/private/tmp/domainry-m1-v14-convergence.n6S4q9/codex-home/skills/domainry-builder-v1/bin/domainry-cli model plan --json --project /private/tmp/domainry-m1-v14-convergence.n6S4q9/project'",
+  "exit_code": 1,
+  "output": {
+    "artifact": ".domainry/builder/disposable/model-preflight-result.json",
+    "contract_version": "domainry-model-preflight-envelope-v1",
+    "create_items": [],
+    "creates": 0,
+    "delete_items": [],
+    "deletes": 0,
+    "files": 5,
+    "identity": "762f27511f331884cee58a7d3e77a0b961566e57434da95f6a78dc4bb4a03a75",
+    "issue_count": 5,
+    "items": 37,
+    "sha256": "edf18ba3331b0647d364db518e02fbbd0ba44fd07540e94473e04db3e041d11b",
+    "sql_files": 2,
+    "state": "repair_required",
+    "unchanged": 35,
+    "update_items": [
+      "crm/resource/actions.sales_lead.approve_conversion",
+      "crm/resource/actions.sales_lead.reject_conversion"
+    ],
+    "updates": 2
+  },
+  "raw_output": "{\"artifact\":\".domainry/builder/disposable/model-preflight-result.json\",\"contract_version\":\"domainry-model-preflight-envelope-v1\",\"create_items\":[],\"creates\":0,\"delete_items\":[],\"deletes\":0,\"files\":5,\"identity\":\"762f27511f331884cee58a7d3e77a0b961566e57434da95f6a78dc4bb4a03a75\",\"issue_count\":5,\"items\":37,\"sha256\":\"edf18ba3331b0647d364db518e02fbbd0ba44fd07540e94473e04db3e041d11b\",\"sql_files\":2,\"state\":\"repair_required\",\"unchanged\":35,\"update_items\":[\"crm/resource/actions.sales_lead.approve_conversion\",\"crm/resource/actions.sales_lead.reject_conversion\"],\"updates\":2}\nbackend.action.definition_invalid: backend.action.definition_invalid\nbackend.action.definition_invalid: backend.action.definition_invalid\nbackend.action.definition_invalid: backend.action.definition_invalid\nbackend.action.definition_invalid: backend.action.definition_invalid\nledger.runtime_manifest_invalid: compiled Runtime Action sales_lead.approve_conversion is invalid: backend.action.definition_invalid at assurance_policy.approval_version_field; backend.action.definition_invalid at assurance_policy.approval_hash_field\nerror: Builder validation found 5 issue(s)\n",
+  "event_item_id": "item_98",
+  "event_line": 194
+}

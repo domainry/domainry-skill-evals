@@ -1,0 +1,10 @@
+已完成 Domainry M1 Delivery Batch `DB-M1-CRM-INITIAL-001`：
+
+- 范围：CRM-001～CRM-019，7 个 Feature，无延期项。
+- Delivery：`sha256:c0611b9886b4e89efa5e93265a2a5a046cf4450a63c9337c8edd3b4726558d45`
+- 测试：完整 Go 测试树及 BF01～BF08 在 initial/restart 两阶段全部通过。
+- Runtime：`state=verified_and_stopped`，同一数据库 cohort 重启验证通过，达到 L5 证据等级。
+- Verification receipt：`840f20e710366eae245d9a567c4ab38e00cf90b3e6245defd142addd72a1685d`
+- TODO 已进入 `done`，四阶段时间已完整记录。
+
+EVAL_RESULT={"state":"done"}

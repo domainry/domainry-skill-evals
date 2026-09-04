@@ -1,0 +1,10 @@
+{
+  "benchmark": "m1-crm",
+  "candidate_id": "v0.3.6-14-m1-lifecycle-20260905+dffb7450e83e",
+  "skill_version": "v0.3.6-14-m1-lifecycle-20260905",
+  "run_id": "m1-crm-v0.3.6-14-m1-lifecycle-20260905-dffb7450e83e-convergence-01",
+  "agent_declared_done": false,
+  "human_interventions": 0,
+  "started_epoch": 1788545164,
+  "ended_epoch": 1788549185
+}

@@ -1,4 +1,7 @@
-# 平台侧缺陷清单(cli_platform 归因,交框架团队)
+# 平台侧缺陷清单（历史归档）
+
+本文件只保存旧 run 的调查线索，不是当前安装候选的事实来源，不参与新 baseline、评分或失败归因；
+其中的旧命令名、源码路径和结论必须在新的隔离 run 中重新验证后才能引用。
 
 来源:S1 benchmark 的 baseline→opt-07 全部评估 run,每条均有 run 工件与复现路径(见 `runs/*/failures.json`)。这些缺陷不受 Skill 文档优化影响,封顶任何 agent 的 pass@1 上限。
 

@@ -1,0 +1,210 @@
+2026-09-04T20:03:02.220089Z  WARN codex_core_plugins::loader: failed to load plugin: plugin is not installed plugin="browser@openai-bundled" path=/private/tmp/domainry-m1-v15-convergence.itjjpe/codex-home/plugins/cache/openai-bundled/browser
+2026-09-04T20:03:02.221080Z  WARN codex_core_plugins::loader: failed to load plugin: plugin is not installed plugin="chrome@openai-bundled" path=/private/tmp/domainry-m1-v15-convergence.itjjpe/codex-home/plugins/cache/openai-bundled/chrome
+2026-09-04T20:03:02.221092Z  WARN codex_core_plugins::loader: failed to load plugin: plugin is not installed plugin="codex-app-tools@openai-bundled" path=/private/tmp/domainry-m1-v15-convergence.itjjpe/codex-home/plugins/cache/openai-bundled/codex-app-tools
+2026-09-04T20:03:02.221099Z  WARN codex_core_plugins::loader: failed to load plugin: plugin is not installed plugin="computer-use@openai-bundled" path=/private/tmp/domainry-m1-v15-convergence.itjjpe/codex-home/plugins/cache/openai-bundled/computer-use
+2026-09-04T20:03:02.221105Z  WARN codex_core_plugins::loader: failed to load plugin: plugin is not installed plugin="documents@openai-primary-runtime" path=/private/tmp/domainry-m1-v15-convergence.itjjpe/codex-home/plugins/cache/openai-primary-runtime/documents
+2026-09-04T20:03:02.221110Z  WARN codex_core_plugins::loader: failed to load plugin: plugin is not installed plugin="pdf@openai-primary-runtime" path=/private/tmp/domainry-m1-v15-convergence.itjjpe/codex-home/plugins/cache/openai-primary-runtime/pdf
+2026-09-04T20:03:02.221114Z  WARN codex_core_plugins::loader: failed to load plugin: plugin is not installed plugin="presentations@openai-primary-runtime" path=/private/tmp/domainry-m1-v15-convergence.itjjpe/codex-home/plugins/cache/openai-primary-runtime/presentations
+2026-09-04T20:03:02.221119Z  WARN codex_core_plugins::loader: failed to load plugin: plugin is not installed plugin="sites@openai-bundled" path=/private/tmp/domainry-m1-v15-convergence.itjjpe/codex-home/plugins/cache/openai-bundled/sites
+2026-09-04T20:03:02.221123Z  WARN codex_core_plugins::loader: failed to load plugin: plugin is not installed plugin="spreadsheets@openai-primary-runtime" path=/private/tmp/domainry-m1-v15-convergence.itjjpe/codex-home/plugins/cache/openai-primary-runtime/spreadsheets
+2026-09-04T20:03:02.221127Z  WARN codex_core_plugins::loader: failed to load plugin: plugin is not installed plugin="template-creator@openai-primary-runtime" path=/private/tmp/domainry-m1-v15-convergence.itjjpe/codex-home/plugins/cache/openai-primary-runtime/template-creator
+2026-09-04T20:03:02.221132Z  WARN codex_core_plugins::loader: failed to load plugin: plugin is not installed plugin="unified-computer-use@openai-bundled" path=/private/tmp/domainry-m1-v15-convergence.itjjpe/codex-home/plugins/cache/openai-bundled/unified-computer-use
+2026-09-04T20:03:02.221136Z  WARN codex_core_plugins::loader: failed to load plugin: plugin is not installed plugin="visualize@openai-bundled" path=/private/tmp/domainry-m1-v15-convergence.itjjpe/codex-home/plugins/cache/openai-bundled/visualize
+2026-09-04T20:03:09.681332Z  WARN codex_core_plugins::loader: failed to load plugin: plugin is not installed plugin="browser@openai-bundled" path=/private/tmp/domainry-m1-v15-convergence.itjjpe/codex-home/plugins/cache/openai-bundled/browser
+2026-09-04T20:03:09.681363Z  WARN codex_core_plugins::loader: failed to load plugin: plugin is not installed plugin="chrome@openai-bundled" path=/private/tmp/domainry-m1-v15-convergence.itjjpe/codex-home/plugins/cache/openai-bundled/chrome
+2026-09-04T20:03:09.681370Z  WARN codex_core_plugins::loader: failed to load plugin: plugin is not installed plugin="codex-app-tools@openai-bundled" path=/private/tmp/domainry-m1-v15-convergence.itjjpe/codex-home/plugins/cache/openai-bundled/codex-app-tools
+2026-09-04T20:03:09.681375Z  WARN codex_core_plugins::loader: failed to load plugin: plugin is not installed plugin="computer-use@openai-bundled" path=/private/tmp/domainry-m1-v15-convergence.itjjpe/codex-home/plugins/cache/openai-bundled/computer-use
+2026-09-04T20:03:09.681380Z  WARN codex_core_plugins::loader: failed to load plugin: plugin is not installed plugin="documents@openai-primary-runtime" path=/private/tmp/domainry-m1-v15-convergence.itjjpe/codex-home/plugins/cache/openai-primary-runtime/documents
+2026-09-04T20:03:09.681401Z  WARN codex_core_plugins::loader: failed to load plugin: plugin is not installed plugin="pdf@openai-primary-runtime" path=/private/tmp/domainry-m1-v15-convergence.itjjpe/codex-home/plugins/cache/openai-primary-runtime/pdf
+2026-09-04T20:03:09.681404Z  WARN codex_core_plugins::loader: failed to load plugin: plugin is not installed plugin="presentations@openai-primary-runtime" path=/private/tmp/domainry-m1-v15-convergence.itjjpe/codex-home/plugins/cache/openai-primary-runtime/presentations
+2026-09-04T20:03:09.681408Z  WARN codex_core_plugins::loader: failed to load plugin: plugin is not installed plugin="sites@openai-bundled" path=/private/tmp/domainry-m1-v15-convergence.itjjpe/codex-home/plugins/cache/openai-bundled/sites
+2026-09-04T20:03:09.681411Z  WARN codex_core_plugins::loader: failed to load plugin: plugin is not installed plugin="spreadsheets@openai-primary-runtime" path=/private/tmp/domainry-m1-v15-convergence.itjjpe/codex-home/plugins/cache/openai-primary-runtime/spreadsheets
+2026-09-04T20:03:09.681415Z  WARN codex_core_plugins::loader: failed to load plugin: plugin is not installed plugin="template-creator@openai-primary-runtime" path=/private/tmp/domainry-m1-v15-convergence.itjjpe/codex-home/plugins/cache/openai-primary-runtime/template-creator
+2026-09-04T20:03:09.681418Z  WARN codex_core_plugins::loader: failed to load plugin: plugin is not installed plugin="unified-computer-use@openai-bundled" path=/private/tmp/domainry-m1-v15-convergence.itjjpe/codex-home/plugins/cache/openai-bundled/unified-computer-use
+2026-09-04T20:03:09.681421Z  WARN codex_core_plugins::loader: failed to load plugin: plugin is not installed plugin="visualize@openai-bundled" path=/private/tmp/domainry-m1-v15-convergence.itjjpe/codex-home/plugins/cache/openai-bundled/visualize
+2026-09-04T20:14:09.566578Z ERROR codex_core::tools::router: error=apply_patch verification failed: Failed to find expected lines in /private/tmp/domainry-m1-v15-convergence.itjjpe/project/backend/model/60-sales-funnel-reporting.json:
+                  "lead_id": {"type": "text", "kind": "dimension"},
+                  "source": {"type": "text", "kind": "dimension"},
+2026-09-04T22:00:46.135272Z  WARN codex_core_plugins::manager: failed to refresh remote installed plugins cache error=remote plugin catalog request to https://chatgpt.com/backend-api/ps/plugins/installed?scope=WORKSPACE failed with status 401 Unauthorized: {
+  "error": {
+    "message": "Encountered invalidated oauth token for user, failing request",
+    "type": null,
+    "code": "token_revoked",
+    "param": null
+  },
+  "status": 401
+} materialized_remote_plugin_count=0
+2026-09-04T22:00:46.135263Z  WARN codex_core_plugins::manager: failed to warm featured plugin ids cache error=remote featured plugin request to https://chatgpt.com/backend-api/plugins/featured?platform=codex failed with status 401 Unauthorized: {
+  "error": {
+    "message": "Encountered invalidated oauth token for user, failing request",
+    "type": null,
+    "code": "token_revoked",
+    "param": null
+  },
+  "status": 401
+}
+2026-09-04T22:00:46.135255Z  WARN codex_core_plugins::manager: failed to refresh cached remote plugin catalog error=remote plugin catalog request to https://chatgpt.com/backend-api/ps/plugins/list?scope=GLOBAL&limit=200 failed with status 401 Unauthorized: {
+  "error": {
+    "message": "Encountered invalidated oauth token for user, failing request",
+    "type": null,
+    "code": "token_revoked",
+    "param": null
+  },
+  "status": 401
+} scope=Global
+2026-09-04T22:00:46.135241Z ERROR codex_models_manager::manager: failed to refresh available models: unexpected status 401 Unauthorized: Encountered invalidated oauth token for user, failing request, url: https://chatgpt.com/backend-api/codex/models?client_version=0.146.0, cf-ray: a36044eaafb5ce3d-SIN, request id: req_b5af39f8a8284889903cc8cc759262ab, auth error: 401, auth error code: token_revoked
+2026-09-04T22:00:46.135265Z ERROR codex_models_manager::manager: failed to refresh available models: unexpected status 401 Unauthorized: Encountered invalidated oauth token for user, failing request, url: https://chatgpt.com/backend-api/codex/models?client_version=0.146.0, cf-ray: a36044eaaafc4097-SIN, request id: req_4f1559ed3cd443d7a0f4db01506af2d5, auth error: 401, auth error code: token_revoked
+2026-09-04T22:00:46.145198Z  WARN codex_core_plugins::loader: failed to load plugin: plugin is not installed plugin="browser@openai-bundled" path=/private/tmp/domainry-m1-v15-convergence.itjjpe/codex-home/plugins/cache/openai-bundled/browser
+2026-09-04T22:00:46.145226Z  WARN codex_core_plugins::loader: failed to load plugin: plugin is not installed plugin="chrome@openai-bundled" path=/private/tmp/domainry-m1-v15-convergence.itjjpe/codex-home/plugins/cache/openai-bundled/chrome
+2026-09-04T22:00:46.145231Z  WARN codex_core_plugins::loader: failed to load plugin: plugin is not installed plugin="codex-app-tools@openai-bundled" path=/private/tmp/domainry-m1-v15-convergence.itjjpe/codex-home/plugins/cache/openai-bundled/codex-app-tools
+2026-09-04T22:00:46.145235Z  WARN codex_core_plugins::loader: failed to load plugin: plugin is not installed plugin="computer-use@openai-bundled" path=/private/tmp/domainry-m1-v15-convergence.itjjpe/codex-home/plugins/cache/openai-bundled/computer-use
+2026-09-04T22:00:46.145239Z  WARN codex_core_plugins::loader: failed to load plugin: plugin is not installed plugin="documents@openai-primary-runtime" path=/private/tmp/domainry-m1-v15-convergence.itjjpe/codex-home/plugins/cache/openai-primary-runtime/documents
+2026-09-04T22:00:46.145242Z  WARN codex_core_plugins::loader: failed to load plugin: plugin is not installed plugin="pdf@openai-primary-runtime" path=/private/tmp/domainry-m1-v15-convergence.itjjpe/codex-home/plugins/cache/openai-primary-runtime/pdf
+2026-09-04T22:00:46.145245Z  WARN codex_core_plugins::loader: failed to load plugin: plugin is not installed plugin="presentations@openai-primary-runtime" path=/private/tmp/domainry-m1-v15-convergence.itjjpe/codex-home/plugins/cache/openai-primary-runtime/presentations
+2026-09-04T22:00:46.145248Z  WARN codex_core_plugins::loader: failed to load plugin: plugin is not installed plugin="sites@openai-bundled" path=/private/tmp/domainry-m1-v15-convergence.itjjpe/codex-home/plugins/cache/openai-bundled/sites
+2026-09-04T22:00:46.145251Z  WARN codex_core_plugins::loader: failed to load plugin: plugin is not installed plugin="spreadsheets@openai-primary-runtime" path=/private/tmp/domainry-m1-v15-convergence.itjjpe/codex-home/plugins/cache/openai-primary-runtime/spreadsheets
+2026-09-04T22:00:46.145254Z  WARN codex_core_plugins::loader: failed to load plugin: plugin is not installed plugin="template-creator@openai-primary-runtime" path=/private/tmp/domainry-m1-v15-convergence.itjjpe/codex-home/plugins/cache/openai-primary-runtime/template-creator
+2026-09-04T22:00:46.145257Z  WARN codex_core_plugins::loader: failed to load plugin: plugin is not installed plugin="unified-computer-use@openai-bundled" path=/private/tmp/domainry-m1-v15-convergence.itjjpe/codex-home/plugins/cache/openai-bundled/unified-computer-use
+2026-09-04T22:00:46.145260Z  WARN codex_core_plugins::loader: failed to load plugin: plugin is not installed plugin="visualize@openai-bundled" path=/private/tmp/domainry-m1-v15-convergence.itjjpe/codex-home/plugins/cache/openai-bundled/visualize
+2026-09-04T22:00:46.147640Z  WARN codex_core_plugins::remote::remote_installed_plugin_sync: remote installed plugin bundle sync failed error=remote plugin catalog request to https://chatgpt.com/backend-api/ps/plugins/installed?scope=WORKSPACE&includeDownloadUrls=true failed with status 401 Unauthorized: {
+  "error": {
+    "message": "Encountered invalidated oauth token for user, failing request",
+    "type": null,
+    "code": "token_revoked",
+    "param": null
+  },
+  "status": 401
+}
+2026-09-04T22:00:46.296835Z  WARN codex_core_plugins::manager: failed to load recommended plugins error=remote plugin catalog request to https://chatgpt.com/backend-api/ps/plugins/suggested?scope=GLOBAL failed with status 401 Unauthorized: {
+  "error": {
+    "message": "Encountered invalidated oauth token for user, failing request",
+    "type": null,
+    "code": "token_revoked",
+    "param": null
+  },
+  "status": 401
+}
+2026-09-04T22:00:46.573479Z ERROR rmcp::transport::worker: worker quit with fatal: Transport channel closed, when UnexpectedServerResponse("HTTP 401: {\n  \"error\": {\n    \"message\": \"Encountered invalidated oauth token for user, failing request\",\n    \"type\": null,\n    \"code\": \"token_revoked\",\n    \"param\": null\n  },\n  \"status\": 401\n}")
+2026-09-04T22:00:46.597338Z  WARN codex_analytics::client: events failed with status 401 Unauthorized: {
+  "error": {
+    "message": "Encountered invalidated oauth token for user, failing request",
+    "type": null,
+    "code": "token_revoked",
+    "param": null
+  },
+  "status": 401
+}
+2026-09-04T22:00:46.729078Z ERROR rmcp::transport::worker: worker quit with fatal: Transport channel closed, when UnexpectedServerResponse("HTTP 401: {\n  \"error\": {\n    \"message\": \"Encountered invalidated oauth token for user, failing request\",\n    \"type\": null,\n    \"code\": \"token_revoked\",\n    \"param\": null\n  },\n  \"status\": 401\n}")
+2026-09-04T22:00:46.729129Z  WARN codex_mcp::rmcp_client: Apps MCP startup reconnect failed; continuing with cached tools error=MCP startup failed: handshaking with MCP server failed: Send message error Transport [rmcp::transport::worker::WorkerTransport<rmcp::transport::streamable_http_client::StreamableHttpClientWorker<codex_rmcp_client::http_client_adapter::StreamableHttpClientAdapter>>] error: unexpected server response: HTTP 401: {
+  "error": {
+    "message": "Encountered invalidated oauth token for user, failing request",
+    "type": null,
+    "code": "token_revoked",
+    "param": null
+  },
+  "status": 401
+}, when send initialize request retry_after_ms=1000
+2026-09-04T22:00:46.936993Z  WARN codex_core_plugins::manager: failed to load recommended plugins error=remote plugin catalog request to https://chatgpt.com/backend-api/ps/plugins/suggested?scope=GLOBAL failed with status 401 Unauthorized: {
+  "error": {
+    "message": "Encountered invalidated oauth token for user, failing request",
+    "type": null,
+    "code": "token_revoked",
+    "param": null
+  },
+  "status": 401
+}
+2026-09-04T22:00:46.940699Z  WARN codex_core_plugins::manifest: ignoring hooks: expected a string, string array, object, or object array; found object
+2026-09-04T22:00:46.940904Z  WARN codex_core_plugins::manifest: ignoring hooks: expected a string, string array, object, or object array; found object
+2026-09-04T22:00:46.941484Z  WARN codex_core_plugins::manifest: ignoring hooks: expected a string, string array, object, or object array; found object
+2026-09-04T22:00:46.942322Z  WARN codex_core_plugins::manifest: ignoring hooks: expected a string, string array, object, or object array; found object
+2026-09-04T22:00:46.942521Z  WARN codex_core_plugins::manifest: ignoring hooks: expected a string, string array, object, or object array; found object
+2026-09-04T22:00:47.380669Z ERROR codex_api::endpoint::responses_websocket: failed to connect to websocket: HTTP error: 401 Unauthorized, url: wss://chatgpt.com/backend-api/codex/responses
+2026-09-04T22:00:47.850087Z ERROR codex_api::endpoint::responses_websocket: failed to connect to websocket: HTTP error: 401 Unauthorized, url: wss://chatgpt.com/backend-api/codex/responses
+2026-09-04T22:00:48.474495Z ERROR codex_login::auth::manager: Failed to refresh token: 401 Unauthorized: {
+  "error": {
+    "message": "Your session has ended. Please log in again.",
+    "type": "invalid_request_error",
+    "param": null,
+    "code": "refresh_token_invalidated"
+  }
+}
+2026-09-04T22:00:48.476356Z  WARN codex_core::session_startup_prewarm: startup websocket prewarm setup failed: Your access token could not be refreshed because your refresh token was revoked. Please log out and sign in again.
+2026-09-04T22:00:48.976669Z ERROR codex_models_manager::manager: failed to refresh available models: unexpected status 401 Unauthorized: Encountered invalidated oauth token for user, failing request, url: https://chatgpt.com/backend-api/codex/models?client_version=0.146.0, cf-ray: a36044fb9d961984-SIN, request id: req_c5b72b8c696849819ac594d606da1576, auth error: 401, auth error code: token_revoked
+2026-09-04T22:00:49.270069Z ERROR rmcp::transport::worker: worker quit with fatal: Transport channel closed, when UnexpectedServerResponse("HTTP 401: {\n  \"error\": {\n    \"message\": \"Encountered invalidated oauth token for user, failing request\",\n    \"type\": null,\n    \"code\": \"token_revoked\",\n    \"param\": null\n  },\n  \"status\": 401\n}")
+2026-09-04T22:00:49.270203Z  WARN codex_mcp::rmcp_client: Apps MCP startup reconnect failed; continuing with cached tools error=MCP startup failed: handshaking with MCP server failed: Send message error Transport [rmcp::transport::worker::WorkerTransport<rmcp::transport::streamable_http_client::StreamableHttpClientWorker<codex_rmcp_client::http_client_adapter::StreamableHttpClientAdapter>>] error: unexpected server response: HTTP 401: {
+  "error": {
+    "message": "Encountered invalidated oauth token for user, failing request",
+    "type": null,
+    "code": "token_revoked",
+    "param": null
+  },
+  "status": 401
+}, when send initialize request retry_after_ms=2000
+2026-09-04T22:00:49.410885Z  WARN codex_core_plugins::manager: failed to load recommended plugins error=remote plugin catalog request to https://chatgpt.com/backend-api/ps/plugins/suggested?scope=GLOBAL failed with status 401 Unauthorized: {
+  "error": {
+    "message": "Encountered invalidated oauth token for user, failing request",
+    "type": null,
+    "code": "token_revoked",
+    "param": null
+  },
+  "status": 401
+}
+2026-09-04T22:00:49.412828Z  WARN codex_core_plugins::manifest: ignoring hooks: expected a string, string array, object, or object array; found object
+2026-09-04T22:00:49.413011Z  WARN codex_core_plugins::manifest: ignoring hooks: expected a string, string array, object, or object array; found object
+2026-09-04T22:00:51.129281Z ERROR codex_api::endpoint::responses_websocket: failed to connect to websocket: HTTP error: 401 Unauthorized, url: wss://chatgpt.com/backend-api/codex/responses
+2026-09-04T22:00:51.983759Z ERROR codex_api::endpoint::responses_websocket: failed to connect to websocket: HTTP error: 401 Unauthorized, url: wss://chatgpt.com/backend-api/codex/responses
+2026-09-04T22:00:52.005489Z  WARN codex_mcp::rmcp_client: failed to initialize MCP client during shutdown: MCP startup failed: handshaking with MCP server failed: Send message error Transport [rmcp::transport::worker::WorkerTransport<rmcp::transport::streamable_http_client::StreamableHttpClientWorker<codex_rmcp_client::http_client_adapter::StreamableHttpClientAdapter>>] error: unexpected server response: HTTP 401: {
+  "error": {
+    "message": "Encountered invalidated oauth token for user, failing request",
+    "type": null,
+    "code": "token_revoked",
+    "param": null
+  },
+  "status": 401
+}, when send initialize request
+2026-09-04T22:00:52.508230Z  WARN codex_analytics::client: events failed with status 401 Unauthorized: {
+  "error": {
+    "message": "Encountered invalidated oauth token for user, failing request",
+    "type": null,
+    "code": "token_revoked",
+    "param": null
+  },
+  "status": 401
+}
+2026-09-04T22:01:24.149164Z  WARN codex_core_plugins::loader: failed to load plugin: plugin is not installed plugin="browser@openai-bundled" path=/private/tmp/domainry-m1-v15-convergence.itjjpe/codex-home/plugins/cache/openai-bundled/browser
+2026-09-04T22:01:24.149191Z  WARN codex_core_plugins::loader: failed to load plugin: plugin is not installed plugin="chrome@openai-bundled" path=/private/tmp/domainry-m1-v15-convergence.itjjpe/codex-home/plugins/cache/openai-bundled/chrome
+2026-09-04T22:01:24.149196Z  WARN codex_core_plugins::loader: failed to load plugin: plugin is not installed plugin="codex-app-tools@openai-bundled" path=/private/tmp/domainry-m1-v15-convergence.itjjpe/codex-home/plugins/cache/openai-bundled/codex-app-tools
+2026-09-04T22:01:24.149207Z  WARN codex_core_plugins::loader: failed to load plugin: plugin is not installed plugin="computer-use@openai-bundled" path=/private/tmp/domainry-m1-v15-convergence.itjjpe/codex-home/plugins/cache/openai-bundled/computer-use
+2026-09-04T22:01:24.149210Z  WARN codex_core_plugins::loader: failed to load plugin: plugin is not installed plugin="documents@openai-primary-runtime" path=/private/tmp/domainry-m1-v15-convergence.itjjpe/codex-home/plugins/cache/openai-primary-runtime/documents
+2026-09-04T22:01:24.149213Z  WARN codex_core_plugins::loader: failed to load plugin: plugin is not installed plugin="pdf@openai-primary-runtime" path=/private/tmp/domainry-m1-v15-convergence.itjjpe/codex-home/plugins/cache/openai-primary-runtime/pdf
+2026-09-04T22:01:24.149215Z  WARN codex_core_plugins::loader: failed to load plugin: plugin is not installed plugin="presentations@openai-primary-runtime" path=/private/tmp/domainry-m1-v15-convergence.itjjpe/codex-home/plugins/cache/openai-primary-runtime/presentations
+2026-09-04T22:01:24.149217Z  WARN codex_core_plugins::loader: failed to load plugin: plugin is not installed plugin="sites@openai-bundled" path=/private/tmp/domainry-m1-v15-convergence.itjjpe/codex-home/plugins/cache/openai-bundled/sites
+2026-09-04T22:01:24.149220Z  WARN codex_core_plugins::loader: failed to load plugin: plugin is not installed plugin="spreadsheets@openai-primary-runtime" path=/private/tmp/domainry-m1-v15-convergence.itjjpe/codex-home/plugins/cache/openai-primary-runtime/spreadsheets
+2026-09-04T22:01:24.149222Z  WARN codex_core_plugins::loader: failed to load plugin: plugin is not installed plugin="template-creator@openai-primary-runtime" path=/private/tmp/domainry-m1-v15-convergence.itjjpe/codex-home/plugins/cache/openai-primary-runtime/template-creator
+2026-09-04T22:01:24.149224Z  WARN codex_core_plugins::loader: failed to load plugin: plugin is not installed plugin="unified-computer-use@openai-bundled" path=/private/tmp/domainry-m1-v15-convergence.itjjpe/codex-home/plugins/cache/openai-bundled/unified-computer-use
+2026-09-04T22:01:24.149226Z  WARN codex_core_plugins::loader: failed to load plugin: plugin is not installed plugin="visualize@openai-bundled" path=/private/tmp/domainry-m1-v15-convergence.itjjpe/codex-home/plugins/cache/openai-bundled/visualize
+2026-09-04T22:01:25.045919Z  WARN codex_core_plugins::loader: failed to load plugin: plugin is not installed plugin="browser@openai-bundled" path=/private/tmp/domainry-m1-v15-convergence.itjjpe/codex-home/plugins/cache/openai-bundled/browser
+2026-09-04T22:01:25.045948Z  WARN codex_core_plugins::loader: failed to load plugin: plugin is not installed plugin="chrome@openai-bundled" path=/private/tmp/domainry-m1-v15-convergence.itjjpe/codex-home/plugins/cache/openai-bundled/chrome
+2026-09-04T22:01:25.045953Z  WARN codex_core_plugins::loader: failed to load plugin: plugin is not installed plugin="codex-app-tools@openai-bundled" path=/private/tmp/domainry-m1-v15-convergence.itjjpe/codex-home/plugins/cache/openai-bundled/codex-app-tools
+2026-09-04T22:01:25.045958Z  WARN codex_core_plugins::loader: failed to load plugin: plugin is not installed plugin="computer-use@openai-bundled" path=/private/tmp/domainry-m1-v15-convergence.itjjpe/codex-home/plugins/cache/openai-bundled/computer-use
+2026-09-04T22:01:25.045962Z  WARN codex_core_plugins::loader: failed to load plugin: plugin is not installed plugin="documents@openai-primary-runtime" path=/private/tmp/domainry-m1-v15-convergence.itjjpe/codex-home/plugins/cache/openai-primary-runtime/documents
+2026-09-04T22:01:25.045965Z  WARN codex_core_plugins::loader: failed to load plugin: plugin is not installed plugin="pdf@openai-primary-runtime" path=/private/tmp/domainry-m1-v15-convergence.itjjpe/codex-home/plugins/cache/openai-primary-runtime/pdf
+2026-09-04T22:01:25.045969Z  WARN codex_core_plugins::loader: failed to load plugin: plugin is not installed plugin="presentations@openai-primary-runtime" path=/private/tmp/domainry-m1-v15-convergence.itjjpe/codex-home/plugins/cache/openai-primary-runtime/presentations
+2026-09-04T22:01:25.045987Z  WARN codex_core_plugins::loader: failed to load plugin: plugin is not installed plugin="sites@openai-bundled" path=/private/tmp/domainry-m1-v15-convergence.itjjpe/codex-home/plugins/cache/openai-bundled/sites
+2026-09-04T22:01:25.045991Z  WARN codex_core_plugins::loader: failed to load plugin: plugin is not installed plugin="spreadsheets@openai-primary-runtime" path=/private/tmp/domainry-m1-v15-convergence.itjjpe/codex-home/plugins/cache/openai-primary-runtime/spreadsheets
+2026-09-04T22:01:25.045994Z  WARN codex_core_plugins::loader: failed to load plugin: plugin is not installed plugin="template-creator@openai-primary-runtime" path=/private/tmp/domainry-m1-v15-convergence.itjjpe/codex-home/plugins/cache/openai-primary-runtime/template-creator
+2026-09-04T22:01:25.045999Z  WARN codex_core_plugins::loader: failed to load plugin: plugin is not installed plugin="unified-computer-use@openai-bundled" path=/private/tmp/domainry-m1-v15-convergence.itjjpe/codex-home/plugins/cache/openai-bundled/unified-computer-use
+2026-09-04T22:01:25.046002Z  WARN codex_core_plugins::loader: failed to load plugin: plugin is not installed plugin="visualize@openai-bundled" path=/private/tmp/domainry-m1-v15-convergence.itjjpe/codex-home/plugins/cache/openai-bundled/visualize
+2026-09-04T22:02:08.320576Z ERROR codex_core::tools::router: error=write_stdin failed: Unknown process id 67356
+2026-09-04T22:05:15.323298Z ERROR codex_core::tools::router: error=apply_patch verification failed: Failed to find expected lines in /private/tmp/domainry-m1-v15-convergence.itjjpe/project/backend/actions/crm/helpers.go:
+import (
+	"math/big"
+
+	capabilities "example.com/domainry-m1-crm/backend/generated/capabilities"
+)
+2026-09-04T22:49:21.125856Z ERROR codex_core::tools::router: error=apply_patch verification failed: Failed to find expected lines in /private/tmp/domainry-m1-v15-convergence.itjjpe/project/backend/tests/businessflow/flows_test.go:
+func startApproval(t *testing.T, f *runtimeFixture, leadID, key string) (string, string) {
+	return startApprovalFor(t, f, f.east, leadID, key)
+	return startApprovalFor(t, f, f.east, leadID, key)
+}
+2026-09-04T22:57:31.957353Z  WARN codex_core::responses_retry: stream disconnected - retrying sampling request (1/5 in 215ms)... turn_id=01a06e70-d7cd-7ed3-b42f-9f72f8afd063 retries=1 max_retries=5 sampling_error=stream disconnected before completion: failed to send websocket request: Connection closed normally

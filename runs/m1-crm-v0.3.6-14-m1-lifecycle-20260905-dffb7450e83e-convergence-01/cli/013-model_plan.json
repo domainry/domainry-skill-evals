@@ -1,0 +1,16 @@
+{
+  "family": "model_plan",
+  "command": "/bin/zsh -lc '/private/tmp/domainry-m1-v14-convergence.n6S4q9/codex-home/skills/domainry-builder-v1/bin/domainry-cli model plan --json --project /private/tmp/domainry-m1-v14-convergence.n6S4q9/project'",
+  "exit_code": 1,
+  "output": {
+    "artifact": ".domainry/builder/disposable/model-preflight-result.json",
+    "contract_version": "domainry-model-preflight-envelope-v1",
+    "identity": "dad174a083d897f4b5dea2977124f7b337237bf21a6770767c8ed6a32ceac646",
+    "issue_count": 1,
+    "sha256": "068c829be89cab582ce04aeba2a0e5a5f6363566464b490de563fc0841c7f827",
+    "state": "repair_required"
+  },
+  "raw_output": "model.action_field_source_not_found: Action lead.reject_conversion lead.reject_conversion.input field rejection_reason requires same-key Object field lead.rejection_reason\nerror: Builder validation found 1 issue(s)\n{\"artifact\":\".domainry/builder/disposable/model-preflight-result.json\",\"contract_version\":\"domainry-model-preflight-envelope-v1\",\"identity\":\"dad174a083d897f4b5dea2977124f7b337237bf21a6770767c8ed6a32ceac646\",\"issue_count\":1,\"sha256\":\"068c829be89cab582ce04aeba2a0e5a5f6363566464b490de563fc0841c7f827\",\"state\":\"repair_required\"}\n",
+  "event_item_id": "item_33",
+  "event_line": 67
+}
