@@ -3,21 +3,57 @@
   "run_id": "m1-crm-v0.3.6-28-m1-bootstrap-roles-20260905-bc9783f3127f-baseline-13",
   "run_kind": "baseline",
   "parent_run_id": null,
-  "state": "agent_running",
+  "state": "baseline_first_scoring_failure",
   "measurement_complete": false,
   "environment_valid": true,
-  "measurement_boundary": "running",
+  "measurement_boundary": "baseline_first_failure_sealed",
   "started_epoch": 1788600628.317782,
-  "ended_epoch": null,
+  "ended_epoch": 1788602691.0483031,
   "budgets": {
     "wall_clock_seconds": 3600.0,
     "total_tokens": 5000000,
     "cli_invocations": 40,
     "cli_retries": 0
   },
-  "usage": {},
-  "termination": null,
+  "usage": {
+    "wall_clock_seconds": 2062.731,
+    "total_tokens": null,
+    "cli_invocations_started": 8,
+    "cli_invocations_captured": 8,
+    "cli_retries_started": 0
+  },
+  "termination": {
+    "family": "verify",
+    "exit_code": 1,
+    "output_state": "failed"
+  },
   "freeze_manifest_sha256": "5bf3cd01451a89d36c3e93b060e77d523530dd02e1d9b142ad28573d1f6e09e4",
   "ephemeral_auth_staged": true,
-  "auth_cleanup_status": "pending"
+  "auth_cleanup_status": "removed",
+  "first_scoring_failure": {
+    "family": "verify",
+    "exit_code": 1,
+    "output_state": "failed"
+  },
+  "agent_result_state": null,
+  "agent_exit_code": 0,
+  "checker_exit_code": null,
+  "checker_gate": {
+    "ready": false,
+    "reason": "delivery_prerequisites_incomplete",
+    "missing": [
+      "agent_result:missing",
+      "verify:failed",
+      "flow_evidence:missing_invalid_or_unparseable"
+    ]
+  },
+  "agent_ended_epoch": 1788602690.782625,
+  "agent_session_id": "01a070e7-b995-7320-8a33-3e49688522aa",
+  "business_flow_evidence_source": "missing",
+  "business_flow_evidence_contract_valid": null,
+  "business_flow_evidence_sha256": null,
+  "business_flow_evidence_error": null,
+  "service_identity_before_sha256": "a8e1b28e746ed4eb2f309f0acfd53ad1b479efdf8f2c76a4af2c0177cfe44648",
+  "service_identity_after_sha256": "a8e1b28e746ed4eb2f309f0acfd53ad1b479efdf8f2c76a4af2c0177cfe44648",
+  "scorer_exit_code": 0
 }

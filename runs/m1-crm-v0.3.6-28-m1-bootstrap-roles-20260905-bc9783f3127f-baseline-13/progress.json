@@ -2,28 +2,28 @@
   "contract_version": "domainry-eval-progress-v1",
   "run_id": "m1-crm-v0.3.6-28-m1-bootstrap-roles-20260905-bc9783f3127f-baseline-13",
   "run_kind": "baseline",
-  "status": "running",
-  "lifecycle_phase": "agent",
-  "lifecycle_state": "agent_running",
+  "status": "terminal",
+  "lifecycle_phase": "terminal",
+  "lifecycle_state": "baseline_first_scoring_failure",
   "lifecycle_phase_timing": {
     "agent": {
       "started_epoch": 1788600628.317782,
-      "ended_epoch": null
+      "ended_epoch": 1788602690.782625
     },
     "checker": {
-      "started_epoch": null,
-      "ended_epoch": null
+      "started_epoch": 1788602691.0478961,
+      "ended_epoch": 1788602691.048695
     },
     "scorer": {
-      "started_epoch": null,
-      "ended_epoch": null
+      "started_epoch": 1788602691.048695,
+      "ended_epoch": 1788602691.140231
     },
     "terminal": {
-      "started_epoch": null,
-      "ended_epoch": null
+      "started_epoch": 1788602691.140231,
+      "ended_epoch": 1788602691.140231
     }
   },
-  "delivery_stage": "model",
+  "delivery_stage": "verify",
   "delivery_stage_source": "agent-stages.json",
   "delivery_stage_timing": {
     "requirements": {
@@ -32,42 +32,46 @@
     },
     "model": {
       "started_epoch": 1788600792.0,
-      "ended_epoch": null
+      "ended_epoch": 1788601153.0
     },
     "apply": {
-      "started_epoch": null,
-      "ended_epoch": null
+      "started_epoch": 1788601153.0,
+      "ended_epoch": 1788602534.0
     },
     "verify": {
-      "started_epoch": null,
+      "started_epoch": 1788602534.0,
       "ended_epoch": null
     }
   },
   "delivery_stage_timing_source": "agent-stages.json",
   "delivery_stage_timing_status": "valid",
-  "wall_elapsed_seconds": 314.042,
+  "wall_elapsed_seconds": 2062.822,
   "domainry_cli": {
-    "invocations_total": 4,
-    "completed_total": 4,
-    "failed_total": 0,
+    "invocations_total": 8,
+    "completed_total": 8,
+    "failed_total": 1,
     "retries_total": 0,
     "latest": {
-      "subcommand": "model_capability",
-      "status": "passed",
-      "exit_code": 0,
-      "output_state": null,
-      "observed_epoch": 1788600909.192658
+      "subcommand": "verify",
+      "status": "failed",
+      "exit_code": 1,
+      "output_state": "failed",
+      "observed_epoch": 1788602690.7417998
     }
   },
   "agent": {
-    "last_activity_epoch": 1788600909.192658,
+    "last_activity_epoch": 1788602690.7417998,
     "last_activity_status": "observed",
     "total_tokens": null,
     "total_tokens_status": "unavailable"
   },
-  "first_failure_seal_triggered": false,
-  "checker_allowed": null,
-  "checker_decision_reason": null,
-  "scorecard": null,
-  "updated_epoch": 1788600942.3596091
+  "first_failure_seal_triggered": true,
+  "checker_allowed": false,
+  "checker_decision_reason": "baseline_first_failure_verify_failed",
+  "scorecard": {
+    "available": true,
+    "pass_at_1": false,
+    "run_outcome_pass": false
+  },
+  "updated_epoch": 1788602691.140231
 }

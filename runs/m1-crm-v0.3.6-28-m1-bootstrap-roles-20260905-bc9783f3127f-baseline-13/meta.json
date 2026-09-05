@@ -1,0 +1,23 @@
+{
+  "benchmark": "m1-crm",
+  "candidate_id": "v0.3.6-28-m1-bootstrap-roles-20260905+bc9783f3127f",
+  "skill_version": "v0.3.6-28-m1-bootstrap-roles-20260905",
+  "model": "gpt-5.6-sol",
+  "run_id": "m1-crm-v0.3.6-28-m1-bootstrap-roles-20260905-bc9783f3127f-baseline-13",
+  "run_kind": "baseline",
+  "parent_run_id": null,
+  "terminal_state": "baseline_first_scoring_failure",
+  "measurement_complete": false,
+  "environment_valid": true,
+  "agent_declared_done": false,
+  "agent_result_state": null,
+  "human_interventions": 0,
+  "started_epoch": 1788600628.317782,
+  "agent_ended_epoch": 1788602690.782625,
+  "ended_epoch": 1788602691.0483031,
+  "project_path": "/private/tmp/domainry-m1-v28-bootstrap-roles-baseline-13/project",
+  "isolation_root": "/private/tmp/domainry-m1-v28-bootstrap-roles-baseline-13",
+  "codex_home": "/private/tmp/domainry-m1-v28-bootstrap-roles-baseline-13/codex-home",
+  "database_path": "/private/tmp/domainry-m1-v28-bootstrap-roles-baseline-13/runtime/cohort.sqlite",
+  "agent_session_id": "01a070e7-b995-7320-8a33-3e49688522aa"
+}

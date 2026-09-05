@@ -1,0 +1,75 @@
+[
+  {
+    "stage": "start initial managed Runtime",
+    "name": "start initial managed Runtime",
+    "owner": "domainry-runtime",
+    "elapsed_ms": 2673,
+    "note": "verify initial Runtime start: managed Runtime process failed: Runtime exited before health became ready; inspect /private/tmp/domainry-m1-v28-bootstrap-roles-baseline-13/project/.domainry/builder/runtime/runtime.log",
+    "terminal_state": "baseline_first_scoring_failure",
+    "attribution_status": "attributed",
+    "output_state": "failed",
+    "output_error": "verify initial Runtime start: managed Runtime process failed: Runtime exited before health became ready; inspect /private/tmp/domainry-m1-v28-bootstrap-roles-baseline-13/project/.domainry/builder/runtime/runtime.log",
+    "first_failure": {
+      "name": "start initial managed Runtime",
+      "status": "failed",
+      "elapsed_ms": 2673,
+      "owner": "domainry-runtime"
+    },
+    "telemetry": {
+      "contract_version": "domainry-verify-telemetry-v1",
+      "elapsed_ms": 120000,
+      "cache": {
+        "signed_runtime_package": false,
+        "verification_receipt": false
+      },
+      "cache_misses": {
+        "signed_runtime_package": "current V6 package receipt is missing: lstat /private/tmp/domainry-m1-v28-bootstrap-roles-baseline-13/project/.domainry/builder/receipts/package.json: no such file or directory",
+        "verification_receipt": "verification receipt is missing"
+      },
+      "stages": [
+        {
+          "name": "validate reusable verification and signed Runtime package",
+          "status": "done",
+          "elapsed_ms": 0,
+          "owner": "domainry-runtime"
+        },
+        {
+          "name": "run structural checks and complete backend tests",
+          "status": "done",
+          "elapsed_ms": 66125,
+          "owner": "domainry-builder"
+        },
+        {
+          "name": "build and sign exact Runtime package",
+          "status": "done",
+          "elapsed_ms": 49363,
+          "owner": "domainry-runtime"
+        },
+        {
+          "name": "compile managed Runtime business-flow tests",
+          "status": "done",
+          "elapsed_ms": 988,
+          "owner": "domainry-runtime"
+        },
+        {
+          "name": "start initial managed Runtime",
+          "status": "failed",
+          "elapsed_ms": 2673,
+          "owner": "domainry-runtime"
+        }
+      ],
+      "first_failure": {
+        "name": "start initial managed Runtime",
+        "status": "failed",
+        "elapsed_ms": 2673,
+        "owner": "domainry-runtime"
+      }
+    },
+    "detail": {
+      "name": "start initial managed Runtime",
+      "status": "failed",
+      "elapsed_ms": 2673,
+      "owner": "domainry-runtime"
+    }
+  }
+]
