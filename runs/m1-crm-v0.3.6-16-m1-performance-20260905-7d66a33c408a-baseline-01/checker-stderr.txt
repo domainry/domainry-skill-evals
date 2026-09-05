@@ -1,0 +1,14 @@
+Traceback (most recent call last):
+  File "/Users/tiger/Projects/domainry-skill-evals/runs/m1-crm-v0.3.6-16-m1-performance-20260905-7d66a33c408a-baseline-01/evaluator-checker.py", line 807, in <module>
+    sys.exit(main())
+             ^^^^^^
+  File "/Users/tiger/Projects/domainry-skill-evals/runs/m1-crm-v0.3.6-16-m1-performance-20260905-7d66a33c408a-baseline-01/evaluator-checker.py", line 705, in main
+    manifest = json.loads(manifest_path.read_text())
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.11/3.11.15/Frameworks/Python.framework/Versions/3.11/lib/python3.11/pathlib.py", line 1058, in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.11/3.11.15/Frameworks/Python.framework/Versions/3.11/lib/python3.11/pathlib.py", line 1044, in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: '/private/tmp/domainry-m1-v16-performance-baseline-01/project/.domainry/builder/project-delivery/runtime-manifest.json'

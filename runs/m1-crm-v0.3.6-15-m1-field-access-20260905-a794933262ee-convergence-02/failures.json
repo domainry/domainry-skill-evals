@@ -1,0 +1,12 @@
+[
+  {
+    "stage": "verify",
+    "owner": "cli_platform",
+    "note": "the requester-owned Report/Data Exchange job completed and persisted its artifact, the role carried canonical owner get/download grants, and the job actor matched the signed-in director, but the public job endpoint still returned backend.data_exchange.job_permission_denied"
+  },
+  {
+    "stage": "acceptance",
+    "owner": "benchmark_defect",
+    "note": "the frozen M01 checker required the internal select key exhibition although requirements.md specifies only the business label 展会; the delivery emitted trade_show with the correct localized label"
+  }
+]

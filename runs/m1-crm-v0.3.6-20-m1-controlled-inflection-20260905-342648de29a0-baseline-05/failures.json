@@ -1,0 +1,14 @@
+[
+  {
+    "stage": "verify",
+    "owner": null,
+    "note": "evaluator terminal state: environment_invalid_freeze_drift",
+    "terminal_state": "environment_invalid_freeze_drift",
+    "detail": {
+      "drifted_inputs": [
+        "driver_sha256"
+      ]
+    },
+    "attribution_status": "pending"
+  }
+]

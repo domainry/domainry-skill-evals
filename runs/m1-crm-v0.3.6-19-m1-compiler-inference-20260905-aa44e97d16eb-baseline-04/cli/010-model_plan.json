@@ -1,0 +1,49 @@
+{
+  "family": "model_plan",
+  "command": "/bin/zsh -lc '/private/tmp/domainry-m1-v19-inference-baseline-04/codex-home/skills/domainry-builder-v1/bin/domainry-cli model plan --json --project /private/tmp/domainry-m1-v19-inference-baseline-04/project'",
+  "exit_code": 1,
+  "output": {
+    "artifact": ".domainry/builder/disposable/model-preflight-result.json",
+    "artifact_relative_to": "--project",
+    "contract_version": "domainry-model-preflight-envelope-v1",
+    "diagnostics": [
+      {
+        "code": "model.action_field_source_not_found",
+        "message": "Action conversion_request.reject_effect input field reason has Object-only constraints but no uniquely named source field in its Handler access closure",
+        "path": "backend/model/crm-conversion-approval.json#modules/crm/features/crm_conversion_approval/actions/conversion_request.reject_effect/input/reason",
+        "file": "backend/model/crm-conversion-approval.json",
+        "json_pointer": "/modules/crm/features/crm_conversion_approval/actions/conversion_request.reject_effect/input/reason",
+        "constraint": "model.action_field_source_not_found",
+        "actual": "long_text!;max_length=1000",
+        "allowed_values": [
+          "long_text!"
+        ],
+        "repair_hint": "replace long_text!;max_length=1000 with long_text! to keep this Action field standalone; otherwise align exactly one semantically named Object field already present in handler.access",
+        "owner": "domainry-cli",
+        "stage": "model_loader",
+        "ledger_path": "backend/model/crm-conversion-approval.json#modules/crm/features/crm_conversion_approval/actions/conversion_request.reject_effect/input/reason",
+        "repair_facts": {
+          "action": "conversion_request.reject_effect",
+          "actual": "long_text!;max_length=1000",
+          "allowed_values": [
+            "long_text!"
+          ],
+          "artifact_path": ".domainry/builder/disposable/model-preflight-result.json",
+          "artifact_relative_to": "--project",
+          "direction": "input",
+          "field": "reason",
+          "operation": "replace",
+          "repair_hint": "replace long_text!;max_length=1000 with long_text! to keep this Action field standalone; otherwise align exactly one semantically named Object field already present in handler.access",
+          "source_file": "backend/model/crm-conversion-approval.json"
+        }
+      }
+    ],
+    "identity": "ad39eb166d7e3cb0e17f859c63bb1e00a867032957b465ee2b8d7a7a877638b6",
+    "issue_count": 1,
+    "sha256": "26be1ab0415d2ac38985fa23f39327fa1f0f8fcb59e75b5b5ae6c6d594497376",
+    "state": "repair_required"
+  },
+  "raw_output": "model.action_field_source_not_found: Action conversion_request.reject_effect input field reason has Object-only constraints but no uniquely named source field in its Handler access closure\nerror: Builder validation found 1 issue(s)\n{\"artifact\":\".domainry/builder/disposable/model-preflight-result.json\",\"artifact_relative_to\":\"--project\",\"contract_version\":\"domainry-model-preflight-envelope-v1\",\"diagnostics\":[{\"code\":\"model.action_field_source_not_found\",\"message\":\"Action conversion_request.reject_effect input field reason has Object-only constraints but no uniquely named source field in its Handler access closure\",\"path\":\"backend/model/crm-conversion-approval.json#modules/crm/features/crm_conversion_approval/actions/conversion_request.reject_effect/input/reason\",\"file\":\"backend/model/crm-conversion-approval.json\",\"json_pointer\":\"/modules/crm/features/crm_conversion_approval/actions/conversion_request.reject_effect/input/reason\",\"constraint\":\"model.action_field_source_not_found\",\"actual\":\"long_text!;max_length=1000\",\"allowed_values\":[\"long_text!\"],\"repair_hint\":\"replace long_text!;max_length=1000 with long_text! to keep this Action field standalone; otherwise align exactly one semantically named Object field already present in handler.access\",\"owner\":\"domainry-cli\",\"stage\":\"model_loader\",\"ledger_path\":\"backend/model/crm-conversion-approval.json#modules/crm/features/crm_conversion_approval/actions/conversion_request.reject_effect/input/reason\",\"repair_facts\":{\"action\":\"conversion_request.reject_effect\",\"actual\":\"long_text!;max_length=1000\",\"allowed_values\":[\"long_text!\"],\"artifact_path\":\".domainry/builder/disposable/model-preflight-result.json\",\"artifact_relative_to\":\"--project\",\"direction\":\"input\",\"field\":\"reason\",\"operation\":\"replace\",\"repair_hint\":\"replace long_text!;max_length=1000 with long_text! to keep this Action field standalone; otherwise align exactly one semantically named Object field already present in handler.access\",\"source_file\":\"backend/model/crm-conversion-approval.json\"}}],\"identity\":\"ad39eb166d7e3cb0e17f859c63bb1e00a867032957b465ee2b8d7a7a877638b6\",\"issue_count\":1,\"sha256\":\"26be1ab0415d2ac38985fa23f39327fa1f0f8fcb59e75b5b5ae6c6d594497376\",\"state\":\"repair_required\"}\n",
+  "event_item_id": "item_34",
+  "event_line": 68
+}

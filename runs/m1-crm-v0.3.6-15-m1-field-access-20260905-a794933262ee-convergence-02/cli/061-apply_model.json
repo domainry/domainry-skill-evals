@@ -1,0 +1,9 @@
+{
+  "family": "apply_model",
+  "command": "/bin/zsh -lc '/private/tmp/domainry-m1-v15-convergence.itjjpe/codex-home/skills/domainry-builder-v1/bin/domainry-cli apply model --json --project /private/tmp/domainry-m1-v15-convergence.itjjpe/project --go-module-path example.com/domainry-m1-crm/backend --service http://127.0.0.1:8283 --evolution-audit-sha256 3fe80585bf7cb48f95b3be67bbf33ede1435629233fe4cbe7b08699282f4c20e --evolution-reason \"Review verify repair: use open workflow task state, grant Notification module all-scope list required for self inbox, preserve two-decimal report result scale, and avoid unauthorized envelope field ordering\"'",
+  "exit_code": 1,
+  "output": "[domainry] apply model: load and preflight model failed (1.215s)\nerror: model.preflight_missing: run model plan before apply",
+  "raw_output": "[domainry] apply model: load and preflight model failed (1.215s)\nerror: model.preflight_missing: run model plan before apply\n",
+  "event_item_id": "item_227",
+  "event_line": 691
+}

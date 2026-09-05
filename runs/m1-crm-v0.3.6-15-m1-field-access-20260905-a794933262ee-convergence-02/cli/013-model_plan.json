@@ -1,0 +1,16 @@
+{
+  "family": "model_plan",
+  "command": "/bin/zsh -lc '/private/tmp/domainry-m1-v15-convergence.itjjpe/codex-home/skills/domainry-builder-v1/bin/domainry-cli model plan --json --project /private/tmp/domainry-m1-v15-convergence.itjjpe/project'",
+  "exit_code": 1,
+  "output": {
+    "artifact": ".domainry/builder/disposable/model-preflight-result.json",
+    "contract_version": "domainry-model-preflight-envelope-v1",
+    "identity": "1e1c18a8fc7a609b27644bcc981a5ba5cc69e97f4209388c2ead7956f346bf04",
+    "issue_count": 1,
+    "sha256": "b78f66bd61440b241779b23f6d26bbb062301f5711fb39836362f2c56283c495",
+    "state": "repair_required"
+  },
+  "raw_output": "{\"artifact\":\".domainry/builder/disposable/model-preflight-result.json\",\"contract_version\":\"domainry-model-preflight-envelope-v1\",\"identity\":\"1e1c18a8fc7a609b27644bcc981a5ba5cc69e97f4209388c2ead7956f346bf04\",\"issue_count\":1,\"sha256\":\"b78f66bd61440b241779b23f6d26bbb062301f5711fb39836362f2c56283c495\",\"state\":\"repair_required\"}\nmodel.unknown_field: report_export_controls.lead_detail_export.record_mapping contains unknown field \"download_content_type_field\"\nerror: Builder validation found 1 issue(s)\n",
+  "event_item_id": "item_51",
+  "event_line": 101
+}

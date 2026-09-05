@@ -1,0 +1,76 @@
+{
+  "contract_version": "domainry-eval-progress-v1",
+  "run_id": "m1-crm-v0.3.6-22-m1-managed-runtime-routes-20260905-e4aeacb10fa1-baseline-07",
+  "run_kind": "baseline",
+  "status": "terminal",
+  "lifecycle_phase": "terminal",
+  "lifecycle_state": "baseline_first_scoring_failure",
+  "lifecycle_phase_timing": {
+    "agent": {
+      "started_epoch": 1788581642.393139,
+      "ended_epoch": 1788582169.266758
+    },
+    "checker": {
+      "started_epoch": 1788582169.266758,
+      "ended_epoch": 1788582169.267487
+    },
+    "scorer": {
+      "started_epoch": 1788582169.267487,
+      "ended_epoch": 1788582169.302637
+    },
+    "terminal": {
+      "started_epoch": 1788582169.302637,
+      "ended_epoch": 1788582169.302637
+    }
+  },
+  "delivery_stage": "model",
+  "delivery_stage_source": "agent-stages.json",
+  "delivery_stage_timing": {
+    "requirements": {
+      "started_epoch": 1788581667.0,
+      "ended_epoch": 1788581838.0
+    },
+    "model": {
+      "started_epoch": 1788581838.0,
+      "ended_epoch": null
+    },
+    "apply": {
+      "started_epoch": null,
+      "ended_epoch": null
+    },
+    "verify": {
+      "started_epoch": null,
+      "ended_epoch": null
+    }
+  },
+  "delivery_stage_timing_source": "agent-stages.json",
+  "wall_elapsed_seconds": 526.909,
+  "domainry_cli": {
+    "invocations_total": 5,
+    "completed_total": 5,
+    "failed_total": 1,
+    "retries_total": 0,
+    "latest": {
+      "subcommand": "model_plan",
+      "status": "failed",
+      "exit_code": 1,
+      "output_state": null,
+      "observed_epoch": 1788582169.016031
+    }
+  },
+  "agent": {
+    "last_activity_epoch": 1788582169.016031,
+    "last_activity_status": "observed",
+    "total_tokens": null,
+    "total_tokens_status": "unavailable"
+  },
+  "first_failure_seal_triggered": true,
+  "checker_allowed": false,
+  "checker_decision_reason": "baseline_first_failure_before_verify",
+  "scorecard": {
+    "available": true,
+    "pass_at_1": false,
+    "run_outcome_pass": false
+  },
+  "updated_epoch": 1788582169.302637
+}

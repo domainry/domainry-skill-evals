@@ -1,0 +1,77 @@
+[
+  {
+    "stage": "apply_finalize",
+    "owner": "project-source",
+    "note": "Action Handler MarkContacted does not use a generated business capability through parameter caps",
+    "terminal_state": "baseline_first_scoring_failure",
+    "attribution_status": "attributed",
+    "diagnostic": {
+      "code": "project.action_capability_unused",
+      "message": "Action Handler MarkContacted does not use a generated business capability through parameter caps",
+      "path": "backend/actions/crm/lead_mark_contacted.go",
+      "line": 42,
+      "column": 1,
+      "owner": "project-source",
+      "category": "actions"
+    },
+    "detail": {
+      "code": "project.action_capability_unused",
+      "message": "Action Handler MarkContacted does not use a generated business capability through parameter caps",
+      "path": "backend/actions/crm/lead_mark_contacted.go",
+      "line": 42,
+      "column": 1,
+      "owner": "project-source",
+      "category": "actions"
+    }
+  },
+  {
+    "stage": "apply_finalize",
+    "owner": "project-source",
+    "note": "Action Handler MarkLost does not use a generated business capability through parameter caps",
+    "terminal_state": "baseline_first_scoring_failure",
+    "attribution_status": "attributed",
+    "diagnostic": {
+      "code": "project.action_capability_unused",
+      "message": "Action Handler MarkLost does not use a generated business capability through parameter caps",
+      "path": "backend/actions/crm/lead_mark_lost.go",
+      "line": 11,
+      "column": 1,
+      "owner": "project-source",
+      "category": "actions"
+    },
+    "detail": {
+      "code": "project.action_capability_unused",
+      "message": "Action Handler MarkLost does not use a generated business capability through parameter caps",
+      "path": "backend/actions/crm/lead_mark_lost.go",
+      "line": 11,
+      "column": 1,
+      "owner": "project-source",
+      "category": "actions"
+    }
+  },
+  {
+    "stage": "apply_finalize",
+    "owner": "project-source",
+    "note": "Action Handler MarkQualified does not use a generated business capability through parameter caps",
+    "terminal_state": "baseline_first_scoring_failure",
+    "attribution_status": "attributed",
+    "diagnostic": {
+      "code": "project.action_capability_unused",
+      "message": "Action Handler MarkQualified does not use a generated business capability through parameter caps",
+      "path": "backend/actions/crm/lead_mark_qualified.go",
+      "line": 11,
+      "column": 1,
+      "owner": "project-source",
+      "category": "actions"
+    },
+    "detail": {
+      "code": "project.action_capability_unused",
+      "message": "Action Handler MarkQualified does not use a generated business capability through parameter caps",
+      "path": "backend/actions/crm/lead_mark_qualified.go",
+      "line": 11,
+      "column": 1,
+      "owner": "project-source",
+      "category": "actions"
+    }
+  }
+]

@@ -1,0 +1,114 @@
+{
+  "family": "apply_model",
+  "command": "/bin/zsh -lc '/private/tmp/domainry-m1-v26-runtime-closure-baseline-11/codex-home/skills/domainry-builder-v1/bin/domainry-cli apply model --json --project /private/tmp/domainry-m1-v26-runtime-closure-baseline-11/project --go-module-path example.com/domainry-m1-crm/backend --service http://127.0.0.1:8283'",
+  "exit_code": 0,
+  "output": {
+    "contract_version": "domainry-model-apply-v3",
+    "created_source_files": 0,
+    "implementation_packet": {
+      "contract_version": "domainry-action-implementation-packet-v7",
+      "path": ".domainry/builder/source/implementation-packets/c6248c2ad2237edf5ac2bc8f9221d4d50d8a847a48acac5a4795f6f556753837.json",
+      "file_sha256": "c6248c2ad2237edf5ac2bc8f9221d4d50d8a847a48acac5a4795f6f556753837",
+      "bytes": 5459,
+      "actions": [
+        {
+          "action_key": "lead.approve_conversion",
+          "path": ".domainry/builder/source/implementation-packets/actions/adc0d782b97d708fc00030dfec5221f9f968d57528fd1976a24ae4adfce3d41e.json",
+          "sha256": "adc0d782b97d708fc00030dfec5221f9f968d57528fd1976a24ae4adfce3d41e",
+          "bytes": 5652
+        },
+        {
+          "action_key": "lead.convert_direct",
+          "path": ".domainry/builder/source/implementation-packets/actions/dca86b247375fe2eccfc266a11655eb89e439cdd2cd76edc389107c201ee2f9b.json",
+          "sha256": "dca86b247375fe2eccfc266a11655eb89e439cdd2cd76edc389107c201ee2f9b",
+          "bytes": 4760
+        },
+        {
+          "action_key": "lead.edit",
+          "path": ".domainry/builder/source/implementation-packets/actions/a09d5f8726e6eafabbab8db1945d46ce604b0616dae523991f86bb2788e0430d.json",
+          "sha256": "a09d5f8726e6eafabbab8db1945d46ce604b0616dae523991f86bb2788e0430d",
+          "bytes": 4788
+        },
+        {
+          "action_key": "lead.mark_contacted",
+          "path": ".domainry/builder/source/implementation-packets/actions/911423c3eea1900b2817c6feb5e5c3a83952c16ffea6665add9851ab9523ddb0.json",
+          "sha256": "911423c3eea1900b2817c6feb5e5c3a83952c16ffea6665add9851ab9523ddb0",
+          "bytes": 4231
+        },
+        {
+          "action_key": "lead.mark_lost",
+          "path": ".domainry/builder/source/implementation-packets/actions/23442148e99b58e8a97b439f4c949e087281b247ce7a4b3cca90f8ed35a200bb.json",
+          "sha256": "23442148e99b58e8a97b439f4c949e087281b247ce7a4b3cca90f8ed35a200bb",
+          "bytes": 4146
+        },
+        {
+          "action_key": "lead.mark_qualified",
+          "path": ".domainry/builder/source/implementation-packets/actions/060d77e2340cc6506691df0ceaec3cc0c3f49b56eda524461ded66b7bd49650b.json",
+          "sha256": "060d77e2340cc6506691df0ceaec3cc0c3f49b56eda524461ded66b7bd49650b",
+          "bytes": 4231
+        },
+        {
+          "action_key": "lead.open_approval",
+          "path": ".domainry/builder/source/implementation-packets/actions/6abc17fdb6679897a9a1871f689cf7b2f3a3782080ee7474c18a5bd4b5187b33.json",
+          "sha256": "6abc17fdb6679897a9a1871f689cf7b2f3a3782080ee7474c18a5bd4b5187b33",
+          "bytes": 4790
+        },
+        {
+          "action_key": "lead.register",
+          "path": ".domainry/builder/source/implementation-packets/actions/1c815896cb887739a582eeea61564a442ea7a564d9a176e122a967ce07391760.json",
+          "sha256": "1c815896cb887739a582eeea61564a442ea7a564d9a176e122a967ce07391760",
+          "bytes": 4988
+        },
+        {
+          "action_key": "lead.reject_conversion",
+          "path": ".domainry/builder/source/implementation-packets/actions/5cfcf18fde87e2af0313ae471ec2ff8eeddf430bc427e7199356350808490189.json",
+          "sha256": "5cfcf18fde87e2af0313ae471ec2ff8eeddf430bc427e7199356350808490189",
+          "bytes": 5236
+        },
+        {
+          "action_key": "lead.run_stale_reminders",
+          "path": ".domainry/builder/source/implementation-packets/actions/ca6a5deaf82a716cd255eeb146b932750e322fbc5ded7bdc5f8bd30b2c2948b8.json",
+          "sha256": "ca6a5deaf82a716cd255eeb146b932750e322fbc5ded7bdc5f8bd30b2c2948b8",
+          "bytes": 5023
+        }
+      ],
+      "summary": {
+        "action_count": 10,
+        "working_directory": "backend",
+        "focused_packages": [
+          "./actions/crm"
+        ],
+        "shared_constraints": [
+          "Read this index once, then read each listed Action context by exact path; do not rediscover context from generated trees.",
+          "Edit only project-owned Action source and paired tests; never edit generated source, manifests, receipts, caches, or managed Runtime state.",
+          "Read verification.path during apply and complete every required backend/tests/businessflow source file before apply finalize.",
+          "Use the delivery build constraint and the project-local-plus-public hybrid GOPROXY exactly as shown."
+        ],
+        "stage_boundary": {
+          "before_finalize": "Complete all Handler, paired test, and required backend/tests/businessflow source; run focused and business_flow_compile. Do not run the full tree because generated composition may intentionally be incomplete.",
+          "finalize": "After all project-owned source and pre-finalize tests are complete, run apply finalize exactly once.",
+          "after_finalize": "Project-owned source is frozen. Run the full backend tree and verify without source edits. Any source change starts a new repair iteration and requires focused tests plus apply finalize again before verify."
+        },
+        "test_commands": {
+          "focused": "cd \"$PROJECT_ROOT/backend\" && GOPROXY=\"file://$PROJECT_ROOT/.domainry/builder/contracts/go-module-proxy,https://proxy.golang.org\" go test -count=1 -tags \"domainry_domain_sdk_de90e6bed3c52cc763ca5de3525cd5d57a3a0c3dfe8ca304e3553dbe849240f7\" ./actions/crm",
+          "business_flow_compile": "if [ -d \"$PROJECT_ROOT/backend/tests/businessflow\" ]; then cd \"$PROJECT_ROOT/backend\" && GOPROXY=\"file://$PROJECT_ROOT/.domainry/builder/contracts/go-module-proxy,https://proxy.golang.org\" go test -count=1 -tags \"domainry_domain_sdk_de90e6bed3c52cc763ca5de3525cd5d57a3a0c3dfe8ca304e3553dbe849240f7\" ./tests/businessflow; fi",
+          "finalize": "\"$DOMAINRY_CLI\" apply finalize --json --project \"$PROJECT_ROOT\"",
+          "full_tree": "cd \"$PROJECT_ROOT/backend\" && GOPROXY=\"file://$PROJECT_ROOT/.domainry/builder/contracts/go-module-proxy,https://proxy.golang.org\" go test -count=1 -tags \"domainry_domain_sdk_de90e6bed3c52cc763ca5de3525cd5d57a3a0c3dfe8ca304e3553dbe849240f7\" ./..."
+        }
+      },
+      "verification": {
+        "path": ".domainry/builder/source/implementation-packets/verification/3b81488e078551926ecfaad19fd67da6d8a7c086f07180e0c29a095b5cd043d4.json",
+        "sha256": "3b81488e078551926ecfaad19fd67da6d8a7c086f07180e0c29a095b5cd043d4",
+        "bytes": 30444
+      },
+      "delivery_id": "sha256:7d49b9b097cd4e3b298e0f77a6f2e3ae340e1188158270ef3ff28b4b569d32a3",
+      "materialization_receipt_sha256": "7cdf3034c865fac916384a2c6dd12b0b1c794e52ccb70e562e6895c7bf4b61f1",
+      "materialization_file_sha256": "fb4bfb038a7c98b2b2ffb433fbf93e6fc20205b2ffe754ebea9e81d041222024"
+    },
+    "receipt": ".domainry/builder/model-apply.json",
+    "state": "implementation_ready"
+  },
+  "raw_output": "[domainry] apply model: load and preflight model done (1.188s)\n[domainry] apply model: synchronize Blueprint Ledger...\n[domainry] apply model: synchronize Blueprint Ledger done (305ms)\n[domainry] apply model: validate compiled Blueprint...\n[domainry] apply model: validate compiled Blueprint done (527ms)\n[domainry] apply model: publish immutable project delivery...\n[domainry] apply model: publish immutable project delivery done (640ms)\n[domainry] apply model: fetch signed delivery artifacts...\n[domainry] apply model: fetch signed delivery artifacts done (322ms)\n[domainry] apply model: materialize backend and resolve Go dependencies...\n[domainry] apply model: materialize backend and resolve Go dependencies done (22.061s)\n[domainry] apply model: prepare project implementation packet...\n[domainry] apply model: prepare project implementation packet done (481ms)\n{\"contract_version\":\"domainry-model-apply-v3\",\"created_source_files\":0,\"implementation_packet\":{\"contract_version\":\"domainry-action-implementation-packet-v7\",\"path\":\".domainry/builder/source/implementation-packets/c6248c2ad2237edf5ac2bc8f9221d4d50d8a847a48acac5a4795f6f556753837.json\",\"file_sha256\":\"c6248c2ad2237edf5ac2bc8f9221d4d50d8a847a48acac5a4795f6f556753837\",\"bytes\":5459,\"actions\":[{\"action_key\":\"lead.approve_conversion\",\"path\":\".domainry/builder/source/implementation-packets/actions/adc0d782b97d708fc00030dfec5221f9f968d57528fd1976a24ae4adfce3d41e.json\",\"sha256\":\"adc0d782b97d708fc00030dfec5221f9f968d57528fd1976a24ae4adfce3d41e\",\"bytes\":5652},{\"action_key\":\"lead.convert_direct\",\"path\":\".domainry/builder/source/implementation-packets/actions/dca86b247375fe2eccfc266a11655eb89e439cdd2cd76edc389107c201ee2f9b.json\",\"sha256\":\"dca86b247375fe2eccfc266a11655eb89e439cdd2cd76edc389107c201ee2f9b\",\"bytes\":4760},{\"action_key\":\"lead.edit\",\"path\":\".domainry/builder/source/implementation-packets/actions/a09d5f8726e6eafabbab8db1945d46ce604b0616dae523991f86bb2788e0430d.json\",\"sha256\":\"a09d5f8726e6eafabbab8db1945d46ce604b0616dae523991f86bb2788e0430d\",\"bytes\":4788},{\"action_key\":\"lead.mark_contacted\",\"path\":\".domainry/builder/source/implementation-packets/actions/911423c3eea1900b2817c6feb5e5c3a83952c16ffea6665add9851ab9523ddb0.json\",\"sha256\":\"911423c3eea1900b2817c6feb5e5c3a83952c16ffea6665add9851ab9523ddb0\",\"bytes\":4231},{\"action_key\":\"lead.mark_lost\",\"path\":\".domainry/builder/source/implementation-packets/actions/23442148e99b58e8a97b439f4c949e087281b247ce7a4b3cca90f8ed35a200bb.json\",\"sha256\":\"23442148e99b58e8a97b439f4c949e087281b247ce7a4b3cca90f8ed35a200bb\",\"bytes\":4146},{\"action_key\":\"lead.mark_qualified\",\"path\":\".domainry/builder/source/implementation-packets/actions/060d77e2340cc6506691df0ceaec3cc0c3f49b56eda524461ded66b7bd49650b.json\",\"sha256\":\"060d77e2340cc6506691df0ceaec3cc0c3f49b56eda524461ded66b7bd49650b\",\"bytes\":4231},{\"action_key\":\"lead.open_approval\",\"path\":\".domainry/builder/source/implementation-packets/actions/6abc17fdb6679897a9a1871f689cf7b2f3a3782080ee7474c18a5bd4b5187b33.json\",\"sha256\":\"6abc17fdb6679897a9a1871f689cf7b2f3a3782080ee7474c18a5bd4b5187b33\",\"bytes\":4790},{\"action_key\":\"lead.register\",\"path\":\".domainry/builder/source/implementation-packets/actions/1c815896cb887739a582eeea61564a442ea7a564d9a176e122a967ce07391760.json\",\"sha256\":\"1c815896cb887739a582eeea61564a442ea7a564d9a176e122a967ce07391760\",\"bytes\":4988},{\"action_key\":\"lead.reject_conversion\",\"path\":\".domainry/builder/source/implementation-packets/actions/5cfcf18fde87e2af0313ae471ec2ff8eeddf430bc427e7199356350808490189.json\",\"sha256\":\"5cfcf18fde87e2af0313ae471ec2ff8eeddf430bc427e7199356350808490189\",\"bytes\":5236},{\"action_key\":\"lead.run_stale_reminders\",\"path\":\".domainry/builder/source/implementation-packets/actions/ca6a5deaf82a716cd255eeb146b932750e322fbc5ded7bdc5f8bd30b2c2948b8.json\",\"sha256\":\"ca6a5deaf82a716cd255eeb146b932750e322fbc5ded7bdc5f8bd30b2c2948b8\",\"bytes\":5023}],\"summary\":{\"action_count\":10,\"working_directory\":\"backend\",\"focused_packages\":[\"./actions/crm\"],\"shared_constraints\":[\"Read this index once, then read each listed Action context by exact path; do not rediscover context from generated trees.\",\"Edit only project-owned Action source and paired tests; never edit generated source, manifests, receipts, caches, or managed Runtime state.\",\"Read verification.path during apply and complete every required backend/tests/businessflow source file before apply finalize.\",\"Use the delivery build constraint and the project-local-plus-public hybrid GOPROXY exactly as shown.\"],\"stage_boundary\":{\"before_finalize\":\"Complete all Handler, paired test, and required backend/tests/businessflow source; run focused and business_flow_compile. Do not run the full tree because generated composition may intentionally be incomplete.\",\"finalize\":\"After all project-owned source and pre-finalize tests are complete, run apply finalize exactly once.\",\"after_finalize\":\"Project-owned source is frozen. Run the full backend tree and verify without source edits. Any source change starts a new repair iteration and requires focused tests plus apply finalize again before verify.\"},\"test_commands\":{\"focused\":\"cd \\\"$PROJECT_ROOT/backend\\\" \\u0026\\u0026 GOPROXY=\\\"file://$PROJECT_ROOT/.domainry/builder/contracts/go-module-proxy,https://proxy.golang.org\\\" go test -count=1 -tags \\\"domainry_domain_sdk_de90e6bed3c52cc763ca5de3525cd5d57a3a0c3dfe8ca304e3553dbe849240f7\\\" ./actions/crm\",\"business_flow_compile\":\"if [ -d \\\"$PROJECT_ROOT/backend/tests/businessflow\\\" ]; then cd \\\"$PROJECT_ROOT/backend\\\" \\u0026\\u0026 GOPROXY=\\\"file://$PROJECT_ROOT/.domainry/builder/contracts/go-module-proxy,https://proxy.golang.org\\\" go test -count=1 -tags \\\"domainry_domain_sdk_de90e6bed3c52cc763ca5de3525cd5d57a3a0c3dfe8ca304e3553dbe849240f7\\\" ./tests/businessflow; fi\",\"finalize\":\"\\\"$DOMAINRY_CLI\\\" apply finalize --json --project \\\"$PROJECT_ROOT\\\"\",\"full_tree\":\"cd \\\"$PROJECT_ROOT/backend\\\" \\u0026\\u0026 GOPROXY=\\\"file://$PROJECT_ROOT/.domainry/builder/contracts/go-module-proxy,https://proxy.golang.org\\\" go test -count=1 -tags \\\"domainry_domain_sdk_de90e6bed3c52cc763ca5de3525cd5d57a3a0c3dfe8ca304e3553dbe849240f7\\\" ./...\"}},\"verification\":{\"path\":\".domainry/builder/source/implementation-packets/verification/3b81488e078551926ecfaad19fd67da6d8a7c086f07180e0c29a095b5cd043d4.json\",\"sha256\":\"3b81488e078551926ecfaad19fd67da6d8a7c086f07180e0c29a095b5cd043d4\",\"bytes\":30444},\"delivery_id\":\"sha256:7d49b9b097cd4e3b298e0f77a6f2e3ae340e1188158270ef3ff28b4b569d32a3\",\"materialization_receipt_sha256\":\"7cdf3034c865fac916384a2c6dd12b0b1c794e52ccb70e562e6895c7bf4b61f1\",\"materialization_file_sha256\":\"fb4bfb038a7c98b2b2ffb433fbf93e6fc20205b2ffe754ebea9e81d041222024\"},\"receipt\":\".domainry/builder/model-apply.json\",\"state\":\"implementation_ready\"}\n",
+  "event_item_id": "item_29",
+  "event_line": 56
+}

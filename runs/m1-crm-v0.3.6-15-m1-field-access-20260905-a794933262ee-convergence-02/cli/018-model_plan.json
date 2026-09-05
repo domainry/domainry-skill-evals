@@ -1,0 +1,16 @@
+{
+  "family": "model_plan",
+  "command": "/bin/zsh -lc '/private/tmp/domainry-m1-v15-convergence.itjjpe/codex-home/skills/domainry-builder-v1/bin/domainry-cli model plan --json --project /private/tmp/domainry-m1-v15-convergence.itjjpe/project'",
+  "exit_code": 1,
+  "output": {
+    "artifact": ".domainry/builder/disposable/model-preflight-result.json",
+    "contract_version": "domainry-model-preflight-envelope-v1",
+    "identity": "1e01380b79226e722e70bbbee2111b8ca67d2f67288e1b5717c5f3a9aee03c31",
+    "issue_count": 1,
+    "sha256": "3d4e149004786eac6907a4bfe8fbc3d680aaaaea622321787341eac0c4735071",
+    "state": "repair_required"
+  },
+  "raw_output": "{\"artifact\":\".domainry/builder/disposable/model-preflight-result.json\",\"contract_version\":\"domainry-model-preflight-envelope-v1\",\"identity\":\"1e01380b79226e722e70bbbee2111b8ca67d2f67288e1b5717c5f3a9aee03c31\",\"issue_count\":1,\"sha256\":\"3d4e149004786eac6907a4bfe8fbc3d680aaaaea622321787341eac0c4735071\",\"state\":\"repair_required\"}\nmodel.write_ownership_conflict: role sales_rep grants direct CRUD permission lead.create while Handler owns writes to lead\nerror: Builder validation found 1 issue(s)\n",
+  "event_item_id": "item_61",
+  "event_line": 121
+}

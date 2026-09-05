@@ -1,0 +1,47 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "domainry-m1-evaluator-result-v3",
+  "title": "Domainry M1 evaluator result v3",
+  "type": "object",
+  "additionalProperties": true,
+  "required": [
+    "contract_version", "pass", "business_flows",
+    "business_flow_evidence", "structured_business_flow_evidence", "results"
+  ],
+  "properties": {
+    "contract_version": {"const": "domainry-m1-evaluator-result-v3"},
+    "pass": {"type": "boolean"},
+    "structured_business_flow_evidence": {
+      "anyOf": [
+        {"type": "null"},
+        {"$ref": "business-flow-evidence-v1.schema.json"}
+      ]
+    },
+    "results": {
+      "type": "array",
+      "minItems": 19,
+      "maxItems": 19,
+      "items": {
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "id", "priority", "status", "mechanism", "reuse_eligible",
+          "mechanism_detail", "silent_downgrade", "evidence"
+        ],
+        "properties": {
+          "id": {"type": "string", "pattern": "^M(0[1-9]|1[0-9])$"},
+          "priority": {"enum": ["P0", "P1"]},
+          "status": {"enum": ["pass", "fail"]},
+          "mechanism": {"enum": ["reuse", "custom"]},
+          "reuse_eligible": {"type": "boolean"},
+          "silent_downgrade": {"type": "boolean"},
+          "mechanism_detail": {
+            "type": "object",
+            "required": ["classification", "evidence_sources", "reason"]
+          },
+          "evidence": {"type": "object"}
+        }
+      }
+    }
+  }
+}

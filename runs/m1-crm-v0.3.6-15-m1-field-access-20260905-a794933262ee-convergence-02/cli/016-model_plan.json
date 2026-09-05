@@ -1,0 +1,16 @@
+{
+  "family": "model_plan",
+  "command": "/bin/zsh -lc '/private/tmp/domainry-m1-v15-convergence.itjjpe/codex-home/skills/domainry-builder-v1/bin/domainry-cli model plan --json --project /private/tmp/domainry-m1-v15-convergence.itjjpe/project'",
+  "exit_code": 1,
+  "output": {
+    "artifact": ".domainry/builder/disposable/model-preflight-result.json",
+    "contract_version": "domainry-model-preflight-envelope-v1",
+    "identity": "b2e2322d001bf3188db193d7d754017ca7d13d7a8ce72b7542a48d214baf0e63",
+    "issue_count": 1,
+    "sha256": "e9f3873f80efae72582e23d9cfec3ef368036675feff47db01a43c2c4533c2f4",
+    "state": "repair_required"
+  },
+  "raw_output": "model.action_permission_required: Action lead.prepare_approval handler requires at least one role grant \"lead.prepare_approval;<data_scope>\"\nerror: Builder validation found 1 issue(s)\n{\"artifact\":\".domainry/builder/disposable/model-preflight-result.json\",\"contract_version\":\"domainry-model-preflight-envelope-v1\",\"identity\":\"b2e2322d001bf3188db193d7d754017ca7d13d7a8ce72b7542a48d214baf0e63\",\"issue_count\":1,\"sha256\":\"e9f3873f80efae72582e23d9cfec3ef368036675feff47db01a43c2c4533c2f4\",\"state\":\"repair_required\"}\n",
+  "event_item_id": "item_57",
+  "event_line": 113
+}

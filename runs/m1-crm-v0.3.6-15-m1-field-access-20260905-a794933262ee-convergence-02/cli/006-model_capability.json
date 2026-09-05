@@ -1,0 +1,21 @@
+{
+  "family": "model_capability",
+  "command": "/bin/zsh -lc '/private/tmp/domainry-m1-v15-convergence.itjjpe/codex-home/skills/domainry-builder-v1/bin/domainry-cli model capability --json --project /private/tmp/domainry-m1-v15-convergence.itjjpe/project --key report.business'",
+  "exit_code": 0,
+  "output": {
+    "category": {
+      "key": "report.business",
+      "name": "Business reports",
+      "description": "Execute authorized report summaries and Object SQL queries, refresh snapshots, and prepare governed exports."
+    },
+    "validations": [
+      {
+        "kind": "report.definition",
+        "description": "Validate one project report definition against Report's dataset or Object SQL contract."
+      }
+    ]
+  },
+  "raw_output": "{\"category\":{\"key\":\"report.business\",\"name\":\"Business reports\",\"description\":\"Execute authorized report summaries and Object SQL queries, refresh snapshots, and prepare governed exports.\"},\"validations\":[{\"kind\":\"report.definition\",\"description\":\"Validate one project report definition against Report's dataset or Object SQL contract.\"}]}\n",
+  "event_item_id": "item_33",
+  "event_line": 70
+}

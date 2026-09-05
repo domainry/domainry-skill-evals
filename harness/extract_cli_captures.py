@@ -7,25 +7,143 @@ import argparse
 import json
 from pathlib import Path
 import re
+import shlex
 
 
-COMMAND_FAMILIES = (
-    (re.compile(r"\bmodel\s+capability\b"), "model_capability"),
-    (re.compile(r"\bmodel\s+plan\b"), "model_plan"),
-    (re.compile(r"\bapply\s+model\b"), "apply_model"),
-    (re.compile(r"\bapply\s+finalize\b"), "apply_finalize"),
-    (re.compile(r"\bverify\b"), "verify"),
-)
 CLI_MARKER = re.compile(r"(?:domainry-cli|DOMAINRY_CLI)")
+SHELL_SEPARATORS = {";", "&&", "||", "|", "&"}
+METADATA_ARGUMENTS = {"--help", "-h", "help", "--version", "-V", "version"}
+
+
+def _is_metadata_argument(argument: str) -> bool:
+    return (
+        argument in METADATA_ARGUMENTS
+        or argument.startswith("--help=")
+        or argument.startswith("--version=")
+    )
+
+
+def _command_words(command: str) -> list[str]:
+    """Best-effort argv extraction for direct and ``shell -lc`` events."""
+    try:
+        outer = shlex.split(command)
+    except ValueError:
+        return []
+    script = command
+    for flag in ("-lc", "-c"):
+        if flag in outer:
+            index = outer.index(flag)
+            if index + 1 < len(outer):
+                script = outer[index + 1]
+                break
+    # Codex commonly sends multi-line shell programs. Domainry scoring commands
+    # are standalone lines; preserving the boundary prevents later prose or
+    # commands from becoming their arguments.
+    script = script.replace("\n", " ; ")
+    try:
+        lexer = shlex.shlex(script, posix=True, punctuation_chars=";&|")
+        lexer.whitespace_split = True
+        lexer.commenters = ""
+        return list(lexer)
+    except ValueError:
+        return []
+
+
+def _is_cli_executable(word: str) -> bool:
+    if "=" in word:
+        return False
+    return Path(word).name == "domainry-cli" or word in {
+        "$DOMAINRY_CLI", "${DOMAINRY_CLI}", "DOMAINRY_CLI",
+    }
+
+
+def _family_from_args(arguments: list[str]) -> str | None:
+    if not arguments or _is_metadata_argument(arguments[0]):
+        return None
+    family = None
+    consumed = 0
+    if arguments[:2] == ["model", "capability"]:
+        family, consumed = "model_capability", 2
+    elif arguments[:2] == ["model", "plan"]:
+        family, consumed = "model_plan", 2
+    elif arguments[:2] == ["apply", "model"]:
+        family, consumed = "apply_model", 2
+    elif arguments[:2] == ["apply", "finalize"]:
+        family, consumed = "apply_finalize", 2
+    elif arguments[0] == "verify":
+        family, consumed = "verify", 1
+    if family is None:
+        return None
+    if any(_is_metadata_argument(argument) for argument in arguments[consumed:]):
+        return None
+    return family
 
 
 def family_for(command: str) -> str | None:
     if not CLI_MARKER.search(command):
         return None
-    for pattern, family in COMMAND_FAMILIES:
-        if pattern.search(command):
+    words = _command_words(command)
+    for index, word in enumerate(words):
+        if not _is_cli_executable(word):
+            continue
+        arguments = []
+        for argument in words[index + 1:]:
+            if argument in SHELL_SEPARATORS:
+                break
+            arguments.append(argument)
+        family = _family_from_args(arguments)
+        if family is not None:
             return family
     return None
+
+
+def _json_envelope_rank(value: dict[str, object]) -> int:
+    """Prefer explicit CLI envelopes over incidental JSON log objects."""
+    if isinstance(value.get("contract_version"), str):
+        return 3
+    if any(key in value for key in (
+        "state", "issue_count", "diagnostics", "telemetry", "artifact", "error",
+    )):
+        return 2
+    return 1
+
+
+def _embedded_json_objects(raw: str) -> list[tuple[int, dict[str, object]]]:
+    """Decode complete JSON objects beginning on their own output line.
+
+    Advancing past a successfully decoded document prevents nested arrays or
+    objects inside its strings from becoming candidates. Requiring the rest of
+    the ending line to be whitespace also rejects fragments such as the
+    ``[1]`` in a human diagnostic like ``reports[1].field``.
+    """
+    decoder = json.JSONDecoder()
+    objects: list[tuple[int, dict[str, object]]] = []
+    cursor = 0
+    while cursor < len(raw):
+        line_end = raw.find("\n", cursor)
+        if line_end < 0:
+            line_end = len(raw)
+        start = cursor
+        while start < line_end and raw[start] in " \t\r":
+            start += 1
+        if start < len(raw) and raw[start] == "{":
+            try:
+                value, length = decoder.raw_decode(raw[start:])
+            except json.JSONDecodeError:
+                pass
+            else:
+                end = start + length
+                ending_line = raw.find("\n", end)
+                if ending_line < 0:
+                    ending_line = len(raw)
+                if not raw[end:ending_line].strip() and isinstance(value, dict):
+                    objects.append((start, value))
+                    cursor = end
+                    if cursor < len(raw) and raw[cursor] == "\n":
+                        cursor += 1
+                    continue
+        cursor = line_end + 1
+    return objects
 
 
 def parse_output(raw: str) -> object:
@@ -36,27 +154,24 @@ def parse_output(raw: str) -> object:
         return json.loads(raw)
     except json.JSONDecodeError:
         pass
-    decoder = json.JSONDecoder()
-    parsed: list[tuple[int, object]] = []
-    for offset, character in enumerate(raw):
-        if character not in "[{":
-            continue
-        try:
-            value, length = decoder.raw_decode(raw[offset:])
-        except json.JSONDecodeError:
-            continue
-        parsed.append((offset + length, value))
-    return max(parsed, key=lambda item: item[0])[1] if parsed else raw
+    parsed = _embedded_json_objects(raw)
+    if not parsed:
+        return raw
+    # Position is only a tie-breaker between equally authoritative envelopes;
+    # it can never make a later JSON fragment outrank a contract envelope.
+    return max(parsed, key=lambda item: (_json_envelope_rank(item[1]), item[0]))[1]
 
 
-def extract(events_path: Path) -> list[dict[str, object]]:
+def extract(events_path: Path, *, strict: bool = True) -> list[dict[str, object]]:
     artifacts: list[dict[str, object]] = []
     with events_path.open(encoding="utf-8") as stream:
         for line_number, line in enumerate(stream, 1):
             try:
                 event = json.loads(line)
             except json.JSONDecodeError as error:
-                raise ValueError(f"invalid Codex JSONL at line {line_number}: {error}") from error
+                if strict:
+                    raise ValueError(f"invalid Codex JSONL at line {line_number}: {error}") from error
+                continue
             if event.get("type") != "item.completed":
                 continue
             item = event.get("item")
@@ -68,7 +183,9 @@ def extract(events_path: Path) -> list[dict[str, object]]:
                 continue
             exit_code = item.get("exit_code")
             if not isinstance(exit_code, int):
-                raise ValueError(f"Builder CLI event has no exit code at line {line_number}")
+                if strict:
+                    raise ValueError(f"Builder CLI event has no exit code at line {line_number}")
+                continue
             raw = item.get("aggregated_output", "")
             artifacts.append({
                 "family": family,

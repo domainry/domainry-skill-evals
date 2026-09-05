@@ -1,0 +1,19 @@
+{
+  "candidate_id": "v0.3.6-19-m1-compiler-inference-20260905+aa44e97d16eb",
+  "skill_name": "domainry-builder-v1",
+  "skill_root": "/private/tmp/domainry-m1-v19-inference-baseline-04/codex-home/skills/domainry-builder-v1",
+  "cli": "/private/tmp/domainry-m1-v19-inference-baseline-04/codex-home/skills/domainry-builder-v1/bin/domainry-cli",
+  "skill_version": "v0.3.6-19-m1-compiler-inference-20260905",
+  "skill_identity_sha256": "ebd64d96025aeabc3ec803e2cef1d6330e670533269edbfc0dda8172909aaceb",
+  "package_metadata_sha256": "0b66cd407dd34afd8f26ad70cbd9d426d79ed0183d5d935be50f214a3ffefaea",
+  "skill_tree_sha256": "aa44e97d16eb17ac5ad1d9666bffa62151f5d64ebcb89becd71f962897073565",
+  "cli_binary_sha256": "6d12b67e23182cd614a5ef769e61e97c988ad5889584da301c9e6b338a1f1dfa",
+  "runtime_api_contract_version": "runtime-domain-api-v1",
+  "runtime_api_contract_hash": "4fe655cbfd4fa0bc0b0c04c89b86926fc6aceb059c9fccf5b09eec9b459330f7",
+  "apply_target_flag": "--service",
+  "apply_target_value": "http://127.0.0.1:8283",
+  "apply_target_args": [
+    "--service",
+    "http://127.0.0.1:8283"
+  ]
+}

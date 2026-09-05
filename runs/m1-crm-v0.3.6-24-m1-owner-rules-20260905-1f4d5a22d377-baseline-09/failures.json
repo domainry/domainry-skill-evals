@@ -1,0 +1,245 @@
+[
+  {
+    "stage": "authoring_contract",
+    "owner": "domainry-plane-authoring",
+    "note": "backend.report.object_sql_result_schema_invalid",
+    "terminal_state": "baseline_first_scoring_failure",
+    "attribution_status": "attributed",
+    "diagnostic": {
+      "code": "backend.report.object_sql_result_schema_invalid",
+      "message": "backend.report.object_sql_result_schema_invalid",
+      "path": "/reports/0/object_sql_v1/result_schema/3",
+      "file": "backend/model/crm-reporting-export.json",
+      "json_pointer": "/reports/0/object_sql_v1/result_schema/3",
+      "constraint": "report.runtime_contract",
+      "repair_hint": "replace the value at the reported file/JSON Pointer and rerun model plan",
+      "owner": "domainry-plane-authoring",
+      "stage": "authoring_contract",
+      "ledger_item": "crm/resource/reports.lead_details",
+      "ledger_path": "backend/model/crm-reporting-export.json",
+      "repair_facts": {
+        "artifact_path": ".domainry/builder/disposable/model-preflight-result.json",
+        "artifact_relative_to": "--project",
+        "operation": "replace",
+        "parameters": {
+          "alias": "estimated_amount",
+          "field": "object_sql_v1.result_schema[3]"
+        },
+        "rule_id": "report.runtime_contract"
+      }
+    },
+    "detail": {
+      "code": "backend.report.object_sql_result_schema_invalid",
+      "message": "backend.report.object_sql_result_schema_invalid",
+      "path": "/reports/0/object_sql_v1/result_schema/3",
+      "file": "backend/model/crm-reporting-export.json",
+      "json_pointer": "/reports/0/object_sql_v1/result_schema/3",
+      "constraint": "report.runtime_contract",
+      "repair_hint": "replace the value at the reported file/JSON Pointer and rerun model plan",
+      "owner": "domainry-plane-authoring",
+      "stage": "authoring_contract",
+      "ledger_item": "crm/resource/reports.lead_details",
+      "ledger_path": "backend/model/crm-reporting-export.json",
+      "repair_facts": {
+        "artifact_path": ".domainry/builder/disposable/model-preflight-result.json",
+        "artifact_relative_to": "--project",
+        "operation": "replace",
+        "parameters": {
+          "alias": "estimated_amount",
+          "field": "object_sql_v1.result_schema[3]"
+        },
+        "rule_id": "report.runtime_contract"
+      }
+    }
+  },
+  {
+    "stage": "authoring_contract",
+    "owner": "domainry-plane-authoring",
+    "note": "backend.report.object_sql_result_schema_invalid",
+    "terminal_state": "baseline_first_scoring_failure",
+    "attribution_status": "attributed",
+    "diagnostic": {
+      "code": "backend.report.object_sql_result_schema_invalid",
+      "message": "backend.report.object_sql_result_schema_invalid",
+      "path": "/reports/1/object_sql_v1/result_schema/0",
+      "file": "backend/model/crm-reporting-export.json",
+      "json_pointer": "/reports/1/object_sql_v1/result_schema/0",
+      "constraint": "report.runtime_contract",
+      "repair_hint": "replace the value at the reported file/JSON Pointer and rerun model plan",
+      "owner": "domainry-plane-authoring",
+      "stage": "authoring_contract",
+      "ledger_item": "crm/resource/reports.lead_funnel",
+      "ledger_path": "backend/model/crm-reporting-export.json",
+      "repair_facts": {
+        "artifact_path": ".domainry/builder/disposable/model-preflight-result.json",
+        "artifact_relative_to": "--project",
+        "operation": "replace",
+        "parameters": {
+          "alias": "estimated_amount_total",
+          "field": "object_sql_v1.result_schema[0]"
+        },
+        "rule_id": "report.runtime_contract"
+      }
+    },
+    "detail": {
+      "code": "backend.report.object_sql_result_schema_invalid",
+      "message": "backend.report.object_sql_result_schema_invalid",
+      "path": "/reports/1/object_sql_v1/result_schema/0",
+      "file": "backend/model/crm-reporting-export.json",
+      "json_pointer": "/reports/1/object_sql_v1/result_schema/0",
+      "constraint": "report.runtime_contract",
+      "repair_hint": "replace the value at the reported file/JSON Pointer and rerun model plan",
+      "owner": "domainry-plane-authoring",
+      "stage": "authoring_contract",
+      "ledger_item": "crm/resource/reports.lead_funnel",
+      "ledger_path": "backend/model/crm-reporting-export.json",
+      "repair_facts": {
+        "artifact_path": ".domainry/builder/disposable/model-preflight-result.json",
+        "artifact_relative_to": "--project",
+        "operation": "replace",
+        "parameters": {
+          "alias": "estimated_amount_total",
+          "field": "object_sql_v1.result_schema[0]"
+        },
+        "rule_id": "report.runtime_contract"
+      }
+    }
+  },
+  {
+    "stage": "capability_assembly",
+    "owner": "report",
+    "note": "backend.report.object_sql_result_schema_invalid at object_sql_v1.result_schema[3]",
+    "terminal_state": "baseline_first_scoring_failure",
+    "attribution_status": "attributed",
+    "diagnostic": {
+      "code": "report.definition.object_sql_invalid",
+      "message": "backend.report.object_sql_result_schema_invalid at object_sql_v1.result_schema[3]",
+      "path": "backend/model/crm-reporting-export.json#/modules/crm/features/crm_reporting_export/reports/lead_details/object_sql_v1",
+      "file": "backend/model/crm-reporting-export.json",
+      "json_pointer": "/modules/crm/features/crm_reporting_export/reports/lead_details/object_sql_v1",
+      "constraint": "report.definition.object_sql_invalid",
+      "repair_hint": "repair the reported constraint at the file/JSON Pointer and rerun model plan",
+      "owner": "report",
+      "stage": "capability_assembly",
+      "repair_facts": {
+        "artifact_path": ".domainry/builder/disposable/model-preflight-result.json",
+        "artifact_relative_to": "--project",
+        "candidate_item": "crm/resource/reports.lead_details",
+        "candidate_json_pointer": "/emits/0",
+        "owner_field_path": "$.candidate.value.object_sql_v1",
+        "severity": "error",
+        "source_file": "backend/model/crm-reporting-export.json",
+        "source_json_pointer": "/modules/crm/features/crm_reporting_export/reports/lead_details/object_sql_v1"
+      }
+    },
+    "detail": {
+      "code": "report.definition.object_sql_invalid",
+      "message": "backend.report.object_sql_result_schema_invalid at object_sql_v1.result_schema[3]",
+      "path": "backend/model/crm-reporting-export.json#/modules/crm/features/crm_reporting_export/reports/lead_details/object_sql_v1",
+      "file": "backend/model/crm-reporting-export.json",
+      "json_pointer": "/modules/crm/features/crm_reporting_export/reports/lead_details/object_sql_v1",
+      "constraint": "report.definition.object_sql_invalid",
+      "repair_hint": "repair the reported constraint at the file/JSON Pointer and rerun model plan",
+      "owner": "report",
+      "stage": "capability_assembly",
+      "repair_facts": {
+        "artifact_path": ".domainry/builder/disposable/model-preflight-result.json",
+        "artifact_relative_to": "--project",
+        "candidate_item": "crm/resource/reports.lead_details",
+        "candidate_json_pointer": "/emits/0",
+        "owner_field_path": "$.candidate.value.object_sql_v1",
+        "severity": "error",
+        "source_file": "backend/model/crm-reporting-export.json",
+        "source_json_pointer": "/modules/crm/features/crm_reporting_export/reports/lead_details/object_sql_v1"
+      }
+    }
+  },
+  {
+    "stage": "capability_assembly",
+    "owner": "report",
+    "note": "backend.report.object_sql_result_schema_invalid at object_sql_v1.result_schema[0]",
+    "terminal_state": "baseline_first_scoring_failure",
+    "attribution_status": "attributed",
+    "diagnostic": {
+      "code": "report.definition.object_sql_invalid",
+      "message": "backend.report.object_sql_result_schema_invalid at object_sql_v1.result_schema[0]",
+      "path": "backend/model/crm-reporting-export.json#/modules/crm/features/crm_reporting_export/reports/lead_funnel/object_sql_v1",
+      "file": "backend/model/crm-reporting-export.json",
+      "json_pointer": "/modules/crm/features/crm_reporting_export/reports/lead_funnel/object_sql_v1",
+      "constraint": "report.definition.object_sql_invalid",
+      "repair_hint": "repair the reported constraint at the file/JSON Pointer and rerun model plan",
+      "owner": "report",
+      "stage": "capability_assembly",
+      "repair_facts": {
+        "artifact_path": ".domainry/builder/disposable/model-preflight-result.json",
+        "artifact_relative_to": "--project",
+        "candidate_item": "crm/resource/reports.lead_funnel",
+        "candidate_json_pointer": "/emits/0",
+        "owner_field_path": "$.candidate.value.object_sql_v1",
+        "severity": "error",
+        "source_file": "backend/model/crm-reporting-export.json",
+        "source_json_pointer": "/modules/crm/features/crm_reporting_export/reports/lead_funnel/object_sql_v1"
+      }
+    },
+    "detail": {
+      "code": "report.definition.object_sql_invalid",
+      "message": "backend.report.object_sql_result_schema_invalid at object_sql_v1.result_schema[0]",
+      "path": "backend/model/crm-reporting-export.json#/modules/crm/features/crm_reporting_export/reports/lead_funnel/object_sql_v1",
+      "file": "backend/model/crm-reporting-export.json",
+      "json_pointer": "/modules/crm/features/crm_reporting_export/reports/lead_funnel/object_sql_v1",
+      "constraint": "report.definition.object_sql_invalid",
+      "repair_hint": "repair the reported constraint at the file/JSON Pointer and rerun model plan",
+      "owner": "report",
+      "stage": "capability_assembly",
+      "repair_facts": {
+        "artifact_path": ".domainry/builder/disposable/model-preflight-result.json",
+        "artifact_relative_to": "--project",
+        "candidate_item": "crm/resource/reports.lead_funnel",
+        "candidate_json_pointer": "/emits/0",
+        "owner_field_path": "$.candidate.value.object_sql_v1",
+        "severity": "error",
+        "source_file": "backend/model/crm-reporting-export.json",
+        "source_json_pointer": "/modules/crm/features/crm_reporting_export/reports/lead_funnel/object_sql_v1"
+      }
+    }
+  },
+  {
+    "stage": "runtime_manifest",
+    "owner": "domainry-plane-compiler",
+    "note": "compiled Runtime manifest is invalid: reports[0].object_sql_v1.result_schema[3]: backend.report.object_sql_result_schema_invalid; reports[1].object_sql_v1.result_schema[0]: backend.report.object_sql_result_schema_invalid",
+    "terminal_state": "baseline_first_scoring_failure",
+    "attribution_status": "attributed",
+    "diagnostic": {
+      "code": "ledger.runtime_manifest_invalid",
+      "message": "compiled Runtime manifest is invalid: reports[0].object_sql_v1.result_schema[3]: backend.report.object_sql_result_schema_invalid; reports[1].object_sql_v1.result_schema[0]: backend.report.object_sql_result_schema_invalid",
+      "file": "backend/model/00-project.json",
+      "constraint": "ledger.runtime_manifest_invalid",
+      "repair_hint": "repair the reported constraint at the file/JSON Pointer and rerun model plan",
+      "owner": "domainry-plane-compiler",
+      "stage": "runtime_manifest",
+      "ledger_item": "project/project/project",
+      "ledger_path": "backend/model/00-project.json",
+      "repair_facts": {
+        "artifact_path": ".domainry/builder/disposable/model-preflight-result.json",
+        "artifact_relative_to": "--project",
+        "compile_before_publish": true
+      }
+    },
+    "detail": {
+      "code": "ledger.runtime_manifest_invalid",
+      "message": "compiled Runtime manifest is invalid: reports[0].object_sql_v1.result_schema[3]: backend.report.object_sql_result_schema_invalid; reports[1].object_sql_v1.result_schema[0]: backend.report.object_sql_result_schema_invalid",
+      "file": "backend/model/00-project.json",
+      "constraint": "ledger.runtime_manifest_invalid",
+      "repair_hint": "repair the reported constraint at the file/JSON Pointer and rerun model plan",
+      "owner": "domainry-plane-compiler",
+      "stage": "runtime_manifest",
+      "ledger_item": "project/project/project",
+      "ledger_path": "backend/model/00-project.json",
+      "repair_facts": {
+        "artifact_path": ".domainry/builder/disposable/model-preflight-result.json",
+        "artifact_relative_to": "--project",
+        "compile_before_publish": true
+      }
+    }
+  }
+]

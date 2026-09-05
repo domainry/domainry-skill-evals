@@ -1,0 +1,42 @@
+{
+  "family": "model_capability",
+  "command": "/bin/zsh -lc '/private/tmp/domainry-m1-v26-runtime-closure-baseline-11/codex-home/skills/domainry-builder-v1/bin/domainry-cli model capability --json --project /private/tmp/domainry-m1-v26-runtime-closure-baseline-11/project --key records.export'",
+  "exit_code": 0,
+  "output": {
+    "category": {
+      "key": "records.export",
+      "name": "Record export",
+      "description": "Request one authorized record export; Runtime owns delivery and completion handling."
+    },
+    "contracts": [
+      {
+        "kind": "runtime.api_operations",
+        "key": "record_export",
+        "schema": {
+          "contract_hash": "c9507097c19d42c9b4268bf2f8ccd3f927f934dd3c800f2293880024fc127a90",
+          "contract_version": "runtime-model-api-v1",
+          "operations": {
+            "record_export": {
+              "arguments": [
+                "fields",
+                "filter_summary",
+                "filters",
+                "masking_policy",
+                "objectKey",
+                "page",
+                "page_size",
+                "reason",
+                "sort"
+              ],
+              "domain": "records",
+              "result_schema": "file"
+            }
+          }
+        }
+      }
+    ]
+  },
+  "raw_output": "{\"category\":{\"key\":\"records.export\",\"name\":\"Record export\",\"description\":\"Request one authorized record export; Runtime owns delivery and completion handling.\"},\"contracts\":[{\"kind\":\"runtime.api_operations\",\"key\":\"record_export\",\"schema\":{\"contract_hash\":\"c9507097c19d42c9b4268bf2f8ccd3f927f934dd3c800f2293880024fc127a90\",\"contract_version\":\"runtime-model-api-v1\",\"operations\":{\"record_export\":{\"arguments\":[\"fields\",\"filter_summary\",\"filters\",\"masking_policy\",\"objectKey\",\"page\",\"page_size\",\"reason\",\"sort\"],\"domain\":\"records\",\"result_schema\":\"file\"}}}}]}\n",
+  "event_item_id": "item_18",
+  "event_line": 37
+}

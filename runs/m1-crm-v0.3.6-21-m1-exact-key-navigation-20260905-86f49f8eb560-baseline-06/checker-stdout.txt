@@ -1,0 +1,753 @@
+{
+  "contract_version": "domainry-m1-evaluator-result-v3",
+  "pass": false,
+  "runtime_manifest": "/private/tmp/domainry-m1-v21-exact-key-baseline-06/project/.domainry/builder/project-delivery/runtime-manifest.json",
+  "fresh_cohort_seed_rows": 0,
+  "business_flow_exit_code": 1,
+  "business_flows": {
+    "BF01": false,
+    "BF02": false,
+    "BF03": false,
+    "BF04": false,
+    "BF05": false,
+    "BF06": false,
+    "BF07": false,
+    "BF08": false
+  },
+  "business_flow_evidence": {
+    "verify_state": "failed",
+    "proof_ok": false,
+    "declared_flow_ids": [
+      "BF01",
+      "BF02",
+      "BF03",
+      "BF04",
+      "BF05",
+      "BF06",
+      "BF07",
+      "BF08"
+    ],
+    "traced_flow_ids": [
+      "BF01",
+      "BF02",
+      "BF03",
+      "BF04",
+      "BF05",
+      "BF06",
+      "BF07",
+      "BF08"
+    ],
+    "initial_business_flow_status": null,
+    "restart_business_flow_status": null,
+    "same_cohort_identity": false,
+    "final_runtime_state": null,
+    "structured_evidence_contract": null,
+    "structured_phase_flow_validity": {
+      "initial": {
+        "BF01": false,
+        "BF02": false,
+        "BF03": false,
+        "BF04": false,
+        "BF05": false,
+        "BF06": false,
+        "BF07": false,
+        "BF08": false
+      },
+      "restart": {
+        "BF01": false,
+        "BF02": false,
+        "BF03": false,
+        "BF04": false,
+        "BF05": false,
+        "BF06": false,
+        "BF07": false,
+        "BF08": false
+      }
+    },
+    "structured_phase_flow_diagnostics": {
+      "initial": {
+        "BF01": [
+          "evidence_contract_missing_or_invalid"
+        ],
+        "BF02": [
+          "evidence_contract_missing_or_invalid"
+        ],
+        "BF03": [
+          "evidence_contract_missing_or_invalid"
+        ],
+        "BF04": [
+          "evidence_contract_missing_or_invalid"
+        ],
+        "BF05": [
+          "evidence_contract_missing_or_invalid"
+        ],
+        "BF06": [
+          "evidence_contract_missing_or_invalid"
+        ],
+        "BF07": [
+          "evidence_contract_missing_or_invalid"
+        ],
+        "BF08": [
+          "evidence_contract_missing_or_invalid"
+        ]
+      },
+      "restart": {
+        "BF01": [
+          "evidence_contract_missing_or_invalid"
+        ],
+        "BF02": [
+          "evidence_contract_missing_or_invalid"
+        ],
+        "BF03": [
+          "evidence_contract_missing_or_invalid"
+        ],
+        "BF04": [
+          "evidence_contract_missing_or_invalid"
+        ],
+        "BF05": [
+          "evidence_contract_missing_or_invalid"
+        ],
+        "BF06": [
+          "evidence_contract_missing_or_invalid"
+        ],
+        "BF07": [
+          "evidence_contract_missing_or_invalid"
+        ],
+        "BF08": [
+          "evidence_contract_missing_or_invalid"
+        ]
+      }
+    }
+  },
+  "structured_business_flow_evidence": null,
+  "rejected_structured_business_flow_evidence": null,
+  "results": [
+    {
+      "id": "M01",
+      "priority": "P0",
+      "status": "fail",
+      "mechanism": "reuse",
+      "reuse_eligible": true,
+      "mechanism_detail": {
+        "classification": "reuse",
+        "evidence_sources": [
+          "manifest.objects"
+        ],
+        "reason": "only Runtime-owned manifest and operation sources participate"
+      },
+      "silent_downgrade": false,
+      "evidence": {
+        "manifest_facts": {
+          "schema": true
+        },
+        "manifest_fact_sources": {
+          "schema": "manifest.objects"
+        },
+        "business_flows": {
+          "BF01": false
+        },
+        "requirement_id": "1",
+        "structured_steps": {
+          "initial": {
+            "BF01": []
+          },
+          "restart": {
+            "BF01": []
+          }
+        }
+      }
+    },
+    {
+      "id": "M02",
+      "priority": "P0",
+      "status": "fail",
+      "mechanism": "reuse",
+      "reuse_eligible": true,
+      "mechanism_detail": {
+        "classification": "reuse",
+        "evidence_sources": [
+          "manifest.state_machines"
+        ],
+        "reason": "only Runtime-owned manifest and operation sources participate"
+      },
+      "silent_downgrade": false,
+      "evidence": {
+        "manifest_facts": {
+          "lead_state_machine": true
+        },
+        "manifest_fact_sources": {
+          "lead_state_machine": "manifest.state_machines"
+        },
+        "business_flows": {
+          "BF01": false,
+          "BF02": false
+        },
+        "requirement_id": "2",
+        "structured_steps": {
+          "initial": {
+            "BF01": [],
+            "BF02": []
+          },
+          "restart": {
+            "BF01": [],
+            "BF02": []
+          }
+        }
+      }
+    },
+    {
+      "id": "M03",
+      "priority": "P0",
+      "status": "fail",
+      "mechanism": "reuse",
+      "reuse_eligible": true,
+      "mechanism_detail": {
+        "classification": "reuse",
+        "evidence_sources": [],
+        "reason": "only Runtime-owned manifest and operation sources participate"
+      },
+      "silent_downgrade": false,
+      "evidence": {
+        "manifest_facts": {},
+        "manifest_fact_sources": {},
+        "business_flows": {
+          "BF01": false
+        },
+        "requirement_id": "3",
+        "structured_steps": {
+          "initial": {
+            "BF01": []
+          },
+          "restart": {
+            "BF01": []
+          }
+        }
+      }
+    },
+    {
+      "id": "M04",
+      "priority": "P0",
+      "status": "fail",
+      "mechanism": "reuse",
+      "reuse_eligible": true,
+      "mechanism_detail": {
+        "classification": "reuse",
+        "evidence_sources": [
+          "manifest.state_machines"
+        ],
+        "reason": "only Runtime-owned manifest and operation sources participate"
+      },
+      "silent_downgrade": false,
+      "evidence": {
+        "manifest_facts": {
+          "advance_action": true
+        },
+        "manifest_fact_sources": {
+          "advance_action": "manifest.state_machines"
+        },
+        "business_flows": {
+          "BF01": false
+        },
+        "requirement_id": "4",
+        "structured_steps": {
+          "initial": {
+            "BF01": []
+          },
+          "restart": {
+            "BF01": []
+          }
+        }
+      }
+    },
+    {
+      "id": "M05",
+      "priority": "P0",
+      "status": "fail",
+      "mechanism": "reuse",
+      "reuse_eligible": true,
+      "mechanism_detail": {
+        "classification": "reuse",
+        "evidence_sources": [],
+        "reason": "only Runtime-owned manifest and operation sources participate"
+      },
+      "silent_downgrade": false,
+      "evidence": {
+        "manifest_facts": {},
+        "manifest_fact_sources": {},
+        "business_flows": {
+          "BF01": false
+        },
+        "requirement_id": "5",
+        "structured_steps": {
+          "initial": {
+            "BF01": []
+          },
+          "restart": {
+            "BF01": []
+          }
+        }
+      }
+    },
+    {
+      "id": "M06",
+      "priority": "P0",
+      "status": "fail",
+      "mechanism": "reuse",
+      "reuse_eligible": false,
+      "mechanism_detail": {
+        "classification": "reuse",
+        "evidence_sources": [],
+        "reason": "only Runtime-owned manifest and operation sources participate"
+      },
+      "silent_downgrade": false,
+      "evidence": {
+        "manifest_facts": {},
+        "manifest_fact_sources": {},
+        "business_flows": {
+          "BF02": false,
+          "BF03": false
+        },
+        "requirement_id": "6",
+        "structured_steps": {
+          "initial": {
+            "BF02": [],
+            "BF03": []
+          },
+          "restart": {
+            "BF02": [],
+            "BF03": []
+          }
+        }
+      }
+    },
+    {
+      "id": "M07",
+      "priority": "P0",
+      "status": "fail",
+      "mechanism": "reuse",
+      "reuse_eligible": false,
+      "mechanism_detail": {
+        "classification": "reuse",
+        "evidence_sources": [
+          "manifest.workflows"
+        ],
+        "reason": "only Runtime-owned manifest and operation sources participate"
+      },
+      "silent_downgrade": false,
+      "evidence": {
+        "manifest_facts": {
+          "approval_workflow": true
+        },
+        "manifest_fact_sources": {
+          "approval_workflow": "manifest.workflows"
+        },
+        "business_flows": {
+          "BF03": false,
+          "BF04": false
+        },
+        "requirement_id": "7",
+        "structured_steps": {
+          "initial": {
+            "BF03": [],
+            "BF04": []
+          },
+          "restart": {
+            "BF03": [],
+            "BF04": []
+          }
+        }
+      }
+    },
+    {
+      "id": "M08",
+      "priority": "P0",
+      "status": "fail",
+      "mechanism": "reuse",
+      "reuse_eligible": true,
+      "mechanism_detail": {
+        "classification": "reuse",
+        "evidence_sources": [],
+        "reason": "only Runtime-owned manifest and operation sources participate"
+      },
+      "silent_downgrade": false,
+      "evidence": {
+        "manifest_facts": {},
+        "manifest_fact_sources": {},
+        "business_flows": {
+          "BF02": false,
+          "BF03": false
+        },
+        "requirement_id": "8",
+        "structured_steps": {
+          "initial": {
+            "BF02": [],
+            "BF03": []
+          },
+          "restart": {
+            "BF02": [],
+            "BF03": []
+          }
+        }
+      }
+    },
+    {
+      "id": "M09",
+      "priority": "P1",
+      "status": "fail",
+      "mechanism": "reuse",
+      "reuse_eligible": true,
+      "mechanism_detail": {
+        "classification": "reuse",
+        "evidence_sources": [],
+        "reason": "only Runtime-owned manifest and operation sources participate"
+      },
+      "silent_downgrade": false,
+      "evidence": {
+        "manifest_facts": {},
+        "manifest_fact_sources": {},
+        "business_flows": {
+          "BF03": false,
+          "BF04": false
+        },
+        "requirement_id": "9",
+        "structured_steps": {
+          "initial": {
+            "BF03": [],
+            "BF04": []
+          },
+          "restart": {
+            "BF03": [],
+            "BF04": []
+          }
+        }
+      }
+    },
+    {
+      "id": "M10",
+      "priority": "P0",
+      "status": "fail",
+      "mechanism": "reuse",
+      "reuse_eligible": true,
+      "mechanism_detail": {
+        "classification": "reuse",
+        "evidence_sources": [],
+        "reason": "only Runtime-owned manifest and operation sources participate"
+      },
+      "silent_downgrade": false,
+      "evidence": {
+        "manifest_facts": {},
+        "manifest_fact_sources": {},
+        "business_flows": {
+          "BF02": false
+        },
+        "requirement_id": "10",
+        "structured_steps": {
+          "initial": {
+            "BF02": []
+          },
+          "restart": {
+            "BF02": []
+          }
+        }
+      }
+    },
+    {
+      "id": "M11",
+      "priority": "P0",
+      "status": "fail",
+      "mechanism": "reuse",
+      "reuse_eligible": true,
+      "mechanism_detail": {
+        "classification": "reuse",
+        "evidence_sources": [],
+        "reason": "only Runtime-owned manifest and operation sources participate"
+      },
+      "silent_downgrade": false,
+      "evidence": {
+        "manifest_facts": {},
+        "manifest_fact_sources": {},
+        "business_flows": {
+          "BF01": false,
+          "BF05": false
+        },
+        "requirement_id": "11",
+        "structured_steps": {
+          "initial": {
+            "BF01": [],
+            "BF05": []
+          },
+          "restart": {
+            "BF01": [],
+            "BF05": []
+          }
+        }
+      }
+    },
+    {
+      "id": "M12",
+      "priority": "P0",
+      "status": "fail",
+      "mechanism": "reuse",
+      "reuse_eligible": true,
+      "mechanism_detail": {
+        "classification": "reuse",
+        "evidence_sources": [],
+        "reason": "only Runtime-owned manifest and operation sources participate"
+      },
+      "silent_downgrade": false,
+      "evidence": {
+        "manifest_facts": {},
+        "manifest_fact_sources": {},
+        "business_flows": {
+          "BF05": false
+        },
+        "requirement_id": "12",
+        "structured_steps": {
+          "initial": {
+            "BF05": []
+          },
+          "restart": {
+            "BF05": []
+          }
+        }
+      }
+    },
+    {
+      "id": "M13",
+      "priority": "P1",
+      "status": "fail",
+      "mechanism": "reuse",
+      "reuse_eligible": true,
+      "mechanism_detail": {
+        "classification": "reuse",
+        "evidence_sources": [],
+        "reason": "only Runtime-owned manifest and operation sources participate"
+      },
+      "silent_downgrade": false,
+      "evidence": {
+        "manifest_facts": {},
+        "manifest_fact_sources": {},
+        "business_flows": {
+          "BF01": false,
+          "BF03": false,
+          "BF04": false
+        },
+        "requirement_id": "13",
+        "structured_steps": {
+          "initial": {
+            "BF01": [],
+            "BF03": [],
+            "BF04": []
+          },
+          "restart": {
+            "BF01": [],
+            "BF03": [],
+            "BF04": []
+          }
+        }
+      }
+    },
+    {
+      "id": "M14",
+      "priority": "P1",
+      "status": "fail",
+      "mechanism": "reuse",
+      "reuse_eligible": true,
+      "mechanism_detail": {
+        "classification": "reuse",
+        "evidence_sources": [
+          "manifest.scheduler_definitions"
+        ],
+        "reason": "only Runtime-owned manifest and operation sources participate"
+      },
+      "silent_downgrade": false,
+      "evidence": {
+        "manifest_facts": {
+          "stale_scheduler": true
+        },
+        "manifest_fact_sources": {
+          "stale_scheduler": "manifest.scheduler_definitions"
+        },
+        "business_flows": {
+          "BF06": false
+        },
+        "requirement_id": "14",
+        "structured_steps": {
+          "initial": {
+            "BF06": []
+          },
+          "restart": {
+            "BF06": []
+          }
+        }
+      }
+    },
+    {
+      "id": "M15",
+      "priority": "P0",
+      "status": "fail",
+      "mechanism": "reuse",
+      "reuse_eligible": true,
+      "mechanism_detail": {
+        "classification": "reuse",
+        "evidence_sources": [
+          "manifest.reports"
+        ],
+        "reason": "only Runtime-owned manifest and operation sources participate"
+      },
+      "silent_downgrade": false,
+      "evidence": {
+        "manifest_facts": {
+          "funnel_report": false
+        },
+        "manifest_fact_sources": {
+          "funnel_report": "manifest.reports"
+        },
+        "business_flows": {
+          "BF07": false
+        },
+        "requirement_id": "15",
+        "structured_steps": {
+          "initial": {
+            "BF07": []
+          },
+          "restart": {
+            "BF07": []
+          }
+        }
+      }
+    },
+    {
+      "id": "M16",
+      "priority": "P0",
+      "status": "fail",
+      "mechanism": "reuse",
+      "reuse_eligible": true,
+      "mechanism_detail": {
+        "classification": "reuse",
+        "evidence_sources": [
+          "manifest.report_export_controls"
+        ],
+        "reason": "only Runtime-owned manifest and operation sources participate"
+      },
+      "silent_downgrade": true,
+      "evidence": {
+        "manifest_facts": {
+          "export_control": true
+        },
+        "manifest_fact_sources": {
+          "export_control": "manifest.report_export_controls"
+        },
+        "business_flows": {
+          "BF08": false
+        },
+        "requirement_id": "16",
+        "structured_steps": {
+          "initial": {
+            "BF08": []
+          },
+          "restart": {
+            "BF08": []
+          }
+        }
+      }
+    },
+    {
+      "id": "M17",
+      "priority": "P0",
+      "status": "fail",
+      "mechanism": "reuse",
+      "reuse_eligible": true,
+      "mechanism_detail": {
+        "classification": "reuse",
+        "evidence_sources": [
+          "manifest.report_export_controls"
+        ],
+        "reason": "only Runtime-owned manifest and operation sources participate"
+      },
+      "silent_downgrade": false,
+      "evidence": {
+        "manifest_facts": {
+          "detail_report": true
+        },
+        "manifest_fact_sources": {
+          "detail_report": "manifest.report_export_controls"
+        },
+        "business_flows": {
+          "BF05": false
+        },
+        "requirement_id": "17",
+        "structured_steps": {
+          "initial": {
+            "BF05": []
+          },
+          "restart": {
+            "BF05": []
+          }
+        }
+      }
+    },
+    {
+      "id": "M18",
+      "priority": "P1",
+      "status": "fail",
+      "mechanism": "reuse",
+      "reuse_eligible": true,
+      "mechanism_detail": {
+        "classification": "reuse",
+        "evidence_sources": [],
+        "reason": "only Runtime-owned manifest and operation sources participate"
+      },
+      "silent_downgrade": false,
+      "evidence": {
+        "manifest_facts": {},
+        "manifest_fact_sources": {},
+        "business_flows": {
+          "BF05": false
+        },
+        "requirement_id": "18",
+        "structured_steps": {
+          "initial": {
+            "BF05": []
+          },
+          "restart": {
+            "BF05": []
+          }
+        }
+      }
+    },
+    {
+      "id": "M19",
+      "priority": "P0",
+      "status": "fail",
+      "mechanism": "reuse",
+      "reuse_eligible": true,
+      "mechanism_detail": {
+        "classification": "reuse",
+        "evidence_sources": [],
+        "reason": "only Runtime-owned manifest and operation sources participate"
+      },
+      "silent_downgrade": false,
+      "evidence": {
+        "manifest_facts": {},
+        "manifest_fact_sources": {},
+        "business_flows": {
+          "BF01": false,
+          "BF05": false
+        },
+        "requirement_id": "19",
+        "structured_steps": {
+          "initial": {
+            "BF01": [],
+            "BF05": []
+          },
+          "restart": {
+            "BF01": [],
+            "BF05": []
+          }
+        }
+      }
+    }
+  ],
+  "generated_epoch": 1788580918
+}

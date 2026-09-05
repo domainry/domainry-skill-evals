@@ -1,0 +1,26 @@
+[
+  {
+    "stage": "model_loader",
+    "owner": "domainry-cli",
+    "note": "modules must be a non-empty object keyed by module",
+    "terminal_state": "baseline_first_scoring_failure",
+    "attribution_status": "attributed",
+    "diagnostic": {
+      "code": "model.modules_invalid",
+      "message": "modules must be a non-empty object keyed by module",
+      "path": "backend/model/00-project.json#modules",
+      "file": "backend/model/00-project.json",
+      "json_pointer": "/modules",
+      "constraint": "model.modules_invalid",
+      "repair_hint": "repair the reported constraint at the file/JSON Pointer and rerun model plan",
+      "owner": "domainry-cli",
+      "stage": "model_loader",
+      "ledger_path": "backend/model/00-project.json#modules",
+      "repair_facts": {
+        "artifact_path": ".domainry/builder/disposable/model-preflight-result.json",
+        "artifact_relative_to": "--project",
+        "source_file": "backend/model/00-project.json"
+      }
+    }
+  }
+]

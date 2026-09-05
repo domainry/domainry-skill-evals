@@ -1,0 +1,73 @@
+{
+  "contract_version": "domainry-eval-progress-v1",
+  "run_id": "m1-crm-v0.3.6-28-m1-bootstrap-roles-20260905-bc9783f3127f-baseline-13",
+  "run_kind": "baseline",
+  "status": "running",
+  "lifecycle_phase": "agent",
+  "lifecycle_state": "agent_running",
+  "lifecycle_phase_timing": {
+    "agent": {
+      "started_epoch": 1788600628.317782,
+      "ended_epoch": null
+    },
+    "checker": {
+      "started_epoch": null,
+      "ended_epoch": null
+    },
+    "scorer": {
+      "started_epoch": null,
+      "ended_epoch": null
+    },
+    "terminal": {
+      "started_epoch": null,
+      "ended_epoch": null
+    }
+  },
+  "delivery_stage": "model",
+  "delivery_stage_source": "agent-stages.json",
+  "delivery_stage_timing": {
+    "requirements": {
+      "started_epoch": 1788600659.0,
+      "ended_epoch": 1788600792.0
+    },
+    "model": {
+      "started_epoch": 1788600792.0,
+      "ended_epoch": null
+    },
+    "apply": {
+      "started_epoch": null,
+      "ended_epoch": null
+    },
+    "verify": {
+      "started_epoch": null,
+      "ended_epoch": null
+    }
+  },
+  "delivery_stage_timing_source": "agent-stages.json",
+  "delivery_stage_timing_status": "valid",
+  "wall_elapsed_seconds": 314.042,
+  "domainry_cli": {
+    "invocations_total": 4,
+    "completed_total": 4,
+    "failed_total": 0,
+    "retries_total": 0,
+    "latest": {
+      "subcommand": "model_capability",
+      "status": "passed",
+      "exit_code": 0,
+      "output_state": null,
+      "observed_epoch": 1788600909.192658
+    }
+  },
+  "agent": {
+    "last_activity_epoch": 1788600909.192658,
+    "last_activity_status": "observed",
+    "total_tokens": null,
+    "total_tokens_status": "unavailable"
+  },
+  "first_failure_seal_triggered": false,
+  "checker_allowed": null,
+  "checker_decision_reason": null,
+  "scorecard": null,
+  "updated_epoch": 1788600942.3596091
+}

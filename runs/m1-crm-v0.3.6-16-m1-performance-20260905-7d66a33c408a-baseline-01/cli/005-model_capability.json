@@ -1,0 +1,46 @@
+{
+  "family": "model_capability",
+  "command": "/bin/zsh -lc '/private/tmp/domainry-m1-v16-performance-baseline-01/codex-home/skills/domainry-builder-v1/bin/domainry-cli model capability --json --project /private/tmp/domainry-m1-v16-performance-baseline-01/project --key workflow.authoring'",
+  "exit_code": 0,
+  "output": {
+    "category": {
+      "key": "workflow.authoring",
+      "name": "Workflow authoring",
+      "description": "Author and validate one complete workflow definition and inspect the embedded graph, node, resolver, trigger, condition, and edge schemas."
+    },
+    "contracts": [
+      {
+        "kind": "runtime.authoring_capability",
+        "key": "workflow.definition",
+        "lifecycle": "source_controlled_json",
+        "schema": {
+          "$ref": "#/$defs/workflow_definition"
+        },
+        "references": [
+          {
+            "input_json_pointer": "/payload/trigger_contract/object_key",
+            "kind": "object_key"
+          },
+          {
+            "input_json_pointer": "/payload/trigger_contract/field_key",
+            "kind": "field_key",
+            "scope_from": "/payload/trigger_contract/object_key"
+          },
+          {
+            "input_json_pointer": "/payload/graph/nodes/*/contract/action/action_key",
+            "kind": "action_key"
+          }
+        ]
+      }
+    ],
+    "validations": [
+      {
+        "kind": "workflow.definition",
+        "description": "Validate one complete project workflow definition."
+      }
+    ]
+  },
+  "raw_output": "{\"category\":{\"key\":\"workflow.authoring\",\"name\":\"Workflow authoring\",\"description\":\"Author and validate one complete workflow definition and inspect the embedded graph, node, resolver, trigger, condition, and edge schemas.\"},\"contracts\":[{\"kind\":\"runtime.authoring_capability\",\"key\":\"workflow.definition\",\"lifecycle\":\"source_controlled_json\",\"schema\":{\"$ref\":\"#/$defs/workflow_definition\"},\"references\":[{\"input_json_pointer\":\"/payload/trigger_contract/object_key\",\"kind\":\"object_key\"},{\"input_json_pointer\":\"/payload/trigger_contract/field_key\",\"kind\":\"field_key\",\"scope_from\":\"/payload/trigger_contract/object_key\"},{\"input_json_pointer\":\"/payload/graph/nodes/*/contract/action/action_key\",\"kind\":\"action_key\"}]}],\"validations\":[{\"kind\":\"workflow.definition\",\"description\":\"Validate one complete project workflow definition.\"}]}\n",
+  "event_item_id": "item_37",
+  "event_line": 75
+}

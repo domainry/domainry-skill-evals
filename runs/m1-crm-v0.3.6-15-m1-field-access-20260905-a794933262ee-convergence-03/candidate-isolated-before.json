@@ -1,0 +1,16 @@
+{
+  "apply_target_args": ["--service", "http://127.0.0.1:8283"],
+  "apply_target_flag": "--service",
+  "apply_target_value": "http://127.0.0.1:8283",
+  "candidate_id": "v0.3.6-15-m1-field-access-20260905+a794933262ee",
+  "cli": "/private/tmp/domainry-m1-v15-convergence3.9fZhO5/codex-home/skills/domainry-builder-v1/bin/domainry-cli",
+  "cli_binary_sha256": "b91b86d0ea3eebe0d3377bf2cc0991b1ca407ae4d6f512df5086b29630d984e4",
+  "package_metadata_sha256": "827cb9eee56cbd5daec8370cbcd179cacb6763bef22ebfd019c466bacccbe593",
+  "runtime_api_contract_hash": "4fe655cbfd4fa0bc0b0c04c89b86926fc6aceb059c9fccf5b09eec9b459330f7",
+  "runtime_api_contract_version": "runtime-domain-api-v1",
+  "skill_identity_sha256": "ebd64d96025aeabc3ec803e2cef1d6330e670533269edbfc0dda8172909aaceb",
+  "skill_name": "domainry-builder-v1",
+  "skill_root": "/private/tmp/domainry-m1-v15-convergence3.9fZhO5/codex-home/skills/domainry-builder-v1",
+  "skill_tree_sha256": "a794933262ee0de59a915d54e1a32ff44226908b51d02b3dd2439f89c0dd092d",
+  "skill_version": "v0.3.6-15-m1-field-access-20260905"
+}

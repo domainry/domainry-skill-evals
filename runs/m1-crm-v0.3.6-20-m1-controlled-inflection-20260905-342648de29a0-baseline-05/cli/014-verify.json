@@ -1,0 +1,44 @@
+{
+  "family": "verify",
+  "command": "/bin/zsh -lc '/private/tmp/domainry-m1-v20-inflection-baseline-05/codex-home/skills/domainry-builder-v1/bin/domainry-cli verify --json --project /private/tmp/domainry-m1-v20-inflection-baseline-05/project --address 127.0.0.1:19286'",
+  "exit_code": 1,
+  "output": {
+    "contract_version": "domainry-project-verify-v2",
+    "error": "finalization receipt is stale for current project-owned source",
+    "state": "failed",
+    "telemetry": {
+      "contract_version": "domainry-verify-telemetry-v1",
+      "elapsed_ms": 73,
+      "cache": {
+        "signed_runtime_package": false,
+        "verification_receipt": false
+      },
+      "cache_misses": {
+        "verification_receipt": "verification receipt is missing"
+      },
+      "stages": [
+        {
+          "name": "validate reusable verification and signed Runtime package",
+          "status": "done",
+          "elapsed_ms": 0,
+          "owner": "domainry-runtime"
+        },
+        {
+          "name": "run structural checks and complete backend tests",
+          "status": "failed",
+          "elapsed_ms": 73,
+          "owner": "domainry-builder"
+        }
+      ],
+      "first_failure": {
+        "name": "run structural checks and complete backend tests",
+        "status": "failed",
+        "elapsed_ms": 73,
+        "owner": "domainry-builder"
+      }
+    }
+  },
+  "raw_output": "[domainry] verify: run structural checks and complete backend tests failed (73ms)\n{\"contract_version\":\"domainry-project-verify-v2\",\"error\":\"finalization receipt is stale for current project-owned source\",\"state\":\"failed\",\"telemetry\":{\"contract_version\":\"domainry-verify-telemetry-v1\",\"elapsed_ms\":73,\"cache\":{\"signed_runtime_package\":false,\"verification_receipt\":false},\"cache_misses\":{\"verification_receipt\":\"verification receipt is missing\"},\"stages\":[{\"name\":\"validate reusable verification and signed Runtime package\",\"status\":\"done\",\"elapsed_ms\":0,\"owner\":\"domainry-runtime\"},{\"name\":\"run structural checks and complete backend tests\",\"status\":\"failed\",\"elapsed_ms\":73,\"owner\":\"domainry-builder\"}],\"first_failure\":{\"name\":\"run structural checks and complete backend tests\",\"status\":\"failed\",\"elapsed_ms\":73,\"owner\":\"domainry-builder\"}}}\nerror: finalization receipt is stale for current project-owned source\n",
+  "event_item_id": "item_160",
+  "event_line": 310
+}

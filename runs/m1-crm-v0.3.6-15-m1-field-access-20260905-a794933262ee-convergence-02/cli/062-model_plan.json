@@ -1,0 +1,26 @@
+{
+  "family": "model_plan",
+  "command": "/bin/zsh -lc '/private/tmp/domainry-m1-v15-convergence.itjjpe/codex-home/skills/domainry-builder-v1/bin/domainry-cli model plan --json --project /private/tmp/domainry-m1-v15-convergence.itjjpe/project'",
+  "exit_code": 0,
+  "output": {
+    "artifact": ".domainry/builder/disposable/model-preflight-result.json",
+    "contract_version": "domainry-model-preflight-envelope-v1",
+    "create_items": [],
+    "creates": 0,
+    "delete_items": [],
+    "deletes": 0,
+    "files": 7,
+    "identity": "7d372cc68ab3f27972cbe8fcd264906b4562ca675b8621c484e259e13ac22c3e",
+    "issue_count": 0,
+    "items": 38,
+    "sha256": "7e859d5a38976507fecefc12c671ff6c6844da545e2817cf6c8b9159b0ca8acf",
+    "sql_files": 2,
+    "state": "valid",
+    "unchanged": 38,
+    "update_items": [],
+    "updates": 0
+  },
+  "raw_output": "{\"artifact\":\".domainry/builder/disposable/model-preflight-result.json\",\"contract_version\":\"domainry-model-preflight-envelope-v1\",\"create_items\":[],\"creates\":0,\"delete_items\":[],\"deletes\":0,\"files\":7,\"identity\":\"7d372cc68ab3f27972cbe8fcd264906b4562ca675b8621c484e259e13ac22c3e\",\"issue_count\":0,\"items\":38,\"sha256\":\"7e859d5a38976507fecefc12c671ff6c6844da545e2817cf6c8b9159b0ca8acf\",\"sql_files\":2,\"state\":\"valid\",\"unchanged\":38,\"update_items\":[],\"updates\":0}\n",
+  "event_item_id": "item_228",
+  "event_line": 693
+}

@@ -1,0 +1,63 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "domainry-business-flow-evidence-v1",
+  "title": "Domainry structured business-flow evidence v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["contract_version", "phases"],
+  "properties": {
+    "contract_version": {"const": "domainry-business-flow-evidence-v1"},
+    "phases": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["initial", "restart"],
+      "properties": {
+        "initial": {"$ref": "#/$defs/phase"},
+        "restart": {"$ref": "#/$defs/phase"}
+      }
+    }
+  },
+  "$defs": {
+    "phase": {
+      "type": "object",
+      "required": ["BF01", "BF02", "BF03", "BF04", "BF05", "BF06", "BF07", "BF08"],
+      "additionalProperties": false,
+      "patternProperties": {"^BF0[1-8]$": {"$ref": "#/$defs/flow"}}
+    },
+    "flow": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": ["status", "steps"],
+      "properties": {
+        "status": {"enum": ["passed", "failed"]},
+        "steps": {
+          "type": "array",
+          "minItems": 1,
+          "items": {"$ref": "#/$defs/step"}
+        }
+      }
+    },
+    "step": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": ["id", "operation", "source", "status", "requirements", "observations"],
+      "properties": {
+        "id": {"type": "string", "minLength": 1},
+        "operation": {"type": "string", "minLength": 1},
+        "source": {
+          "enum": [
+            "runtime.records", "runtime.action", "runtime.workflow",
+            "runtime.scheduler", "runtime.report", "runtime.data_exchange",
+            "runtime.identity", "runtime.navigation", "project_handler"
+          ]
+        },
+        "status": {"enum": ["passed", "failed"]},
+        "observations": {"type": "object"},
+        "requirements": {
+          "type": "array", "minItems": 1,
+          "items": {"type": "string", "pattern": "^[1-9][0-9]*$"}
+        }
+      }
+    }
+  }
+}

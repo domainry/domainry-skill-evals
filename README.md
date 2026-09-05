@@ -15,6 +15,8 @@ Builder Skill 的评估与优化闭环仓库。评测对象是 `config.json` 指
 | `benchmarks/s1-ticketing/` | S 级基准:需求规格(agent 输入)+ golden checklist(评分金标准,agent 不可见) |
 | `tasks/` | L1 微评估任务定义 |
 | `harness/capture.sh` | CLI 调用捕获器(每次调用 → 可评分工件) |
+| `harness/extract_cli_captures.py` | 从 Agent JSONL 提取实际执行；metadata/help/version 仅作辅助观测 |
+| `harness/run_driver.py` | 全新隔离根、候选冻结、新 Agent session、原子实时 progress、baseline/convergence 生命周期、预算与证据封存 |
 | `harness/scorer.py` | scorecard 生成器 |
 | `runs/` | 运行工件(不入库大文件) |
 | `scorecards/` | 版本化评分结果,优化对比的依据 |
@@ -27,6 +29,12 @@ python3 harness/eval_config.py --json
 
 # 候选身份 + 外部服务健康预检（失败时不得启动测量 run）
 python3 harness/preflight.py
+
+# 统一 driver 参数、最小临时认证、隔离规则与预算；isolation root 必须全新且在仓库外
+python3 harness/run_driver.py --help
+
+# 长跑期间读取当前派生进展（只读，不参与评分）
+jq . runs/<run-id>/progress.json
 
 # 跑一个 L1 建模微评估：见 tasks/l1-model-authoring.md
 

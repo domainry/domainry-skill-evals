@@ -1,0 +1,16 @@
+{
+  "family": "model_plan",
+  "command": "/bin/zsh -lc '/private/tmp/domainry-m1-v15-convergence.itjjpe/codex-home/skills/domainry-builder-v1/bin/domainry-cli model plan --json --project /private/tmp/domainry-m1-v15-convergence.itjjpe/project'",
+  "exit_code": 1,
+  "output": {
+    "artifact": ".domainry/builder/disposable/model-preflight-result.json",
+    "contract_version": "domainry-model-preflight-envelope-v1",
+    "identity": "895dca01ef77ec5f36b2dd3570172f4d9671c885a575a877be19f584892ae01d",
+    "issue_count": 1,
+    "sha256": "f4771f9d23869138cfdbb200dad385b90d50a0562d1ef4c78813e03d485d605d",
+    "state": "repair_required"
+  },
+  "raw_output": "{\"artifact\":\".domainry/builder/disposable/model-preflight-result.json\",\"contract_version\":\"domainry-model-preflight-envelope-v1\",\"identity\":\"895dca01ef77ec5f36b2dd3570172f4d9671c885a575a877be19f584892ae01d\",\"issue_count\":1,\"sha256\":\"f4771f9d23869138cfdbb200dad385b90d50a0562d1ef4c78813e03d485d605d\",\"state\":\"repair_required\"}\nmodel.unknown_field: reports.sales_funnel.object_sql_v1.result_schema.expected_amount_total contains unknown field \"rounding\"\nerror: Builder validation found 1 issue(s)\n",
+  "event_item_id": "item_220",
+  "event_line": 677
+}

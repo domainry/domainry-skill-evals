@@ -1,0 +1,119 @@
+[
+  {
+    "stage": "capability_assembly",
+    "owner": "identity",
+    "note": "Unknown Identity field",
+    "terminal_state": "baseline_first_scoring_failure",
+    "attribution_status": "attributed",
+    "diagnostic": {
+      "code": "identity.validation.unknown",
+      "message": "Unknown Identity field",
+      "path": "$.candidate.value.provision_to_workspaces",
+      "file": "$.candidate.value.provision_to_workspaces",
+      "constraint": "identity.validation.unknown",
+      "repair_hint": "repair the reported constraint at the file/JSON Pointer and rerun model plan",
+      "owner": "identity",
+      "stage": "capability_assembly",
+      "repair_facts": {
+        "artifact_path": ".domainry/builder/disposable/model-preflight-result.json",
+        "artifact_relative_to": "--project",
+        "owner_field_path": "$.candidate.value.provision_to_workspaces",
+        "severity": "error"
+      }
+    },
+    "detail": {
+      "code": "identity.validation.unknown",
+      "message": "Unknown Identity field",
+      "path": "$.candidate.value.provision_to_workspaces",
+      "file": "$.candidate.value.provision_to_workspaces",
+      "constraint": "identity.validation.unknown",
+      "repair_hint": "repair the reported constraint at the file/JSON Pointer and rerun model plan",
+      "owner": "identity",
+      "stage": "capability_assembly",
+      "repair_facts": {
+        "artifact_path": ".domainry/builder/disposable/model-preflight-result.json",
+        "artifact_relative_to": "--project",
+        "owner_field_path": "$.candidate.value.provision_to_workspaces",
+        "severity": "error"
+      }
+    }
+  },
+  {
+    "stage": "capability_assembly",
+    "owner": "identity",
+    "note": "Unknown Identity field",
+    "terminal_state": "baseline_first_scoring_failure",
+    "attribution_status": "attributed",
+    "diagnostic": {
+      "code": "identity.validation.unknown",
+      "message": "Unknown Identity field",
+      "path": "$.candidate.value.provision_to_workspaces",
+      "file": "$.candidate.value.provision_to_workspaces",
+      "constraint": "identity.validation.unknown",
+      "repair_hint": "repair the reported constraint at the file/JSON Pointer and rerun model plan",
+      "owner": "identity",
+      "stage": "capability_assembly",
+      "repair_facts": {
+        "artifact_path": ".domainry/builder/disposable/model-preflight-result.json",
+        "artifact_relative_to": "--project",
+        "owner_field_path": "$.candidate.value.provision_to_workspaces",
+        "severity": "error"
+      }
+    },
+    "detail": {
+      "code": "identity.validation.unknown",
+      "message": "Unknown Identity field",
+      "path": "$.candidate.value.provision_to_workspaces",
+      "file": "$.candidate.value.provision_to_workspaces",
+      "constraint": "identity.validation.unknown",
+      "repair_hint": "repair the reported constraint at the file/JSON Pointer and rerun model plan",
+      "owner": "identity",
+      "stage": "capability_assembly",
+      "repair_facts": {
+        "artifact_path": ".domainry/builder/disposable/model-preflight-result.json",
+        "artifact_relative_to": "--project",
+        "owner_field_path": "$.candidate.value.provision_to_workspaces",
+        "severity": "error"
+      }
+    }
+  },
+  {
+    "stage": "project_contract",
+    "owner": "domainry-plane-project-contract",
+    "note": "Action lead.approve_conversion notification event type lead.conversion_approved must publish a project_record semantic route action",
+    "terminal_state": "baseline_first_scoring_failure",
+    "attribution_status": "attributed",
+    "diagnostic": {
+      "code": "ledger.project_contract_invalid",
+      "message": "Action lead.approve_conversion notification event type lead.conversion_approved must publish a project_record semantic route action",
+      "file": "backend/model/00-project.json",
+      "constraint": "ledger.project_contract_invalid",
+      "repair_hint": "repair the reported constraint at the file/JSON Pointer and rerun model plan",
+      "owner": "domainry-plane-project-contract",
+      "stage": "project_contract",
+      "ledger_item": "project/project/project",
+      "ledger_path": "backend/model/00-project.json",
+      "repair_facts": {
+        "artifact_path": ".domainry/builder/disposable/model-preflight-result.json",
+        "artifact_relative_to": "--project",
+        "compile_before_publish": true
+      }
+    },
+    "detail": {
+      "code": "ledger.project_contract_invalid",
+      "message": "Action lead.approve_conversion notification event type lead.conversion_approved must publish a project_record semantic route action",
+      "file": "backend/model/00-project.json",
+      "constraint": "ledger.project_contract_invalid",
+      "repair_hint": "repair the reported constraint at the file/JSON Pointer and rerun model plan",
+      "owner": "domainry-plane-project-contract",
+      "stage": "project_contract",
+      "ledger_item": "project/project/project",
+      "ledger_path": "backend/model/00-project.json",
+      "repair_facts": {
+        "artifact_path": ".domainry/builder/disposable/model-preflight-result.json",
+        "artifact_relative_to": "--project",
+        "compile_before_publish": true
+      }
+    }
+  }
+]

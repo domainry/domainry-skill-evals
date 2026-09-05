@@ -1,0 +1,21 @@
+{
+  "family": "model_capability",
+  "command": "/bin/zsh -lc '/private/tmp/domainry-m1-v17-relation-baseline-02/codex-home/skills/domainry-builder-v1/bin/domainry-cli model capability --json --project /private/tmp/domainry-m1-v17-relation-baseline-02/project --key notification.templates'",
+  "exit_code": 0,
+  "output": {
+    "category": {
+      "key": "notification.templates",
+      "name": "Notification templates",
+      "description": "Author, preview, review, publish, disable, and restore governed notification templates."
+    },
+    "validations": [
+      {
+        "kind": "notification.template",
+        "description": "Validate one project-owned external-channel notification template."
+      }
+    ]
+  },
+  "raw_output": "{\"category\":{\"key\":\"notification.templates\",\"name\":\"Notification templates\",\"description\":\"Author, preview, review, publish, disable, and restore governed notification templates.\"},\"validations\":[{\"kind\":\"notification.template\",\"description\":\"Validate one project-owned external-channel notification template.\"}]}\n",
+  "event_item_id": "item_18",
+  "event_line": 37
+}

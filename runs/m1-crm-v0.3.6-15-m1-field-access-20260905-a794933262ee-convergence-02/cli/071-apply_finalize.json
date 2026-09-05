@@ -1,0 +1,24 @@
+{
+  "family": "apply_finalize",
+  "command": "/bin/zsh -lc '/private/tmp/domainry-m1-v15-convergence.itjjpe/codex-home/skills/domainry-builder-v1/bin/domainry-cli apply finalize --json --project /private/tmp/domainry-m1-v15-convergence.itjjpe/project'",
+  "exit_code": 0,
+  "output": {
+    "contract_version": "domainry-source-finalization-receipt-v2",
+    "delivery_id": "sha256:bcd405888804f5e087c4caa6b0dd4cc4c8da2ea5b57a4818eab5300d3f00de02",
+    "materialization_receipt_sha256": "4dcf1d95417626fefc17a161596ca1c565de9f83397fb261294db387635c9f40",
+    "receipt_path": ".domainry/builder/receipts/finalization.json",
+    "receipt_sha256": "a8fef3c9f7a492ede512876855dd4871893b8f8501e049c323e4052c179c0cec",
+    "input_sha256": "1644e7b7de19f2d814f6c6a142c661ca874ff829673e54580f25d7c3075c86bc",
+    "project_source_tree_sha256": "1d99e992c2960757087ddec610bb256bd2384b291f8e3d5498a5bdb8aee039b9",
+    "git_head": "unborn",
+    "git_clean": false,
+    "local_composition_sha256": "08fe5e74fd3955ec0b586ed6c073100ea0adeb903c3e444b9f0db2edcf7d6436",
+    "generated_tree_sha256": "d4daa4f874442f3a66405dc26121f95539d2db37a4d07873092c9a88edbe7bd2",
+    "updated_files": 0,
+    "unchanged_files": 5,
+    "recovered": true
+  },
+  "raw_output": "[domainry] apply finalize: validate project-owned source done (1.032s)\n[domainry] apply finalize: resolve dependencies and finalize source...\n[domainry] apply finalize: resolve dependencies and finalize source done (938ms)\n{\"contract_version\":\"domainry-source-finalization-receipt-v2\",\"delivery_id\":\"sha256:bcd405888804f5e087c4caa6b0dd4cc4c8da2ea5b57a4818eab5300d3f00de02\",\"materialization_receipt_sha256\":\"4dcf1d95417626fefc17a161596ca1c565de9f83397fb261294db387635c9f40\",\"receipt_path\":\".domainry/builder/receipts/finalization.json\",\"receipt_sha256\":\"a8fef3c9f7a492ede512876855dd4871893b8f8501e049c323e4052c179c0cec\",\"input_sha256\":\"1644e7b7de19f2d814f6c6a142c661ca874ff829673e54580f25d7c3075c86bc\",\"project_source_tree_sha256\":\"1d99e992c2960757087ddec610bb256bd2384b291f8e3d5498a5bdb8aee039b9\",\"git_head\":\"unborn\",\"git_clean\":false,\"local_composition_sha256\":\"08fe5e74fd3955ec0b586ed6c073100ea0adeb903c3e444b9f0db2edcf7d6436\",\"generated_tree_sha256\":\"d4daa4f874442f3a66405dc26121f95539d2db37a4d07873092c9a88edbe7bd2\",\"updated_files\":0,\"unchanged_files\":5,\"recovered\":true}\n",
+  "event_item_id": "item_254",
+  "event_line": 743
+}

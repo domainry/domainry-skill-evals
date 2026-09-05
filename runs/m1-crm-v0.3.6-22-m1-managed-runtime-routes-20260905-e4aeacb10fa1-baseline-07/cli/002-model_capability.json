@@ -1,0 +1,25 @@
+{
+  "family": "model_capability",
+  "command": "/bin/zsh -lc '/private/tmp/domainry-m1-v22-managed-routes-baseline-07/codex-home/skills/domainry-builder-v1/bin/domainry-cli model capability --json --project /private/tmp/domainry-m1-v22-managed-routes-baseline-07/project --key notification.delivery_governance'",
+  "exit_code": 0,
+  "output": {
+    "category": {
+      "key": "notification.delivery_governance",
+      "name": "Notification delivery governance",
+      "description": "Configure event types and delivery rules and inspect delivery and Inbox governance metrics."
+    },
+    "validations": [
+      {
+        "kind": "notification.event_type",
+        "description": "Validate one published project notification event type."
+      },
+      {
+        "kind": "notification.rule",
+        "description": "Validate one notification rule against explicitly referenced event types."
+      }
+    ]
+  },
+  "raw_output": "{\"category\":{\"key\":\"notification.delivery_governance\",\"name\":\"Notification delivery governance\",\"description\":\"Configure event types and delivery rules and inspect delivery and Inbox governance metrics.\"},\"validations\":[{\"kind\":\"notification.event_type\",\"description\":\"Validate one published project notification event type.\"},{\"kind\":\"notification.rule\",\"description\":\"Validate one notification rule against explicitly referenced event types.\"}]}\n",
+  "event_item_id": "item_20",
+  "event_line": 40
+}

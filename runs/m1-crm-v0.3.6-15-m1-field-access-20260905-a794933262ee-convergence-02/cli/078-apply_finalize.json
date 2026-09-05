@@ -1,0 +1,24 @@
+{
+  "family": "apply_finalize",
+  "command": "/bin/zsh -lc '/private/tmp/domainry-m1-v15-convergence.itjjpe/codex-home/skills/domainry-builder-v1/bin/domainry-cli apply finalize --json --project .'",
+  "exit_code": 0,
+  "output": {
+    "contract_version": "domainry-source-finalization-receipt-v2",
+    "delivery_id": "sha256:1e7b9a0c486e4cac2b16ddecb25db8dd9ee0188468d587ec984b8e2501a7514f",
+    "materialization_receipt_sha256": "77602567a662beb6e96e26fc72b51a84f5b774de842c60011f9077717e67d938",
+    "receipt_path": ".domainry/builder/receipts/finalization.json",
+    "receipt_sha256": "12c0e491add67165adaf3dd661e098f22ffbc8f677f7364e87bdd069234f01d4",
+    "input_sha256": "e5fdfe67b77adc93d0fa4c680661a3853d63691379b773c4de293ae9a6fcb9e7",
+    "project_source_tree_sha256": "3cca93940903c6ff3edc4045400b41cf63608e414f662d3c45964120284320c0",
+    "git_head": "unborn",
+    "git_clean": false,
+    "local_composition_sha256": "08fe5e74fd3955ec0b586ed6c073100ea0adeb903c3e444b9f0db2edcf7d6436",
+    "generated_tree_sha256": "8fadae7a49c702f509f16194c69090963ad72caa977767aa1bc8be0ae976a15e",
+    "updated_files": 0,
+    "unchanged_files": 5,
+    "recovered": true
+  },
+  "raw_output": "[domainry] apply finalize: validate project-owned source done (2.617s)\n[domainry] apply finalize: resolve dependencies and finalize source...\n{\"contract_version\":\"domainry-source-finalization-receipt-v2\",\"delivery_id\":\"sha256:1e7b9a0c486e4cac2b16ddecb25db8dd9ee0188468d587ec984b8e2501a7514f\",\"materialization_receipt_sha256\":\"77602567a662beb6e96e26fc72b51a84f5b774de842c60011f9077717e67d938\",\"receipt_path\":\".domainry/builder/receipts/finalization.json\",\"receipt_sha256\":\"12c0e491add67165adaf3dd661e098f22ffbc8f677f7364e87bdd069234f01d4\",\"input_sha256\":\"e5fdfe67b77adc93d0fa4c680661a3853d63691379b773c4de293ae9a6fcb9e7\",\"project_source_tree_sha256\":\"3cca93940903c6ff3edc4045400b41cf63608e414f662d3c45964120284320c0\",\"git_head\":\"unborn\",\"git_clean\":false,\"local_composition_sha256\":\"08fe5e74fd3955ec0b586ed6c073100ea0adeb903c3e444b9f0db2edcf7d6436\",\"generated_tree_sha256\":\"8fadae7a49c702f509f16194c69090963ad72caa977767aa1bc8be0ae976a15e\",\"updated_files\":0,\"unchanged_files\":5,\"recovered\":true}\n[domainry] apply finalize: resolve dependencies and finalize source done (2.411s)\n",
+  "event_item_id": "item_300",
+  "event_line": 833
+}

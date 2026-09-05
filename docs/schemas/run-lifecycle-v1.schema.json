@@ -1,0 +1,74 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "domainry-eval-run-lifecycle-v1",
+  "title": "Domainry evaluator run lifecycle v1",
+  "type": "object",
+  "additionalProperties": true,
+  "required": [
+    "contract_version", "run_id", "run_kind", "state",
+    "measurement_complete", "environment_valid", "measurement_boundary",
+    "ephemeral_auth_staged", "auth_cleanup_status", "started_epoch", "budgets", "usage"
+  ],
+  "properties": {
+    "contract_version": {"const": "domainry-eval-run-lifecycle-v1"},
+    "run_id": {"type": "string", "minLength": 1},
+    "run_kind": {"enum": ["baseline", "convergence"]},
+    "parent_run_id": {"type": ["string", "null"]},
+    "state": {
+      "enum": [
+        "agent_running", "completed", "acceptance_failed", "delivery_incomplete",
+        "baseline_first_scoring_failure", "budget_exhausted_wall_clock",
+        "budget_exhausted_tokens", "budget_exhausted_cli_invocations",
+        "budget_exhausted_cli_retries", "invalid_agent_event_stream",
+        "agent_process_failed", "acceptance_not_executed", "scorer_failed",
+        "invalid_agent_session_context", "environment_invalid_candidate_drift",
+        "environment_invalid_freeze_drift", "environment_invalid_auth_cleanup",
+        "environment_invalid_auth_sanitization", "environment_invalid_service_drift", "flow_evidence_conflict",
+        "flow_evidence_archive_drift"
+      ]
+    },
+    "measurement_complete": {"type": "boolean"},
+    "environment_valid": {"type": "boolean"},
+    "measurement_boundary": {
+      "enum": ["running", "baseline_first_failure_sealed", "full_run_sealed", "delivery_incomplete", "interrupted_or_invalid"]
+    },
+    "agent_result_state": {"type": ["string", "null"], "enum": ["done", "not_done", null]},
+    "agent_ended_epoch": {"type": ["number", "null"]},
+    "agent_session_id": {"type": ["string", "null"]},
+    "ephemeral_auth_staged": {"type": "boolean"},
+    "auth_cleanup_status": {"enum": ["pending", "removed", "not_required", "failed"]},
+    "business_flow_evidence_source": {
+      "enum": ["verify", "external", "missing", "conflict"]
+    },
+    "business_flow_evidence_contract_valid": {"type": ["boolean", "null"]},
+    "business_flow_evidence_sha256": {
+      "type": ["string", "null"], "pattern": "^[0-9a-f]{64}$"
+    },
+    "service_identity_before_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "service_identity_after_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "started_epoch": {"type": "number"},
+    "ended_epoch": {"type": ["number", "null"]},
+    "budgets": {
+      "type": "object",
+      "required": ["wall_clock_seconds", "total_tokens", "cli_invocations", "cli_retries"],
+      "properties": {
+        "wall_clock_seconds": {"type": ["number", "null"], "exclusiveMinimum": 0},
+        "total_tokens": {"type": ["integer", "null"], "exclusiveMinimum": 0},
+        "cli_invocations": {"type": ["integer", "null"], "exclusiveMinimum": 0},
+        "cli_retries": {"type": ["integer", "null"], "minimum": 0}
+      }
+    },
+    "usage": {"type": "object"},
+    "termination": {"type": ["object", "null"]}
+  },
+  "allOf": [
+    {
+      "if": {"properties": {"run_kind": {"const": "convergence"}}},
+      "then": {"properties": {"parent_run_id": {"type": "string", "minLength": 1}}}
+    },
+    {
+      "if": {"properties": {"run_kind": {"const": "baseline"}}},
+      "then": {"properties": {"parent_run_id": {"type": "null"}}}
+    }
+  ]
+}

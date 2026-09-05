@@ -1,0 +1,59 @@
+{
+  "family": "model_plan",
+  "command": "/bin/zsh -lc '/private/tmp/domainry-m1-v16-performance-baseline-01/codex-home/skills/domainry-builder-v1/bin/domainry-cli model plan --json --project /private/tmp/domainry-m1-v16-performance-baseline-01/project'",
+  "exit_code": 1,
+  "output": {
+    "artifact": ".domainry/builder/disposable/model-preflight-result.json",
+    "artifact_relative_to": "--project",
+    "contract_version": "domainry-model-preflight-envelope-v1",
+    "diagnostics": [
+      {
+        "code": "model.field_modifier_invalid",
+        "message": "field lead_id modifier unique is only valid on Object fields and has no value",
+        "path": "backend/model/30-conversion.json#modules/crm/features/crm_conversion/objects/conversion_request",
+        "file": "backend/model/30-conversion.json#modules/crm/features/crm_conversion/objects/conversion_request",
+        "constraint": "model.field_modifier_invalid",
+        "repair_hint": "repair the reported constraint at the file/JSON Pointer and rerun model plan",
+        "owner": "domainry-cli",
+        "stage": "model_loader",
+        "ledger_path": "backend/model/30-conversion.json#modules/crm/features/crm_conversion/objects/conversion_request",
+        "repair_facts": {
+          "artifact_path": ".domainry/builder/disposable/model-preflight-result.json",
+          "artifact_relative_to": "--project",
+          "collection": "objects",
+          "feature": "crm_conversion",
+          "key": "conversion_request",
+          "module": "crm",
+          "source_file": "backend/model/30-conversion.json"
+        }
+      },
+      {
+        "code": "model.field_modifier_invalid",
+        "message": "field conversion_request_id modifier unique is only valid on Object fields and has no value",
+        "path": "backend/model/30-conversion.json#modules/crm/features/crm_conversion/objects/customer",
+        "file": "backend/model/30-conversion.json#modules/crm/features/crm_conversion/objects/customer",
+        "constraint": "model.field_modifier_invalid",
+        "repair_hint": "repair the reported constraint at the file/JSON Pointer and rerun model plan",
+        "owner": "domainry-cli",
+        "stage": "model_loader",
+        "ledger_path": "backend/model/30-conversion.json#modules/crm/features/crm_conversion/objects/customer",
+        "repair_facts": {
+          "artifact_path": ".domainry/builder/disposable/model-preflight-result.json",
+          "artifact_relative_to": "--project",
+          "collection": "objects",
+          "feature": "crm_conversion",
+          "key": "customer",
+          "module": "crm",
+          "source_file": "backend/model/30-conversion.json"
+        }
+      }
+    ],
+    "identity": "43fe3e2fb007492cca3e5cba577226aa47645ec4cf707dee5da021b60c9218cb",
+    "issue_count": 2,
+    "sha256": "4600bb7f72b406a9f5f7e5deb6479dd818a9f7ab19edda219b0c55946d62718b",
+    "state": "repair_required"
+  },
+  "raw_output": "{\"artifact\":\".domainry/builder/disposable/model-preflight-result.json\",\"artifact_relative_to\":\"--project\",\"contract_version\":\"domainry-model-preflight-envelope-v1\",\"diagnostics\":[{\"code\":\"model.field_modifier_invalid\",\"message\":\"field lead_id modifier unique is only valid on Object fields and has no value\",\"path\":\"backend/model/30-conversion.json#modules/crm/features/crm_conversion/objects/conversion_request\",\"file\":\"backend/model/30-conversion.json#modules/crm/features/crm_conversion/objects/conversion_request\",\"constraint\":\"model.field_modifier_invalid\",\"repair_hint\":\"repair the reported constraint at the file/JSON Pointer and rerun model plan\",\"owner\":\"domainry-cli\",\"stage\":\"model_loader\",\"ledger_path\":\"backend/model/30-conversion.json#modules/crm/features/crm_conversion/objects/conversion_request\",\"repair_facts\":{\"artifact_path\":\".domainry/builder/disposable/model-preflight-result.json\",\"artifact_relative_to\":\"--project\",\"collection\":\"objects\",\"feature\":\"crm_conversion\",\"key\":\"conversion_request\",\"module\":\"crm\",\"source_file\":\"backend/model/30-conversion.json\"}},{\"code\":\"model.field_modifier_invalid\",\"message\":\"field conversion_request_id modifier unique is only valid on Object fields and has no value\",\"path\":\"backend/model/30-conversion.json#modules/crm/features/crm_conversion/objects/customer\",\"file\":\"backend/model/30-conversion.json#modules/crm/features/crm_conversion/objects/customer\",\"constraint\":\"model.field_modifier_invalid\",\"repair_hint\":\"repair the reported constraint at the file/JSON Pointer and rerun model plan\",\"owner\":\"domainry-cli\",\"stage\":\"model_loader\",\"ledger_path\":\"backend/model/30-conversion.json#modules/crm/features/crm_conversion/objects/customer\",\"repair_facts\":{\"artifact_path\":\".domainry/builder/disposable/model-preflight-result.json\",\"artifact_relative_to\":\"--project\",\"collection\":\"objects\",\"feature\":\"crm_conversion\",\"key\":\"customer\",\"module\":\"crm\",\"source_file\":\"backend/model/30-conversion.json\"}}],\"identity\":\"43fe3e2fb007492cca3e5cba577226aa47645ec4cf707dee5da021b60c9218cb\",\"issue_count\":2,\"sha256\":\"4600bb7f72b406a9f5f7e5deb6479dd818a9f7ab19edda219b0c55946d62718b\",\"state\":\"repair_required\"}\nmodel.field_modifier_invalid: field lead_id modifier unique is only valid on Object fields and has no value\nmodel.field_modifier_invalid: field conversion_request_id modifier unique is only valid on Object fields and has no value\nerror: Builder validation found 2 issue(s)\n",
+  "event_item_id": "item_55",
+  "event_line": 110
+}

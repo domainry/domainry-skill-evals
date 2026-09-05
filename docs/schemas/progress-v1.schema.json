@@ -1,0 +1,120 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "domainry-eval-progress-v1",
+  "title": "Domainry evaluator live progress v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "contract_version", "run_id", "run_kind", "status", "lifecycle_phase",
+    "lifecycle_state", "lifecycle_phase_timing", "delivery_stage",
+    "delivery_stage_source", "delivery_stage_timing",
+    "delivery_stage_timing_source", "delivery_stage_timing_status",
+    "wall_elapsed_seconds", "domainry_cli",
+    "agent", "first_failure_seal_triggered", "checker_allowed",
+    "checker_decision_reason", "scorecard", "updated_epoch"
+  ],
+  "properties": {
+    "contract_version": {"const": "domainry-eval-progress-v1"},
+    "run_id": {"type": "string", "minLength": 1},
+    "run_kind": {"enum": ["baseline", "convergence"]},
+    "status": {"enum": ["running", "terminal"]},
+    "lifecycle_phase": {"enum": ["agent", "checker", "scorer", "terminal"]},
+    "lifecycle_state": {"type": "string", "minLength": 1},
+    "lifecycle_phase_timing": {"$ref": "#/$defs/phaseTiming"},
+    "delivery_stage": {
+      "type": ["string", "null"],
+      "enum": ["requirements", "model", "apply", "verify", "done", null]
+    },
+    "delivery_stage_source": {
+      "type": ["string", "null"],
+      "enum": ["agent-stages.json", "agent-event", "cli-event", null]
+    },
+    "delivery_stage_timing": {"$ref": "#/$defs/deliveryTiming"},
+    "delivery_stage_timing_source": {
+      "type": ["string", "null"], "enum": ["agent-stages.json", null]
+    },
+    "delivery_stage_timing_status": {
+      "enum": [
+        "valid", "unavailable", "invalid_shape", "invalid_out_of_bounds",
+        "invalid_interval", "invalid_non_monotonic"
+      ]
+    },
+    "wall_elapsed_seconds": {"type": "number", "minimum": 0},
+    "domainry_cli": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "invocations_total", "completed_total", "failed_total", "retries_total", "latest"
+      ],
+      "properties": {
+        "invocations_total": {"type": "integer", "minimum": 0},
+        "completed_total": {"type": "integer", "minimum": 0},
+        "failed_total": {"type": "integer", "minimum": 0},
+        "retries_total": {"type": "integer", "minimum": 0},
+        "latest": {
+          "oneOf": [
+            {"type": "null"},
+            {
+              "type": "object",
+              "required": ["subcommand", "status", "exit_code", "output_state", "observed_epoch"],
+              "properties": {
+                "subcommand": {"type": "string"},
+                "status": {"enum": ["in_progress", "passed", "failed"]},
+                "exit_code": {"type": ["integer", "null"]},
+                "output_state": {"type": ["string", "null"]},
+                "observed_epoch": {"type": ["number", "null"]}
+              }
+            }
+          ]
+        }
+      }
+    },
+    "agent": {
+      "type": "object",
+      "required": [
+        "last_activity_epoch", "last_activity_status", "total_tokens", "total_tokens_status"
+      ],
+      "properties": {
+        "last_activity_epoch": {"type": ["number", "null"]},
+        "last_activity_status": {"enum": ["observed", "unavailable"]},
+        "total_tokens": {"type": ["integer", "null"]},
+        "total_tokens_status": {"enum": ["observed", "unavailable"]}
+      }
+    },
+    "first_failure_seal_triggered": {"type": "boolean"},
+    "checker_allowed": {"type": ["boolean", "null"]},
+    "checker_decision_reason": {"type": ["string", "null"]},
+    "scorecard": {"type": ["object", "null"]},
+    "updated_epoch": {"type": "number"}
+  },
+  "$defs": {
+    "instant": {
+      "type": "object",
+      "required": ["started_epoch", "ended_epoch"],
+      "properties": {
+        "started_epoch": {"type": ["number", "null"]},
+        "ended_epoch": {"type": ["number", "null"]}
+      }
+    },
+    "phaseTiming": {
+      "type": "object",
+      "required": ["agent", "checker", "scorer", "terminal"],
+      "properties": {
+        "agent": {"$ref": "#/$defs/instant"},
+        "checker": {"$ref": "#/$defs/instant"},
+        "scorer": {"$ref": "#/$defs/instant"},
+        "terminal": {"$ref": "#/$defs/instant"}
+      }
+    },
+    "deliveryTiming": {
+      "type": "object",
+      "required": ["requirements", "model", "apply", "verify"],
+      "properties": {
+        "requirements": {"$ref": "#/$defs/instant"},
+        "model": {"$ref": "#/$defs/instant"},
+        "apply": {"$ref": "#/$defs/instant"},
+        "verify": {"$ref": "#/$defs/instant"}
+      }
+    }
+  }
+}

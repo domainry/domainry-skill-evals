@@ -1,0 +1,16 @@
+{
+  "family": "model_plan",
+  "command": "/bin/zsh -lc '/private/tmp/domainry-m1-v15-convergence.itjjpe/codex-home/skills/domainry-builder-v1/bin/domainry-cli model plan --json --project /private/tmp/domainry-m1-v15-convergence.itjjpe/project'",
+  "exit_code": 1,
+  "output": {
+    "artifact": ".domainry/builder/disposable/model-preflight-result.json",
+    "contract_version": "domainry-model-preflight-envelope-v1",
+    "identity": "a5374e0b595abc30a75a0894f32ac44004120261c95bca6e7936a93a3ccdb0fa",
+    "issue_count": 1,
+    "sha256": "6f3bebac2a0e5b36bc1028cf1e71953f0c7d1149550e67fc69ca35a9b1102422",
+    "state": "repair_required"
+  },
+  "raw_output": "model.unknown_field: report_export_controls.lead_detail_export.record_mapping contains unknown field \"download_audit_relation_field\"\nerror: Builder validation found 1 issue(s)\n{\"artifact\":\".domainry/builder/disposable/model-preflight-result.json\",\"contract_version\":\"domainry-model-preflight-envelope-v1\",\"identity\":\"a5374e0b595abc30a75a0894f32ac44004120261c95bca6e7936a93a3ccdb0fa\",\"issue_count\":1,\"sha256\":\"6f3bebac2a0e5b36bc1028cf1e71953f0c7d1149550e67fc69ca35a9b1102422\",\"state\":\"repair_required\"}\n",
+  "event_item_id": "item_49",
+  "event_line": 97
+}

@@ -1,0 +1,24 @@
+[
+  {
+    "stage": "model_loader",
+    "owner": "domainry-cli",
+    "note": "Action lead.mark_lost lead.mark_lost.input field reason requires same-key Object field lead.reason",
+    "terminal_state": "baseline_first_scoring_failure",
+    "attribution_status": "attributed",
+    "diagnostic": {
+      "code": "model.action_field_source_not_found",
+      "message": "Action lead.mark_lost lead.mark_lost.input field reason requires same-key Object field lead.reason",
+      "path": "backend/model",
+      "file": "backend/model",
+      "constraint": "model.action_field_source_not_found",
+      "repair_hint": "repair the reported constraint at the file/JSON Pointer and rerun model plan",
+      "owner": "domainry-cli",
+      "stage": "model_loader",
+      "ledger_path": "backend/model",
+      "repair_facts": {
+        "artifact_path": ".domainry/builder/disposable/model-preflight-result.json",
+        "artifact_relative_to": "--project"
+      }
+    }
+  }
+]

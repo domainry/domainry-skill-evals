@@ -1,0 +1,17 @@
+{
+  "family": "verify",
+  "command": "/bin/zsh -lc '/private/tmp/domainry-m1-v15-convergence.itjjpe/codex-home/skills/domainry-builder-v1/bin/domainry-cli verify --json --project /private/tmp/domainry-m1-v15-convergence.itjjpe/project --address 127.0.0.1:19284'",
+  "exit_code": 1,
+  "output": {
+    "code": "backend.validation.field_not_writable",
+    "contract_version": "runtime-authoring-v1",
+    "error": "backend.validation.field_not_writable",
+    "message": "backend.validation.field_not_writable",
+    "message_key": "backend.validation.field_not_writable",
+    "params": null,
+    "request_id": "bf-1788561961273657000"
+  },
+  "raw_output": "[domainry] verify: run structural checks and complete backend tests done (58.376s)\n[domainry] verify: build and sign exact Runtime package...\n[domainry] verify: build and sign exact Runtime package done (21.14s)\n[domainry] verify: compile managed Runtime business-flow tests...\n[domainry] verify: compile managed Runtime business-flow tests done (729ms)\n[domainry] verify: start initial managed Runtime...\n[domainry] verify: start initial managed Runtime done (2.185s)\n[domainry] verify: run initial Runtime business flows...\n[domainry] verify: run initial Runtime business flows failed (18.404s)\nerror: verify initial Runtime business flows: managed business-flow tests failed for initial: exit status 1: === RUN   TestBF03ApprovalAccepted\n    flows_test.go:30: POST /workflow/tasks/task_1788561961071417000_8/approve returned 400: {\"code\":\"backend.validation.field_not_writable\",\"contract_version\":\"runtime-authoring-v1\",\"error\":\"backend.validation.field_not_writable\",\"message\":\"backend.validation.field_not_writable\",\"message_key\":\"backend.validation.field_not_writable\",\"params\":null,\"request_id\":\"bf-1788561961273657000\"}\n--- FAIL: TestBF03ApprovalAccepted (2.42s)\n=== RUN   TestBF01LeadLifecycleAndScope\n--- PASS: TestBF01LeadLifecycleAndScope (1.19s)\n=== RUN   TestBF02DirectConversionIdempotency\n--- PASS: TestBF02DirectConversionIdempotency (1.19s)\n=== RUN   TestBF04ApprovalRejected\n    flows_test.go:130: rejected process/lead terminal state mismatch\n--- FAIL: TestBF04ApprovalRejected (1.08s)\n=== RUN   TestBF05DepartmentScopePaginationMenus\n--- PASS: TestBF05DepartmentScopePaginationMenus (0.91s)\n=== RUN   TestBF06OverdueReminderDedupRestart\n--- PASS: TestBF06OverdueReminderDedupRestart (1.91s)\n=== RUN   TestBF07FunnelReportAuthorizationAndTotals\n--- PASS: TestBF07FunnelReportAuthorizationAndTotals (0.17s)\n=== RUN   TestBF08GovernedCsvExportIsolation\n    flows_test.go:275: timed out waiting for completed Data Exchange export\n--- FAIL: TestBF08GovernedCsvExportIsolation (9.13s)\n=== RUN   TestBusinessFlowTraceabilityPayloadsRemainJSON\n--- PASS: TestBusinessFlowTraceabilityPayloadsRemainJSON (0.00s)\nFAIL\n",
+  "event_item_id": "item_257",
+  "event_line": 749
+}

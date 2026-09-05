@@ -1,0 +1,88 @@
+{
+  "family": "apply_model",
+  "command": "/bin/zsh -lc '/private/tmp/domainry-m1-v15-convergence.itjjpe/codex-home/skills/domainry-builder-v1/bin/domainry-cli apply model --json --project /private/tmp/domainry-m1-v15-convergence.itjjpe/project --go-module-path example.com/domainry-m1-crm/backend --service http://127.0.0.1:8283 --evolution-audit-sha256 40bc912ac7bbcae0bbde3fc8f0013330b4c893d6cda824e260d9305e62a58a85 --evolution-reason \"Review verify repair: grant exact workflow/report permissions, explicit lead export fields, and add optional as_of reminder verification input; preserve project-owned handlers\"'",
+  "exit_code": 0,
+  "output": {
+    "contract_version": "domainry-model-apply-v3",
+    "created_source_files": 0,
+    "evolution_audit_path": ".domainry/builder/audits/project-delivery-40bc912ac7bbcae0bbde3fc8f0013330b4c893d6cda824e260d9305e62a58a85.json",
+    "evolution_audit_sha256": "40bc912ac7bbcae0bbde3fc8f0013330b4c893d6cda824e260d9305e62a58a85",
+    "evolution_repair_state": "repaired",
+    "implementation_packet": {
+      "contract_version": "domainry-action-implementation-packet-v4",
+      "path": ".domainry/builder/source/implementation-packets/e57726f2bf7dcebc32fc62bbbc5b81e9d87da4c1c72093dda58d2967ab6ed01b.json",
+      "file_sha256": "e57726f2bf7dcebc32fc62bbbc5b81e9d87da4c1c72093dda58d2967ab6ed01b",
+      "bytes": 2999,
+      "actions": [
+        {
+          "action_key": "lead.approve_conversion",
+          "path": ".domainry/builder/source/implementation-packets/actions/43ed4fe6c75619c78c960f787aefa6c15694faa1e61686e66a8be1d32e8bc07c.json",
+          "sha256": "43ed4fe6c75619c78c960f787aefa6c15694faa1e61686e66a8be1d32e8bc07c",
+          "bytes": 34911
+        },
+        {
+          "action_key": "lead.capture",
+          "path": ".domainry/builder/source/implementation-packets/actions/cd2f67df814bc6f3a81612f632757b8620af2c89e32694286580140415dbe63b.json",
+          "sha256": "cd2f67df814bc6f3a81612f632757b8620af2c89e32694286580140415dbe63b",
+          "bytes": 10746
+        },
+        {
+          "action_key": "lead.convert_direct",
+          "path": ".domainry/builder/source/implementation-packets/actions/8cbd0fc3faa3ab650b5b6520fffad6880858ea12d487747702e4c82ad8fd1711.json",
+          "sha256": "8cbd0fc3faa3ab650b5b6520fffad6880858ea12d487747702e4c82ad8fd1711",
+          "bytes": 17739
+        },
+        {
+          "action_key": "lead.mark_contacted",
+          "path": ".domainry/builder/source/implementation-packets/actions/b936257a7446a7859cbd15b3a019297b8eda2b0b39d41fa372d3a67e79750d94.json",
+          "sha256": "b936257a7446a7859cbd15b3a019297b8eda2b0b39d41fa372d3a67e79750d94",
+          "bytes": 13837
+        },
+        {
+          "action_key": "lead.mark_lost",
+          "path": ".domainry/builder/source/implementation-packets/actions/5bdefd950a485a5e4fff3ffbd5fca230259e4ff9740dece424076f657552b171.json",
+          "sha256": "5bdefd950a485a5e4fff3ffbd5fca230259e4ff9740dece424076f657552b171",
+          "bytes": 13533
+        },
+        {
+          "action_key": "lead.prepare_approval",
+          "path": ".domainry/builder/source/implementation-packets/actions/1d19e635f36e53883b5b0944fbf638bd61f273d6331334adeb6c415381e0746a.json",
+          "sha256": "1d19e635f36e53883b5b0944fbf638bd61f273d6331334adeb6c415381e0746a",
+          "bytes": 19918
+        },
+        {
+          "action_key": "lead.qualify",
+          "path": ".domainry/builder/source/implementation-packets/actions/8e03dc05466627e94307f85e3af81c29662144ac0d40163e3a171f9101a4347a.json",
+          "sha256": "8e03dc05466627e94307f85e3af81c29662144ac0d40163e3a171f9101a4347a",
+          "bytes": 13584
+        },
+        {
+          "action_key": "lead.reject_conversion",
+          "path": ".domainry/builder/source/implementation-packets/actions/bc2855ac8f142b6a3839598a2dcb4aa01586714019df97128ae6c0172300334d.json",
+          "sha256": "bc2855ac8f142b6a3839598a2dcb4aa01586714019df97128ae6c0172300334d",
+          "bytes": 26620
+        },
+        {
+          "action_key": "lead.send_overdue_reminders",
+          "path": ".domainry/builder/source/implementation-packets/actions/fd224809b11bc7f9f8f5fc215187b9ae6f809d2d8de4073a1e84fdf23db8d350.json",
+          "sha256": "fd224809b11bc7f9f8f5fc215187b9ae6f809d2d8de4073a1e84fdf23db8d350",
+          "bytes": 24911
+        },
+        {
+          "action_key": "lead.update_details",
+          "path": ".domainry/builder/source/implementation-packets/actions/d65c112739eebc339d751caf0b0c8eed7a9e9b509dcc0ecf1576ab8e4c447445.json",
+          "sha256": "d65c112739eebc339d751caf0b0c8eed7a9e9b509dcc0ecf1576ab8e4c447445",
+          "bytes": 15064
+        }
+      ],
+      "delivery_id": "sha256:b330cf6679a9e85794c07c31e4786e04396302cf5338c0479b06006fe9ac6340",
+      "materialization_receipt_sha256": "02d22a802524257a0726022b42f4b3fbb9042b8b74aa023cc6a4f18e6e20c854",
+      "materialization_file_sha256": "34d9cd30a131fd56948b9b69c72cde9f4bd0752d4d7a5825136e3275d9706a54"
+    },
+    "receipt": ".domainry/builder/model-apply.json",
+    "state": "implementation_ready"
+  },
+  "raw_output": "[domainry] apply model: load and preflight model done (1.127s)\n[domainry] apply model: synchronize Blueprint Ledger...\n[domainry] apply model: synchronize Blueprint Ledger done (59ms)\n[domainry] apply model: validate compiled Blueprint...\n[domainry] apply model: validate compiled Blueprint done (516ms)\n[domainry] apply model: publish immutable project delivery...\n[domainry] apply model: publish immutable project delivery done (620ms)\n[domainry] apply model: fetch signed delivery artifacts...\n[domainry] apply model: fetch signed delivery artifacts done (104ms)\n[domainry] apply model: materialize backend and resolve Go dependencies...\n[domainry] apply model: materialize backend and resolve Go dependencies done (39ms)\n[domainry] apply model: apply reviewed project evolution...\n[domainry] apply model: apply reviewed project evolution done (1m10.856s)\n[domainry] apply model: prepare project implementation packet...\n[domainry] apply model: prepare project implementation packet done (126ms)\n{\"contract_version\":\"domainry-model-apply-v3\",\"created_source_files\":0,\"evolution_audit_path\":\".domainry/builder/audits/project-delivery-40bc912ac7bbcae0bbde3fc8f0013330b4c893d6cda824e260d9305e62a58a85.json\",\"evolution_audit_sha256\":\"40bc912ac7bbcae0bbde3fc8f0013330b4c893d6cda824e260d9305e62a58a85\",\"evolution_repair_state\":\"repaired\",\"implementation_packet\":{\"contract_version\":\"domainry-action-implementation-packet-v4\",\"path\":\".domainry/builder/source/implementation-packets/e57726f2bf7dcebc32fc62bbbc5b81e9d87da4c1c72093dda58d2967ab6ed01b.json\",\"file_sha256\":\"e57726f2bf7dcebc32fc62bbbc5b81e9d87da4c1c72093dda58d2967ab6ed01b\",\"bytes\":2999,\"actions\":[{\"action_key\":\"lead.approve_conversion\",\"path\":\".domainry/builder/source/implementation-packets/actions/43ed4fe6c75619c78c960f787aefa6c15694faa1e61686e66a8be1d32e8bc07c.json\",\"sha256\":\"43ed4fe6c75619c78c960f787aefa6c15694faa1e61686e66a8be1d32e8bc07c\",\"bytes\":34911},{\"action_key\":\"lead.capture\",\"path\":\".domainry/builder/source/implementation-packets/actions/cd2f67df814bc6f3a81612f632757b8620af2c89e32694286580140415dbe63b.json\",\"sha256\":\"cd2f67df814bc6f3a81612f632757b8620af2c89e32694286580140415dbe63b\",\"bytes\":10746},{\"action_key\":\"lead.convert_direct\",\"path\":\".domainry/builder/source/implementation-packets/actions/8cbd0fc3faa3ab650b5b6520fffad6880858ea12d487747702e4c82ad8fd1711.json\",\"sha256\":\"8cbd0fc3faa3ab650b5b6520fffad6880858ea12d487747702e4c82ad8fd1711\",\"bytes\":17739},{\"action_key\":\"lead.mark_contacted\",\"path\":\".domainry/builder/source/implementation-packets/actions/b936257a7446a7859cbd15b3a019297b8eda2b0b39d41fa372d3a67e79750d94.json\",\"sha256\":\"b936257a7446a7859cbd15b3a019297b8eda2b0b39d41fa372d3a67e79750d94\",\"bytes\":13837},{\"action_key\":\"lead.mark_lost\",\"path\":\".domainry/builder/source/implementation-packets/actions/5bdefd950a485a5e4fff3ffbd5fca230259e4ff9740dece424076f657552b171.json\",\"sha256\":\"5bdefd950a485a5e4fff3ffbd5fca230259e4ff9740dece424076f657552b171\",\"bytes\":13533},{\"action_key\":\"lead.prepare_approval\",\"path\":\".domainry/builder/source/implementation-packets/actions/1d19e635f36e53883b5b0944fbf638bd61f273d6331334adeb6c415381e0746a.json\",\"sha256\":\"1d19e635f36e53883b5b0944fbf638bd61f273d6331334adeb6c415381e0746a\",\"bytes\":19918},{\"action_key\":\"lead.qualify\",\"path\":\".domainry/builder/source/implementation-packets/actions/8e03dc05466627e94307f85e3af81c29662144ac0d40163e3a171f9101a4347a.json\",\"sha256\":\"8e03dc05466627e94307f85e3af81c29662144ac0d40163e3a171f9101a4347a\",\"bytes\":13584},{\"action_key\":\"lead.reject_conversion\",\"path\":\".domainry/builder/source/implementation-packets/actions/bc2855ac8f142b6a3839598a2dcb4aa01586714019df97128ae6c0172300334d.json\",\"sha256\":\"bc2855ac8f142b6a3839598a2dcb4aa01586714019df97128ae6c0172300334d\",\"bytes\":26620},{\"action_key\":\"lead.send_overdue_reminders\",\"path\":\".domainry/builder/source/implementation-packets/actions/fd224809b11bc7f9f8f5fc215187b9ae6f809d2d8de4073a1e84fdf23db8d350.json\",\"sha256\":\"fd224809b11bc7f9f8f5fc215187b9ae6f809d2d8de4073a1e84fdf23db8d350\",\"bytes\":24911},{\"action_key\":\"lead.update_details\",\"path\":\".domainry/builder/source/implementation-packets/actions/d65c112739eebc339d751caf0b0c8eed7a9e9b509dcc0ecf1576ab8e4c447445.json\",\"sha256\":\"d65c112739eebc339d751caf0b0c8eed7a9e9b509dcc0ecf1576ab8e4c447445\",\"bytes\":15064}],\"delivery_id\":\"sha256:b330cf6679a9e85794c07c31e4786e04396302cf5338c0479b06006fe9ac6340\",\"materialization_receipt_sha256\":\"02d22a802524257a0726022b42f4b3fbb9042b8b74aa023cc6a4f18e6e20c854\",\"materialization_file_sha256\":\"34d9cd30a131fd56948b9b69c72cde9f4bd0752d4d7a5825136e3275d9706a54\"},\"receipt\":\".domainry/builder/model-apply.json\",\"state\":\"implementation_ready\"}\n",
+  "event_item_id": "item_150",
+  "event_line": 550
+}

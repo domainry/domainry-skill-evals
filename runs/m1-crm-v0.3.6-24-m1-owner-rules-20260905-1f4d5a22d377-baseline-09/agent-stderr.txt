@@ -1,0 +1,3 @@
+2026-09-05T05:24:11.227564Z ERROR codex_core::tools::router: error=apply_patch verification failed: Failed to find expected lines in /private/tmp/domainry-m1-v24-owner-rules-baseline-09/project/backend/model/crm-leads.json:
+              "output": {"status": "select![converted]"},
+              "preconditions": ["status == qualified"],

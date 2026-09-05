@@ -1,0 +1,77 @@
+{
+  "contract_version": "domainry-eval-progress-v1",
+  "run_id": "m1-crm-v0.3.6-26-m1-runtime-closure-20260905-c71493395b4d-baseline-11",
+  "run_kind": "baseline",
+  "status": "terminal",
+  "lifecycle_phase": "terminal",
+  "lifecycle_state": "baseline_first_scoring_failure",
+  "lifecycle_phase_timing": {
+    "agent": {
+      "started_epoch": 1788594292.057031,
+      "ended_epoch": 1788595663.2782779
+    },
+    "checker": {
+      "started_epoch": 1788595663.5394812,
+      "ended_epoch": 1788595663.5407941
+    },
+    "scorer": {
+      "started_epoch": 1788595663.5407941,
+      "ended_epoch": 1788595663.584678
+    },
+    "terminal": {
+      "started_epoch": 1788595663.584678,
+      "ended_epoch": 1788595663.584678
+    }
+  },
+  "delivery_stage": "apply",
+  "delivery_stage_source": "agent-stages.json",
+  "delivery_stage_timing": {
+    "requirements": {
+      "started_epoch": 1788594317.0,
+      "ended_epoch": 1788594455.0
+    },
+    "model": {
+      "started_epoch": 1788594455.0,
+      "ended_epoch": 1788594854.0
+    },
+    "apply": {
+      "started_epoch": 1788594854.0,
+      "ended_epoch": null
+    },
+    "verify": {
+      "started_epoch": null,
+      "ended_epoch": null
+    }
+  },
+  "delivery_stage_timing_source": "agent-stages.json",
+  "delivery_stage_timing_status": "valid",
+  "wall_elapsed_seconds": 1371.528,
+  "domainry_cli": {
+    "invocations_total": 7,
+    "completed_total": 7,
+    "failed_total": 1,
+    "retries_total": 0,
+    "latest": {
+      "subcommand": "apply_finalize",
+      "status": "failed",
+      "exit_code": 1,
+      "output_state": "invalid",
+      "observed_epoch": 1788595663.2549639
+    }
+  },
+  "agent": {
+    "last_activity_epoch": 1788595663.2549639,
+    "last_activity_status": "observed",
+    "total_tokens": null,
+    "total_tokens_status": "unavailable"
+  },
+  "first_failure_seal_triggered": true,
+  "checker_allowed": false,
+  "checker_decision_reason": "baseline_first_failure_before_verify",
+  "scorecard": {
+    "available": true,
+    "pass_at_1": false,
+    "run_outcome_pass": false
+  },
+  "updated_epoch": 1788595663.584678
+}

@@ -1,0 +1,36 @@
+{
+  "family": "model_plan",
+  "command": "/bin/zsh -lc '/private/tmp/domainry-m1-v17-relation-baseline-02/codex-home/skills/domainry-builder-v1/bin/domainry-cli model plan --json --project /private/tmp/domainry-m1-v17-relation-baseline-02/project'",
+  "exit_code": 1,
+  "output": {
+    "artifact": ".domainry/builder/disposable/model-preflight-result.json",
+    "artifact_relative_to": "--project",
+    "contract_version": "domainry-model-preflight-envelope-v1",
+    "diagnostics": [
+      {
+        "code": "model.modules_invalid",
+        "message": "modules must be a non-empty object keyed by module",
+        "path": "backend/model/00-project.json#modules",
+        "file": "backend/model/00-project.json",
+        "json_pointer": "/modules",
+        "constraint": "model.modules_invalid",
+        "repair_hint": "repair the reported constraint at the file/JSON Pointer and rerun model plan",
+        "owner": "domainry-cli",
+        "stage": "model_loader",
+        "ledger_path": "backend/model/00-project.json#modules",
+        "repair_facts": {
+          "artifact_path": ".domainry/builder/disposable/model-preflight-result.json",
+          "artifact_relative_to": "--project",
+          "source_file": "backend/model/00-project.json"
+        }
+      }
+    ],
+    "identity": "56c31bd7c6583264a7abb6bd9889ac1ce1b382afdd03329df44d11691d73677a",
+    "issue_count": 1,
+    "sha256": "5e089ca60040bb366116cdc92cb85ad8c8fbe3f538da916ab13fdb83e38b8706",
+    "state": "repair_required"
+  },
+  "raw_output": "{\"artifact\":\".domainry/builder/disposable/model-preflight-result.json\",\"artifact_relative_to\":\"--project\",\"contract_version\":\"domainry-model-preflight-envelope-v1\",\"diagnostics\":[{\"code\":\"model.modules_invalid\",\"message\":\"modules must be a non-empty object keyed by module\",\"path\":\"backend/model/00-project.json#modules\",\"file\":\"backend/model/00-project.json\",\"json_pointer\":\"/modules\",\"constraint\":\"model.modules_invalid\",\"repair_hint\":\"repair the reported constraint at the file/JSON Pointer and rerun model plan\",\"owner\":\"domainry-cli\",\"stage\":\"model_loader\",\"ledger_path\":\"backend/model/00-project.json#modules\",\"repair_facts\":{\"artifact_path\":\".domainry/builder/disposable/model-preflight-result.json\",\"artifact_relative_to\":\"--project\",\"source_file\":\"backend/model/00-project.json\"}}],\"identity\":\"56c31bd7c6583264a7abb6bd9889ac1ce1b382afdd03329df44d11691d73677a\",\"issue_count\":1,\"sha256\":\"5e089ca60040bb366116cdc92cb85ad8c8fbe3f538da916ab13fdb83e38b8706\",\"state\":\"repair_required\"}\nmodel.modules_invalid: modules must be a non-empty object keyed by module\nerror: Builder validation found 1 issue(s)\n",
+  "event_item_id": "item_33",
+  "event_line": 65
+}

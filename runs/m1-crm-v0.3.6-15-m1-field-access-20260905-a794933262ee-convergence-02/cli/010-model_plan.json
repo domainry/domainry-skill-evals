@@ -1,0 +1,16 @@
+{
+  "family": "model_plan",
+  "command": "/bin/zsh -lc '/private/tmp/domainry-m1-v15-convergence.itjjpe/codex-home/skills/domainry-builder-v1/bin/domainry-cli model plan --json --project /private/tmp/domainry-m1-v15-convergence.itjjpe/project'",
+  "exit_code": 1,
+  "output": {
+    "artifact": ".domainry/builder/disposable/model-preflight-result.json",
+    "contract_version": "domainry-model-preflight-envelope-v1",
+    "identity": "554c8ef098e0612e0befdbd3322cad4e6cc0e61b63ac7534a89286509b97dfdd",
+    "issue_count": 3,
+    "sha256": "5582615814853d8051182ba68458673b08b3dbcc14fa8e23a440df23617062af",
+    "state": "repair_required"
+  },
+  "raw_output": "model.field_modifier_invalid: field source_lead_id modifier unique is only valid on Object fields and has no value\nmodel.field_modifier_invalid: field lead_id modifier unique is only valid on Object fields and has no value\nmodel.unknown_field: report_export_controls.lead_detail_export.record_mapping contains unknown field \"audit_job_id_field\"\nerror: Builder validation found 3 issue(s)\n{\"artifact\":\".domainry/builder/disposable/model-preflight-result.json\",\"contract_version\":\"domainry-model-preflight-envelope-v1\",\"identity\":\"554c8ef098e0612e0befdbd3322cad4e6cc0e61b63ac7534a89286509b97dfdd\",\"issue_count\":3,\"sha256\":\"5582615814853d8051182ba68458673b08b3dbcc14fa8e23a440df23617062af\",\"state\":\"repair_required\"}\n",
+  "event_item_id": "item_44",
+  "event_line": 88
+}

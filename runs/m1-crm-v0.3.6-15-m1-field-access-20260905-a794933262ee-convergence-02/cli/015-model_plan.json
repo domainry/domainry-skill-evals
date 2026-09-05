@@ -1,0 +1,16 @@
+{
+  "family": "model_plan",
+  "command": "/bin/zsh -lc '/private/tmp/domainry-m1-v15-convergence.itjjpe/codex-home/skills/domainry-builder-v1/bin/domainry-cli model plan --json --project /private/tmp/domainry-m1-v15-convergence.itjjpe/project'",
+  "exit_code": 1,
+  "output": {
+    "artifact": ".domainry/builder/disposable/model-preflight-result.json",
+    "contract_version": "domainry-model-preflight-envelope-v1",
+    "identity": "50f345c2a2ba026a01beb5187fc1efa9506f839e0220aa06d248f47bae0f9320",
+    "issue_count": 1,
+    "sha256": "df44ebf7032188b6eb5574cb29c5b01591c612b16825cd61553af2ca68bbc7bc",
+    "state": "repair_required"
+  },
+  "raw_output": "{\"artifact\":\".domainry/builder/disposable/model-preflight-result.json\",\"contract_version\":\"domainry-model-preflight-envelope-v1\",\"identity\":\"50f345c2a2ba026a01beb5187fc1efa9506f839e0220aa06d248f47bae0f9320\",\"issue_count\":1,\"sha256\":\"df44ebf7032188b6eb5574cb29c5b01591c612b16825cd61553af2ca68bbc7bc\",\"state\":\"repair_required\"}\nmodel.unknown_field: report_export_controls.lead_detail_export contains unknown field \"source_objects\"\nerror: Builder validation found 1 issue(s)\n",
+  "event_item_id": "item_55",
+  "event_line": 109
+}

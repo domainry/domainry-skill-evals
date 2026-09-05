@@ -1,0 +1,390 @@
+{
+  "family": "model_capability",
+  "command": "/bin/zsh -lc '/private/tmp/domainry-m1-v21-exact-key-baseline-06/codex-home/skills/domainry-builder-v1/bin/domainry-cli model capability --json --project /private/tmp/domainry-m1-v21-exact-key-baseline-06/project --key report.business'",
+  "exit_code": 0,
+  "output": {
+    "category": {
+      "key": "report.business",
+      "name": "Business reports",
+      "description": "Execute authorized report summaries and Object SQL queries, refresh snapshots, and prepare governed exports."
+    },
+    "contracts": [
+      {
+        "kind": "plane.blueprint_collection",
+        "key": "report_export_controls",
+        "schema": {
+          "$defs": {
+            "FreeText": {
+              "type": "string",
+              "x-domainry-string-kind": "free_text"
+            },
+            "LocalizedTextMap": {
+              "additionalProperties": {
+                "additionalProperties": {
+                  "$ref": "#/$defs/FreeText",
+                  "minLength": 1
+                },
+                "type": "object",
+                "x-domainry-allowed-properties": [
+                  "name",
+                  "description",
+                  "label",
+                  "display_name",
+                  "system_label",
+                  "resource_label",
+                  "action_label",
+                  "category_label",
+                  "message",
+                  "business_purpose"
+                ]
+              },
+              "type": "object",
+              "x-domainry-key-format": "BCP 47 locale tag"
+            },
+            "OpenValue": {
+              "type": "string",
+              "x-domainry-string-kind": "open_value"
+            },
+            "ReportExportRecordMapping": {
+              "additionalProperties": false,
+              "properties": {
+                "audit_denied_status": {
+                  "$ref": "#/$defs/OpenValue"
+                },
+                "audit_downloaded_status": {
+                  "$ref": "#/$defs/OpenValue"
+                },
+                "audit_expired_status": {
+                  "$ref": "#/$defs/OpenValue"
+                },
+                "audit_prepared_status": {
+                  "$ref": "#/$defs/OpenValue"
+                },
+                "audit_prepared_statuses": {
+                  "items": {
+                    "$ref": "#/$defs/OpenValue"
+                  },
+                  "minItems": 1,
+                  "type": "array"
+                },
+                "audit_report_key_field": {
+                  "$ref": "#/$defs/OpenValue"
+                },
+                "audit_requester_field": {
+                  "$ref": "#/$defs/OpenValue"
+                },
+                "audit_row_count_field": {
+                  "$ref": "#/$defs/OpenValue"
+                },
+                "audit_scope_hash_field": {
+                  "$ref": "#/$defs/OpenValue"
+                },
+                "audit_status_field": {
+                  "$ref": "#/$defs/OpenValue"
+                },
+                "download_audit_field": {
+                  "$ref": "#/$defs/OpenValue"
+                },
+                "download_content_hash_field": {
+                  "$ref": "#/$defs/OpenValue"
+                },
+                "download_expires_at_field": {
+                  "$ref": "#/$defs/OpenValue"
+                },
+                "download_filename_field": {
+                  "$ref": "#/$defs/OpenValue"
+                },
+                "download_job_id_field": {
+                  "$ref": "#/$defs/OpenValue"
+                },
+                "download_number_field": {
+                  "$ref": "#/$defs/OpenValue"
+                },
+                "download_watermarked_field": {
+                  "$ref": "#/$defs/OpenValue"
+                }
+              },
+              "required": [
+                "audit_report_key_field",
+                "audit_requester_field",
+                "audit_status_field",
+                "audit_prepared_statuses",
+                "audit_prepared_status",
+                "audit_downloaded_status",
+                "audit_denied_status",
+                "audit_expired_status",
+                "audit_row_count_field",
+                "audit_scope_hash_field",
+                "download_audit_field",
+                "download_filename_field",
+                "download_content_hash_field",
+                "download_expires_at_field"
+              ],
+              "type": "object"
+            },
+            "StringDynamicReference": {
+              "type": "string",
+              "x-domainry-string-kind": "dynamic_reference"
+            }
+          },
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "additionalProperties": false,
+          "properties": {
+            "approval_required": {
+              "type": "boolean"
+            },
+            "audit_object": {
+              "$ref": "#/$defs/StringDynamicReference",
+              "x-domainry-ref": {
+                "collection": "objects",
+                "resolution": "same_blueprint"
+              }
+            },
+            "config": {
+              "additionalProperties": {},
+              "type": "object"
+            },
+            "download_object": {
+              "$ref": "#/$defs/StringDynamicReference",
+              "x-domainry-ref": {
+                "collection": "objects",
+                "resolution": "same_blueprint"
+              }
+            },
+            "i18n": {
+              "$ref": "#/$defs/LocalizedTextMap"
+            },
+            "masking_required": {
+              "type": "boolean"
+            },
+            "max_rows": {
+              "minimum": 1,
+              "type": "integer"
+            },
+            "name": {
+              "$ref": "#/$defs/FreeText"
+            },
+            "object_export_policy_keys": {
+              "items": {
+                "$ref": "#/$defs/OpenValue"
+              },
+              "type": "array"
+            },
+            "reason": {
+              "$ref": "#/$defs/FreeText"
+            },
+            "record_mapping": {
+              "$ref": "#/$defs/ReportExportRecordMapping"
+            },
+            "report_key": {
+              "$ref": "#/$defs/StringDynamicReference",
+              "x-domainry-ref": {
+                "collection": "reports",
+                "resolution": "same_blueprint"
+              }
+            },
+            "sensitive_field_policy_keys": {
+              "items": {
+                "$ref": "#/$defs/StringDynamicReference",
+                "x-domainry-ref": {
+                  "collection": "sensitive_field_policies",
+                  "resolution": "same_blueprint"
+                }
+              },
+              "type": "array"
+            },
+            "sensitive_source_objects": {
+              "items": {
+                "$ref": "#/$defs/StringDynamicReference",
+                "x-domainry-ref": {
+                  "collection": "objects",
+                  "resolution": "same_blueprint"
+                }
+              },
+              "type": "array"
+            },
+            "watermark": {
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "report_key",
+            "audit_object",
+            "download_object",
+            "record_mapping",
+            "max_rows",
+            "reason"
+          ],
+          "title": "report_export_controls compact model map value",
+          "type": "object",
+          "x-domainry-collection": "report_export_controls",
+          "x-domainry-identity-source": "surrounding_map_key"
+        },
+        "references": {
+          "audit_object": {
+            "collection": "objects",
+            "mapped_field_requirements": {
+              "audit_report_key_field": {
+                "types": [
+                  "text",
+                  "select"
+                ]
+              },
+              "audit_requester_field": {
+                "types": [
+                  "user"
+                ]
+              },
+              "audit_row_count_field": {
+                "types": [
+                  "integer",
+                  "number"
+                ]
+              },
+              "audit_scope_hash_field": {
+                "types": [
+                  "text"
+                ]
+              },
+              "audit_status_field": {
+                "types": [
+                  "select",
+                  "text"
+                ],
+                "values_from": [
+                  "audit_prepared_statuses",
+                  "audit_prepared_status",
+                  "audit_downloaded_status",
+                  "audit_denied_status",
+                  "audit_expired_status"
+                ]
+              }
+            }
+          },
+          "download_object": {
+            "collection": "objects",
+            "mapped_field_requirements": {
+              "download_audit_field": {
+                "target": "<audit_object>",
+                "types": [
+                  "relation"
+                ]
+              },
+              "download_content_hash_field": {
+                "types": [
+                  "text"
+                ]
+              },
+              "download_expires_at_field": {
+                "types": [
+                  "datetime"
+                ]
+              },
+              "download_filename_field": {
+                "types": [
+                  "text"
+                ]
+              },
+              "download_job_id_field": {
+                "optional": true,
+                "types": [
+                  "text"
+                ]
+              },
+              "download_number_field": {
+                "optional": true,
+                "types": [
+                  "text"
+                ]
+              },
+              "download_watermarked_field": {
+                "optional": true,
+                "types": [
+                  "boolean"
+                ]
+              }
+            }
+          },
+          "report_key": {
+            "collection": "reports",
+            "required_execution_definition": "object_sql_v1",
+            "resolution": "same_model"
+          },
+          "role_grant_chain": {
+            "candidate_roles_from": "reports.<report_key>.audience_roles",
+            "generated_record_scope": "requester_owned",
+            "required_field_permissions": {
+              "export": true,
+              "fields_from": "compiled object_sql_v1 source plan business fields",
+              "read": true
+            },
+            "required_grants": [
+              {
+                "data_scope": "requirement_selected",
+                "permission": "<source_object>.read"
+              },
+              {
+                "data_scope": "requirement_selected",
+                "permission": "<source_object>.export"
+              },
+              {
+                "data_scope": "owner",
+                "permission": "report.exports.prepare"
+              },
+              {
+                "data_scope": "owner",
+                "permission": "data_exchange.jobs.get"
+              },
+              {
+                "data_scope": "owner",
+                "permission": "data_exchange.jobs.download"
+              },
+              {
+                "data_scope": "owner",
+                "permission": "<audit_object>.read"
+              },
+              {
+                "data_scope": "owner",
+                "permission": "<audit_object>.create"
+              },
+              {
+                "data_scope": "owner",
+                "permission": "<audit_object>.update"
+              },
+              {
+                "data_scope": "owner",
+                "permission": "<download_object>.read"
+              },
+              {
+                "data_scope": "owner",
+                "permission": "<download_object>.create"
+              }
+            ],
+            "unauthorized_role_rule": "omit report.exports.prepare and every source export grant; verify prepare denial and unchanged state"
+          },
+          "sensitive_field_policy_keys": {
+            "collection": "sensitive_field_policies",
+            "resolution": "same_model"
+          },
+          "sensitive_source_objects": {
+            "collection": "objects",
+            "resolution": "same_model"
+          },
+          "source_objects": {
+            "authoring": "compiler_derived",
+            "from": "reports.<report_key>.execution sources plus export-scope tag join objects"
+          }
+        }
+      }
+    ],
+    "validations": [
+      {
+        "kind": "report.definition",
+        "description": "Validate one project report definition against Report's object_sql_v1 contract."
+      }
+    ]
+  },
+  "raw_output": "{\"category\":{\"key\":\"report.business\",\"name\":\"Business reports\",\"description\":\"Execute authorized report summaries and Object SQL queries, refresh snapshots, and prepare governed exports.\"},\"contracts\":[{\"kind\":\"plane.blueprint_collection\",\"key\":\"report_export_controls\",\"schema\":{\"$defs\":{\"FreeText\":{\"type\":\"string\",\"x-domainry-string-kind\":\"free_text\"},\"LocalizedTextMap\":{\"additionalProperties\":{\"additionalProperties\":{\"$ref\":\"#/$defs/FreeText\",\"minLength\":1},\"type\":\"object\",\"x-domainry-allowed-properties\":[\"name\",\"description\",\"label\",\"display_name\",\"system_label\",\"resource_label\",\"action_label\",\"category_label\",\"message\",\"business_purpose\"]},\"type\":\"object\",\"x-domainry-key-format\":\"BCP 47 locale tag\"},\"OpenValue\":{\"type\":\"string\",\"x-domainry-string-kind\":\"open_value\"},\"ReportExportRecordMapping\":{\"additionalProperties\":false,\"properties\":{\"audit_denied_status\":{\"$ref\":\"#/$defs/OpenValue\"},\"audit_downloaded_status\":{\"$ref\":\"#/$defs/OpenValue\"},\"audit_expired_status\":{\"$ref\":\"#/$defs/OpenValue\"},\"audit_prepared_status\":{\"$ref\":\"#/$defs/OpenValue\"},\"audit_prepared_statuses\":{\"items\":{\"$ref\":\"#/$defs/OpenValue\"},\"minItems\":1,\"type\":\"array\"},\"audit_report_key_field\":{\"$ref\":\"#/$defs/OpenValue\"},\"audit_requester_field\":{\"$ref\":\"#/$defs/OpenValue\"},\"audit_row_count_field\":{\"$ref\":\"#/$defs/OpenValue\"},\"audit_scope_hash_field\":{\"$ref\":\"#/$defs/OpenValue\"},\"audit_status_field\":{\"$ref\":\"#/$defs/OpenValue\"},\"download_audit_field\":{\"$ref\":\"#/$defs/OpenValue\"},\"download_content_hash_field\":{\"$ref\":\"#/$defs/OpenValue\"},\"download_expires_at_field\":{\"$ref\":\"#/$defs/OpenValue\"},\"download_filename_field\":{\"$ref\":\"#/$defs/OpenValue\"},\"download_job_id_field\":{\"$ref\":\"#/$defs/OpenValue\"},\"download_number_field\":{\"$ref\":\"#/$defs/OpenValue\"},\"download_watermarked_field\":{\"$ref\":\"#/$defs/OpenValue\"}},\"required\":[\"audit_report_key_field\",\"audit_requester_field\",\"audit_status_field\",\"audit_prepared_statuses\",\"audit_prepared_status\",\"audit_downloaded_status\",\"audit_denied_status\",\"audit_expired_status\",\"audit_row_count_field\",\"audit_scope_hash_field\",\"download_audit_field\",\"download_filename_field\",\"download_content_hash_field\",\"download_expires_at_field\"],\"type\":\"object\"},\"StringDynamicReference\":{\"type\":\"string\",\"x-domainry-string-kind\":\"dynamic_reference\"}},\"$schema\":\"https://json-schema.org/draft/2020-12/schema\",\"additionalProperties\":false,\"properties\":{\"approval_required\":{\"type\":\"boolean\"},\"audit_object\":{\"$ref\":\"#/$defs/StringDynamicReference\",\"x-domainry-ref\":{\"collection\":\"objects\",\"resolution\":\"same_blueprint\"}},\"config\":{\"additionalProperties\":{},\"type\":\"object\"},\"download_object\":{\"$ref\":\"#/$defs/StringDynamicReference\",\"x-domainry-ref\":{\"collection\":\"objects\",\"resolution\":\"same_blueprint\"}},\"i18n\":{\"$ref\":\"#/$defs/LocalizedTextMap\"},\"masking_required\":{\"type\":\"boolean\"},\"max_rows\":{\"minimum\":1,\"type\":\"integer\"},\"name\":{\"$ref\":\"#/$defs/FreeText\"},\"object_export_policy_keys\":{\"items\":{\"$ref\":\"#/$defs/OpenValue\"},\"type\":\"array\"},\"reason\":{\"$ref\":\"#/$defs/FreeText\"},\"record_mapping\":{\"$ref\":\"#/$defs/ReportExportRecordMapping\"},\"report_key\":{\"$ref\":\"#/$defs/StringDynamicReference\",\"x-domainry-ref\":{\"collection\":\"reports\",\"resolution\":\"same_blueprint\"}},\"sensitive_field_policy_keys\":{\"items\":{\"$ref\":\"#/$defs/StringDynamicReference\",\"x-domainry-ref\":{\"collection\":\"sensitive_field_policies\",\"resolution\":\"same_blueprint\"}},\"type\":\"array\"},\"sensitive_source_objects\":{\"items\":{\"$ref\":\"#/$defs/StringDynamicReference\",\"x-domainry-ref\":{\"collection\":\"objects\",\"resolution\":\"same_blueprint\"}},\"type\":\"array\"},\"watermark\":{\"type\":\"boolean\"}},\"required\":[\"report_key\",\"audit_object\",\"download_object\",\"record_mapping\",\"max_rows\",\"reason\"],\"title\":\"report_export_controls compact model map value\",\"type\":\"object\",\"x-domainry-collection\":\"report_export_controls\",\"x-domainry-identity-source\":\"surrounding_map_key\"},\"references\":{\"audit_object\":{\"collection\":\"objects\",\"mapped_field_requirements\":{\"audit_report_key_field\":{\"types\":[\"text\",\"select\"]},\"audit_requester_field\":{\"types\":[\"user\"]},\"audit_row_count_field\":{\"types\":[\"integer\",\"number\"]},\"audit_scope_hash_field\":{\"types\":[\"text\"]},\"audit_status_field\":{\"types\":[\"select\",\"text\"],\"values_from\":[\"audit_prepared_statuses\",\"audit_prepared_status\",\"audit_downloaded_status\",\"audit_denied_status\",\"audit_expired_status\"]}}},\"download_object\":{\"collection\":\"objects\",\"mapped_field_requirements\":{\"download_audit_field\":{\"target\":\"\\u003caudit_object\\u003e\",\"types\":[\"relation\"]},\"download_content_hash_field\":{\"types\":[\"text\"]},\"download_expires_at_field\":{\"types\":[\"datetime\"]},\"download_filename_field\":{\"types\":[\"text\"]},\"download_job_id_field\":{\"optional\":true,\"types\":[\"text\"]},\"download_number_field\":{\"optional\":true,\"types\":[\"text\"]},\"download_watermarked_field\":{\"optional\":true,\"types\":[\"boolean\"]}}},\"report_key\":{\"collection\":\"reports\",\"required_execution_definition\":\"object_sql_v1\",\"resolution\":\"same_model\"},\"role_grant_chain\":{\"candidate_roles_from\":\"reports.\\u003creport_key\\u003e.audience_roles\",\"generated_record_scope\":\"requester_owned\",\"required_field_permissions\":{\"export\":true,\"fields_from\":\"compiled object_sql_v1 source plan business fields\",\"read\":true},\"required_grants\":[{\"data_scope\":\"requirement_selected\",\"permission\":\"\\u003csource_object\\u003e.read\"},{\"data_scope\":\"requirement_selected\",\"permission\":\"\\u003csource_object\\u003e.export\"},{\"data_scope\":\"owner\",\"permission\":\"report.exports.prepare\"},{\"data_scope\":\"owner\",\"permission\":\"data_exchange.jobs.get\"},{\"data_scope\":\"owner\",\"permission\":\"data_exchange.jobs.download\"},{\"data_scope\":\"owner\",\"permission\":\"\\u003caudit_object\\u003e.read\"},{\"data_scope\":\"owner\",\"permission\":\"\\u003caudit_object\\u003e.create\"},{\"data_scope\":\"owner\",\"permission\":\"\\u003caudit_object\\u003e.update\"},{\"data_scope\":\"owner\",\"permission\":\"\\u003cdownload_object\\u003e.read\"},{\"data_scope\":\"owner\",\"permission\":\"\\u003cdownload_object\\u003e.create\"}],\"unauthorized_role_rule\":\"omit report.exports.prepare and every source export grant; verify prepare denial and unchanged state\"},\"sensitive_field_policy_keys\":{\"collection\":\"sensitive_field_policies\",\"resolution\":\"same_model\"},\"sensitive_source_objects\":{\"collection\":\"objects\",\"resolution\":\"same_model\"},\"source_objects\":{\"authoring\":\"compiler_derived\",\"from\":\"reports.\\u003creport_key\\u003e.execution sources plus export-scope tag join objects\"}}}],\"validations\":[{\"kind\":\"report.definition\",\"description\":\"Validate one project report definition against Report's object_sql_v1 contract.\"}]}\n",
+  "event_item_id": "item_26",
+  "event_line": 51
+}

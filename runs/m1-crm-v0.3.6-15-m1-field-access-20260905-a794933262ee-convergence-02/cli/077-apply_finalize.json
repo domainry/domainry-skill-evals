@@ -1,0 +1,9 @@
+{
+  "family": "apply_finalize",
+  "command": "/bin/zsh -lc '/private/tmp/domainry-m1-v15-convergence.itjjpe/codex-home/skills/domainry-builder-v1/bin/domainry-cli apply finalize --json'",
+  "exit_code": 1,
+  "output": "error: domainry-cli <command>\n\nCommands:\n  domainry-cli model capability --json [--project <path>] [--key <category> | --connector <key> | --connector-context <connector.provider>]\n  domainry-cli model plan --json --project <path>\n  domainry-cli apply model --json --project <path> --go-module-path <path> [...]\n  domainry-cli apply finalize --json --project <path>\n  domainry-cli frontend install --json --project <absolute-path> [--environment <name> | --service <url>]\n  domainry-cli verify --json --project <path> [--address 127.0.0.1:<port>]\n\nMetadata:\n  domainry-cli --version --json",
+  "raw_output": "error: domainry-cli <command>\n\nCommands:\n  domainry-cli model capability --json [--project <path>] [--key <category> | --connector <key> | --connector-context <connector.provider>]\n  domainry-cli model plan --json --project <path>\n  domainry-cli apply model --json --project <path> --go-module-path <path> [...]\n  domainry-cli apply finalize --json --project <path>\n  domainry-cli frontend install --json --project <absolute-path> [--environment <name> | --service <url>]\n  domainry-cli verify --json --project <path> [--address 127.0.0.1:<port>]\n\nMetadata:\n  domainry-cli --version --json\n",
+  "event_item_id": "item_299",
+  "event_line": 831
+}

@@ -1,0 +1,16 @@
+{
+  "family": "model_plan",
+  "command": "/bin/zsh -lc '/private/tmp/domainry-m1-v15-convergence.itjjpe/codex-home/skills/domainry-builder-v1/bin/domainry-cli model plan --json --project /private/tmp/domainry-m1-v15-convergence.itjjpe/project'",
+  "exit_code": 1,
+  "output": {
+    "artifact": ".domainry/builder/disposable/model-preflight-result.json",
+    "contract_version": "domainry-model-preflight-envelope-v1",
+    "identity": "874de7ff817dc4e24d117eebe26ab13711c6eb9c0281c516e05b52122349e22e",
+    "issue_count": 1,
+    "sha256": "d78f55d368c1b13fe861aa2e3fd687cab4951aa460f820c032ba30ddde78dc8d",
+    "state": "repair_required"
+  },
+  "raw_output": "model.unknown_field: reports.sales_funnel.object_sql_v1.result_schema.expected_amount_total contains unknown field \"currency\"\nerror: Builder validation found 1 issue(s)\n{\"artifact\":\".domainry/builder/disposable/model-preflight-result.json\",\"contract_version\":\"domainry-model-preflight-envelope-v1\",\"identity\":\"874de7ff817dc4e24d117eebe26ab13711c6eb9c0281c516e05b52122349e22e\",\"issue_count\":1,\"sha256\":\"d78f55d368c1b13fe861aa2e3fd687cab4951aa460f820c032ba30ddde78dc8d\",\"state\":\"repair_required\"}\n",
+  "event_item_id": "item_218",
+  "event_line": 673
+}

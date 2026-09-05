@@ -1,0 +1,45 @@
+{
+  "family": "apply_finalize",
+  "command": "/bin/zsh -lc '/private/tmp/domainry-m1-v26-runtime-closure-baseline-11/codex-home/skills/domainry-builder-v1/bin/domainry-cli apply finalize --json --project /private/tmp/domainry-m1-v26-runtime-closure-baseline-11/project'",
+  "exit_code": 1,
+  "output": {
+    "contract_version": "domainry-project-check-v1",
+    "state": "invalid",
+    "project_root": "/private/tmp/domainry-m1-v26-runtime-closure-baseline-11/project",
+    "scope": "actions",
+    "summary": "project actions source violates static policy",
+    "issue_count": 3,
+    "diagnostics": [
+      {
+        "code": "project.action_capability_unused",
+        "message": "Action Handler MarkContacted does not use a generated business capability through parameter caps",
+        "path": "backend/actions/crm/lead_mark_contacted.go",
+        "line": 42,
+        "column": 1,
+        "owner": "project-source",
+        "category": "actions"
+      },
+      {
+        "code": "project.action_capability_unused",
+        "message": "Action Handler MarkLost does not use a generated business capability through parameter caps",
+        "path": "backend/actions/crm/lead_mark_lost.go",
+        "line": 11,
+        "column": 1,
+        "owner": "project-source",
+        "category": "actions"
+      },
+      {
+        "code": "project.action_capability_unused",
+        "message": "Action Handler MarkQualified does not use a generated business capability through parameter caps",
+        "path": "backend/actions/crm/lead_mark_qualified.go",
+        "line": 11,
+        "column": 1,
+        "owner": "project-source",
+        "category": "actions"
+      }
+    ]
+  },
+  "raw_output": "[domainry] apply finalize: validate project-owned source...\n[domainry] apply finalize: validate project-owned source failed (194ms)\nerror: project check found 3 issue(s)\n{\"contract_version\":\"domainry-project-check-v1\",\"state\":\"invalid\",\"project_root\":\"/private/tmp/domainry-m1-v26-runtime-closure-baseline-11/project\",\"scope\":\"actions\",\"summary\":\"project actions source violates static policy\",\"issue_count\":3,\"diagnostics\":[{\"code\":\"project.action_capability_unused\",\"message\":\"Action Handler MarkContacted does not use a generated business capability through parameter caps\",\"path\":\"backend/actions/crm/lead_mark_contacted.go\",\"line\":42,\"column\":1,\"owner\":\"project-source\",\"category\":\"actions\"},{\"code\":\"project.action_capability_unused\",\"message\":\"Action Handler MarkLost does not use a generated business capability through parameter caps\",\"path\":\"backend/actions/crm/lead_mark_lost.go\",\"line\":11,\"column\":1,\"owner\":\"project-source\",\"category\":\"actions\"},{\"code\":\"project.action_capability_unused\",\"message\":\"Action Handler MarkQualified does not use a generated business capability through parameter caps\",\"path\":\"backend/actions/crm/lead_mark_qualified.go\",\"line\":11,\"column\":1,\"owner\":\"project-source\",\"category\":\"actions\"}]}\n",
+  "event_item_id": "item_57",
+  "event_line": 108
+}

@@ -1,4 +1,4 @@
-# Builder Skill 评估指标规范 v2
+# Builder Skill 评估指标规范 v3
 
 本文档是评估体系的唯一指标权威。所有 scorecard 字段名以本文档为准。
 
@@ -43,9 +43,15 @@ A 组每个字段的取值来源记录在顶层 `A_source` 字段(`{A1..A6: sour
 | `A2_apply_first_pass` | 首次 `apply model` 是否成功 | `apply_model` 捕获工件 / apply 回执 |
 | `A3_finalize_first_pass` | 首次 `apply finalize` 是否成功 | `apply_finalize` 捕获工件 / finalization 回执 |
 | `A4_verify_first_pass` | 首次 `verify` 是否完整通过且最终 stopped | `verify` 捕获工件 / verification、package、Runtime 回执 |
-| `A5_acceptance_first_pass` | evaluator 独立金标准验收是否首轮全过 | `acceptance_check` 捕获工件 / checklist result |
+| `A5_acceptance_first_pass` | evaluator 独立金标准验收是否首轮全过；baseline 在 verify 前首败封存、checker 未执行时为 `null`，来源为 `not_measurable` | `acceptance_check` 捕获工件 / checklist result |
 | `A6_rework_rounds` | 同一 CLI family 失败后再次调用的往返总数 | 捕获工件序号 |
-| `A7_false_done` | agent 声称 done 但金标准验收失败(布尔,最严重) | done 声明 vs golden 结果 |
+| `A7_false_done` | Agent 声称 done，且 oracle/done 不一致并非纯 benchmark/platform 缺陷 | done、golden 与 failure owner |
+
+同时保留两个审计字段：`A7_oracle_done_mismatch` 原样记录“done 与冻结 oracle 不一致”；
+`A7_false_done_classification` 区分 `no_oracle_done_mismatch`、
+`benchmark_or_platform_mismatch`、`agent_false_done`、`unattributed_mismatch`。因此冻结
+checker 有错或纯 CLI/Runtime platform 缺陷不会再被描述为 Agent 虚假完成；旧 scorecard 的
+原 A7 值不回写，仍按当时 schema 保留审计。
 
 ## B. 覆盖度(对金标准)
 
@@ -55,15 +61,22 @@ A 组每个字段的取值来源记录在顶层 `A_source` 字段(`{A1..A6: sour
 | `B2_silent_downgrade_count` | 被跳过/降级且未在 TODO 声明的金标准功能点数 |
 | `B3_platform_reuse_rate` | 用平台元数据能力实现的功能点 / 可复用功能点总数 |
 
+新 checklist 每项显式输出 `reuse_eligible`、`mechanism` 与 `mechanism_detail.evidence_sources`。
+B3 分母只含 `reuse_eligible=true`，分子只含其中状态通过且由 Runtime/manifest 真实证据分类为
+`reuse` 的项；必须由项目事务 Handler 完成的项不进入分母。缺少 `reuse_eligible` 的旧结果
+继续使用旧的 `reuse|custom` 分母口径，保证可读但不与新口径静默混算。
+兼容字段 `mechanism` 仍为 `reuse|custom`；`mechanism_detail.classification` 可进一步标成
+`hybrid`，并列出实际参与的 manifest、Runtime operation 与 `project_handler` 来源。
+
 ## C. 时长与成本
 
 | 字段 | 定义 |
 |---|---|
 | `C1_wall_clock_seconds` | 任务开始到 done 声明 |
-| `C2_total_tokens` | 全程 token(input+output+cache) |
+| `C2_total_tokens` | 全程 token(input+output+cache)；事件流没有 usage snapshot 时保持 `null`，不得估算 |
 | `C3_reading_token_ratio` | 读 Skill 文档消耗 / 总消耗(度量文档冗余税)。需 transcript token 记账,当前 agent-driven 模式无数据源,暂不自动计算。 |
 | `C4_cli_invocations` / `C4_cli_retries` | CLI 调用总数 / 其中重试数 |
-| `C5_stage_seconds` | 各阶段耗时分布 `{requirements, model, apply, verify}`。实现与 `apply finalize` 属于 apply；真实 Runtime 业务旅程属于 verify；done 只是终态。读取顺序:agent 实时产出的 `project/.domainry/development/stages.json`(各阶段 `{started, ended}` epoch,见 run-protocol「投放提示要求」)> run 目录 `stages.json`(driver 手工)> run 内回执/证据文件时间戳 best-effort 近似(受后期演化覆盖污染,仅兜底)。来源标注于 `C5_stage_seconds_source`(`agent-stages.json` / `stages.json` / `mtime-approx`),拿不到的阶段为 null。 |
+| `C5_stage_seconds` | 各阶段耗时分布 `{requirements, model, apply, verify}`。实现与 `apply finalize` 属于 apply；真实 Runtime 业务旅程属于 verify；done 只是终态。读取顺序:agent 实时产出的 `project/.domainry/development/stages.json`(各阶段 `{started, ended}` epoch,见 run-protocol「投放提示要求」)> run 目录 `stages.json`(driver 手工)> run 内回执/证据文件时间戳 best-effort 近似(受后期演化覆盖污染,仅兜底)。Agent epoch 必须位于 Agent lifecycle 边界内、单调且不重叠，否则整组为 null。来源标注于 `C5_stage_seconds_source`，可信度/拒绝原因标注于 `C5_stage_seconds_status`；拿不到的阶段为 null。 |
 
 ## D. 稳定性与干预
 
@@ -71,6 +84,18 @@ A 组每个字段的取值来源记录在顶层 `A_source` 字段(`{A1..A6: sour
 |---|---|
 | `D1_repeat_pass_rate` | 同一 benchmark 重复 N 次的合格率 |
 | `D2_human_interventions` | 人工干预次数(卡死解围、澄清、纠错) |
+
+## 运行资格字段
+
+新 scorecard 额外输出 `run_kind`、`parent_run_id`、`terminal_state`、
+`measurement_complete`、`pass_at_1_eligible` 和 `run_outcome_pass`。convergence 的
+`pass_at_1=null`；预算截断、baseline 首败截断或其他不完整终态的 `pass_at_1=false`，即使
+目录里碰巧存在最终成功回执也不能冒充首轮完成证据。
+
+`environment_valid=false` 的 session/candidate/freeze/service 隔离失败无条件排除 pass@1 与 run outcome；
+按设计在首个评分失败处封存的 baseline 则保持 `environment_valid=true`，仅因首败边界而不能通过。
+这些语义属于 `scorer_schema=domainry-builder-eval-v3`。已归档 v2 scorecard 原样保留；读取
+旧 run 输入做诊断时必须写到新路径，禁止覆盖其历史 scorecard。
 
 ## 失败归因分类(每个失败一条记录)
 

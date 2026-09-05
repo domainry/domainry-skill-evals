@@ -1,0 +1,76 @@
+{
+  "contract_version": "domainry-eval-progress-v1",
+  "run_id": "m1-crm-v0.3.6-21-m1-exact-key-navigation-20260905-86f49f8eb560-baseline-06",
+  "run_kind": "baseline",
+  "status": "terminal",
+  "lifecycle_phase": "terminal",
+  "lifecycle_state": "baseline_first_scoring_failure",
+  "lifecycle_phase_timing": {
+    "agent": {
+      "started_epoch": 1788579315.918438,
+      "ended_epoch": 1788580918.2117891
+    },
+    "checker": {
+      "started_epoch": 1788580918.2117891,
+      "ended_epoch": 1788580918.358606
+    },
+    "scorer": {
+      "started_epoch": 1788580918.358606,
+      "ended_epoch": 1788580918.385345
+    },
+    "terminal": {
+      "started_epoch": 1788580918.385345,
+      "ended_epoch": 1788580918.385345
+    }
+  },
+  "delivery_stage": "verify",
+  "delivery_stage_source": "agent-stages.json",
+  "delivery_stage_timing": {
+    "requirements": {
+      "started_epoch": 1788579357.0,
+      "ended_epoch": 1788579514.0
+    },
+    "model": {
+      "started_epoch": 1788579514.0,
+      "ended_epoch": 1788579922.0
+    },
+    "apply": {
+      "started_epoch": 1788579922.0,
+      "ended_epoch": 1788580756.0
+    },
+    "verify": {
+      "started_epoch": 1788580756.0,
+      "ended_epoch": null
+    }
+  },
+  "delivery_stage_timing_source": "agent-stages.json",
+  "wall_elapsed_seconds": 1602.467,
+  "domainry_cli": {
+    "invocations_total": 13,
+    "completed_total": 13,
+    "failed_total": 1,
+    "retries_total": 0,
+    "latest": {
+      "subcommand": "verify",
+      "status": "failed",
+      "exit_code": 1,
+      "output_state": "failed",
+      "observed_epoch": 1788580917.881572
+    }
+  },
+  "agent": {
+    "last_activity_epoch": 1788580917.881572,
+    "last_activity_status": "observed",
+    "total_tokens": null,
+    "total_tokens_status": "unavailable"
+  },
+  "first_failure_seal_triggered": true,
+  "checker_allowed": true,
+  "checker_decision_reason": "eligible",
+  "scorecard": {
+    "available": true,
+    "pass_at_1": false,
+    "run_outcome_pass": false
+  },
+  "updated_epoch": 1788580918.385345
+}

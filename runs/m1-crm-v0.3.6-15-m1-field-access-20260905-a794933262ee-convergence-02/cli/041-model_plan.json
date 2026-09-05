@@ -1,0 +1,11 @@
+{
+  "family": "model_plan",
+  "command": "/bin/zsh -lc '/private/tmp/domainry-m1-v15-convergence.itjjpe/codex-home/skills/domainry-builder-v1/bin/domainry-cli model plan --json --project /private/tmp/domainry-m1-v15-convergence.itjjpe/project'",
+  "exit_code": 1,
+  "output": [
+    9
+  ],
+  "raw_output": "{\"artifact\":\".domainry/builder/disposable/model-preflight-result.json\",\"contract_version\":\"domainry-model-preflight-envelope-v1\",\"create_items\":[],\"creates\":0,\"delete_items\":[],\"deletes\":0,\"files\":7,\"identity\":\"3cd7b994170fc86a943d1cfcbf01a4ab5405717968a2cc207bac371b6c6cc4fb\",\"issue_count\":1,\"items\":38,\"sha256\":\"55af710563fa1db195618d5d5f04864e8189c5db4fd55f19dc325c0336b2ae02\",\"sql_files\":2,\"state\":\"repair_required\",\"unchanged\":35,\"update_items\":[\"crm/resource/actions.lead.send_overdue_reminders\",\"crm/resource/roles.sales_director\",\"crm/resource/roles.sales_rep\"],\"updates\":3}\nledger.runtime_manifest_invalid: compiled Runtime manifest is invalid: roles[0].field_permissions[3].field_key: unknown or disabled field \"created_at\" on object \"lead\"; roles[0].field_permissions[5].field_key: unknown or disabled field \"id\" on object \"lead\"; roles[0].field_permissions[9].field_key: unknown or disabled field \"updated_at\" on object \"lead\"\nerror: Builder validation found 1 issue(s)\n",
+  "event_item_id": "item_145",
+  "event_line": 532
+}

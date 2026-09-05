@@ -1,0 +1,23 @@
+{
+  "contract_version": "domainry-eval-run-lifecycle-v1",
+  "run_id": "m1-crm-v0.3.6-28-m1-bootstrap-roles-20260905-bc9783f3127f-baseline-13",
+  "run_kind": "baseline",
+  "parent_run_id": null,
+  "state": "agent_running",
+  "measurement_complete": false,
+  "environment_valid": true,
+  "measurement_boundary": "running",
+  "started_epoch": 1788600628.317782,
+  "ended_epoch": null,
+  "budgets": {
+    "wall_clock_seconds": 3600.0,
+    "total_tokens": 5000000,
+    "cli_invocations": 40,
+    "cli_retries": 0
+  },
+  "usage": {},
+  "termination": null,
+  "freeze_manifest_sha256": "5bf3cd01451a89d36c3e93b060e77d523530dd02e1d9b142ad28573d1f6e09e4",
+  "ephemeral_auth_staged": true,
+  "auth_cleanup_status": "pending"
+}

@@ -13,7 +13,7 @@ The holdout pool and its golden assets live in evaluator-controlled storage outs
 
 ## Freeze manifest and two denominators
 
-Before revealing the selected holdout PRD to the delivery agent, persist one immutable freeze manifest containing hashes and versions for the PRD, public semantic IDs, driver prompt, benchmark denominator, golden/oracle, fixture generator, scorer and outcome schema, installed Skill tree, packaged CLI, declared external service target, Runtime contract, model, and material run settings. Do not resolve any candidate or platform identity from a source checkout.
+Before revealing the selected holdout PRD to the delivery agent, persist one immutable freeze manifest containing hashes and versions for the PRD, public semantic IDs, driver prompt, benchmark denominator, golden/oracle, fixture generator, checker, scorer and outcome schema, installed Skill tree, packaged CLI, declared external service target, live Application Delivery manifest identity, Runtime module/version/closure, Runtime API and authoring contracts, project template/client/Skill-package identities, delivery trust identity, model, budgets, and material run settings. The service must be healthy before launch and the same public identity must be observed after the Agent exits. The manifest also records that the isolation root, project, isolated `CODEX_HOME`, Agent home, SQLite database, WAL and SHM did not exist before preparation. Do not resolve any candidate or platform identity from a source checkout.
 
 Keep two denominators distinct:
 
@@ -24,9 +24,30 @@ Both hashes and their explicit case-set reconciliation belong in every result. A
 
 ## Measured run and lineage
 
-Use a new standalone Git project, fresh Agent session, frozen installed candidate package, and zero human clarification or repair. Capture every command/event needed to measure the first `model plan`, `apply model`, `apply finalize`, `verify`, and evaluator acceptance attempts; a `not_measurable` first-pass funnel is not strict holdout evidence. Golden assertions must actually execute, not merely finish setup.
+Use a newly created standalone empty Git project, a new SQLite cohort and a fresh Agent session in an isolated `CODEX_HOME` containing only a byte-for-byte frozen candidate copy plus, while the Agent process is alive, one minimal `auth.json`. The driver never copies history, session/thread databases, memories, logs, state, queue, skills, or ordinary configuration from the caller. Authentication content, hashes and source paths are never persisted in evaluator artifacts, and the isolated credential is removed on every Agent exit path. The driver passes a minimal clean environment, never resumes or continues a prior session, and gives the Agent only requirements plus the driver-owned run policy. Golden/checker/scorer assets and historical runs are not passed through its prompt, command arguments, environment, or working directory. Capture every command/event needed to measure the first `model plan`, `apply model`, `apply finalize`, `verify`, and evaluator acceptance attempts; a `not_measurable` first-pass funnel is not strict holdout evidence. Golden assertions must actually execute, not merely finish setup.
+
+Runtime business-flow evidence is extracted from the last captured verify result and archived before checker execution. A legacy external evidence file may fill a missing embedded result but cannot replace one; conflicting hashes invalidate the run. Missing or contract-invalid evidence remains a checker failure, and no driver layer may synthesize it.
+
+The driver validates the installed candidate, isolated copy, and live service identity before launch and revalidates all three after exit. Any Skill tree, package identity, CLI, prompt, checker, scorer, candidate config, freeze-manifest, Application Delivery, or Runtime identity drift makes the run environment invalid and prevents checker execution. A baseline intentionally sealed at its first scoring failure remains an environment-valid partial measurement only when those identities remain stable; it is not mislabeled as an isolation failure, though it is still ineligible for pass-at-1.
 
 Write the first run once to an immutable run directory containing the freeze manifest, raw event stream, complete exact-set results, scorer output, token/time accounting, and every failure. Never overwrite it. Later repairs use a separate `convergence` run with `parent_run_id`, changed component hashes, changed-case inventory, and a reference to the preserved first run. Convergence is never named pass-at-1.
+
+The evaluator driver, not the delivery prompt, owns the measurement boundary. A
+`baseline` stops immediately after the first failed scoring command (`model
+plan`, `apply model`, `apply finalize`, or `verify`) and then seals the partial
+event stream, completed CLI captures, checker attempt/result, scorecard and
+failure facts. It must not let the same Agent repair that failure. Continuing
+repairs requires an explicitly selected `convergence` run and a non-empty
+`parent_run_id`.
+
+Every run freezes positive wall-clock, total-token, CLI-invocation and CLI-retry
+budgets when configured. The driver terminates the Agent process group when an
+observable budget is exceeded, attempts evaluator acceptance, preserves all
+available evidence, and records an explicit `budget_exhausted_*` terminal state.
+Token enforcement consumes cumulative usage snapshots from the Agent event
+stream; runners used with a token budget must stream those snapshots rather than
+report usage only after an unbounded turn. An interrupted or budget-exhausted
+run is incomplete evidence and is never eligible for pass-at-1.
 
 Every benchmark case has exactly one typed outcome such as `passed`, `product_gap`, `model_error`, `runner_gap`, `platform_blocked`, `benchmark_defect`, `not_emitted`, or `not_executed`. Raw Runtime Results v2 and any evaluator/business-harness reconciliation remain separately available; an aggregate count never replaces either exact set. Only a `needs_business_harness` row may be replaced by that harness, and the replacement retains lineage to the original row.
 

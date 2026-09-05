@@ -1,0 +1,171 @@
+{
+  "family": "model_capability",
+  "command": "/bin/zsh -lc '/private/tmp/domainry-m1-v17-relation-baseline-02/codex-home/skills/domainry-builder-v1/bin/domainry-cli model capability --json --project /private/tmp/domainry-m1-v17-relation-baseline-02/project --key records.authoring'",
+  "exit_code": 0,
+  "output": {
+    "category": {
+      "key": "records.authoring",
+      "name": "Action authoring",
+      "description": "Author Runtime Action metadata while project-owned handlers retain business behavior."
+    },
+    "contracts": [
+      {
+        "kind": "runtime.authoring_capability",
+        "key": "action.definition",
+        "lifecycle": "versioned_metadata",
+        "schema": {
+          "additionalProperties": false,
+          "properties": {
+            "assurance_policy": {
+              "additionalProperties": false,
+              "properties": {
+                "approval_hash_field": {
+                  "type": "string"
+                },
+                "approval_version_field": {
+                  "type": "string"
+                },
+                "maker_field": {
+                  "type": "string"
+                },
+                "recent_reauth_max_age_seconds": {
+                  "type": "integer"
+                },
+                "required_methods": {
+                  "items": {
+                    "enum": [
+                      "normal_login",
+                      "recent_reauth",
+                      "otp",
+                      "maker_checker",
+                      "workflow_approval"
+                    ],
+                    "type": "string"
+                  },
+                  "type": "array"
+                }
+              },
+              "required": [
+                "required_methods"
+              ],
+              "type": "object"
+            },
+            "concurrency_field": {
+              "type": "string"
+            },
+            "defaults": {
+              "type": "object"
+            },
+            "kind": {
+              "enum": [
+                "bulk_operation",
+                "conditional_update",
+                "object_create",
+                "object_operation",
+                "record_delete",
+                "record_operation",
+                "record_restore",
+                "record_update",
+                "transition_state"
+              ],
+              "type": "string"
+            },
+            "label": {
+              "type": "string"
+            },
+            "object_key": {
+              "type": "string"
+            },
+            "optimistic_concurrency": {
+              "default": false,
+              "type": "boolean"
+            },
+            "payload_fields": {
+              "items": {
+                "additionalProperties": false,
+                "properties": {
+                  "default": {},
+                  "key": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  },
+                  "options": {
+                    "items": {
+                      "type": "string"
+                    },
+                    "type": "array"
+                  },
+                  "required": {
+                    "type": "boolean"
+                  },
+                  "type": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "key",
+                  "type"
+                ],
+                "type": "object"
+              },
+              "type": "array"
+            },
+            "preconditions": {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            "risk_level": {
+              "enum": [
+                "low",
+                "medium",
+                "high",
+                "critical"
+              ],
+              "type": "string"
+            }
+          },
+          "required": [
+            "kind",
+            "label",
+            "object_key"
+          ],
+          "type": "object"
+        },
+        "references": [
+          {
+            "input_json_pointer": "/payload/object_key",
+            "kind": "object_key"
+          },
+          {
+            "input_json_pointer": "/payload/assurance_policy/approval_version_field",
+            "kind": "field_key",
+            "scope_from": "/payload/object_key"
+          },
+          {
+            "input_json_pointer": "/payload/assurance_policy/approval_hash_field",
+            "kind": "field_key",
+            "scope_from": "/payload/object_key"
+          },
+          {
+            "input_json_pointer": "/payload/assurance_policy/maker_field",
+            "kind": "field_key",
+            "scope_from": "/payload/object_key"
+          }
+        ]
+      }
+    ],
+    "validations": [
+      {
+        "kind": "action.definition",
+        "description": "Validate one project Action definition against its referenced object contract."
+      }
+    ]
+  },
+  "raw_output": "{\"category\":{\"key\":\"records.authoring\",\"name\":\"Action authoring\",\"description\":\"Author Runtime Action metadata while project-owned handlers retain business behavior.\"},\"contracts\":[{\"kind\":\"runtime.authoring_capability\",\"key\":\"action.definition\",\"lifecycle\":\"versioned_metadata\",\"schema\":{\"additionalProperties\":false,\"properties\":{\"assurance_policy\":{\"additionalProperties\":false,\"properties\":{\"approval_hash_field\":{\"type\":\"string\"},\"approval_version_field\":{\"type\":\"string\"},\"maker_field\":{\"type\":\"string\"},\"recent_reauth_max_age_seconds\":{\"type\":\"integer\"},\"required_methods\":{\"items\":{\"enum\":[\"normal_login\",\"recent_reauth\",\"otp\",\"maker_checker\",\"workflow_approval\"],\"type\":\"string\"},\"type\":\"array\"}},\"required\":[\"required_methods\"],\"type\":\"object\"},\"concurrency_field\":{\"type\":\"string\"},\"defaults\":{\"type\":\"object\"},\"kind\":{\"enum\":[\"bulk_operation\",\"conditional_update\",\"object_create\",\"object_operation\",\"record_delete\",\"record_operation\",\"record_restore\",\"record_update\",\"transition_state\"],\"type\":\"string\"},\"label\":{\"type\":\"string\"},\"object_key\":{\"type\":\"string\"},\"optimistic_concurrency\":{\"default\":false,\"type\":\"boolean\"},\"payload_fields\":{\"items\":{\"additionalProperties\":false,\"properties\":{\"default\":{},\"key\":{\"type\":\"string\"},\"name\":{\"type\":\"string\"},\"options\":{\"items\":{\"type\":\"string\"},\"type\":\"array\"},\"required\":{\"type\":\"boolean\"},\"type\":{\"type\":\"string\"}},\"required\":[\"key\",\"type\"],\"type\":\"object\"},\"type\":\"array\"},\"preconditions\":{\"items\":{\"type\":\"string\"},\"type\":\"array\"},\"risk_level\":{\"enum\":[\"low\",\"medium\",\"high\",\"critical\"],\"type\":\"string\"}},\"required\":[\"kind\",\"label\",\"object_key\"],\"type\":\"object\"},\"references\":[{\"input_json_pointer\":\"/payload/object_key\",\"kind\":\"object_key\"},{\"input_json_pointer\":\"/payload/assurance_policy/approval_version_field\",\"kind\":\"field_key\",\"scope_from\":\"/payload/object_key\"},{\"input_json_pointer\":\"/payload/assurance_policy/approval_hash_field\",\"kind\":\"field_key\",\"scope_from\":\"/payload/object_key\"},{\"input_json_pointer\":\"/payload/assurance_policy/maker_field\",\"kind\":\"field_key\",\"scope_from\":\"/payload/object_key\"}]}],\"validations\":[{\"kind\":\"action.definition\",\"description\":\"Validate one project Action definition against its referenced object contract.\"}]}\n",
+  "event_item_id": "item_12",
+  "event_line": 25
+}

@@ -1,0 +1,10 @@
+[
+  {
+    "stage": "driver",
+    "owner": null,
+    "note": "evaluator terminal state: acceptance_failed",
+    "terminal_state": "acceptance_failed",
+    "detail": null,
+    "attribution_status": "pending"
+  }
+]

@@ -1,0 +1,44 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "domainry-builder-eval-v3",
+  "title": "Domainry Builder evaluator scorecard v3",
+  "type": "object",
+  "additionalProperties": true,
+  "required": [
+    "scorer_schema", "run_id", "pass_at_1", "pass_at_1_eligible",
+    "run_outcome_pass", "A7_false_done", "A7_oracle_done_mismatch",
+    "A7_false_done_classification", "B3_platform_reuse_rate"
+  ],
+  "properties": {
+    "scorer_schema": {"const": "domainry-builder-eval-v3"},
+    "run_kind": {"type": ["string", "null"], "enum": ["baseline", "convergence", null]},
+    "parent_run_id": {"type": ["string", "null"]},
+    "terminal_state": {"type": ["string", "null"]},
+    "measurement_complete": {"type": ["boolean", "null"]},
+    "environment_valid": {"type": ["boolean", "null"]},
+    "pass_at_1_eligible": {"type": "boolean"},
+    "pass_at_1": {"type": ["boolean", "null"]},
+    "run_outcome_pass": {"type": "boolean"},
+    "A7_false_done": {"type": "boolean"},
+    "A7_oracle_done_mismatch": {"type": "boolean"},
+    "A7_false_done_classification": {
+      "enum": [
+        "no_oracle_done_mismatch", "benchmark_or_platform_mismatch",
+        "agent_false_done", "unattributed_mismatch"
+      ]
+    },
+    "B3_platform_reuse_rate": {"type": ["number", "null"], "minimum": 0, "maximum": 1}
+    ,
+    "C5_stage_seconds_source": {
+      "type": ["string", "null"],
+      "enum": ["agent-stages.json", "stages.json", "mtime-approx", null]
+    },
+    "C5_stage_seconds_status": {
+      "enum": [
+        "valid", "approximate", "unavailable", "invalid_shape",
+        "invalid_lifecycle_boundary", "invalid_out_of_bounds",
+        "invalid_interval", "invalid_non_monotonic"
+      ]
+    }
+  }
+}

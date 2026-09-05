@@ -41,11 +41,18 @@ def write_run(tmp_path, families):
     (run / "checklist-results.json").write_text(json.dumps({"results": [
         {"id": "M01", "priority": "P0", "status": "pass", "mechanism": "custom"},
     ]}))
+    outputs = {
+        "model_plan": {"state": "valid"},
+        "apply_model": {"state": "implementation_ready"},
+        "apply_finalize": {"state": "finalized"},
+        "verify": {"state": "verified_and_stopped"},
+        "acceptance_check": {"state": "passed"},
+    }
     for index, family in enumerate(families, 1):
         (cli / f"{index:03d}-{family}.json").write_text(json.dumps({
             "family": family,
             "exit_code": 0,
-            "output": {"state": "passed"},
+            "output": outputs.get(family, {"state": "passed"}),
         }))
     return run
 
@@ -58,7 +65,7 @@ def test_current_cli_funnel_can_prove_pass_at_1(tmp_path, capsys):
     MOD.main(run)
     capsys.readouterr()
     scorecard = json.loads((run / "scorecard.json").read_text())
-    assert scorecard["scorer_schema"] == "domainry-builder-eval-v2"
+    assert scorecard["scorer_schema"] == "domainry-builder-eval-v3"
     assert scorecard["candidate_id"] == "pkg+tree"
     assert scorecard["pass_at_1"] is True
     assert scorecard["A6_rework_rounds"] == 0
@@ -94,3 +101,142 @@ def test_final_receipts_cannot_impersonate_first_pass(tmp_path, capsys):
     assert scorecard["A1_plan_first_pass"] is True
     assert scorecard["A4_verify_first_pass"] is True
     assert scorecard["pass_at_1"] is None
+
+
+def test_benchmark_or_platform_mismatch_is_not_agent_false_done(tmp_path, capsys):
+    run = write_run(tmp_path, [
+        "model_plan", "apply_model", "apply_finalize", "verify",
+    ])
+    (run / "checklist-results.json").write_text(json.dumps({"results": [
+        {"id": "M01", "priority": "P0", "status": "fail", "mechanism": "reuse"},
+    ]}))
+    (run / "failures.json").write_text(json.dumps([
+        {"stage": "acceptance", "owner": "benchmark_defect", "note": "bad oracle"},
+        {"stage": "verify", "owner": "cli_platform", "note": "platform defect"},
+    ]))
+    MOD.main(run)
+    capsys.readouterr()
+    scorecard = json.loads((run / "scorecard.json").read_text())
+    assert scorecard["A7_oracle_done_mismatch"] is True
+    assert scorecard["A7_false_done"] is False
+    assert scorecard["A7_false_done_classification"] == "benchmark_or_platform_mismatch"
+
+
+def test_convergence_and_budget_terminal_states_are_not_pass_at_1(tmp_path, capsys):
+    run = write_run(tmp_path, [
+        "model_plan", "apply_model", "apply_finalize", "verify",
+    ])
+    (run / "lifecycle.json").write_text(json.dumps({
+        "run_kind": "convergence",
+        "parent_run_id": "baseline-01",
+        "state": "completed",
+        "measurement_complete": True,
+    }))
+    MOD.main(run)
+    capsys.readouterr()
+    scorecard = json.loads((run / "scorecard.json").read_text())
+    assert scorecard["pass_at_1"] is None
+    assert scorecard["pass_at_1_eligible"] is False
+    assert scorecard["run_outcome_pass"] is True
+
+    (run / "lifecycle.json").write_text(json.dumps({
+        "run_kind": "baseline",
+        "state": "budget_exhausted_wall_clock",
+        "measurement_complete": False,
+    }))
+    MOD.main(run)
+    capsys.readouterr()
+    scorecard = json.loads((run / "scorecard.json").read_text())
+    assert scorecard["pass_at_1"] is False
+    assert scorecard["run_outcome_pass"] is False
+
+
+def test_b3_uses_explicit_reuse_eligibility(tmp_path, capsys):
+    run = write_run(tmp_path, [
+        "model_plan", "apply_model", "apply_finalize", "verify",
+    ])
+    (run / "checklist-results.json").write_text(json.dumps({"results": [
+        {"id": "M01", "priority": "P0", "status": "pass", "mechanism": "reuse",
+         "reuse_eligible": True},
+        {"id": "M02", "priority": "P0", "status": "pass", "mechanism": "custom",
+         "reuse_eligible": True},
+        {"id": "M06", "priority": "P0", "status": "pass", "mechanism": "custom",
+         "reuse_eligible": False},
+    ]}))
+    MOD.main(run)
+    capsys.readouterr()
+    scorecard = json.loads((run / "scorecard.json").read_text())
+    assert scorecard["B3_platform_reuse_rate"] == 0.5
+
+
+def test_measured_run_does_not_derive_unobserved_stages_from_receipts(tmp_path, capsys):
+    run = write_run(tmp_path, ["model_plan", "apply_model"])
+    state = run / "project/.domainry/builder/receipts"
+    state.mkdir(parents=True)
+    (state / "finalization.json").write_text(json.dumps({"receipt_sha256": "stale"}))
+    (run / "lifecycle.json").write_text(json.dumps({
+        "run_kind": "baseline",
+        "state": "delivery_incomplete",
+        "measurement_complete": False,
+        "environment_valid": True,
+    }))
+    MOD.main(run)
+    capsys.readouterr()
+    scorecard = json.loads((run / "scorecard.json").read_text())
+    assert scorecard["A3_finalize_first_pass"] is None
+    assert scorecard["A_source"]["A3"] == "not_measurable"
+
+
+def test_finalize_without_success_receipt_is_not_a3_first_pass(tmp_path, capsys):
+    run = write_run(tmp_path, [
+        "model_plan", "apply_model", "apply_finalize", "verify",
+    ])
+    finalize = run / "cli/003-apply_finalize.json"
+    document = json.loads(finalize.read_text())
+    document["output"] = {}
+    finalize.write_text(json.dumps(document))
+    (run / "lifecycle.json").write_text(json.dumps({
+        "run_kind": "baseline",
+        "state": "delivery_incomplete",
+        "measurement_complete": False,
+        "environment_valid": True,
+    }))
+    MOD.main(run)
+    capsys.readouterr()
+    scorecard = json.loads((run / "scorecard.json").read_text())
+    assert scorecard["A3_finalize_first_pass"] is False
+    assert scorecard["pass_at_1_eligible"] is False
+
+
+def test_c5_rejects_out_of_bounds_and_overlapping_agent_timestamps(tmp_path, capsys):
+    run = write_run(tmp_path, ["model_plan", "apply_model"])
+    stage_path = run / "project/.domainry/development/stages.json"
+    stage_path.parent.mkdir(parents=True)
+    (run / "lifecycle.json").write_text(json.dumps({
+        "run_kind": "baseline",
+        "state": "delivery_incomplete",
+        "measurement_complete": False,
+        "environment_valid": True,
+        "started_epoch": 100.0,
+        "agent_ended_epoch": 300.0,
+    }))
+
+    stage_path.write_text(json.dumps({
+        "requirements": {"started": 29.0, "ended": 120.0},
+        "model": {"started": 120.0, "ended": 180.0},
+    }))
+    MOD.main(run)
+    capsys.readouterr()
+    scorecard = json.loads((run / "scorecard.json").read_text())
+    assert scorecard["C5_stage_seconds_status"] == "invalid_out_of_bounds"
+    assert all(value is None for value in scorecard["C5_stage_seconds"].values())
+
+    stage_path.write_text(json.dumps({
+        "requirements": {"started": 100.0, "ended": 180.0},
+        "model": {"started": 170.0, "ended": 220.0},
+    }))
+    MOD.main(run)
+    capsys.readouterr()
+    scorecard = json.loads((run / "scorecard.json").read_text())
+    assert scorecard["C5_stage_seconds_status"] == "invalid_non_monotonic"
+    assert all(value is None for value in scorecard["C5_stage_seconds"].values())

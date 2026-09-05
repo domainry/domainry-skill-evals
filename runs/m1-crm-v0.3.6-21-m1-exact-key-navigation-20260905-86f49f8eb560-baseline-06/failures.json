@@ -1,0 +1,14 @@
+[
+  {
+    "stage": "verify",
+    "owner": null,
+    "note": "evaluator terminal state: baseline_first_scoring_failure",
+    "terminal_state": "baseline_first_scoring_failure",
+    "detail": {
+      "family": "verify",
+      "exit_code": 1,
+      "output_state": "failed"
+    },
+    "attribution_status": "pending"
+  }
+]

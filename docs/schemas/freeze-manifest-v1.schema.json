@@ -1,0 +1,78 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "domainry-eval-freeze-manifest-v1",
+  "title": "Domainry evaluator freeze manifest v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "contract_version", "run_id", "benchmark", "run_kind", "parent_run_id",
+    "model", "budgets", "absence_proof", "isolation", "candidate",
+    "isolated_candidate", "service_identity", "hashes", "agent_context"
+  ],
+  "properties": {
+    "contract_version": {"const": "domainry-eval-freeze-manifest-v1"},
+    "run_id": {"type": "string", "minLength": 1},
+    "benchmark": {"type": "string", "minLength": 1},
+    "run_kind": {"enum": ["baseline", "convergence"]},
+    "parent_run_id": {"type": ["string", "null"]},
+    "model": {"type": "string", "minLength": 1},
+    "budgets": {"type": "object"},
+    "absence_proof": {
+      "type": "object",
+      "required": [
+        "checked_epoch", "isolation_root_absent", "project_absent",
+        "codex_home_absent", "agent_home_absent", "sqlite_database_absent",
+        "sqlite_wal_absent", "sqlite_shm_absent"
+      ],
+      "properties": {
+        "checked_epoch": {"type": "number"},
+        "isolation_root_absent": {"const": true},
+        "project_absent": {"const": true},
+        "codex_home_absent": {"const": true},
+        "agent_home_absent": {"const": true},
+        "sqlite_database_absent": {"const": true},
+        "sqlite_wal_absent": {"const": true},
+        "sqlite_shm_absent": {"const": true}
+      }
+    },
+    "isolation": {"type": "object"},
+    "candidate": {"type": "object"},
+    "isolated_candidate": {"type": "object"},
+    "service_identity": {
+      "type": "object",
+      "required": ["target_kind"],
+      "properties": {
+        "target_kind": {"enum": ["service", "environment"]},
+        "healthy": {"type": "boolean"},
+        "http_status": {"type": "integer"},
+        "health_document_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "published_identity": {"type": "object"},
+        "identity_verifiable": {"type": "boolean"}
+      }
+    },
+    "hashes": {
+      "type": "object",
+      "required": [
+        "candidate_config_sha256", "requirements_sha256",
+        "rendered_driver_prompt_sha256", "checker_sha256", "scorer_sha256",
+        "frozen_checker_sha256", "frozen_scorer_sha256", "driver_sha256",
+        "agent_command_sha256", "checker_command_sha256"
+      ]
+    },
+    "agent_context": {
+      "type": "object",
+      "required": [
+        "fresh_session_required", "resume_forbidden", "codex_home_contents_during_agent",
+        "ephemeral_auth_staged", "auth_retention", "environment_policy",
+        "prompt_inputs", "evaluator_assets_exposed"
+      ],
+      "properties": {
+        "fresh_session_required": {"const": true},
+        "resume_forbidden": {"const": true},
+        "ephemeral_auth_staged": {"type": "boolean"},
+        "auth_retention": {"const": "remove_immediately_after_agent"},
+        "evaluator_assets_exposed": {"const": false}
+      }
+    }
+  }
+}

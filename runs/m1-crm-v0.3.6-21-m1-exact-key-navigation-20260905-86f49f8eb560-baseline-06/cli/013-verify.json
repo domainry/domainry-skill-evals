@@ -1,0 +1,69 @@
+{
+  "family": "verify",
+  "command": "/bin/zsh -lc 'DOMAINRY_EVAL_SQLITE_PATH=\"$DOMAINRY_EVAL_SQLITE_PATH\" /private/tmp/domainry-m1-v21-exact-key-baseline-06/codex-home/skills/domainry-builder-v1/bin/domainry-cli verify --json --project /private/tmp/domainry-m1-v21-exact-key-baseline-06/project --address 127.0.0.1:19286'",
+  "exit_code": 1,
+  "output": {
+    "contract_version": "domainry-project-verify-v2",
+    "error": "verify initial Runtime business flows: managed business-flow tests failed for initial: exit status 1: === RUN   TestBF01LeadLifecycle\n    crm_businessflow_test.go:11: initial management login failed: status=404\n--- FAIL: TestBF01LeadLifecycle (0.00s)\n=== RUN   TestBF02DirectConversion\n    crm_businessflow_test.go:44: initial management login failed: status=404\n--- FAIL: TestBF02DirectConversion (0.00s)\n=== RUN   TestBF03ApprovalAccepted\n    crm_businessflow_test.go:77: initial management login failed: status=404\n--- FAIL: TestBF03ApprovalAccepted (0.00s)\n=== RUN   TestBF04ApprovalRejected\n    crm_businessflow_test.go:139: initial management login failed: status=404\n--- FAIL: TestBF04ApprovalRejected (0.00s)\n=== RUN   TestBF05ScopePaginationAndMenus\n    crm_businessflow_test.go:186: initial management login failed: status=404\n--- FAIL: TestBF05ScopePaginationAndMenus (0.00s)\n=== RUN   TestBF06OverdueReminder\n    crm_businessflow_test.go:211: initial management login failed: status=404\n--- FAIL: TestBF06OverdueReminder (0.00s)\n=== RUN   TestBF07FunnelReport\n    crm_businessflow_test.go:238: initial management login failed: status=404\n--- FAIL: TestBF07FunnelReport (0.00s)\n=== RUN   TestBF08GovernedCSVExport\n    crm_businessflow_test.go:260: initial management login failed: status=404\n--- FAIL: TestBF08GovernedCSVExport (0.00s)\nFAIL",
+    "state": "failed",
+    "telemetry": {
+      "contract_version": "domainry-verify-telemetry-v1",
+      "elapsed_ms": 100080,
+      "cache": {
+        "signed_runtime_package": false,
+        "verification_receipt": false
+      },
+      "cache_misses": {
+        "signed_runtime_package": "current V6 package receipt is missing: lstat /private/tmp/domainry-m1-v21-exact-key-baseline-06/project/.domainry/builder/receipts/package.json: no such file or directory",
+        "verification_receipt": "verification receipt is missing"
+      },
+      "stages": [
+        {
+          "name": "validate reusable verification and signed Runtime package",
+          "status": "done",
+          "elapsed_ms": 0,
+          "owner": "domainry-runtime"
+        },
+        {
+          "name": "run structural checks and complete backend tests",
+          "status": "done",
+          "elapsed_ms": 55220,
+          "owner": "domainry-builder"
+        },
+        {
+          "name": "build and sign exact Runtime package",
+          "status": "done",
+          "elapsed_ms": 39912,
+          "owner": "domainry-runtime"
+        },
+        {
+          "name": "compile managed Runtime business-flow tests",
+          "status": "done",
+          "elapsed_ms": 979,
+          "owner": "domainry-runtime"
+        },
+        {
+          "name": "start initial managed Runtime",
+          "status": "done",
+          "elapsed_ms": 2127,
+          "owner": "domainry-runtime"
+        },
+        {
+          "name": "run initial Runtime business flows",
+          "status": "failed",
+          "elapsed_ms": 394,
+          "owner": "project.business_flow_tests"
+        }
+      ],
+      "first_failure": {
+        "name": "run initial Runtime business flows",
+        "status": "failed",
+        "elapsed_ms": 394,
+        "owner": "project.business_flow_tests"
+      }
+    }
+  },
+  "raw_output": "[domainry] verify: run structural checks and complete backend tests done (55.22s)\n[domainry] verify: build and sign exact Runtime package...\n[domainry] verify: build and sign exact Runtime package done (39.912s)\n[domainry] verify: compile managed Runtime business-flow tests...\n[domainry] verify: compile managed Runtime business-flow tests done (979ms)\n[domainry] verify: start initial managed Runtime...\n[domainry] verify: start initial managed Runtime done (2.127s)\n[domainry] verify: run initial Runtime business flows...\n[domainry] verify: run initial Runtime business flows failed (394ms)\n{\"contract_version\":\"domainry-project-verify-v2\",\"error\":\"verify initial Runtime business flows: managed business-flow tests failed for initial: exit status 1: === RUN   TestBF01LeadLifecycle\\n    crm_businessflow_test.go:11: initial management login failed: status=404\\n--- FAIL: TestBF01LeadLifecycle (0.00s)\\n=== RUN   TestBF02DirectConversion\\n    crm_businessflow_test.go:44: initial management login failed: status=404\\n--- FAIL: TestBF02DirectConversion (0.00s)\\n=== RUN   TestBF03ApprovalAccepted\\n    crm_businessflow_test.go:77: initial management login failed: status=404\\n--- FAIL: TestBF03ApprovalAccepted (0.00s)\\n=== RUN   TestBF04ApprovalRejected\\n    crm_businessflow_test.go:139: initial management login failed: status=404\\n--- FAIL: TestBF04ApprovalRejected (0.00s)\\n=== RUN   TestBF05ScopePaginationAndMenus\\n    crm_businessflow_test.go:186: initial management login failed: status=404\\n--- FAIL: TestBF05ScopePaginationAndMenus (0.00s)\\n=== RUN   TestBF06OverdueReminder\\n    crm_businessflow_test.go:211: initial management login failed: status=404\\n--- FAIL: TestBF06OverdueReminder (0.00s)\\n=== RUN   TestBF07FunnelReport\\n    crm_businessflow_test.go:238: initial management login failed: status=404\\n--- FAIL: TestBF07FunnelReport (0.00s)\\n=== RUN   TestBF08GovernedCSVExport\\n    crm_businessflow_test.go:260: initial management login failed: status=404\\n--- FAIL: TestBF08GovernedCSVExport (0.00s)\\nFAIL\",\"state\":\"failed\",\"telemetry\":{\"contract_version\":\"domainry-verify-telemetry-v1\",\"elapsed_ms\":100080,\"cache\":{\"signed_runtime_package\":false,\"verification_receipt\":false},\"cache_misses\":{\"signed_runtime_package\":\"current V6 package receipt is missing: lstat /private/tmp/domainry-m1-v21-exact-key-baseline-06/project/.domainry/builder/receipts/package.json: no such file or directory\",\"verification_receipt\":\"verification receipt is missing\"},\"stages\":[{\"name\":\"validate reusable verification and signed Runtime package\",\"status\":\"done\",\"elapsed_ms\":0,\"owner\":\"domainry-runtime\"},{\"name\":\"run structural checks and complete backend tests\",\"status\":\"done\",\"elapsed_ms\":55220,\"owner\":\"domainry-builder\"},{\"name\":\"build and sign exact Runtime package\",\"status\":\"done\",\"elapsed_ms\":39912,\"owner\":\"domainry-runtime\"},{\"name\":\"compile managed Runtime business-flow tests\",\"status\":\"done\",\"elapsed_ms\":979,\"owner\":\"domainry-runtime\"},{\"name\":\"start initial managed Runtime\",\"status\":\"done\",\"elapsed_ms\":2127,\"owner\":\"domainry-runtime\"},{\"name\":\"run initial Runtime business flows\",\"status\":\"failed\",\"elapsed_ms\":394,\"owner\":\"project.business_flow_tests\"}],\"first_failure\":{\"name\":\"run initial Runtime business flows\",\"status\":\"failed\",\"elapsed_ms\":394,\"owner\":\"project.business_flow_tests\"}}}\nerror: verify initial Runtime business flows: managed business-flow tests failed for initial: exit status 1: === RUN   TestBF01LeadLifecycle\n    crm_businessflow_test.go:11: initial management login failed: status=404\n--- FAIL: TestBF01LeadLifecycle (0.00s)\n=== RUN   TestBF02DirectConversion\n    crm_businessflow_test.go:44: initial management login failed: status=404\n--- FAIL: TestBF02DirectConversion (0.00s)\n=== RUN   TestBF03ApprovalAccepted\n    crm_businessflow_test.go:77: initial management login failed: status=404\n--- FAIL: TestBF03ApprovalAccepted (0.00s)\n=== RUN   TestBF04ApprovalRejected\n    crm_businessflow_test.go:139: initial management login failed: status=404\n--- FAIL: TestBF04ApprovalRejected (0.00s)\n=== RUN   TestBF05ScopePaginationAndMenus\n    crm_businessflow_test.go:186: initial management login failed: status=404\n--- FAIL: TestBF05ScopePaginationAndMenus (0.00s)\n=== RUN   TestBF06OverdueReminder\n    crm_businessflow_test.go:211: initial management login failed: status=404\n--- FAIL: TestBF06OverdueReminder (0.00s)\n=== RUN   TestBF07FunnelReport\n    crm_businessflow_test.go:238: initial management login failed: status=404\n--- FAIL: TestBF07FunnelReport (0.00s)\n=== RUN   TestBF08GovernedCSVExport\n    crm_businessflow_test.go:260: initial management login failed: status=404\n--- FAIL: TestBF08GovernedCSVExport (0.00s)\nFAIL\n",
+  "event_item_id": "item_82",
+  "event_line": 155
+}

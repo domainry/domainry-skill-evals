@@ -1,0 +1,9 @@
+{
+  "family": "verify",
+  "command": "/bin/zsh -lc \"ps -axo pid,etime,stat,command | rg 'domainry-cli verify|domainry-runtime|go test' | rg -v 'rg '\"",
+  "exit_code": 0,
+  "output": "84889       02:16 Ss   /private/tmp/domainry-m1-v15-convergence.itjjpe/codex-home/skills/domainry-builder-v1/bin/domainry-cli verify --json --project . --address 127.0.0.1:19284",
+  "raw_output": "84889       02:16 Ss   /private/tmp/domainry-m1-v15-convergence.itjjpe/codex-home/skills/domainry-builder-v1/bin/domainry-cli verify --json --project . --address 127.0.0.1:19284\n",
+  "event_item_id": "item_308",
+  "event_line": 846
+}

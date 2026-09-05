@@ -1,0 +1,39 @@
+[
+  {
+    "stage": "model_loader",
+    "owner": "domainry-cli",
+    "note": "Action conversion_request.reject_effect input field reason has Object-only constraints but no uniquely named source field in its Handler access closure",
+    "terminal_state": "baseline_first_scoring_failure",
+    "attribution_status": "attributed",
+    "diagnostic": {
+      "code": "model.action_field_source_not_found",
+      "message": "Action conversion_request.reject_effect input field reason has Object-only constraints but no uniquely named source field in its Handler access closure",
+      "path": "backend/model/crm-conversion-approval.json#modules/crm/features/crm_conversion_approval/actions/conversion_request.reject_effect/input/reason",
+      "file": "backend/model/crm-conversion-approval.json",
+      "json_pointer": "/modules/crm/features/crm_conversion_approval/actions/conversion_request.reject_effect/input/reason",
+      "constraint": "model.action_field_source_not_found",
+      "actual": "long_text!;max_length=1000",
+      "allowed_values": [
+        "long_text!"
+      ],
+      "repair_hint": "replace long_text!;max_length=1000 with long_text! to keep this Action field standalone; otherwise align exactly one semantically named Object field already present in handler.access",
+      "owner": "domainry-cli",
+      "stage": "model_loader",
+      "ledger_path": "backend/model/crm-conversion-approval.json#modules/crm/features/crm_conversion_approval/actions/conversion_request.reject_effect/input/reason",
+      "repair_facts": {
+        "action": "conversion_request.reject_effect",
+        "actual": "long_text!;max_length=1000",
+        "allowed_values": [
+          "long_text!"
+        ],
+        "artifact_path": ".domainry/builder/disposable/model-preflight-result.json",
+        "artifact_relative_to": "--project",
+        "direction": "input",
+        "field": "reason",
+        "operation": "replace",
+        "repair_hint": "replace long_text!;max_length=1000 with long_text! to keep this Action field standalone; otherwise align exactly one semantically named Object field already present in handler.access",
+        "source_file": "backend/model/crm-conversion-approval.json"
+      }
+    }
+  }
+]

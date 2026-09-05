@@ -1,0 +1,9 @@
+{
+  "family": "model_plan",
+  "command": "/bin/zsh -lc \"rg -n 'domainry-cli.*(model plan|apply model|apply finalize|verify)' .domainry backend -g '*.md' -g '*.json' -g '*.log' | head -160\"",
+  "exit_code": 0,
+  "output": "",
+  "raw_output": "",
+  "event_item_id": "item_143",
+  "event_line": 528
+}

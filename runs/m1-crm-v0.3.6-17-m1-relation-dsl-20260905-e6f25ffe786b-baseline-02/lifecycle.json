@@ -1,0 +1,48 @@
+{
+  "contract_version": "domainry-eval-run-lifecycle-v1",
+  "run_id": "m1-crm-v0.3.6-17-m1-relation-dsl-20260905-e6f25ffe786b-baseline-02",
+  "run_kind": "baseline",
+  "parent_run_id": null,
+  "state": "baseline_first_scoring_failure",
+  "measurement_complete": false,
+  "environment_valid": true,
+  "measurement_boundary": "baseline_first_failure_sealed",
+  "started_epoch": 1788571081.152247,
+  "ended_epoch": 1788571638.9105668,
+  "budgets": {
+    "wall_clock_seconds": 3600.0,
+    "total_tokens": 5000000,
+    "cli_invocations": 40,
+    "cli_retries": 0
+  },
+  "usage": {
+    "wall_clock_seconds": 557.758,
+    "total_tokens": null,
+    "cli_invocations_started": 11,
+    "cli_invocations_captured": 11,
+    "cli_retries_started": 0
+  },
+  "termination": {
+    "family": "model_plan",
+    "exit_code": 1,
+    "output_state": "repair_required"
+  },
+  "freeze_manifest_sha256": "6991cd6996f93cfdd85ceef33b541c26ad1f0fcef8520830fae6b5fb903ee373",
+  "ephemeral_auth_staged": true,
+  "auth_cleanup_status": "removed",
+  "first_scoring_failure": {
+    "family": "model_plan",
+    "exit_code": 1,
+    "output_state": "repair_required"
+  },
+  "agent_exit_code": 0,
+  "checker_exit_code": null,
+  "agent_session_id": "01a06f24-dfb4-7f02-8bfc-73a00672b377",
+  "business_flow_evidence_source": "missing",
+  "business_flow_evidence_contract_valid": null,
+  "business_flow_evidence_sha256": null,
+  "business_flow_evidence_error": null,
+  "service_identity_before_sha256": "2a0333876d08b52d793d9b27b94e4030c66b77fb09e982b6727b7c82b7bead27",
+  "service_identity_after_sha256": "2a0333876d08b52d793d9b27b94e4030c66b77fb09e982b6727b7c82b7bead27",
+  "scorer_exit_code": 0
+}

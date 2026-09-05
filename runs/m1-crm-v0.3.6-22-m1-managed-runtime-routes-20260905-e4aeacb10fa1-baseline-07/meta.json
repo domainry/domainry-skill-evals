@@ -1,0 +1,21 @@
+{
+  "benchmark": "m1-crm",
+  "candidate_id": "v0.3.6-22-m1-managed-runtime-routes-20260905+e4aeacb10fa1",
+  "skill_version": "v0.3.6-22-m1-managed-runtime-routes-20260905",
+  "model": "gpt-5.6-sol",
+  "run_id": "m1-crm-v0.3.6-22-m1-managed-runtime-routes-20260905-e4aeacb10fa1-baseline-07",
+  "run_kind": "baseline",
+  "parent_run_id": null,
+  "terminal_state": "baseline_first_scoring_failure",
+  "measurement_complete": false,
+  "environment_valid": true,
+  "agent_declared_done": false,
+  "human_interventions": 0,
+  "started_epoch": 1788581642.393139,
+  "ended_epoch": 1788582169.2671628,
+  "project_path": "/private/tmp/domainry-m1-v22-managed-routes-baseline-07/project",
+  "isolation_root": "/private/tmp/domainry-m1-v22-managed-routes-baseline-07",
+  "codex_home": "/private/tmp/domainry-m1-v22-managed-routes-baseline-07/codex-home",
+  "database_path": "/private/tmp/domainry-m1-v22-managed-routes-baseline-07/runtime/cohort.sqlite",
+  "agent_session_id": "01a06fc6-06e6-7331-b2df-91e24193567f"
+}

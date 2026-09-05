@@ -1,0 +1,14 @@
+[
+  {
+    "stage": "model_plan",
+    "owner": null,
+    "note": "evaluator terminal state: baseline_first_scoring_failure",
+    "terminal_state": "baseline_first_scoring_failure",
+    "detail": {
+      "family": "model_plan",
+      "exit_code": 1,
+      "output_state": "repair_required"
+    },
+    "attribution_status": "pending"
+  }
+]

@@ -1,0 +1,7 @@
+usage: evaluator-checker.py [-h] --project PROJECT --run-dir RUN_DIR
+                            [--verify-result VERIFY_RESULT]
+                            [--flow-evidence FLOW_EVIDENCE]
+                            [--base-url BASE_URL] [--database DATABASE]
+                            [--bootstrap-password BOOTSTRAP_PASSWORD]
+                            [--acceptance-password ACCEPTANCE_PASSWORD]
+evaluator-checker.py: error: use --verify-result or provide all legacy live-Runtime arguments

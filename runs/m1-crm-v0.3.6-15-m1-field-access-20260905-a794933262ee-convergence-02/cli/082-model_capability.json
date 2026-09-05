@@ -1,0 +1,9 @@
+{
+  "family": "model_capability",
+  "command": "/bin/zsh -lc '/private/tmp/domainry-m1-v15-convergence.itjjpe/codex-home/skills/domainry-builder-v1/bin/domainry-cli model capability --json --key data_exchange'",
+  "exit_code": 1,
+  "output": "error: module_capability.category_not_found: unknown capability category",
+  "raw_output": "error: module_capability.category_not_found: unknown capability category\n",
+  "event_item_id": "item_324",
+  "event_line": 878
+}

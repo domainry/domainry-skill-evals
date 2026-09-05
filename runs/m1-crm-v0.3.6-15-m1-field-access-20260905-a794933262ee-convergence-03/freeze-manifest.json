@@ -1,0 +1,48 @@
+{
+  "contract_version": "domainry-eval-freeze-v2",
+  "benchmark": "m1-crm",
+  "run_id": "m1-crm-v0.3.6-15-m1-field-access-20260905-a794933262ee-convergence-03",
+  "parent_run_id": "m1-crm-v0.3.6-15-m1-field-access-20260905-a794933262ee-convergence-02",
+  "frozen_epoch": 1788564471,
+  "model": "gpt-5.6-sol",
+  "reasoning_effort": "high",
+  "candidate": {
+    "candidate_id": "v0.3.6-15-m1-field-access-20260905+a794933262ee",
+    "skill_name": "domainry-builder-v1",
+    "skill_version": "v0.3.6-15-m1-field-access-20260905",
+    "skill_tree_sha256": "a794933262ee0de59a915d54e1a32ff44226908b51d02b3dd2439f89c0dd092d",
+    "cli_binary_sha256": "b91b86d0ea3eebe0d3377bf2cc0991b1ca407ae4d6f512df5086b29630d984e4",
+    "package_metadata_sha256": "827cb9eee56cbd5daec8370cbcd179cacb6763bef22ebfd019c466bacccbe593",
+    "runtime_api_contract_hash": "4fe655cbfd4fa0bc0b0c04c89b86926fc6aceb059c9fccf5b09eec9b459330f7",
+    "runtime_api_contract_version": "runtime-domain-api-v1",
+    "apply_target_args": ["--service", "http://127.0.0.1:8283"]
+  },
+  "candidate_copy": "/private/tmp/domainry-m1-v15-convergence3.9fZhO5/codex-home/skills/domainry-builder-v1",
+  "requirements_sha256": "399d9b501d121e44ce72a32926a6c7605133085da69c44fa8a5ce2b7c4a1c2e3",
+  "prompt_sha256": "d13ecc9abb846110b0e075fdbe2ea1f3353af08d6c22b1b0f97f4adfbec283f8",
+  "benchmark_denominator": {
+    "sha256": "4c13b2a69cfaa8abae7490cb4828acb1b3ada9e8d6f115de6c97deee6df9b925",
+    "case_ids": ["M01", "M02", "M03", "M04", "M05", "M06", "M07", "M08", "M09", "M10", "M11", "M12", "M13", "M14", "M15", "M16", "M17", "M18", "M19"]
+  },
+  "checker_sha256": "92e8bd78f715ae2da7faa0e6948f961798f7ef95c62d4c726f69fee224c6caf7",
+  "scorer_sha256": "65188b19b86eb3eeee9dde21aba010e7c37818bff4fea9884415f0c276f3a211",
+  "changed_components": [
+    {
+      "component": "harness/run_m1_baseline.py",
+      "parent_sha256": "bffe4885b57703df7a9dce81a38bc460f97877199b0ac2567e4b96db090db2e7",
+      "sha256": "92e8bd78f715ae2da7faa0e6948f961798f7ef95c62d4c726f69fee224c6caf7",
+      "reason": "M01 now evaluates the four required localized business labels instead of hard-coding the unspecified internal key exhibition"
+    }
+  ],
+  "changed_case_inventory": ["M01"],
+  "project_initial_entries": [".git/", "requirements.md"],
+  "project_builder_state_initial_entries": [],
+  "verification_address": "127.0.0.1:19285",
+  "plane": {
+    "service": "http://127.0.0.1:8283",
+    "status": "healthy",
+    "version": "v0.3.6-15-m1-field-access-20260905",
+    "project_delivery_store_existing_file_count": 36,
+    "project_delivery_store_snapshot_sha256": "2aa310b04809bc885764bc8913414fccfbb1c3f4701733647e36c6b1f968195c"
+  }
+}
