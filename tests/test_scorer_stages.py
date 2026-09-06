@@ -228,7 +228,8 @@ def test_c5_rejects_out_of_bounds_and_overlapping_agent_timestamps(tmp_path, cap
     MOD.main(run)
     capsys.readouterr()
     scorecard = json.loads((run / "scorecard.json").read_text())
-    assert scorecard["C5_stage_seconds_status"] == "invalid_out_of_bounds"
+    assert scorecard["C5_stage_seconds_status"] == "unavailable"
+    assert scorecard["C5_project_stage_report"]["status"] == "invalid_out_of_bounds"
     assert all(value is None for value in scorecard["C5_stage_seconds"].values())
 
     stage_path.write_text(json.dumps({
@@ -238,5 +239,93 @@ def test_c5_rejects_out_of_bounds_and_overlapping_agent_timestamps(tmp_path, cap
     MOD.main(run)
     capsys.readouterr()
     scorecard = json.loads((run / "scorecard.json").read_text())
-    assert scorecard["C5_stage_seconds_status"] == "invalid_non_monotonic"
+    assert scorecard["C5_stage_seconds_status"] == "unavailable"
+    assert scorecard["C5_project_stage_report"]["status"] == "invalid_non_monotonic"
     assert all(value is None for value in scorecard["C5_stage_seconds"].values())
+
+
+def test_c5_evaluator_timing_survives_invalid_project_report(tmp_path, capsys):
+    run = write_run(tmp_path, [
+        "model_capability", "model_plan", "apply_model", "apply_finalize", "verify",
+    ])
+    (run / "lifecycle.json").write_text(json.dumps({
+        "run_kind": "baseline",
+        "state": "completed",
+        "measurement_complete": True,
+        "environment_valid": True,
+        "started_epoch": 100.0,
+        "agent_ended_epoch": 200.0,
+    }))
+    stages = {
+        "discovery": (100.0, 120.0),
+        "plan": (120.0, 140.0),
+        "apply": (140.0, 165.0),
+        "finalize": (165.0, 175.0),
+        "verify": (175.0, 200.0),
+    }
+    (run / "stage-timing.json").write_text(json.dumps({
+        "contract_version": MOD.STAGE_TIMING_CONTRACT,
+        "boundary_rule": "evaluator-cli-transition-v1",
+        "stage_order": list(MOD.C5_OBSERVED_STAGES),
+        "status": "valid",
+        "stages": {
+            stage: {
+                "started_epoch": interval[0],
+                "ended_epoch": interval[1],
+                "seconds": interval[1] - interval[0],
+                "status": "observed",
+                "start_provenance": {"source": "synthetic-observation"},
+                "end_provenance": {"source": "synthetic-observation"},
+            }
+            for stage, interval in stages.items()
+        },
+    }))
+    stage_path = run / "project/.domainry/development/stages.json"
+    stage_path.parent.mkdir(parents=True)
+    stage_path.write_text(json.dumps({
+        "requirements": {"started": 100, "ended": 120},
+        "model": {"started": 120, "ended": 140},
+        "apply": {"started": 140, "ended": 175},
+        "verify": {"started": 175, "ended": 0},
+    }))
+
+    MOD.main(run)
+    capsys.readouterr()
+    scorecard = json.loads((run / "scorecard.json").read_text())
+    assert scorecard["C5_stage_seconds_source"] == "evaluator-events"
+    assert scorecard["C5_stage_seconds_status"] == "valid"
+    assert scorecard["C5_stage_seconds"] == {
+        "requirements": 20.0,
+        "model": 20.0,
+        "apply": 35.0,
+        "verify": 25.0,
+    }
+    assert scorecard["C5_stage_timing"]["critical_path"] == {
+        "observed_seconds": 100.0,
+        "unknown_stages": [],
+        "hotspot": {"stage": "apply", "seconds": 25.0},
+    }
+    assert scorecard["C5_project_stage_report"]["status"] == "invalid_out_of_bounds"
+
+
+def test_c5_old_run_without_event_timing_keeps_driver_stage_fallback(tmp_path, capsys):
+    run = write_run(tmp_path, ["model_plan", "apply_model"])
+    (run / "stages.json").write_text(json.dumps({
+        "requirements": 11,
+        "model": 22,
+        "apply": 33,
+        "verify": None,
+    }))
+
+    MOD.main(run)
+    capsys.readouterr()
+    scorecard = json.loads((run / "scorecard.json").read_text())
+    assert scorecard["C5_stage_seconds"] == {
+        "requirements": 11,
+        "model": 22,
+        "apply": 33,
+        "verify": None,
+    }
+    assert scorecard["C5_stage_seconds_source"] == "stages.json"
+    assert scorecard["C5_stage_seconds_status"] == "valid"
+    assert scorecard["C5_stage_timing"] is None

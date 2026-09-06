@@ -1,0 +1,142 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "domainry-eval-stage-timing-v1",
+  "title": "Domainry evaluator observed stage timing v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "contract_version", "boundary_rule", "stage_order", "status", "stages",
+    "critical_path"
+  ],
+  "properties": {
+    "contract_version": {"const": "domainry-eval-stage-timing-v1"},
+    "boundary_rule": {"const": "evaluator-cli-transition-v1"},
+    "stage_order": {
+      "const": ["discovery", "plan", "apply", "finalize", "verify"]
+    },
+    "status": {
+      "enum": ["valid", "partial", "unavailable", "invalid_lifecycle_boundary"]
+    },
+    "stages": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["discovery", "plan", "apply", "finalize", "verify"],
+      "properties": {
+        "discovery": {"$ref": "#/$defs/stage"},
+        "plan": {"$ref": "#/$defs/stage"},
+        "apply": {"$ref": "#/$defs/stage"},
+        "finalize": {"$ref": "#/$defs/stage"},
+        "verify": {"$ref": "#/$defs/stage"}
+      }
+    },
+    "critical_path": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["observed_seconds", "unknown_stages", "hotspot"],
+      "properties": {
+        "observed_seconds": {"type": "number", "minimum": 0},
+        "unknown_stages": {
+          "type": "array",
+          "items": {"enum": ["discovery", "plan", "apply", "finalize", "verify"]},
+          "uniqueItems": true
+        },
+        "hotspot": {
+          "oneOf": [
+            {"type": "null"},
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["stage", "seconds"],
+              "properties": {
+                "stage": {"enum": ["discovery", "plan", "apply", "finalize", "verify"]},
+                "seconds": {"type": "number", "minimum": 0}
+              }
+            }
+          ]
+        }
+      }
+    },
+    "diagnostic_intervals": {
+      "type": "array",
+      "description": "Non-scoring diagnostics displayed alongside timing; these never close the verify stage.",
+      "items": {"$ref": "#/$defs/diagnosticInterval"}
+    }
+  },
+  "$defs": {
+    "diagnosticInterval": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "family", "started_epoch", "ended_epoch", "seconds", "status",
+        "failed", "exit_code", "start_provenance", "end_provenance",
+        "scoring_effect", "display_stage"
+      ],
+      "properties": {
+        "family": {"const": "verify_fixture"},
+        "started_epoch": {"type": ["number", "null"]},
+        "ended_epoch": {"type": ["number", "null"]},
+        "seconds": {"type": ["number", "null"], "minimum": 0},
+        "status": {"enum": ["observed", "in_progress", "unknown"]},
+        "failed": {"type": ["boolean", "null"]},
+        "exit_code": {"type": ["integer", "null"]},
+        "start_provenance": {"$ref": "#/$defs/provenanceOrNull"},
+        "end_provenance": {"$ref": "#/$defs/provenanceOrNull"},
+        "scoring_effect": {"const": "none"},
+        "display_stage": {"const": "pre_verify_diagnostic"}
+      }
+    },
+    "stage": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "started_epoch", "ended_epoch", "seconds", "status",
+        "start_provenance", "end_provenance"
+      ],
+      "properties": {
+        "started_epoch": {"type": ["number", "null"]},
+        "ended_epoch": {"type": ["number", "null"]},
+        "seconds": {"type": ["number", "null"], "minimum": 0},
+        "status": {"enum": ["observed", "unknown"]},
+        "start_provenance": {"$ref": "#/$defs/provenanceOrNull"},
+        "end_provenance": {"$ref": "#/$defs/provenanceOrNull"}
+      }
+    },
+    "provenanceOrNull": {
+      "oneOf": [
+        {"type": "null"},
+        {"$ref": "#/$defs/provenance"}
+      ]
+    },
+    "provenance": {
+      "type": "object",
+      "description": "Evaluator-owned boundary source. boundary_reason is present on newly generated runs; older v1 runs without it remain readable.",
+      "properties": {
+        "source": {
+          "type": "string",
+          "enum": ["lifecycle.json", "agent-event-observations.jsonl"]
+        },
+        "field": {"type": "string"},
+        "capture_file": {"type": ["string", "null"]},
+        "family": {
+          "type": "string",
+          "enum": [
+            "model_capability", "model_plan", "apply_model", "apply_finalize",
+            "verify_fixture", "verify"
+          ]
+        },
+        "event": {"enum": ["started", "completed"]},
+        "event_item_id": {"type": ["string", "null"]},
+        "event_line": {"type": ["integer", "null"], "minimum": 1},
+        "boundary_reason": {
+          "enum": [
+            "agent_lifecycle_started", "discovery_capability_completed",
+            "stage_cli_started", "next_stage_cli_started",
+            "terminal_stage_cli_completed", "active_stage_cli_open_at_agent_end",
+            "diagnostic_cli_started", "diagnostic_cli_completed"
+          ]
+        },
+        "related_cli_start": {"$ref": "#/$defs/provenance"}
+      }
+    }
+  }
+}

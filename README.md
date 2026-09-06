@@ -15,7 +15,7 @@ Builder Skill 的评估与优化闭环仓库。评测对象是 `config.json` 指
 | `benchmarks/s1-ticketing/` | S 级基准:需求规格(agent 输入)+ golden checklist(评分金标准,agent 不可见) |
 | `tasks/` | L1 微评估任务定义 |
 | `harness/capture.sh` | CLI 调用捕获器(每次调用 → 可评分工件) |
-| `harness/extract_cli_captures.py` | 从 Agent JSONL 提取实际执行；metadata/help/version 仅作辅助观测 |
+| `harness/extract_cli_captures.py` | 从 Agent JSONL 提取实际执行；评分 family 与 `verify_fixture` diagnostic 分通道，metadata/help/version 不捕获 |
 | `harness/run_driver.py` | 全新隔离根、候选冻结、新 Agent session、原子实时 progress、baseline/convergence 生命周期、预算与证据封存 |
 | `harness/scorer.py` | scorecard 生成器 |
 | `runs/` | 运行工件(不入库大文件) |

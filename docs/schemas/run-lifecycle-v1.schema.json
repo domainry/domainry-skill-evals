@@ -58,8 +58,69 @@
         "cli_retries": {"type": ["integer", "null"], "minimum": 0}
       }
     },
-    "usage": {"type": "object"},
-    "termination": {"type": ["object", "null"]}
+    "usage": {
+      "type": "object",
+      "properties": {
+        "total_tokens": {"type": ["integer", "null"], "minimum": 0},
+        "token_usage": {"$ref": "#/$defs/tokenUsage"},
+        "cli_invocations_started": {"type": "integer", "minimum": 0},
+        "cli_invocations_captured": {"type": "integer", "minimum": 0},
+        "cli_retries_started": {"type": "integer", "minimum": 0},
+        "diagnostic_cli_invocations_started": {"type": "integer", "minimum": 0},
+        "diagnostic_cli_invocations_captured": {"type": "integer", "minimum": 0},
+        "diagnostic_cli_completions": {"type": "integer", "minimum": 0},
+        "diagnostic_cli_failures": {"type": "integer", "minimum": 0},
+        "diagnostic_cli_retries": {"type": "integer", "minimum": 0}
+      }
+    },
+    "termination": {"type": ["object", "null"]},
+    "first_failure": {"type": ["object", "null"]},
+    "scoring_first_failure": {"type": ["object", "null"]},
+    "diagnostic_first_failure": {"type": ["object", "null"]},
+    "first_scoring_failure": {
+      "type": ["object", "null"],
+      "description": "Legacy alias of scoring_first_failure."
+    },
+    "diagnostic_cli": {
+      "type": "object",
+      "required": [
+        "invocations_total", "completed_total", "failed_total", "retries_total",
+        "latest", "first_failure"
+      ],
+      "properties": {
+        "invocations_total": {"type": "integer", "minimum": 0},
+        "completed_total": {"type": "integer", "minimum": 0},
+        "failed_total": {"type": "integer", "minimum": 0},
+        "retries_total": {"type": "integer", "minimum": 0},
+        "latest": {"type": ["object", "null"]},
+        "first_failure": {"type": ["object", "null"]}
+      }
+    }
+  },
+  "$defs": {
+    "tokenUsage": {
+      "type": "object",
+      "required": [
+        "input_tokens", "cached_input_tokens", "non_cached_input_tokens",
+        "output_tokens", "reasoning_output_tokens", "budget_tokens",
+        "budget_basis", "cached_input_included_in_input",
+        "reasoning_output_included_in_output", "observability_status"
+      ],
+      "properties": {
+        "input_tokens": {"type": ["integer", "null"], "minimum": 0},
+        "cached_input_tokens": {"type": ["integer", "null"], "minimum": 0},
+        "non_cached_input_tokens": {"type": ["integer", "null"], "minimum": 0},
+        "output_tokens": {"type": ["integer", "null"], "minimum": 0},
+        "reasoning_output_tokens": {"type": ["integer", "null"], "minimum": 0},
+        "budget_tokens": {"type": ["integer", "null"], "minimum": 0},
+        "budget_basis": {"const": "provider_cumulative_input_plus_output"},
+        "cached_input_included_in_input": {"const": true},
+        "reasoning_output_included_in_output": {"const": true},
+        "observability_status": {
+          "enum": ["complete", "partial", "invalid_detail", "unavailable", "legacy_total_only"]
+        }
+      }
+    }
   },
   "allOf": [
     {

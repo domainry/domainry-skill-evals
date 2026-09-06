@@ -13,6 +13,7 @@ import shlex
 CLI_MARKER = re.compile(r"(?:domainry-cli|DOMAINRY_CLI)")
 SHELL_SEPARATORS = {";", "&&", "||", "|", "&"}
 METADATA_ARGUMENTS = {"--help", "-h", "help", "--version", "-V", "version"}
+OBSERVATION_CONTRACT = "domainry-eval-event-observations-v1"
 
 
 def _is_metadata_argument(argument: str) -> bool:
@@ -70,6 +71,11 @@ def _family_from_args(arguments: list[str]) -> str | None:
         family, consumed = "apply_model", 2
     elif arguments[:2] == ["apply", "finalize"]:
         family, consumed = "apply_finalize", 2
+    elif arguments[:2] == ["verify", "fixture"]:
+        # Password-free fixture projection is a read-only diagnostic. It must
+        # not consume the one scored verify attempt or turn the lifecycle
+        # command that follows into a retry.
+        family, consumed = "verify_fixture", 2
     elif arguments[0] == "verify":
         family, consumed = "verify", 1
     if family is None:
@@ -162,8 +168,51 @@ def parse_output(raw: str) -> object:
     return max(parsed, key=lambda item: (_json_envelope_rank(item[1]), item[0]))[1]
 
 
-def extract(events_path: Path, *, strict: bool = True) -> list[dict[str, object]]:
+def _observations_by_line(path: Path | None, *, strict: bool) -> dict[int, dict[str, object]]:
+    if path is None or not path.exists():
+        return {}
+    observations: dict[int, dict[str, object]] = {}
+    with path.open(encoding="utf-8") as stream:
+        for line_number, line in enumerate(stream, 1):
+            try:
+                value = json.loads(line)
+            except json.JSONDecodeError as error:
+                if strict:
+                    raise ValueError(
+                        f"invalid evaluator observation JSONL at line {line_number}: {error}"
+                    ) from error
+                continue
+            event_line = value.get("event_line") if isinstance(value, dict) else None
+            observed_epoch = value.get("observed_epoch") if isinstance(value, dict) else None
+            valid = (
+                isinstance(value, dict)
+                and value.get("contract_version") == OBSERVATION_CONTRACT
+                and isinstance(event_line, int) and event_line > 0
+                and isinstance(observed_epoch, (int, float))
+                and not isinstance(observed_epoch, bool)
+            )
+            if not valid:
+                if strict:
+                    raise ValueError(
+                        f"invalid evaluator observation at line {line_number}")
+                continue
+            assert isinstance(value, dict)
+            assert isinstance(event_line, int)
+            if event_line in observations:
+                if strict:
+                    raise ValueError(
+                        f"duplicate evaluator observation for event line {event_line}")
+                continue
+            observations[event_line] = value
+    return observations
+
+
+def extract(
+    events_path: Path, *, strict: bool = True, observations_path: Path | None = None,
+) -> list[dict[str, object]]:
     artifacts: list[dict[str, object]] = []
+    observations = _observations_by_line(observations_path, strict=strict)
+    started_by_item: dict[str, tuple[int, float | None]] = {}
     with events_path.open(encoding="utf-8") as stream:
         for line_number, line in enumerate(stream, 1):
             try:
@@ -172,8 +221,6 @@ def extract(events_path: Path, *, strict: bool = True) -> list[dict[str, object]
                 if strict:
                     raise ValueError(f"invalid Codex JSONL at line {line_number}: {error}") from error
                 continue
-            if event.get("type") != "item.completed":
-                continue
             item = event.get("item")
             if not isinstance(item, dict) or item.get("type") != "command_execution":
                 continue
@@ -181,20 +228,60 @@ def extract(events_path: Path, *, strict: bool = True) -> list[dict[str, object]
             family = family_for(command) if isinstance(command, str) else None
             if family is None:
                 continue
+            item_id = item.get("id")
+            observation = observations.get(line_number)
+            observation_epoch = (
+                observation.get("observed_epoch") if observation is not None else None)
+            observed_epoch = (
+                float(observation_epoch)
+                if isinstance(observation_epoch, (int, float))
+                and not isinstance(observation_epoch, bool) else None)
+            if event.get("type") == "item.started":
+                if isinstance(item_id, str) and item_id:
+                    started_by_item[item_id] = (line_number, observed_epoch)
+                continue
+            if event.get("type") != "item.completed":
+                continue
             exit_code = item.get("exit_code")
             if not isinstance(exit_code, int):
                 if strict:
                     raise ValueError(f"Builder CLI event has no exit code at line {line_number}")
                 continue
             raw = item.get("aggregated_output", "")
+            stdout = item.get("stdout")
+            stderr = item.get("stderr")
+            started_line, started_epoch = (
+                started_by_item.get(item_id, (None, None))
+                if isinstance(item_id, str) else (None, None))
+            duration_seconds = (
+                round(observed_epoch - started_epoch, 3)
+                if observed_epoch is not None and started_epoch is not None
+                and observed_epoch >= started_epoch else None)
             artifacts.append({
                 "family": family,
                 "command": command,
                 "exit_code": exit_code,
                 "output": parse_output(raw if isinstance(raw, str) else str(raw)),
                 "raw_output": raw,
-                "event_item_id": item.get("id"),
+                # Codex command events currently expose aggregated_output. Keep
+                # stdout/stderr separate when a provider supplies them, and do
+                # not guess which stream an aggregated diagnostic came from.
+                "stdout": stdout if isinstance(stdout, str) else None,
+                "stderr": stderr if isinstance(stderr, str) else None,
+                "output_streams_status": (
+                    "separate" if isinstance(stdout, str) and isinstance(stderr, str)
+                    else "aggregated_only"),
+                "event_item_id": item_id,
                 "event_line": line_number,
+                "observed_started_epoch": started_epoch,
+                "observed_completed_epoch": observed_epoch,
+                "observed_started_event_line": started_line,
+                "observed_completed_event_line": (
+                    line_number if observed_epoch is not None else None),
+                "duration_seconds": duration_seconds,
+                "timing_source": (
+                    observations_path.name
+                    if observations and observations_path is not None else None),
             })
     return artifacts
 
@@ -208,7 +295,10 @@ def main() -> int:
     output_dir.mkdir(parents=True, exist_ok=True)
     if any(output_dir.iterdir()):
         raise SystemExit(f"refusing to overwrite non-empty capture directory: {output_dir}")
-    artifacts = extract(arguments.events)
+    artifacts = extract(
+        arguments.events,
+        observations_path=arguments.run_dir / "agent-event-observations.jsonl",
+    )
     for index, artifact in enumerate(artifacts, 1):
         path = output_dir / f"{index:03d}-{artifact['family']}.json"
         path.write_text(json.dumps(artifact, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")

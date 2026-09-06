@@ -41,12 +41,61 @@ def test_failed_attempt_is_preserved(tmp_path):
     assert artifact["exit_code"] == 1
 
 
+def test_separate_stdout_stderr_are_preserved_when_provider_exposes_them(tmp_path):
+    events = tmp_path / "events.jsonl"
+    event = json.loads(completed(
+        '/candidate/domainry-cli verify fixture --json --project .',
+        'combined output', 1))
+    event["item"]["stdout"] = '{"state":"failed"}\n'
+    event["item"]["stderr"] = 'fixture error\n'
+    events.write_text(json.dumps(event) + "\n")
+
+    artifact = MOD.extract(events)[0]
+    assert artifact["family"] == "verify_fixture"
+    assert artifact["stdout"] == '{"state":"failed"}\n'
+    assert artifact["stderr"] == 'fixture error\n'
+    assert artifact["raw_output"] == "combined output"
+    assert artifact["output_streams_status"] == "separate"
+
+
 def test_tolerant_mode_salvages_valid_events_for_driver_sealing(tmp_path):
     events = tmp_path / "events.jsonl"
     events.write_text("not-json\n" + completed(
         '"$DOMAINRY_CLI" model plan --json --project .', '{"state":"planned"}') + "\n")
     artifacts = MOD.extract(events, strict=False)
     assert [row["family"] for row in artifacts] == ["model_plan"]
+
+
+def test_evaluator_observations_bind_command_start_and_completion(tmp_path):
+    events = tmp_path / "events.jsonl"
+    command = '"$DOMAINRY_CLI" model plan --json --project .'
+    started = {"type": "item.started", "item": {
+        "id": "item_7", "type": "command_execution", "command": command,
+    }}
+    completed_event = json.loads(completed(command, '{"state":"valid"}'))
+    completed_event["item"]["id"] = "item_7"
+    events.write_text(
+        json.dumps(started) + "\n" + json.dumps(completed_event) + "\n")
+    observations = tmp_path / "agent-event-observations.jsonl"
+    observations.write_text("\n".join([
+        json.dumps({
+            "contract_version": MOD.OBSERVATION_CONTRACT,
+            "event_line": 1,
+            "observed_epoch": 101.25,
+        }),
+        json.dumps({
+            "contract_version": MOD.OBSERVATION_CONTRACT,
+            "event_line": 2,
+            "observed_epoch": 104.75,
+        }),
+    ]) + "\n")
+
+    artifact = MOD.extract(events, observations_path=observations)[0]
+    assert artifact["observed_started_epoch"] == 101.25
+    assert artifact["observed_completed_epoch"] == 104.75
+    assert artifact["observed_started_event_line"] == 1
+    assert artifact["observed_completed_event_line"] == 2
+    assert artifact["duration_seconds"] == 3.5
 
 
 def test_metadata_and_help_invocations_are_not_scoring_captures(tmp_path):
@@ -59,6 +108,33 @@ def test_metadata_and_help_invocations_are_not_scoring_captures(tmp_path):
         completed("/candidate/domainry-cli verify --version", "version", 0),
     ]) + "\n")
     assert MOD.extract(events) == []
+
+
+def test_verify_fixture_diagnostic_does_not_consume_scored_verify_attempt(tmp_path):
+    events = tmp_path / "events.jsonl"
+    events.write_text("\n".join([
+        completed(
+            "/candidate/domainry-cli verify fixture --json --project /tmp/project",
+            '{"contract_version":"domainry-managed-runtime-acceptance-fixture-projection-v1","actor_count":3}',
+            0,
+        ),
+        completed(
+            "/candidate/domainry-cli verify --json --project /tmp/project",
+            '{"state":"verified_and_stopped"}',
+            0,
+        ),
+    ]) + "\n")
+    artifacts = MOD.extract(events)
+    assert [(row["family"], row["exit_code"]) for row in artifacts] == [
+        ("verify_fixture", 0),
+        ("verify", 0),
+    ]
+    assert artifacts[0]["output_streams_status"] == "aggregated_only"
+    assert artifacts[0]["stdout"] is None
+    assert artifacts[0]["stderr"] is None
+    assert MOD.family_for(
+        "/candidate/domainry-cli verify fixture --json --project /tmp/project"
+    ) == "verify_fixture"
 
 
 def test_help_text_inside_an_ordinary_argument_does_not_hide_execution(tmp_path):

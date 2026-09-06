@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 """Budgeted evaluator run lifecycle for baseline and convergence runs.
 
-The driver consumes a Codex ``--json`` event stream, persists every raw line,
-and makes stopping policy evaluator-owned.  A baseline is stopped after the
-first failed scoring CLI command.  A convergence run is the only mode allowed
-to continue repairing, and it must name its parent run.
+The driver consumes a Codex ``--json`` event stream, persists every raw line
+plus an evaluator receive-time sidecar, and makes stopping policy evaluator-owned.
+A baseline is stopped after the first failed scoring CLI command. A convergence
+run is the only mode allowed to continue repairing, and it must name its parent run.
 """
 
 from __future__ import annotations
@@ -32,7 +32,17 @@ CONTRACT_VERSION = "domainry-eval-run-lifecycle-v1"
 FREEZE_CONTRACT = "domainry-eval-freeze-manifest-v1"
 PROGRESS_CONTRACT = "domainry-eval-progress-v1"
 FLOW_EVIDENCE_CONTRACT = "domainry-business-flow-evidence-v1"
+EVENT_OBSERVATION_CONTRACT = "domainry-eval-event-observations-v1"
+STAGE_TIMING_CONTRACT = "domainry-eval-stage-timing-v1"
+OBSERVED_STAGE_ORDER = ("discovery", "plan", "apply", "finalize", "verify")
+STAGE_CLI_FAMILY = {
+    "plan": "model_plan",
+    "apply": "apply_model",
+    "finalize": "apply_finalize",
+    "verify": "verify",
+}
 SCORING_FAMILIES = {"model_plan", "apply_model", "apply_finalize", "verify"}
+DIAGNOSTIC_FAMILIES = {"verify_fixture"}
 IDENTITY_FIELDS = (
     "candidate_id", "skill_name", "skill_version", "skill_identity_sha256",
     "package_metadata_sha256", "skill_tree_sha256", "cli_binary_sha256",
@@ -84,63 +94,309 @@ def atomic_write_json(path: Path, value: object) -> None:
         temporary.unlink(missing_ok=True)
 
 
-def observed_stage_timing(
-    project: Path, boundary_start: float, boundary_end: float,
-) -> tuple[
-    dict[str, dict[str, float | None]], str | None, str,
-]:
-    stages = {stage: {"started_epoch": None, "ended_epoch": None} for stage in (
-        "requirements", "model", "apply", "verify")}
-    path = project / ".domainry" / "development" / "stages.json"
-    try:
-        document = json.loads(path.read_text(encoding="utf-8"))
-    except (OSError, json.JSONDecodeError):
-        return stages, None, "unavailable"
-    if not isinstance(document, dict):
-        return stages, "agent-stages.json", "invalid_shape"
-    observed = False
-    invalid_status = None
-    previous_end = None
-    open_stage = False
-    for stage in stages:
-        value = document.get(stage)
-        if not isinstance(value, dict):
+def _cli_boundary(
+    artifact: dict[str, object], event: str, boundary_reason: str,
+) -> tuple[float | None, dict[str, object] | None]:
+    epoch_key = f"observed_{event}_epoch"
+    line_key = f"observed_{event}_event_line"
+    epoch = artifact.get(epoch_key)
+    if not isinstance(epoch, (int, float)) or isinstance(epoch, bool):
+        return None, None
+    return float(epoch), {
+        "source": "agent-event-observations.jsonl",
+        "capture_file": artifact.get("capture_file"),
+        "family": artifact.get("family"),
+        "event": event,
+        "event_item_id": artifact.get("event_item_id"),
+        "event_line": artifact.get(line_key),
+        "boundary_reason": boundary_reason,
+    }
+
+
+def _lifecycle_boundary(
+    field: str, boundary_reason: str, related_cli_start: dict[str, object] | None = None,
+) -> dict[str, object]:
+    provenance: dict[str, object] = {
+        "source": "lifecycle.json",
+        "field": field,
+        "boundary_reason": boundary_reason,
+    }
+    if related_cli_start is not None:
+        provenance["related_cli_start"] = related_cli_start
+    return provenance
+
+
+def evaluator_diagnostic_intervals(
+    artifacts: list[dict[str, object]], boundary_end: float | None,
+) -> list[dict[str, object]]:
+    """Expose diagnostic timing without turning it into a scored stage."""
+    intervals = []
+    for artifact in artifacts:
+        family = artifact.get("family")
+        if family not in DIAGNOSTIC_FAMILIES:
             continue
-        started = value.get("started")
-        ended = value.get("ended")
-        started_valid = isinstance(started, (int, float)) and not isinstance(started, bool)
-        ended_valid = isinstance(ended, (int, float)) and not isinstance(ended, bool)
-        if started is not None and not started_valid:
-            invalid_status = invalid_status or "invalid_shape"
-        if ended is not None and not ended_valid:
-            invalid_status = invalid_status or "invalid_shape"
-        if not started_valid and not ended_valid:
-            continue
-        observed = True
-        if not started_valid:
-            invalid_status = invalid_status or "invalid_shape"
-            continue
-        start_value = float(started)
-        end_value = float(ended) if ended_valid else None
-        if (start_value < boundary_start or start_value > boundary_end
-                or (end_value is not None and (
-                    end_value < boundary_start or end_value > boundary_end))):
-            invalid_status = invalid_status or "invalid_out_of_bounds"
-        elif end_value is not None and end_value < start_value:
-            invalid_status = invalid_status or "invalid_interval"
-        elif open_stage or (previous_end is not None and start_value < previous_end):
-            invalid_status = invalid_status or "invalid_non_monotonic"
-        stages[stage]["started_epoch"] = start_value
-        stages[stage]["ended_epoch"] = end_value
-        if end_value is None:
-            open_stage = True
+        started, start_provenance = _cli_boundary(
+            artifact, "started", "diagnostic_cli_started")
+        ended, end_provenance = _cli_boundary(
+            artifact, "completed", "diagnostic_cli_completed")
+        valid = (
+            started is not None and ended is not None and started <= ended
+            and (boundary_end is None or ended <= boundary_end))
+        seconds = None
+        if valid:
+            assert started is not None and ended is not None
+            seconds = round(ended - started, 3)
+        intervals.append({
+            "family": family,
+            "started_epoch": started,
+            "ended_epoch": ended if valid else None,
+            "seconds": seconds,
+            "status": "observed" if valid else "in_progress" if started is not None else "unknown",
+            "failed": artifact.get("failed") if isinstance(artifact.get("failed"), bool) else (
+                artifact_failed(artifact) if artifact.get("exit_code") is not None else None),
+            "exit_code": artifact.get("exit_code"),
+            "start_provenance": start_provenance,
+            "end_provenance": end_provenance if valid else None,
+            "scoring_effect": "none",
+            "display_stage": "pre_verify_diagnostic",
+        })
+    return intervals
+
+
+def evaluator_stage_timing(
+    artifacts: list[dict[str, object]], boundary_start: float, boundary_end: float | None,
+) -> dict[str, object]:
+    """Build deterministic wall-clock intervals from evaluator-observed CLI events.
+
+    Discovery ends at the last capability completion before the first plan command.
+    A later stage normally ends when the next stage starts. If the Agent terminates
+    before that transition, the latest started attempt for the active stage closes
+    at its evaluator-observed completion, or at ``agent_ended_epoch`` only when that
+    attempt was still open. Missing boundaries stay unknown rather than being estimated.
+    """
+    valid_start = (
+        isinstance(boundary_start, (int, float)) and not isinstance(boundary_start, bool))
+    valid_end = (
+        boundary_end is None or (
+            isinstance(boundary_end, (int, float)) and not isinstance(boundary_end, bool)))
+    if not valid_start or not valid_end or (
+        boundary_end is not None and boundary_end < boundary_start
+    ):
+        return {
+            "contract_version": STAGE_TIMING_CONTRACT,
+            "boundary_rule": "evaluator-cli-transition-v1",
+            "stage_order": list(OBSERVED_STAGE_ORDER),
+            "status": "invalid_lifecycle_boundary",
+            "stages": {
+                stage: {
+                    "started_epoch": None, "ended_epoch": None, "seconds": None,
+                    "status": "unknown", "start_provenance": None,
+                    "end_provenance": None,
+                } for stage in OBSERVED_STAGE_ORDER
+            },
+            "critical_path": {
+                "observed_seconds": 0, "unknown_stages": list(OBSERVED_STAGE_ORDER),
+                "hotspot": None,
+            },
+            "diagnostic_intervals": evaluator_diagnostic_intervals(
+                artifacts, boundary_end if valid_end else None),
+        }
+
+    by_family: dict[str, list[dict[str, object]]] = {}
+    for artifact in artifacts:
+        family = artifact.get("family")
+        if isinstance(family, str):
+            by_family.setdefault(family, []).append(artifact)
+
+    def first_started(family: str):
+        candidates = []
+        for artifact in by_family.get(family, []):
+            epoch, provenance = _cli_boundary(
+                artifact, "started", "stage_cli_started")
+            if epoch is not None:
+                candidates.append((epoch, provenance))
+        return min(candidates, key=lambda value: value[0]) if candidates else (None, None)
+
+    def terminal_stage_end(
+        stage: str, stage_started: float | None,
+        later_stage_starts: tuple[float | None, ...],
+    ) -> tuple[float | None, dict[str, object] | None]:
+        """Close only a provably active stage after the Agent lifecycle ended."""
+        if (boundary_end is None or stage_started is None
+                or any(start is not None for start in later_stage_starts)):
+            return None, None
+        family = STAGE_CLI_FAMILY[stage]
+        attempts = []
+        for artifact in by_family.get(family, []):
+            started_epoch, started_provenance = _cli_boundary(
+                artifact, "started", "stage_cli_started")
+            if (started_epoch is None or started_epoch < stage_started
+                    or started_epoch > boundary_end):
+                continue
+            completed_epoch, completed_provenance = _cli_boundary(
+                artifact, "completed", "terminal_stage_cli_completed")
+            attempts.append((
+                started_epoch, started_provenance,
+                completed_epoch, completed_provenance,
+            ))
+        if not attempts:
+            return None, None
+        attempt_started, started_provenance, completed_epoch, completed_provenance = max(
+            attempts, key=lambda value: value[0])
+        if (completed_epoch is not None and completed_epoch >= attempt_started
+                and completed_epoch <= boundary_end):
+            return completed_epoch, completed_provenance
+        if completed_epoch is None:
+            return float(boundary_end), _lifecycle_boundary(
+                "agent_ended_epoch", "active_stage_cli_open_at_agent_end",
+                started_provenance,
+            )
+        return None, None
+
+    plan_command_start, _ = first_started("model_plan")
+    capability_ends = []
+    if plan_command_start is not None:
+        for artifact in by_family.get("model_capability", []):
+            epoch, provenance = _cli_boundary(
+                artifact, "completed", "discovery_capability_completed")
+            if epoch is not None and epoch <= plan_command_start:
+                capability_ends.append((epoch, provenance))
+    discovery_end, discovery_end_provenance = (
+        max(capability_ends, key=lambda value: value[0])
+        if capability_ends else (None, None))
+    apply_start, apply_start_provenance = first_started("apply_model")
+    finalize_start, finalize_start_provenance = first_started("apply_finalize")
+    verify_start, verify_start_provenance = first_started("verify")
+
+    lifecycle_start_provenance = _lifecycle_boundary(
+        "started_epoch", "agent_lifecycle_started")
+    transition_provenance = {
+        "plan": (
+            {**apply_start_provenance, "boundary_reason": "next_stage_cli_started"}
+            if apply_start_provenance is not None else None),
+        "apply": (
+            {**finalize_start_provenance, "boundary_reason": "next_stage_cli_started"}
+            if finalize_start_provenance is not None else None),
+        "finalize": (
+            {**verify_start_provenance, "boundary_reason": "next_stage_cli_started"}
+            if verify_start_provenance is not None else None),
+    }
+    plan_terminal_end, plan_terminal_provenance = terminal_stage_end(
+        "plan", discovery_end if plan_command_start is not None else None,
+        (apply_start, finalize_start, verify_start))
+    apply_terminal_end, apply_terminal_provenance = terminal_stage_end(
+        "apply", apply_start, (finalize_start, verify_start))
+    finalize_terminal_end, finalize_terminal_provenance = terminal_stage_end(
+        "finalize", finalize_start, (verify_start,))
+    verify_terminal_end, verify_terminal_provenance = terminal_stage_end(
+        "verify", verify_start, ())
+    boundaries = {
+        "discovery": (
+            float(boundary_start), discovery_end,
+            lifecycle_start_provenance, discovery_end_provenance),
+        "plan": (
+            discovery_end if plan_command_start is not None else None,
+            (apply_start if apply_start is not None else plan_terminal_end)
+            if plan_command_start is not None else None,
+            discovery_end_provenance if plan_command_start is not None else None,
+            (transition_provenance["plan"] if apply_start is not None
+             else plan_terminal_provenance)
+            if plan_command_start is not None else None),
+        "apply": (
+            apply_start,
+            finalize_start if finalize_start is not None else apply_terminal_end,
+            apply_start_provenance,
+            (transition_provenance["apply"] if finalize_start is not None
+             else apply_terminal_provenance)),
+        "finalize": (
+            finalize_start,
+            verify_start if verify_start is not None else finalize_terminal_end,
+            finalize_start_provenance,
+            (transition_provenance["finalize"] if verify_start is not None
+             else finalize_terminal_provenance)),
+        "verify": (
+            verify_start, verify_terminal_end,
+            verify_start_provenance, verify_terminal_provenance),
+    }
+    stages: dict[str, dict[str, object]] = {}
+    observed_seconds = 0.0
+    unknown_stages = []
+    for stage in OBSERVED_STAGE_ORDER:
+        started, ended, start_provenance, end_provenance = boundaries[stage]
+        valid = (
+            started is not None and ended is not None
+            and boundary_start <= started <= ended
+            and (boundary_end is None or ended <= boundary_end))
+        if valid:
+            assert started is not None and ended is not None
+            seconds = round(ended - started, 3)
+            observed_seconds += seconds
         else:
-            previous_end = end_value
-    source = "agent-stages.json" if observed or document else None
-    if invalid_status:
-        return ({stage: {"started_epoch": None, "ended_epoch": None}
-                 for stage in stages}, source, invalid_status)
-    return stages, source, "valid" if observed else "unavailable"
+            seconds = None
+            unknown_stages.append(stage)
+        stages[stage] = {
+            "started_epoch": started if valid else None,
+            "ended_epoch": ended if valid else None,
+            "seconds": seconds,
+            "status": "observed" if valid else "unknown",
+            "start_provenance": start_provenance if valid else None,
+            "end_provenance": end_provenance if valid else None,
+        }
+    observed: list[tuple[str, float]] = []
+    for stage in OBSERVED_STAGE_ORDER:
+        seconds = stages[stage]["seconds"]
+        if isinstance(seconds, (int, float)) and not isinstance(seconds, bool):
+            observed.append((stage, float(seconds)))
+    hotspot = max(observed, key=lambda value: value[1]) if observed else None
+    return {
+        "contract_version": STAGE_TIMING_CONTRACT,
+        "boundary_rule": "evaluator-cli-transition-v1",
+        "stage_order": list(OBSERVED_STAGE_ORDER),
+        "status": (
+            "valid" if not unknown_stages else "partial" if observed else "unavailable"),
+        "stages": stages,
+        "critical_path": {
+            "observed_seconds": round(observed_seconds, 3),
+            "unknown_stages": unknown_stages,
+            "hotspot": (
+                {"stage": hotspot[0], "seconds": hotspot[1]} if hotspot else None),
+        },
+        "diagnostic_intervals": evaluator_diagnostic_intervals(
+            artifacts, boundary_end),
+    }
+
+
+def legacy_progress_stage_timing(
+    timing: dict[str, object],
+) -> dict[str, dict[str, float | None]]:
+    stages = timing.get("stages") if isinstance(timing, dict) else None
+    stages = stages if isinstance(stages, dict) else {}
+
+    def interval(stage: str) -> dict[str, float | None]:
+        value = stages.get(stage)
+        if not isinstance(value, dict) or value.get("status") != "observed":
+            return {"started_epoch": None, "ended_epoch": None}
+        return {
+            "started_epoch": value.get("started_epoch"),
+            "ended_epoch": value.get("ended_epoch"),
+        }
+
+    apply = stages.get("apply")
+    finalize = stages.get("finalize")
+    apply_interval: dict[str, float | None] = {
+        "started_epoch": None, "ended_epoch": None}
+    if (isinstance(apply, dict) and apply.get("status") == "observed"
+            and isinstance(finalize, dict) and finalize.get("status") == "observed"):
+        apply_interval = {
+            "started_epoch": apply.get("started_epoch"),
+            "ended_epoch": finalize.get("ended_epoch"),
+        }
+    return {
+        "requirements": interval("discovery"),
+        "model": interval("plan"),
+        "apply": apply_interval,
+        "verify": interval("verify"),
+    }
 
 
 def sha256_bytes(content: bytes) -> str:
@@ -291,18 +547,85 @@ def validate_agent_command(command: list[str]) -> None:
         raise ValueError("agent command contains evaluator-only filesystem paths")
 
 
-def event_usage_tokens(event: object) -> int | None:
-    """Return cumulative billed tokens from any streamed usage snapshot."""
+def _observed_token_count(value: object) -> int | None:
+    return (
+        value if isinstance(value, int) and not isinstance(value, bool) and value >= 0
+        else None)
+
+
+def event_usage_breakdown(event: object) -> dict[str, object] | None:
+    """Return one provider cumulative usage snapshot without double counting.
+
+    Codex reports cached input as a subset of input and reasoning output as a
+    subset of output. The evaluator budget therefore uses input + output only.
+    Optional detail fields remain null when the event does not expose them.
+    """
     if not isinstance(event, dict):
         return None
     usage = event.get("usage")
     if not isinstance(usage, dict):
         return None
-    input_tokens = usage.get("input_tokens")
-    output_tokens = usage.get("output_tokens")
-    if not isinstance(input_tokens, int) or not isinstance(output_tokens, int):
+    input_tokens = _observed_token_count(usage.get("input_tokens"))
+    output_tokens = _observed_token_count(usage.get("output_tokens"))
+    if input_tokens is None or output_tokens is None:
         return None
-    return input_tokens + output_tokens
+    raw_cached = usage.get("cached_input_tokens")
+    cached_input_tokens = _observed_token_count(raw_cached)
+    raw_reasoning = usage.get("reasoning_output_tokens")
+    reasoning_output_tokens = _observed_token_count(raw_reasoning)
+    invalid_detail = False
+    if cached_input_tokens is not None and cached_input_tokens > input_tokens:
+        cached_input_tokens = None
+        invalid_detail = True
+    if reasoning_output_tokens is not None and reasoning_output_tokens > output_tokens:
+        reasoning_output_tokens = None
+        invalid_detail = True
+    if raw_cached is not None and cached_input_tokens is None:
+        invalid_detail = True
+    if raw_reasoning is not None and reasoning_output_tokens is None:
+        invalid_detail = True
+    complete = cached_input_tokens is not None and reasoning_output_tokens is not None
+    return {
+        "input_tokens": input_tokens,
+        "cached_input_tokens": cached_input_tokens,
+        "non_cached_input_tokens": (
+            input_tokens - cached_input_tokens
+            if cached_input_tokens is not None else None),
+        "output_tokens": output_tokens,
+        "reasoning_output_tokens": reasoning_output_tokens,
+        "budget_tokens": input_tokens + output_tokens,
+        "budget_basis": "provider_cumulative_input_plus_output",
+        "cached_input_included_in_input": True,
+        "reasoning_output_included_in_output": True,
+        "observability_status": (
+            "invalid_detail" if invalid_detail else "complete" if complete else "partial"),
+    }
+
+
+def event_usage_tokens(event: object) -> int | None:
+    """Compatibility accessor for the cumulative budget quantity."""
+    breakdown = event_usage_breakdown(event)
+    value = breakdown.get("budget_tokens") if breakdown is not None else None
+    return value if isinstance(value, int) else None
+
+
+def token_usage_snapshot_or_unavailable(
+    value: dict[str, object] | None,
+) -> dict[str, object]:
+    if value is not None:
+        return dict(value)
+    return {
+        "input_tokens": None,
+        "cached_input_tokens": None,
+        "non_cached_input_tokens": None,
+        "output_tokens": None,
+        "reasoning_output_tokens": None,
+        "budget_tokens": None,
+        "budget_basis": "provider_cumulative_input_plus_output",
+        "cached_input_included_in_input": True,
+        "reasoning_output_included_in_output": True,
+        "observability_status": "unavailable",
+    }
 
 
 def event_eval_result_state(event: object) -> str | None:
@@ -385,6 +708,55 @@ def artifact_failed(artifact: dict[str, object]) -> bool:
     )
 
 
+def diagnostic_failure_from_artifact(
+    artifact: dict[str, object],
+) -> dict[str, object]:
+    output = artifact.get("output")
+    return {
+        "failure_kind": "diagnostic",
+        "family": artifact.get("family"),
+        "exit_code": artifact.get("exit_code"),
+        "output_state": output.get("state") if isinstance(output, dict) else None,
+        "output": output,
+        "raw_output": artifact.get("raw_output"),
+        "stdout": artifact.get("stdout"),
+        "stderr": artifact.get("stderr"),
+        "output_streams_status": artifact.get("output_streams_status"),
+        "event_item_id": artifact.get("event_item_id"),
+        "event_line": artifact.get("event_line"),
+        "observed_started_epoch": artifact.get("observed_started_epoch"),
+        "observed_completed_epoch": artifact.get("observed_completed_epoch"),
+        "duration_seconds": artifact.get("duration_seconds"),
+        "capture_file": artifact.get("capture_file"),
+        "scoring_effect": "none",
+    }
+
+
+def failures_from_diagnostic_captures(
+    artifacts: list[dict[str, object]], terminal: str,
+) -> list[dict[str, object]]:
+    failures = []
+    for artifact in artifacts:
+        if artifact.get("family") not in DIAGNOSTIC_FAMILIES or not artifact_failed(artifact):
+            continue
+        detail = diagnostic_failure_from_artifact(artifact)
+        output = artifact.get("output")
+        note = (
+            output.get("error") or output.get("message")
+            if isinstance(output, dict) else str(output or "diagnostic CLI failed"))
+        failures.append({
+            "failure_kind": "diagnostic",
+            "stage": artifact.get("family"),
+            "owner": "domainry-cli",
+            "note": note,
+            "terminal_state": terminal,
+            "attribution_status": "attributed",
+            "does_not_affect_scoring": True,
+            "detail": detail,
+        })
+    return failures
+
+
 def failures_from_first_scoring_capture(
     artifacts: list[dict[str, object]], first_failure: dict[str, object] | None,
     terminal: str,
@@ -424,7 +796,9 @@ def failures_from_first_scoring_capture(
     # not consulted.
     if family not in SCORING_FAMILIES:
         return []
-    telemetry = output.get("telemetry") if isinstance(output, dict) else None
+    if not isinstance(output, dict):
+        return []
+    telemetry = output.get("telemetry")
     telemetry_failure = (
         telemetry.get("first_failure") if isinstance(telemetry, dict) else None)
     if not isinstance(telemetry_failure, dict):
@@ -735,13 +1109,23 @@ class RunMonitor:
         self.cli_failures = 0
         self.cli_retries = 0
         self.total_tokens: int | None = None
+        self.token_usage: dict[str, object] | None = None
+        self.diagnostic_invocations = 0
+        self.diagnostic_completions = 0
+        self.diagnostic_failures = 0
+        self.diagnostic_retries = 0
         self.agent_declared_done = False
         self.agent_result_state: str | None = None
         self.last_activity_epoch: float | None = None
         self.latest_cli: dict[str, object] | None = None
+        self.latest_diagnostic: dict[str, object] | None = None
+        self.cli_timing: list[dict[str, object]] = []
         self.agent_session_ids: set[str] = set()
         self._failed_families: set[str] = set()
+        self._failed_diagnostic_families: set[str] = set()
         self.first_scoring_failure: dict[str, object] | None = None
+        self.diagnostic_first_failure: dict[str, object] | None = None
+        self._first_failure_kind: str | None = None
         self.stop_state: str | None = None
         self.stop_detail: dict[str, object] | None = None
 
@@ -750,7 +1134,10 @@ class RunMonitor:
             self.stop_state = state
             self.stop_detail = detail
 
-    def observe(self, event: object, observed_at: float | None = None) -> None:
+    def observe(
+        self, event: object, observed_at: float | None = None,
+        event_line: int | None = None,
+    ) -> None:
         if isinstance(event, dict):
             self.last_activity_epoch = observed_at if observed_at is not None else time.time()
         if isinstance(event, dict) and event.get("type") == "thread.started":
@@ -770,26 +1157,50 @@ class RunMonitor:
         if result_state is not None:
             self.agent_result_state = result_state
             self.agent_declared_done = result_state == "done"
-        usage = event_usage_tokens(event)
-        if usage is not None:
-            self.total_tokens = max(self.total_tokens or 0, usage)
+        usage_breakdown = event_usage_breakdown(event)
+        usage = (
+            usage_breakdown.get("budget_tokens")
+            if usage_breakdown is not None else None)
+        if isinstance(usage, int):
+            if self.total_tokens is None or usage >= self.total_tokens:
+                self.total_tokens = usage
+                self.token_usage = usage_breakdown
             if self.budgets.total_tokens is not None and usage > self.budgets.total_tokens:
                 self.stop("budget_exhausted_tokens", {
                     "observed": usage, "limit": self.budgets.total_tokens,
+                    "basis": "provider_cumulative_input_plus_output",
                 })
 
         family, started, exit_code = command_event(event)
         if family is None:
             return
+        item = event.get("item") if isinstance(event, dict) else None
+        item_id = item.get("id") if isinstance(item, dict) else None
         if started:
-            self.cli_invocations += 1
-            self.latest_cli = {
+            self.cli_timing.append({
+                "family": family,
+                "event_item_id": item_id,
+                "observed_started_epoch": self.last_activity_epoch,
+                "observed_started_event_line": event_line,
+                "observed_completed_epoch": None,
+                "observed_completed_event_line": None,
+                "capture_file": None,
+            })
+            latest: dict[str, object] = {
                 "subcommand": family,
                 "status": "in_progress",
                 "exit_code": None,
                 "output_state": None,
                 "observed_epoch": self.last_activity_epoch,
             }
+            if family in DIAGNOSTIC_FAMILIES:
+                self.diagnostic_invocations += 1
+                self.latest_diagnostic = latest
+                if family in self._failed_diagnostic_families:
+                    self.diagnostic_retries += 1
+                return
+            self.cli_invocations += 1
+            self.latest_cli = latest
             if family in self._failed_families:
                 self.cli_retries += 1
             if (self.budgets.cli_invocations is not None
@@ -808,18 +1219,60 @@ class RunMonitor:
                 })
             return
 
+        completed_timing = None
+        for timing in reversed(self.cli_timing):
+            if timing.get("family") != family:
+                continue
+            if (item_id is not None and timing.get("event_item_id") != item_id):
+                continue
+            if timing.get("observed_completed_epoch") is None:
+                timing["observed_completed_epoch"] = self.last_activity_epoch
+                timing["observed_completed_event_line"] = event_line
+                completed_timing = timing
+                break
+
         output_failed, output_state = command_output_failed(event)
-        self.cli_completions += 1
         failed = exit_code is None or exit_code != 0 or output_failed
-        if failed:
-            self.cli_failures += 1
-        self.latest_cli = {
+        if completed_timing is not None:
+            completed_timing["exit_code"] = exit_code
+            completed_timing["output_state"] = output_state
+            completed_timing["failed"] = failed
+        latest = {
             "subcommand": family,
             "status": "failed" if failed else "passed",
             "exit_code": exit_code,
             "output_state": output_state,
             "observed_epoch": self.last_activity_epoch,
         }
+        if family in DIAGNOSTIC_FAMILIES:
+            self.diagnostic_completions += 1
+            if failed:
+                self.diagnostic_failures += 1
+            self.latest_diagnostic = latest
+            if exit_code is not None and (exit_code != 0 or output_failed):
+                self._failed_diagnostic_families.add(family)
+                if self.diagnostic_first_failure is None:
+                    item = event.get("item") if isinstance(event, dict) else None
+                    raw = item.get("aggregated_output", "") if isinstance(item, dict) else ""
+                    self.diagnostic_first_failure = {
+                        "failure_kind": "diagnostic",
+                        "family": family,
+                        "exit_code": exit_code,
+                        "output_state": output_state,
+                        "output": parse_output(raw if isinstance(raw, str) else str(raw)),
+                        "raw_output": raw,
+                        "event_item_id": item_id,
+                        "event_line": event_line,
+                        "observed_epoch": self.last_activity_epoch,
+                    }
+                    if self._first_failure_kind is None:
+                        self._first_failure_kind = "diagnostic"
+            return
+
+        self.cli_completions += 1
+        if failed:
+            self.cli_failures += 1
+        self.latest_cli = latest
         if exit_code is not None and (exit_code != 0 or output_failed):
             self._failed_families.add(family)
             if family in SCORING_FAMILIES and self.first_scoring_failure is None:
@@ -828,8 +1281,18 @@ class RunMonitor:
                     "exit_code": exit_code,
                     "output_state": output_state,
                 }
+                if self._first_failure_kind is None:
+                    self._first_failure_kind = "scoring"
                 if self.mode == "baseline":
                     self.stop("baseline_first_scoring_failure", self.first_scoring_failure)
+
+    def first_failure(self) -> dict[str, object] | None:
+        """Return the first semantic CLI failure across independent channels."""
+        if self._first_failure_kind == "diagnostic":
+            return self.diagnostic_first_failure
+        if self._first_failure_kind == "scoring" and self.first_scoring_failure is not None:
+            return {"failure_kind": "scoring", **self.first_scoring_failure}
+        return None
 
 
 class ProgressWriter:
@@ -884,21 +1347,27 @@ class ProgressWriter:
             return "done", "agent-event"
         latest = self.monitor.latest_cli
         family = latest.get("subcommand") if isinstance(latest, dict) else None
-        inferred = {
+        stage_by_family = {
             "model_capability": "model", "model_plan": "model",
             "apply_model": "apply", "apply_finalize": "apply", "verify": "verify",
-        }.get(family)
+        }
+        inferred = stage_by_family.get(family) if isinstance(family, str) else None
         return inferred, "cli-event" if inferred else None
 
     def write(self, now: float, *, force: bool = False) -> None:
         if not force and self._last_write is not None and now - self._last_write < 1.0:
             return
-        agent_boundary_end = self.agent_ended_epoch or now
-        stage_timing, stage_source, stage_status = observed_stage_timing(
-            self.project, self.started, agent_boundary_end)
+        observed_timing = evaluator_stage_timing(
+            self.monitor.cli_timing, self.started,
+            self.agent_ended_epoch if self.agent_ended_epoch is not None else None)
+        stage_timing = legacy_progress_stage_timing(observed_timing)
+        stage_status = str(observed_timing["status"])
+        stage_source = (
+            "evaluator-events" if stage_status in {"valid", "partial"} else None)
         current_stage, current_stage_source = self._delivery_stage(
-            stage_timing, stage_source if stage_status == "valid" else None)
+            stage_timing, stage_source)
         total_tokens = self.monitor.total_tokens
+        token_usage = token_usage_snapshot_or_unavailable(self.monitor.token_usage)
         last_activity = self.monitor.last_activity_epoch
         checker_allowed = self.checker_allowed
         checker_reason = self.checker_decision_reason
@@ -932,12 +1401,26 @@ class ProgressWriter:
                 "retries_total": self.monitor.cli_retries,
                 "latest": self.monitor.latest_cli,
             },
+            "diagnostic_cli": {
+                "invocations_total": max(
+                    self.monitor.diagnostic_invocations,
+                    self.monitor.diagnostic_completions),
+                "completed_total": self.monitor.diagnostic_completions,
+                "failed_total": self.monitor.diagnostic_failures,
+                "retries_total": self.monitor.diagnostic_retries,
+                "latest": self.monitor.latest_diagnostic,
+                "first_failure": self.monitor.diagnostic_first_failure,
+            },
             "agent": {
                 "last_activity_epoch": last_activity,
                 "last_activity_status": "observed" if last_activity is not None else "unavailable",
                 "total_tokens": total_tokens,
                 "total_tokens_status": "observed" if total_tokens is not None else "unavailable",
+                "token_usage": token_usage,
             },
+            "scoring_first_failure": self.monitor.first_scoring_failure,
+            "diagnostic_first_failure": self.monitor.diagnostic_first_failure,
+            "first_failure": self.monitor.first_failure(),
             "first_failure_seal_triggered": (
                 self.monitor.first_scoring_failure is not None
                 and self.monitor.mode == "baseline"),
@@ -966,17 +1449,38 @@ def terminate_process_group(process: subprocess.Popen, grace_seconds: float = 5.
         process.wait()
 
 
-def capture_artifacts(events_path: Path, run_dir: Path) -> list[dict[str, object]]:
+def capture_artifacts(
+    events_path: Path, observations_path: Path, run_dir: Path,
+    cli_timing: list[dict[str, object]] | None = None,
+) -> list[dict[str, object]]:
     # The raw stream remains authoritative. If the runner emitted one malformed
     # line, salvage every independently valid completed CLI event so budget or
     # stream failures still produce a useful scorecard.
-    artifacts = extract(events_path, strict=False)
+    artifacts = extract(
+        events_path, strict=False, observations_path=observations_path)
     cli = run_dir / "cli"
     cli.mkdir(exist_ok=True)
     if any(cli.iterdir()):
         raise ValueError(f"refusing to overwrite non-empty capture directory: {cli}")
     for index, artifact in enumerate(artifacts, 1):
-        write_json(cli / f"{index:03d}-{artifact['family']}.json", artifact)
+        artifact["capture_file"] = f"cli/{index:03d}-{artifact['family']}.json"
+        if cli_timing is not None:
+            completed_line = artifact.get("observed_completed_event_line")
+            item_id = artifact.get("event_item_id")
+            match = next((
+                timing for timing in cli_timing
+                if timing.get("capture_file") is None
+                and timing.get("family") == artifact.get("family")
+                and (
+                    completed_line is not None
+                    and timing.get("observed_completed_event_line") == completed_line
+                    or completed_line is None and item_id is not None
+                    and timing.get("event_item_id") == item_id
+                )
+            ), None)
+            if match is not None:
+                match["capture_file"] = artifact["capture_file"]
+        write_json(run_dir / str(artifact["capture_file"]), artifact)
     return artifacts
 
 
@@ -1321,10 +1825,13 @@ def prior_session_owner(run_dir: Path, session_id: str) -> str | None:
 
 def run_agent_process(
     *, command: list[str], project: Path, environment: dict[str, str],
-    events_path: Path, stderr_path: Path, monitor: RunMonitor, budgets: Budgets,
+    events_path: Path, observations_path: Path, stderr_path: Path,
+    monitor: RunMonitor, budgets: Budgets,
     started: float, clock: Callable[[], float], progress: ProgressWriter,
 ) -> int:
-    with events_path.open("wb") as events, stderr_path.open("wb") as stderr:
+    with (events_path.open("wb") as events,
+          observations_path.open("w", encoding="utf-8") as observations,
+          stderr_path.open("wb") as stderr):
         process = subprocess.Popen(
             command, cwd=project, stdout=subprocess.PIPE, stderr=stderr,
             env=environment, text=False, bufsize=0, start_new_session=True,
@@ -1333,6 +1840,35 @@ def run_agent_process(
         selector = selectors.DefaultSelector()
         selector.register(process.stdout, selectors.EVENT_READ)
         pending = b""
+        event_line = 0
+
+        def observe_line(raw_line: bytes) -> None:
+            nonlocal event_line
+            event_line += 1
+            line = raw_line.decode("utf-8", errors="replace")
+            observed_at = clock()
+            monitor.last_activity_epoch = observed_at
+            event = None
+            try:
+                event = json.loads(line)
+            except json.JSONDecodeError:
+                monitor.stop("invalid_agent_event_stream", {"line": line[:500]})
+            item = event.get("item") if isinstance(event, dict) else None
+            write_json_line = {
+                "contract_version": EVENT_OBSERVATION_CONTRACT,
+                "event_line": event_line,
+                "observed_epoch": observed_at,
+                "event_type": event.get("type") if isinstance(event, dict) else None,
+                "event_item_id": item.get("id") if isinstance(item, dict) else None,
+            }
+            observations.write(json.dumps(
+                write_json_line, ensure_ascii=False, separators=(",", ":")) + "\n")
+            observations.flush()
+            if event is None:
+                progress.write(observed_at, force=True)
+                return
+            monitor.observe(event, observed_at=observed_at, event_line=event_line)
+            progress.write(observed_at, force=True)
 
         def consume(chunk: bytes) -> None:
             nonlocal pending
@@ -1341,17 +1877,7 @@ def run_agent_process(
             pending += chunk
             while b"\n" in pending:
                 raw_line, pending = pending.split(b"\n", 1)
-                line = raw_line.decode("utf-8", errors="replace")
-                observed_at = clock()
-                monitor.last_activity_epoch = observed_at
-                try:
-                    event = json.loads(line)
-                except json.JSONDecodeError:
-                    monitor.stop("invalid_agent_event_stream", {"line": line[:500]})
-                    progress.write(observed_at, force=True)
-                    continue
-                monitor.observe(event, observed_at=observed_at)
-                progress.write(observed_at, force=True)
+                observe_line(raw_line)
 
         try:
             while process.poll() is None:
@@ -1376,14 +1902,7 @@ def run_agent_process(
             if remainder:
                 consume(remainder)
             if pending.strip():
-                line = pending.decode("utf-8", errors="replace")
-                try:
-                    observed_at = clock()
-                    monitor.observe(json.loads(line), observed_at=observed_at)
-                    progress.write(observed_at, force=True)
-                except json.JSONDecodeError:
-                    if monitor.stop_state is None:
-                        monitor.stop("invalid_agent_event_stream", {"line": line[:500]})
+                observe_line(pending)
             return process.wait()
         except BaseException:
             terminate_process_group(process)
@@ -1438,7 +1957,8 @@ def execute_run(
     if not executable_exists:
         raise ValueError(f"agent command executable does not exist: {executable}")
     protected = (
-        "lifecycle.json", "agent-events.jsonl", "meta.json", "scorecard.json",
+        "lifecycle.json", "agent-events.jsonl", "agent-event-observations.jsonl",
+        "stage-timing.json", "meta.json", "scorecard.json",
         "checklist-results.json", "failures.json", "cli", "freeze-manifest.json",
         "candidate-before.json", "candidate-isolated-before.json",
         "candidate-after.json", "candidate-isolated-after.json",
@@ -1508,7 +2028,7 @@ def execute_run(
     monitor = RunMonitor(mode, budgets)
     progress = ProgressWriter(
         run_dir / "progress.json", run_id, mode, project, monitor, started)
-    lifecycle = {
+    lifecycle: dict[str, object] = {
         "contract_version": CONTRACT_VERSION,
         "run_id": run_id,
         "run_kind": mode,
@@ -1522,6 +2042,19 @@ def execute_run(
         "budgets": budgets.as_dict(),
         "usage": {},
         "termination": None,
+        "first_failure": None,
+        "scoring_first_failure": None,
+        "diagnostic_first_failure": None,
+        # Legacy name retained for existing readers.
+        "first_scoring_failure": None,
+        "diagnostic_cli": {
+            "invocations_total": 0,
+            "completed_total": 0,
+            "failed_total": 0,
+            "retries_total": 0,
+            "latest": None,
+            "first_failure": None,
+        },
         "freeze_manifest_sha256": freeze_sha256,
         "ephemeral_auth_staged": auth_source is not None,
         "auth_cleanup_status": "pending" if auth_source is not None else "not_required",
@@ -1541,6 +2074,7 @@ def execute_run(
     }
     command = expand_command(agent_command, values)
     events_path = run_dir / "agent-events.jsonl"
+    observations_path = run_dir / "agent-event-observations.jsonl"
     stderr_path = run_dir / "agent-stderr.txt"
     auth_redactions = auth_redaction_tokens(auth_source)
     isolated_auth = stage_isolated_auth(auth_source, isolation)
@@ -1550,7 +2084,8 @@ def execute_run(
             agent_code = run_agent_process(
                 command=command, project=project,
                 environment=clean_agent_environment(isolation),
-                events_path=events_path, stderr_path=stderr_path, monitor=monitor,
+                events_path=events_path, observations_path=observations_path,
+                stderr_path=stderr_path, monitor=monitor,
                 budgets=budgets, started=started, clock=clock, progress=progress,
             )
         except Exception as error:
@@ -1561,6 +2096,7 @@ def execute_run(
                 "error_type": type(error).__name__,
             })
             events_path.touch(exist_ok=True)
+            observations_path.touch(exist_ok=True)
             stderr_path.touch(exist_ok=True)
     finally:
         auth_cleanup_error = remove_isolated_auth(isolated_auth)
@@ -1580,7 +2116,19 @@ def execute_run(
         monitor.stop_state = "environment_invalid_auth_sanitization"
         monitor.stop_detail = {"reason": auth_sanitization_errors[0]}
 
-    artifacts = capture_artifacts(events_path, run_dir)
+    artifacts = capture_artifacts(
+        events_path, observations_path, run_dir, monitor.cli_timing)
+    captured_diagnostic_failure = next((
+        diagnostic_failure_from_artifact(artifact)
+        for artifact in artifacts
+        if artifact.get("family") in DIAGNOSTIC_FAMILIES and artifact_failed(artifact)
+    ), None)
+    if captured_diagnostic_failure is not None:
+        monitor.diagnostic_first_failure = captured_diagnostic_failure
+    write_json(
+        run_dir / "stage-timing.json",
+        evaluator_stage_timing(monitor.cli_timing, started, agent_ended),
+    )
     session_id = next(iter(monitor.agent_session_ids), None)
     context_error = None
     if len(monitor.agent_session_ids) != 1:
@@ -1795,6 +2343,7 @@ def execute_run(
         measurement_boundary = "full_run_sealed"
     else:
         measurement_boundary = "interrupted_or_invalid"
+    token_usage = token_usage_snapshot_or_unavailable(monitor.token_usage)
     lifecycle.update({
         "state": terminal,
         "measurement_complete": measurement_complete,
@@ -1804,12 +2353,34 @@ def execute_run(
         "usage": {
             "wall_clock_seconds": round(ended - started, 3),
             "total_tokens": monitor.total_tokens,
+            "token_usage": token_usage,
             "cli_invocations_started": monitor.cli_invocations,
-            "cli_invocations_captured": len(artifacts),
+            "cli_invocations_captured": sum(
+                1 for artifact in artifacts
+                if artifact.get("family") not in DIAGNOSTIC_FAMILIES),
             "cli_retries_started": monitor.cli_retries,
+            "diagnostic_cli_invocations_started": monitor.diagnostic_invocations,
+            "diagnostic_cli_invocations_captured": sum(
+                1 for artifact in artifacts
+                if artifact.get("family") in DIAGNOSTIC_FAMILIES),
+            "diagnostic_cli_completions": monitor.diagnostic_completions,
+            "diagnostic_cli_failures": monitor.diagnostic_failures,
+            "diagnostic_cli_retries": monitor.diagnostic_retries,
         },
         "termination": monitor.stop_detail,
+        "first_failure": monitor.first_failure(),
+        "scoring_first_failure": monitor.first_scoring_failure,
+        "diagnostic_first_failure": monitor.diagnostic_first_failure,
         "first_scoring_failure": monitor.first_scoring_failure,
+        "diagnostic_cli": {
+            "invocations_total": max(
+                monitor.diagnostic_invocations, monitor.diagnostic_completions),
+            "completed_total": monitor.diagnostic_completions,
+            "failed_total": monitor.diagnostic_failures,
+            "retries_total": monitor.diagnostic_retries,
+            "latest": monitor.latest_diagnostic,
+            "first_failure": monitor.diagnostic_first_failure,
+        },
         "agent_result_state": monitor.agent_result_state,
         "agent_exit_code": agent_code,
         "checker_exit_code": checker_code,
@@ -1832,7 +2403,10 @@ def execute_run(
     })
     write_json(run_dir / "lifecycle.json", lifecycle)
     if monitor.total_tokens is not None:
-        write_json(run_dir / "tokens.json", {"total_tokens": monitor.total_tokens})
+        write_json(run_dir / "tokens.json", {
+            "total_tokens": monitor.total_tokens,
+            **token_usage,
+        })
     meta = {
         "benchmark": benchmark,
         "candidate_id": candidate["candidate_id"],
@@ -1858,9 +2432,13 @@ def execute_run(
     }
     write_json(run_dir / "meta.json", meta)
     if not (run_dir / "failures.json").exists():
-        raw_failures = failures_from_first_scoring_capture(
-            artifacts, monitor.first_scoring_failure, terminal)
-        if terminal == "delivery_incomplete" and not raw_failures:
+        raw_failures = failures_from_diagnostic_captures(artifacts, terminal)
+        raw_failures.extend(failures_from_first_scoring_capture(
+            artifacts, monitor.first_scoring_failure, terminal))
+        if (terminal == "delivery_incomplete" and not any(
+            failure.get("failure_kind") != "diagnostic"
+            for failure in raw_failures
+        )):
             latest_scoring = next((
                 artifact for artifact in reversed(artifacts)
                 if artifact.get("family") in SCORING_FAMILIES
@@ -1868,12 +2446,13 @@ def execute_run(
             latest_family = (
                 latest_scoring.get("family")
                 if isinstance(latest_scoring, dict) else None)
+            latest_family = latest_family if isinstance(latest_family, str) else None
             delivery_stage = {
                 "model_plan": "model",
                 "apply_model": "apply",
                 "apply_finalize": "apply",
                 "verify": "verify",
-            }.get(latest_family, "delivery")
+            }.get(latest_family, "delivery") if latest_family is not None else "delivery"
             raw_failures.append({
                 "stage": delivery_stage,
                 "owner": "agent",
@@ -1889,7 +2468,10 @@ def execute_run(
                 },
                 "attribution_status": "attributed",
             })
-        if terminal != "completed" and not raw_failures:
+        if (terminal != "completed" and not any(
+            failure.get("failure_kind") != "diagnostic"
+            for failure in raw_failures
+        )):
             raw_failures.append({
                 "stage": ((monitor.first_scoring_failure or {}).get("family") or "driver"),
                 "owner": None,
@@ -1912,7 +2494,9 @@ def execute_run(
     final_now = clock()
     progress.set_phase("terminal", final_now)
     progress.phase_timing["terminal"]["ended_epoch"] = final_now
-    progress.lifecycle_state = lifecycle["state"]
+    final_lifecycle_state = lifecycle["state"]
+    progress.lifecycle_state = (
+        final_lifecycle_state if isinstance(final_lifecycle_state, str) else "scorer_failed")
     progress.terminal = True
     scorecard = load_json_if_object(run_dir / "scorecard.json")
     progress.scorecard = {

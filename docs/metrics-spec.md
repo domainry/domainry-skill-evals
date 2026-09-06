@@ -73,10 +73,14 @@ B3 分母只含 `reuse_eligible=true`，分子只含其中状态通过且由 Run
 | 字段 | 定义 |
 |---|---|
 | `C1_wall_clock_seconds` | 任务开始到 done 声明 |
-| `C2_total_tokens` | 全程 token(input+output+cache)；事件流没有 usage snapshot 时保持 `null`，不得估算 |
+| `C2_total_tokens` | 兼容字段，等于供应方累计 `input_tokens + output_tokens`。cached input 已包含于 input、reasoning output 已包含于 output，均不重复相加；事件流没有完整 input/output snapshot 时保持 `null`，不得估算。 |
+| `C2_usage_breakdown` | `{input_tokens, cached_input_tokens, non_cached_input_tokens, output_tokens, reasoning_output_tokens, budget_tokens}` 及包含关系/可观测状态。可选明细按事件 fail closed，缺失为 null；预算使用 `budget_tokens=input+output`。 |
 | `C3_reading_token_ratio` | 读 Skill 文档消耗 / 总消耗(度量文档冗余税)。需 transcript token 记账,当前 agent-driven 模式无数据源,暂不自动计算。 |
-| `C4_cli_invocations` / `C4_cli_retries` | CLI 调用总数 / 其中重试数 |
-| `C5_stage_seconds` | 各阶段耗时分布 `{requirements, model, apply, verify}`。实现与 `apply finalize` 属于 apply；真实 Runtime 业务旅程属于 verify；done 只是终态。读取顺序:agent 实时产出的 `project/.domainry/development/stages.json`(各阶段 `{started, ended}` epoch,见 run-protocol「投放提示要求」)> run 目录 `stages.json`(driver 手工)> run 内回执/证据文件时间戳 best-effort 近似(受后期演化覆盖污染,仅兜底)。Agent epoch 必须位于 Agent lifecycle 边界内、单调且不重叠，否则整组为 null。来源标注于 `C5_stage_seconds_source`，可信度/拒绝原因标注于 `C5_stage_seconds_status`；拿不到的阶段为 null。 |
+| `C4_cli_invocations` / `C4_cli_retries` | 评分通道 CLI 调用总数 / 其中重试数；不含 `verify_fixture`。 |
+| `C4_diagnostic_cli` | 独立非计分 diagnostic 通道的调用、失败和首次失败；不进入 A4、C4 主计数或 retry budget。 |
+| `C5_stage_seconds` | 兼容四段汇总 `{requirements, model, apply, verify}`，由 evaluator 观察的五段关键路径折叠得到：requirements=discovery、model=plan、apply=apply+finalize、verify=verify。主来源是 `stage-timing.json`；无该工件的旧 run 才回退到 driver `stages.json` 或 mtime 近似。缺边界的阶段为 null，整体标 `partial`/`unavailable`，不得估算。 |
+| `C5_stage_timing` | evaluator 观察的 `{discovery, plan, apply, finalize, verify}` 区间、每个端点 provenance、已观察关键路径总时长、unknown 阶段和热点。Agent 在阶段 CLI 后终止且下一阶段未开始时，最后一次当前阶段 CLI completed 是优先结束边界；仅未配对 started 可回退到严格关联的 `agent_ended_epoch`。后续阶段不补 0。固定边界见 run-protocol。 |
+| `C5_project_stage_report` | Agent `.domainry/development/stages.json` 的独立校验与同口径差值。它只能交叉验证，坏数据不会覆盖或清空 evaluator 时间线。 |
 
 ## D. 稳定性与干预
 

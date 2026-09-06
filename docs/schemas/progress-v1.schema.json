@@ -27,15 +27,16 @@
     },
     "delivery_stage_source": {
       "type": ["string", "null"],
-      "enum": ["agent-stages.json", "agent-event", "cli-event", null]
+      "enum": ["evaluator-events", "agent-stages.json", "agent-event", "cli-event", null]
     },
     "delivery_stage_timing": {"$ref": "#/$defs/deliveryTiming"},
     "delivery_stage_timing_source": {
-      "type": ["string", "null"], "enum": ["agent-stages.json", null]
+      "type": ["string", "null"], "enum": ["evaluator-events", "agent-stages.json", null]
     },
     "delivery_stage_timing_status": {
       "enum": [
-        "valid", "unavailable", "invalid_shape", "invalid_out_of_bounds",
+        "valid", "partial", "unavailable", "invalid_shape", "invalid_lifecycle_boundary",
+        "invalid_out_of_bounds",
         "invalid_interval", "invalid_non_monotonic"
       ]
     },
@@ -69,6 +70,22 @@
         }
       }
     },
+    "diagnostic_cli": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "invocations_total", "completed_total", "failed_total", "retries_total",
+        "latest", "first_failure"
+      ],
+      "properties": {
+        "invocations_total": {"type": "integer", "minimum": 0},
+        "completed_total": {"type": "integer", "minimum": 0},
+        "failed_total": {"type": "integer", "minimum": 0},
+        "retries_total": {"type": "integer", "minimum": 0},
+        "latest": {"type": ["object", "null"]},
+        "first_failure": {"type": ["object", "null"]}
+      }
+    },
     "agent": {
       "type": "object",
       "required": [
@@ -78,9 +95,13 @@
         "last_activity_epoch": {"type": ["number", "null"]},
         "last_activity_status": {"enum": ["observed", "unavailable"]},
         "total_tokens": {"type": ["integer", "null"]},
-        "total_tokens_status": {"enum": ["observed", "unavailable"]}
+        "total_tokens_status": {"enum": ["observed", "unavailable"]},
+        "token_usage": {"$ref": "#/$defs/tokenUsage"}
       }
     },
+    "scoring_first_failure": {"type": ["object", "null"]},
+    "diagnostic_first_failure": {"type": ["object", "null"]},
+    "first_failure": {"type": ["object", "null"]},
     "first_failure_seal_triggered": {"type": "boolean"},
     "checker_allowed": {"type": ["boolean", "null"]},
     "checker_decision_reason": {"type": ["string", "null"]},
@@ -114,6 +135,29 @@
         "model": {"$ref": "#/$defs/instant"},
         "apply": {"$ref": "#/$defs/instant"},
         "verify": {"$ref": "#/$defs/instant"}
+      }
+    },
+    "tokenUsage": {
+      "type": "object",
+      "required": [
+        "input_tokens", "cached_input_tokens", "non_cached_input_tokens",
+        "output_tokens", "reasoning_output_tokens", "budget_tokens",
+        "budget_basis", "cached_input_included_in_input",
+        "reasoning_output_included_in_output", "observability_status"
+      ],
+      "properties": {
+        "input_tokens": {"type": ["integer", "null"], "minimum": 0},
+        "cached_input_tokens": {"type": ["integer", "null"], "minimum": 0},
+        "non_cached_input_tokens": {"type": ["integer", "null"], "minimum": 0},
+        "output_tokens": {"type": ["integer", "null"], "minimum": 0},
+        "reasoning_output_tokens": {"type": ["integer", "null"], "minimum": 0},
+        "budget_tokens": {"type": ["integer", "null"], "minimum": 0},
+        "budget_basis": {"const": "provider_cumulative_input_plus_output"},
+        "cached_input_included_in_input": {"const": true},
+        "reasoning_output_included_in_output": {"const": true},
+        "observability_status": {
+          "enum": ["complete", "partial", "invalid_detail", "unavailable", "legacy_total_only"]
+        }
       }
     }
   }

@@ -29,16 +29,83 @@
     },
     "B3_platform_reuse_rate": {"type": ["number", "null"], "minimum": 0, "maximum": 1}
     ,
+    "C2_total_tokens": {"type": ["integer", "null"], "minimum": 0},
+    "C2_usage_breakdown": {"$ref": "#/$defs/tokenUsage"},
+    "C4_diagnostic_cli": {
+      "type": "object",
+      "required": [
+        "invocations", "failures", "first_failure",
+        "included_in_scoring_invocations", "included_in_retry_budget"
+      ],
+      "properties": {
+        "invocations": {"type": "integer", "minimum": 0},
+        "failures": {"type": "integer", "minimum": 0},
+        "first_failure": {"type": ["object", "null"]},
+        "included_in_scoring_invocations": {"const": false},
+        "included_in_retry_budget": {"const": false}
+      }
+    },
+    "scoring_first_failure": {"type": ["object", "null"]},
+    "diagnostic_first_failure": {"type": ["object", "null"]},
+    "diagnostic_failure_attribution": {"type": ["object", "null"]},
+    "C5_stage_seconds": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["requirements", "model", "apply", "verify"],
+      "properties": {
+        "requirements": {"type": ["number", "null"], "minimum": 0},
+        "model": {"type": ["number", "null"], "minimum": 0},
+        "apply": {"type": ["number", "null"], "minimum": 0},
+        "verify": {"type": ["number", "null"], "minimum": 0}
+      }
+    },
     "C5_stage_seconds_source": {
       "type": ["string", "null"],
-      "enum": ["agent-stages.json", "stages.json", "mtime-approx", null]
+      "enum": [
+        "evaluator-events", "agent-stages.json", "stages.json", "mtime-approx", null
+      ]
     },
     "C5_stage_seconds_status": {
       "enum": [
-        "valid", "approximate", "unavailable", "invalid_shape",
+        "valid", "partial", "approximate", "unavailable", "invalid_shape",
         "invalid_lifecycle_boundary", "invalid_out_of_bounds",
         "invalid_interval", "invalid_non_monotonic"
       ]
+    },
+    "C5_stage_timing": {
+      "anyOf": [
+        {"type": "null"},
+        {"$ref": "stage-timing-v1.schema.json"}
+      ]
+    },
+    "C5_project_stage_report": {
+      "type": "object",
+      "required": ["source", "status", "stage_seconds", "comparison"]
+    }
+  },
+  "$defs": {
+    "tokenUsage": {
+      "type": "object",
+      "required": [
+        "input_tokens", "cached_input_tokens", "non_cached_input_tokens",
+        "output_tokens", "reasoning_output_tokens", "budget_tokens",
+        "budget_basis", "cached_input_included_in_input",
+        "reasoning_output_included_in_output", "observability_status"
+      ],
+      "properties": {
+        "input_tokens": {"type": ["integer", "null"], "minimum": 0},
+        "cached_input_tokens": {"type": ["integer", "null"], "minimum": 0},
+        "non_cached_input_tokens": {"type": ["integer", "null"], "minimum": 0},
+        "output_tokens": {"type": ["integer", "null"], "minimum": 0},
+        "reasoning_output_tokens": {"type": ["integer", "null"], "minimum": 0},
+        "budget_tokens": {"type": ["integer", "null"], "minimum": 0},
+        "budget_basis": {"const": "provider_cumulative_input_plus_output"},
+        "cached_input_included_in_input": {"const": true},
+        "reasoning_output_included_in_output": {"const": true},
+        "observability_status": {
+          "enum": ["complete", "partial", "invalid_detail", "unavailable", "legacy_total_only"]
+        }
+      }
     }
   }
 }

@@ -120,6 +120,19 @@ def command_event(kind, family_command, code=None):
     return {"type": kind, "item": item}
 
 
+def observed_cli(family, started, completed, index):
+    return {
+        "family": family,
+        "event_item_id": f"item_{index}",
+        "observed_started_epoch": started,
+        "observed_completed_epoch": completed,
+        "observed_started_event_line": index * 2 + 1,
+        "observed_completed_event_line": index * 2 + 2 if completed is not None else None,
+        "capture_file": (
+            f"cli/{index + 1:03d}-{family}.json" if completed is not None else None),
+    }
+
+
 def test_baseline_stops_on_first_failed_scoring_command():
     monitor = MOD.RunMonitor("baseline", MOD.Budgets())
     command = "/candidate/domainry-cli model plan --json --project ."
@@ -177,6 +190,75 @@ def test_cli_retry_and_token_budgets_fail_closed():
     assert token_monitor.total_tokens == 101
 
 
+def test_token_usage_breakdown_uses_provider_input_plus_output_without_double_counting():
+    monitor = MOD.RunMonitor("baseline", MOD.Budgets(total_tokens=5_000_000))
+    monitor.observe({"type": "turn.completed", "usage": {
+        "input_tokens": 5_613_505,
+        "cached_input_tokens": 5_387_520,
+        "output_tokens": 59_969,
+        "reasoning_output_tokens": 14_837,
+    }})
+
+    assert monitor.total_tokens == 5_673_474
+    assert monitor.stop_state == "budget_exhausted_tokens"
+    assert monitor.token_usage == {
+        "input_tokens": 5_613_505,
+        "cached_input_tokens": 5_387_520,
+        "non_cached_input_tokens": 225_985,
+        "output_tokens": 59_969,
+        "reasoning_output_tokens": 14_837,
+        "budget_tokens": 5_673_474,
+        "budget_basis": "provider_cumulative_input_plus_output",
+        "cached_input_included_in_input": True,
+        "reasoning_output_included_in_output": True,
+        "observability_status": "complete",
+    }
+
+
+def test_token_usage_optional_details_fail_closed_per_event():
+    assert MOD.event_usage_breakdown({"usage": {
+        "input_tokens": 90, "output_tokens": 10,
+    }}) == {
+        "input_tokens": 90,
+        "cached_input_tokens": None,
+        "non_cached_input_tokens": None,
+        "output_tokens": 10,
+        "reasoning_output_tokens": None,
+        "budget_tokens": 100,
+        "budget_basis": "provider_cumulative_input_plus_output",
+        "cached_input_included_in_input": True,
+        "reasoning_output_included_in_output": True,
+        "observability_status": "partial",
+    }
+    assert MOD.event_usage_breakdown({"usage": {
+        "input_tokens": 90, "cached_input_tokens": 91,
+        "output_tokens": 10, "reasoning_output_tokens": 11,
+    }})["observability_status"] == "invalid_detail"
+    assert MOD.event_usage_breakdown({"usage": {
+        "input_tokens": 90,
+    }}) is None
+
+
+def test_verify_fixture_is_independent_diagnostic_and_never_a_scoring_retry():
+    monitor = MOD.RunMonitor("baseline", MOD.Budgets(cli_invocations=1, cli_retries=0))
+    diagnostic = "/candidate/domainry-cli verify fixture --json --project ."
+    verify = "/candidate/domainry-cli verify --json --project ."
+    monitor.observe(command_event("item.started", diagnostic), observed_at=10, event_line=1)
+    failed = command_event("item.completed", diagnostic, 1)
+    failed["item"]["aggregated_output"] = "error: undeclared role sales_rep\n"
+    monitor.observe(failed, observed_at=12, event_line=2)
+    monitor.observe(command_event("item.started", verify), observed_at=13, event_line=3)
+
+    assert monitor.stop_state is None
+    assert monitor.cli_invocations == 1
+    assert monitor.cli_retries == 0
+    assert monitor.diagnostic_invocations == 1
+    assert monitor.diagnostic_failures == 1
+    assert monitor.first_scoring_failure is None
+    assert monitor.diagnostic_first_failure["family"] == "verify_fixture"
+    assert monitor.first_failure()["failure_kind"] == "diagnostic"
+
+
 def test_prompt_policy_separates_baseline_and_convergence(tmp_path):
     source = tmp_path / "source.md"
     source.write_text("do the work")
@@ -222,6 +304,104 @@ def test_driver_seals_baseline_evidence_after_first_failure(tmp_path):
     assert (run / "failures.json").is_file()
     assert scorecard["pass_at_1"] is False
     assert scorecard["terminal_state"] == "baseline_first_scoring_failure"
+
+
+def test_baseline20_shape_preserves_diagnostic_failure_and_token_terminal(tmp_path):
+    commands = [
+        ("model_capability", "/candidate/domainry-cli model capability --json --project .",
+         {"state": "available"}, 0),
+        ("model_plan", "/candidate/domainry-cli model plan --json --project .",
+         {"state": "valid"}, 0),
+        ("apply_model", "/candidate/domainry-cli apply model --json --project .",
+         {"state": "implementation_ready"}, 0),
+        ("verify_fixture", "/candidate/domainry-cli verify fixture --json --project .",
+         'error: project compiler-bound Runtime acceptance fixture: Runtime acceptance fixture '
+         '"overdue_contacted_lead" references undeclared role "sales_rep"\n', 1),
+    ]
+    script = (
+        "import json\n"
+        f"commands={commands!r}\n"
+        "for index,(family,command,output,code) in enumerate(commands):\n"
+        " item={'id':f'item_{index}','type':'command_execution','command':command}\n"
+        " print(json.dumps({'type':'item.started','item':item}),flush=True)\n"
+        " done=dict(item);done.update(exit_code=code,aggregated_output=(json.dumps(output) if isinstance(output,dict) else output))\n"
+        " print(json.dumps({'type':'item.completed','item':done}),flush=True)\n"
+        "message={'id':'result','type':'agent_message','text':'EVAL_RESULT={\"state\":\"not_done\"}'}\n"
+        "print(json.dumps({'type':'item.completed','item':message}),flush=True)\n"
+        "print(json.dumps({'type':'turn.completed','usage':{"
+        "'input_tokens':5613505,'cached_input_tokens':5387520,"
+        "'output_tokens':59969,'reasoning_output_tokens':14837}}),flush=True)\n"
+    )
+    arguments = run_arguments(tmp_path, script, run_name="baseline-20-shape")
+    arguments["budgets"] = MOD.Budgets(
+        total_tokens=5_000_000, cli_invocations=5, cli_retries=0)
+
+    assert MOD.execute_run(**arguments) == 1
+    run = arguments["run_dir"]
+    lifecycle = json.loads((run / "lifecycle.json").read_text())
+    progress = json.loads((run / "progress.json").read_text())
+    scorecard = json.loads((run / "scorecard.json").read_text())
+    tokens = json.loads((run / "tokens.json").read_text())
+    failures = json.loads((run / "failures.json").read_text())
+    stage_timing = json.loads((run / "stage-timing.json").read_text())
+
+    assert lifecycle["state"] == "budget_exhausted_tokens"
+    assert lifecycle["measurement_complete"] is False
+    assert lifecycle["termination"] == {
+        "observed": 5_673_474,
+        "limit": 5_000_000,
+        "basis": "provider_cumulative_input_plus_output",
+    }
+    assert lifecycle["first_failure"]["family"] == "verify_fixture"
+    assert lifecycle["scoring_first_failure"] is None
+    assert lifecycle["first_scoring_failure"] is None
+    assert lifecycle["diagnostic_first_failure"]["capture_file"] == (
+        "cli/004-verify_fixture.json")
+    assert lifecycle["usage"]["cli_invocations_started"] == 3
+    assert lifecycle["usage"]["cli_invocations_captured"] == 3
+    assert lifecycle["usage"]["cli_retries_started"] == 0
+    assert lifecycle["usage"]["diagnostic_cli_invocations_started"] == 1
+    assert lifecycle["usage"]["diagnostic_cli_failures"] == 1
+    assert lifecycle["diagnostic_cli"]["latest"]["subcommand"] == "verify_fixture"
+    assert lifecycle["diagnostic_cli"]["first_failure"]["family"] == "verify_fixture"
+    assert lifecycle["checker_exit_code"] is None
+    assert lifecycle["checker_gate"]["reason"] == "agent_declared_not_done"
+
+    assert progress["domainry_cli"]["invocations_total"] == 3
+    assert progress["domainry_cli"]["retries_total"] == 0
+    assert progress["diagnostic_cli"]["invocations_total"] == 1
+    assert progress["diagnostic_cli"]["failed_total"] == 1
+    assert progress["diagnostic_first_failure"]["family"] == "verify_fixture"
+    assert progress["agent"]["token_usage"]["non_cached_input_tokens"] == 225_985
+    assert progress["checker_allowed"] is False
+
+    assert tokens["total_tokens"] == tokens["budget_tokens"] == 5_673_474
+    assert tokens["input_tokens"] == 5_613_505
+    assert tokens["cached_input_tokens"] == 5_387_520
+    assert tokens["non_cached_input_tokens"] == 225_985
+    assert tokens["output_tokens"] == 59_969
+    assert tokens["reasoning_output_tokens"] == 14_837
+
+    assert scorecard["A4_verify_first_pass"] is None
+    assert scorecard["C4_cli_invocations"] == 3
+    assert scorecard["C4_cli_retries"] == 0
+    assert scorecard["C4_diagnostic_cli"]["invocations"] == 1
+    assert scorecard["C4_diagnostic_cli"]["failures"] == 1
+    assert scorecard["C2_usage_breakdown"]["cached_input_tokens"] == 5_387_520
+    assert scorecard["diagnostic_failure_attribution"] == {"domainry-cli": 1}
+    assert scorecard["failure_attribution"] == {"unattributed": 1}
+    assert scorecard["C5_stage_timing"]["diagnostic_intervals"][0]["family"] == (
+        "verify_fixture")
+    assert scorecard["C5_stage_timing"]["stages"]["verify"]["status"] == "unknown"
+
+    diagnostic = stage_timing["diagnostic_intervals"]
+    assert len(diagnostic) == 1
+    assert diagnostic[0]["family"] == "verify_fixture"
+    assert diagnostic[0]["failed"] is True
+    assert diagnostic[0]["scoring_effect"] == "none"
+    assert stage_timing["stages"]["verify"]["status"] == "unknown"
+    assert any(failure.get("failure_kind") == "diagnostic" for failure in failures)
+    assert any(failure.get("stage") == "driver" for failure in failures)
 
 
 def test_driver_rejects_overwriting_measured_run(tmp_path):
@@ -590,6 +770,7 @@ def test_service_drift_invalidates_run_and_skips_checker(tmp_path):
 
 
 def test_real_shape_baseline_plan_failure_skips_checker_and_attributes_diagnostics(tmp_path):
+    capability_command = "/candidate/domainry-cli model capability --json --project ."
     command = "/candidate/domainry-cli model plan --json --project ."
     diagnostics = [
         {
@@ -622,7 +803,13 @@ def test_real_shape_baseline_plan_failure_skips_checker_and_attributes_diagnosti
         "error: Builder validation found 2 issue(s)",
     ])
     script = (
-        f"item={{'type':'command_execution','command':{command!r}}}\n"
+        f"capability={{'id':'item_capability','type':'command_execution',"
+        f"'command':{capability_command!r}}}\n"
+        "print(json.dumps({'type':'item.started','item':capability}),flush=True)\n"
+        "capability_done=dict(capability);capability_done.update("
+        "exit_code=0,aggregated_output=json.dumps({'state':'available'}))\n"
+        "print(json.dumps({'type':'item.completed','item':capability_done}),flush=True)\n"
+        f"item={{'id':'item_plan','type':'command_execution','command':{command!r}}}\n"
         "print(json.dumps({'type':'item.started','item':item}),flush=True)\n"
         f"done=dict(item);done.update(exit_code=1,aggregated_output={raw_output!r})\n"
         "print(json.dumps({'type':'item.completed','item':done}),flush=True)\n"
@@ -641,6 +828,7 @@ def test_real_shape_baseline_plan_failure_skips_checker_and_attributes_diagnosti
     scorecard = json.loads((run / "scorecard.json").read_text())
     meta = json.loads((run / "meta.json").read_text())
     capture = json.loads(next((run / "cli").glob("*-model_plan.json")).read_text())
+    stage_timing = json.loads((run / "stage-timing.json").read_text())
 
     assert lifecycle["state"] == "baseline_first_scoring_failure"
     assert lifecycle["environment_valid"] is True
@@ -662,6 +850,22 @@ def test_real_shape_baseline_plan_failure_skips_checker_and_attributes_diagnosti
     assert scorecard["A_source"]["A5"] == "not_measurable"
     assert scorecard["failure_attribution"] == {"domainry-cli": 2}
     assert scorecard["C2_total_tokens"] is None
+    assert scorecard["C5_stage_seconds"]["model"] is not None
+    assert stage_timing["stages"]["plan"]["started_epoch"] == (
+        stage_timing["stages"]["discovery"]["ended_epoch"])
+    assert stage_timing["stages"]["plan"]["ended_epoch"] == (
+        capture["observed_completed_epoch"])
+    assert stage_timing["stages"]["plan"]["end_provenance"] == {
+        "source": "agent-event-observations.jsonl",
+        "capture_file": "cli/002-model_plan.json",
+        "family": "model_plan",
+        "event": "completed",
+        "event_item_id": "item_plan",
+        "event_line": capture["observed_completed_event_line"],
+        "boundary_reason": "terminal_stage_cli_completed",
+    }
+    assert stage_timing["critical_path"]["unknown_stages"] == [
+        "apply", "finalize", "verify"]
     progress = json.loads((run / "progress.json").read_text())
     assert progress["status"] == "terminal"
     assert progress["lifecycle_state"] == "baseline_first_scoring_failure"
@@ -669,8 +873,8 @@ def test_real_shape_baseline_plan_failure_skips_checker_and_attributes_diagnosti
     assert progress["checker_allowed"] is False
     assert progress["checker_decision_reason"] == "baseline_first_failure_before_verify"
     assert progress["domainry_cli"] == {
-        "invocations_total": 1,
-        "completed_total": 1,
+        "invocations_total": 2,
+        "completed_total": 2,
         "failed_total": 1,
         "retries_total": 0,
         "latest": progress["domainry_cli"]["latest"],
@@ -874,6 +1078,7 @@ def test_structured_diagnostics_attribute_every_scoring_family(family):
 
 def test_progress_is_atomically_visible_during_normal_run_and_matches_final_outputs(tmp_path):
     commands = [
+        ("/candidate/domainry-cli model capability --json --project .", "available"),
         ("/candidate/domainry-cli model plan --json --project .", "valid"),
         ("/candidate/domainry-cli apply model --json --project .", "implementation_ready"),
         ("/candidate/domainry-cli apply finalize --json --project .", "finalized"),
@@ -882,8 +1087,8 @@ def test_progress_is_atomically_visible_during_normal_run_and_matches_final_outp
     script = (
         "import time\n"
         f"commands={commands!r}\n"
-        "for command,state in commands:\n"
-        " item={'type':'command_execution','command':command}\n"
+        "for index,(command,state) in enumerate(commands):\n"
+        " item={'id':f'item_{index}','type':'command_execution','command':command}\n"
         " print(json.dumps({'type':'item.started','item':item}),flush=True)\n"
         " done=dict(item);done.update(exit_code=0,aggregated_output=json.dumps({'state':state}))\n"
         " print(json.dumps({'type':'item.completed','item':done}),flush=True)\n"
@@ -914,7 +1119,11 @@ def test_progress_is_atomically_visible_during_normal_run_and_matches_final_outp
         if progress_path.exists():
             # Repeated parsing also checks readers never observe a partial replacement.
             snapshot = json.loads(progress_path.read_text())
-            if snapshot["status"] == "running" and snapshot["domainry_cli"]["completed_total"]:
+            latest = snapshot["domainry_cli"]["latest"]
+            if (snapshot["status"] == "running"
+                    and snapshot["domainry_cli"]["completed_total"]
+                    and isinstance(latest, dict)
+                    and latest.get("status") == "passed"):
                 running = snapshot
                 break
         time.sleep(0.01)
@@ -932,12 +1141,40 @@ def test_progress_is_atomically_visible_during_normal_run_and_matches_final_outp
     assert progress["status"] == "terminal"
     assert progress["lifecycle_state"] == lifecycle["state"] == "completed"
     assert progress["checker_allowed"] is True
-    assert progress["domainry_cli"]["invocations_total"] == 4
+    assert progress["domainry_cli"]["invocations_total"] == 5
     assert progress["domainry_cli"]["failed_total"] == 0
     assert progress["scorecard"]["pass_at_1"] == scorecard["pass_at_1"]
     assert progress["scorecard"]["run_outcome_pass"] == scorecard["run_outcome_pass"]
     assert progress["lifecycle_phase_timing"]["agent"]["ended_epoch"] is not None
     assert progress["lifecycle_phase_timing"]["checker"]["started_epoch"] is not None
+    assert progress["delivery_stage_timing_source"] == "evaluator-events"
+    assert progress["delivery_stage_timing_status"] == "valid"
+    observations_path = arguments["run_dir"] / "agent-event-observations.jsonl"
+    observations = [json.loads(line) for line in observations_path.read_text().splitlines()]
+    raw_events = (arguments["run_dir"] / "agent-events.jsonl").read_text().splitlines()
+    assert len(observations) == len(raw_events)
+    assert [row["event_line"] for row in observations] == list(
+        range(1, len(raw_events) + 1))
+    first_capture = json.loads((arguments["run_dir"] / "cli/001-model_capability.json").read_text())
+    assert first_capture["observed_started_epoch"] is not None
+    assert first_capture["observed_completed_epoch"] >= first_capture["observed_started_epoch"]
+    stage_timing = json.loads((arguments["run_dir"] / "stage-timing.json").read_text())
+    assert stage_timing["stage_order"] == [
+        "discovery", "plan", "apply", "finalize", "verify"]
+    assert stage_timing["status"] == "valid"
+    assert stage_timing["critical_path"]["unknown_stages"] == []
+    assert stage_timing["critical_path"]["hotspot"]["stage"] in stage_timing["stage_order"]
+    assert stage_timing["stages"]["discovery"]["end_provenance"] == {
+        "source": "agent-event-observations.jsonl",
+        "capture_file": "cli/001-model_capability.json",
+        "family": "model_capability",
+        "event": "completed",
+        "event_item_id": "item_0",
+        "event_line": 3,
+        "boundary_reason": "discovery_capability_completed",
+    }
+    assert scorecard["C5_stage_seconds_source"] == "evaluator-events"
+    assert scorecard["C5_stage_seconds_status"] == "valid"
     assert not list(arguments["run_dir"].glob(".progress.json.*.tmp"))
 
 
@@ -954,32 +1191,191 @@ def test_progress_marks_unobserved_usage_unavailable(tmp_path):
     assert progress["agent"]["total_tokens_status"] == "unavailable"
 
 
-def test_progress_uses_observed_agent_stage_timestamps(tmp_path):
+def test_progress_uses_evaluator_observed_cli_timestamps(tmp_path):
     project = tmp_path / "project"
-    stage_path = project / ".domainry/development/stages.json"
-    stage_path.parent.mkdir(parents=True)
-    stage_path.write_text(json.dumps({
-        "requirements": {"started": 100, "ended": 120},
-        "model": {"started": 120, "ended": 180},
-        "apply": {"started": 180, "ended": 260},
-        "verify": {"started": 260},
-    }))
+    project.mkdir()
     monitor = MOD.RunMonitor("baseline", MOD.Budgets())
+    commands = [
+        (100.0, 120.0, "/candidate/domainry-cli model capability --json --project ."),
+        (130.0, 140.0, "/candidate/domainry-cli model plan --json --project ."),
+        (180.0, 200.0, "/candidate/domainry-cli apply model --json --project ."),
+        (260.0, 270.0, "/candidate/domainry-cli apply finalize --json --project ."),
+        (280.0, 290.0, "/candidate/domainry-cli verify --json --project ."),
+    ]
+    for index, (started, ended, command) in enumerate(commands):
+        start_event = command_event("item.started", command)
+        start_event["item"]["id"] = f"item_{index}"
+        end_event = command_event("item.completed", command, 0)
+        end_event["item"]["id"] = f"item_{index}"
+        monitor.observe(start_event, observed_at=started)
+        monitor.observe(end_event, observed_at=ended)
     writer = MOD.ProgressWriter(
         tmp_path / "progress.json", "run", "baseline", project, monitor, 90.0)
+    writer.mark_agent_ended(300.0)
     writer.write(300.0, force=True)
     progress = json.loads((tmp_path / "progress.json").read_text())
     assert progress["delivery_stage"] == "verify"
-    assert progress["delivery_stage_source"] == "agent-stages.json"
-    assert progress["delivery_stage_timing_source"] == "agent-stages.json"
+    assert progress["delivery_stage_source"] == "cli-event"
+    assert progress["delivery_stage_timing_source"] == "evaluator-events"
     assert progress["delivery_stage_timing_status"] == "valid"
     assert progress["delivery_stage_timing"]["requirements"] == {
-        "started_epoch": 100.0, "ended_epoch": 120.0}
+        "started_epoch": 90.0, "ended_epoch": 120.0}
+    assert progress["delivery_stage_timing"]["apply"] == {
+        "started_epoch": 180.0, "ended_epoch": 280.0}
     assert progress["delivery_stage_timing"]["verify"] == {
-        "started_epoch": 260.0, "ended_epoch": None}
+        "started_epoch": 280.0, "ended_epoch": 290.0}
 
 
-def test_progress_rejects_agent_stage_timestamps_outside_lifecycle(tmp_path):
+@pytest.mark.parametrize(
+    ("terminal_stage", "attempts", "expected_start", "expected_end", "unknown"),
+    [
+        (
+            "plan",
+            [("model_capability", 105.0, 120.0), ("model_plan", 500.0, 524.0)],
+            120.0,
+            524.0,
+            ["apply", "finalize", "verify"],
+        ),
+        (
+            "apply",
+            [
+                ("model_capability", 105.0, 120.0),
+                ("model_plan", 130.0, 140.0),
+                ("apply_model", 200.0, 224.0),
+            ],
+            200.0,
+            224.0,
+            ["finalize", "verify"],
+        ),
+        (
+            "finalize",
+            [
+                ("model_capability", 105.0, 120.0),
+                ("model_plan", 130.0, 140.0),
+                ("apply_model", 200.0, 210.0),
+                ("apply_finalize", 260.0, 284.0),
+            ],
+            260.0,
+            284.0,
+            ["verify"],
+        ),
+        (
+            "verify",
+            [
+                ("model_capability", 105.0, 120.0),
+                ("model_plan", 130.0, 140.0),
+                ("apply_model", 200.0, 210.0),
+                ("apply_finalize", 260.0, 270.0),
+                ("verify", 300.0, 324.0),
+            ],
+            300.0,
+            324.0,
+            [],
+        ),
+    ],
+)
+def test_plan_apply_finalize_failures_and_verify_termination_use_cli_completion(
+    terminal_stage, attempts, expected_start, expected_end, unknown,
+):
+    artifacts = [
+        observed_cli(family, started, completed, index)
+        for index, (family, started, completed) in enumerate(attempts)
+    ]
+    artifacts[-1]["exit_code"] = 1
+
+    timing = MOD.evaluator_stage_timing(artifacts, 100.0, 550.0)
+
+    stage = timing["stages"][terminal_stage]
+    assert stage["started_epoch"] == expected_start
+    assert stage["ended_epoch"] == expected_end
+    assert stage["seconds"] == expected_end - expected_start
+    assert stage["end_provenance"]["source"] == "agent-event-observations.jsonl"
+    assert stage["end_provenance"]["event"] == "completed"
+    assert stage["end_provenance"]["boundary_reason"] == (
+        "terminal_stage_cli_completed")
+    assert timing["critical_path"]["unknown_stages"] == unknown
+    for later_stage in unknown:
+        assert timing["stages"][later_stage] == {
+            "started_epoch": None,
+            "ended_epoch": None,
+            "seconds": None,
+            "status": "unknown",
+            "start_provenance": None,
+            "end_provenance": None,
+        }
+
+
+def test_open_stage_cli_uses_agent_end_only_after_lifecycle_termination():
+    artifacts = [
+        observed_cli("model_capability", 105.0, 120.0, 0),
+        observed_cli("model_plan", 500.0, None, 1),
+    ]
+
+    running = MOD.evaluator_stage_timing(artifacts, 100.0, None)
+    assert running["stages"]["plan"]["status"] == "unknown"
+    assert running["critical_path"]["observed_seconds"] == 20.0
+
+    terminated = MOD.evaluator_stage_timing(artifacts, 100.0, 550.0)
+    plan = terminated["stages"]["plan"]
+    assert plan["started_epoch"] == 120.0
+    assert plan["ended_epoch"] == 550.0
+    assert plan["seconds"] == 430.0
+    assert plan["end_provenance"] == {
+        "source": "lifecycle.json",
+        "field": "agent_ended_epoch",
+        "boundary_reason": "active_stage_cli_open_at_agent_end",
+        "related_cli_start": {
+            "source": "agent-event-observations.jsonl",
+            "capture_file": None,
+            "family": "model_plan",
+            "event": "started",
+            "event_item_id": "item_1",
+            "event_line": 3,
+            "boundary_reason": "stage_cli_started",
+        },
+    }
+
+
+def test_completed_active_stage_stays_unknown_while_agent_is_running():
+    artifacts = [
+        observed_cli("model_capability", 105.0, 120.0, 0),
+        observed_cli("model_plan", 500.0, 524.0, 1),
+    ]
+    timing = MOD.evaluator_stage_timing(artifacts, 100.0, None)
+    assert timing["status"] == "partial"
+    assert timing["stages"]["discovery"]["seconds"] == 20.0
+    assert timing["stages"]["plan"]["status"] == "unknown"
+    assert timing["critical_path"]["unknown_stages"] == [
+        "plan", "apply", "finalize", "verify"]
+
+
+def test_later_stage_observation_prevents_terminal_closure_of_skipped_transition():
+    artifacts = [
+        observed_cli("model_capability", 105.0, 120.0, 0),
+        observed_cli("model_plan", 130.0, 140.0, 1),
+        observed_cli("verify", 300.0, 324.0, 2),
+    ]
+
+    timing = MOD.evaluator_stage_timing(artifacts, 100.0, 350.0)
+
+    assert timing["stages"]["plan"]["status"] == "unknown"
+    assert timing["stages"]["apply"]["status"] == "unknown"
+    assert timing["stages"]["finalize"]["status"] == "unknown"
+    assert timing["stages"]["verify"]["seconds"] == 24.0
+
+
+def test_legacy_capture_without_observation_epochs_never_becomes_zero_duration():
+    timing = MOD.evaluator_stage_timing([
+        {"family": "model_plan", "exit_code": 1, "event_item_id": "legacy"},
+    ], 100.0, 200.0)
+    assert timing["status"] == "unavailable"
+    assert timing["critical_path"]["observed_seconds"] == 0
+    assert all(
+        stage["status"] == "unknown" and stage["seconds"] is None
+        for stage in timing["stages"].values())
+
+
+def test_progress_does_not_trust_project_stage_timestamps(tmp_path):
     project = tmp_path / "project"
     stage_path = project / ".domainry/development/stages.json"
     stage_path.parent.mkdir(parents=True)
@@ -992,8 +1388,8 @@ def test_progress_rejects_agent_stage_timestamps_outside_lifecycle(tmp_path):
         tmp_path / "progress.json", "run", "baseline", project, monitor, 90.0)
     writer.write(200.0, force=True)
     progress = json.loads((tmp_path / "progress.json").read_text())
-    assert progress["delivery_stage_timing_source"] == "agent-stages.json"
-    assert progress["delivery_stage_timing_status"] == "invalid_out_of_bounds"
+    assert progress["delivery_stage_timing_source"] is None
+    assert progress["delivery_stage_timing_status"] == "unavailable"
     assert all(
         value == {"started_epoch": None, "ended_epoch": None}
         for value in progress["delivery_stage_timing"].values())

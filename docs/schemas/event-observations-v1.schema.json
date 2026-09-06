@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "domainry-eval-event-observations-v1",
+  "title": "Domainry evaluator event observation v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "contract_version", "event_line", "observed_epoch", "event_type", "event_item_id"
+  ],
+  "properties": {
+    "contract_version": {"const": "domainry-eval-event-observations-v1"},
+    "event_line": {"type": "integer", "minimum": 1},
+    "observed_epoch": {"type": "number"},
+    "event_type": {"type": ["string", "null"]},
+    "event_item_id": {"type": ["string", "null"]}
+  }
+}

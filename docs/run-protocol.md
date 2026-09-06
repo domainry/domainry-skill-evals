@@ -45,12 +45,14 @@ runs/<benchmark>-<skill_version>-<NN>/
   meta.json               benchmark、candidate_id、skill_version、run_id、
                           run_kind、parent_run_id、terminal_state、measurement_complete、
                           project_path、agent_declared_done、human_interventions、started/ended_epoch
-  lifecycle.json          driver 状态、冻结预算、使用量、停止原因、首次评分失败
+  lifecycle.json          driver 状态、冻结预算、使用量、停止原因、评分/诊断首次失败
   progress.json           driver 原子刷新的实时派生状态（不参与评分）
-  cli/NNN-<family>.json   capture.sh 工件(family 见 capture.sh 头注)
-  tokens.json             可选:total_tokens / reading_tokens(读 Skill 文档的消耗)
-  stages.json             可选:各阶段秒数(driver 手工;优先级低于 agent 产出的
-                          project/.domainry/development/stages.json,见「投放提示要求」)
+  agent-events.jsonl      Codex 原始 JSONL（保持原样）
+  agent-event-observations.jsonl evaluator 对每条 JSONL 的接收 epoch 与行号绑定
+  cli/NNN-<family>.json   CLI 工件；含评分 family 与独立 verify_fixture diagnostic family
+  stage-timing.json       evaluator 从 lifecycle + CLI 事件推导的五段区间与 provenance
+  tokens.json             可选:兼容 total_tokens、供应方 usage breakdown、reading_tokens
+  stages.json             可选:旧 driver 手工阶段秒数（仅在无 evaluator 事件计时时兜底）
   checklist-results.json  金标准探针结果(driver 执行,禁止采信 agent 自述)
   failures.json           失败归因(owner 可含 CLI diagnostic 原始 domainry-cli，或 evaluator 归类的
                           skill_doc|skill_tooling|cli_platform|model_capability|benchmark_defect)
@@ -67,10 +69,13 @@ resume/continue/session 参数。checker 可使用 `{checker}`、`{project}`、`
 `{database}`、`{verify_result}` 和 `{flow_evidence}`。driver 会生成最终 `agent-prompt.md`，实时保存
 JSONL，按事件提取 CLI 捕获，然后运行 checker 与 scorer。
 
-只有实际执行 `model capability`、`model plan`、`apply model`、`apply finalize` 或 `verify` 的
+只有实际执行 `model capability`、`model plan`、`apply model`、`apply finalize` 或完整生命周期 `verify` 的
 Domainry CLI argv 才进入 scoring capture、首败、重试与 C4/progress 计数。`--help`、`-h`、
 `help`、`--version`、`version` 等 metadata 调用只是 auxiliary observation，即使写成
-`domainry-cli verify --help` 也不得冒充一次成功 verify。识别按 shell argv 的独立 token 进行；
+`domainry-cli verify --help` 也不得冒充一次成功 verify。只读的 `verify fixture` 进入独立非计分
+`verify_fixture` capture family，保存 started/completed、exit code、聚合输出、可用时独立
+stdout/stderr、evaluator-observed 时长；它不进入 A4、C4 scoring invocations、评分首败、CLI
+预算或重试预算，也不会把随后的完整 verify 计为重试。识别按 shell argv 的独立 token 进行；
 普通参数文本或路径中包含 `--help` 字样不会隐藏真实执行。
 
 ```bash
@@ -125,26 +130,51 @@ state/error 与完整 telemetry。归因只能读取已封存的首个失败 cap
 自由文本猜测责任方。CLI 自报 owner 时不得降级为 unattributed。只有结构化 owner 确实缺失的
 driver 失败才用 `owner:null, attribution_status:pending` 保存。
 
+`lifecycle.json` 同时记录 `scoring_first_failure` 与 `diagnostic_first_failure`；旧读取器继续使用
+兼容别名 `first_scoring_failure`。`first_failure` 指向两个通道中事件顺序最早的语义失败。
+Diagnostic 失败本身不改变终态优先级：例如更晚的供应方 token 快照超过预算时，终态和
+`termination` 仍为 `budget_exhausted_tokens`，而更早的 `verify_fixture` 失败仍完整保留在
+`diagnostic_first_failure`、`failures.json` 和 scorecard 的独立 diagnostic attribution 中。
+Diagnostic attribution 不进入 A 漏斗、A7 或普通 `failure_attribution`。
+
 Codex JSONL 没有任何 usage snapshot 时，`usage.total_tokens` 与 scorecard `C2_total_tokens` 保持
-null，且不生成 `tokens.json`；不得根据事件数、运行时间或截断位置估算 Token。
+null，且不生成 `tokens.json`；不得根据事件数、运行时间或截断位置估算 Token。供应方累计预算
+口径固定为 `input_tokens + output_tokens`。`cached_input_tokens` 是 input 的子集且计入预算一次，
+`reasoning_output_tokens` 是 output 的子集且计入预算一次，两者都不得再次相加。工件同时保存
+input、cached input、non-cached input、output、reasoning output 与 `budget_tokens`；某个可选
+明细未被事件暴露或不合法时仅该明细保持 null 并标为 partial/invalid_detail，不作估算。
 
 ## 实时进展工件
 
 Agent 运行期间 driver 持续以同目录临时文件加 `os.replace` 原子更新 `progress.json`，契约为
 `domainry-eval-progress-v1`。读者任何时刻都应看到完整旧版本或完整新版本，不会看到半写 JSON。
-该文件只从已经接收的 Agent JSONL、Domainry CLI started/completed 事件、Agent 明确维护的
-`.domainry/development/stages.json`、driver 生命周期和最终 scorecard 派生，绝不成为 checker 或
+该文件只从已经接收的 Agent JSONL、Domainry CLI started/completed 事件、driver 生命周期和
+最终 scorecard 派生，绝不成为 checker 或
 scorer 输入，因此不改变评分语义。
 
 它包含 evaluator lifecycle phase（agent/checker/scorer/terminal）及起止时间、当前 Delivery
-stage 及 requirements/model/apply/verify 的已观测时间、wall elapsed、Domainry CLI 调用/完成/
-失败/重试计数、最近子命令状态、Agent 最后事件接收时间、首败封存状态、checker 是否获准执行，
-以及终态 scorecard 摘要。Agent 提供的阶段 epoch 必须全部处于 Agent 生命周期边界内并按
-requirements→model→apply→verify 单调且互不重叠；违反时整组阶段时间记为不可测，并用
-`delivery_stage_timing_status` 保留具体 invalid 原因。事件或阶段文件没有提供的值为 `null` 并标为 `unavailable`；尤其不从
+stage 及 requirements/model/apply/verify 的 evaluator 汇总时间、wall elapsed、评分 CLI 与独立
+diagnostic CLI 的调用/完成/失败/重试计数、各自最近子命令与首次失败、Agent usage breakdown、
+最后事件接收时间、首败封存状态、checker 是否获准执行，
+以及终态 scorecard 摘要。事件边界不足时对应值为 `null`，整体标为 `partial` 或 `unavailable`；尤其不从
 墙钟或事件数量估算 Token。Agent 异常、预算终止和 baseline 首败也会在封存路径结束时写最终
 terminal progress，正常完成时 `lifecycle_state` 与 `lifecycle.json`、scorecard 摘要与
 `scorecard.json` 一致。
+
+driver 同时逐行写 `agent-event-observations.jsonl`，以 `event_line`、`event_item_id` 和
+`observed_epoch` 将 evaluator 接收时刻绑定到原始 `agent-events.jsonl`。CLI capture 保留对应的
+started/completed 行号与 epoch。`stage-timing.json` 使用固定边界：`discovery` 从 Agent lifecycle
+开始到 `model plan` 前最后一次 `model capability` 完成；`plan` 从该点到首次 `apply model`
+开始；`apply` 到首次 `apply finalize` 开始；`finalize` 到首次正式 `verify` 开始。正常阶段转换
+一律以 evaluator 观察到的下一阶段 CLI `started` 为结束边界。若下一阶段从未开始且 Agent
+随后终止，只在当前阶段自己的 CLI `started` 已被观察到时闭合：优先使用该阶段最后一次已
+started 尝试的 evaluator-observed `completed`；若该尝试到 Agent 结束仍无配对 completed，
+才使用 lifecycle `agent_ended_epoch`，并在 provenance 中绑定未配对 started 事件。`verify`
+使用相同终止规则。Agent 仍在运行、当前阶段 CLI 未 started，或边界顺序无法证明时，该阶段
+明确为 `unknown`；后续未开始阶段也保持 `unknown`，不得报成 0，且不得用事件数量、产物
+mtime 或 Agent 自报时间猜值。五段按顺序组成已观察关键路径，并输出已观察总时长、未知阶段
+与最大耗时热点。`verify_fixture` 另列在 `diagnostic_intervals`，显示为
+`pre_verify_diagnostic`；它绝不建立或闭合正式 `verify` 阶段。
 
 ## 投放提示要求
 
@@ -164,10 +194,11 @@ driver 投放任务提示时,除需求文本外**必须**附带以下要求(不�
 
    阶段键固定为当前 Skill 的四个工作阶段(requirements/model/apply/verify)；源码实现和
    `apply finalize` 都属于 apply，done 只是终态、不单独计时。不得虚构 implement 阶段。
-   未经历的阶段可缺省。scorer 的 C5 读取顺序:**agent 产出的该文件 >
-   runs/<dir>/stages.json(driver 手工,{stage: seconds} 形态)> 产物 mtime 近似**
-   (mtime 近似会被后期演化轮覆盖产物污染,仅兜底;来源见 scorecard 的
-   `C5_stage_seconds_source`:agent-stages.json / stages.json / mtime-approx)。
+   未经历的阶段可缺省。该文件只作为 evaluator 时间线的交叉校验证据；坏数据只记录在
+   `C5_project_stage_report.status`，不能清空已有 evaluator 事件区间。C5 读取顺序是
+   **`stage-timing.json` evaluator 观察 > `runs/<dir>/stages.json` 旧 driver 手工值 > 产物
+   mtime 近似**。旧四段汇总保持兼容：requirements=discovery、model=plan、
+   apply=apply+finalize、verify=verify；五段原始区间及 provenance 在 `C5_stage_timing`。
 
 ## 候选版本
 
@@ -180,7 +211,7 @@ L1 在隔离目录进行，只执行 `model capability` / `model plan`，分钟�
 ## L3 全量流程
 
 1. driver 运行 `python3 harness/preflight.py` 重验候选 Skill，并对 `config.json` 的外部服务目标做只读健康预检；`pass` 不为 true 时不得启动测量 run，也不启动或构建源码仓库。
-2. driver 证明 isolation root、项目和 SQLite 均不存在，再创建独立 `CODEX_HOME`、空 Git 项目和 SQLite cohort 路径，复制冻结候选后仅投放需求与 driver policy。Agent 必须以事件流中的唯一新 `thread_id` 单会话执行当前五命令工作流到 done；缺少 session 证据或复用历史 `thread_id` 时 run 无效。保存 Codex JSONL 事件流，并用 `harness/extract_cli_captures.py` 提取每次 Builder CLI 调用；缺少任一当前评分 family 时不能声称 pass@1。
+2. driver 证明 isolation root、项目和 SQLite 均不存在，再创建独立 `CODEX_HOME`、空 Git 项目和 SQLite cohort 路径，复制冻结候选后仅投放需求与 driver policy。Agent 必须以事件流中的唯一新 `thread_id` 单会话执行当前工作流到 done；缺少 session 证据或复用历史 `thread_id` 时 run 无效。保存 Codex JSONL 事件流，并用 `harness/extract_cli_captures.py` 提取每次 Builder CLI 调用；缺少任一当前评分 family 时不能声称 pass@1，`verify_fixture` 仅提供独立诊断证据。
 3. `verify` 必须返回 `verified_and_stopped`：同一个 business-flow 测试二进制在初次启动和同 cohort 重启时都通过，最终 Runtime 已停止。
 4. driver 执行 benchmark checker，写 `checklist-results.json`；再运行 `python3 harness/scorer.py runs/<dir>`，归档 scorecard。
 
