@@ -1,0 +1,35 @@
+{
+  "contract_version": "domainry-eval-checkpoint-v1",
+  "source_run_id": "m1-crm-foundation-organization-unit-convergence-36",
+  "checkpoint_kind": "post_implementation_ready_plane_evolution_added_action_lifecycle_gap",
+  "measurement_class": "checkpoint_convergence_not_baseline",
+  "baseline_eligibility": false,
+  "manifest_sha256": "4f811ee38dd6320e860eea54fcc6ddb9762635c67f77bff7aac3eb2a73b3b696",
+  "archive_sha256": "663045dcdf6f6f4f31b3f35624d63aa50e4a95e843c08ec7db26f643fdf942d3",
+  "resume_boundary": {
+    "stage": "apply",
+    "next_node": "after a compatible Plane candidate with the reviewed-evolution implementation-stage fix is installed, restore this implementation-ready project, preserve the typed provision_department Handler and its paired tests, rebase model/apply only if the changed candidate requires it, then continue with focused tests, business-flow completion, apply finalize, and managed verify",
+    "rule": "Do not repeat accepted requirements or unrelated model work; do not resurrect the deleted store-backed department registry; do not reuse Runtime databases, Git history, Agent sessions, locks, or stale verification/finalization receipts.",
+    "prior_delivery_id": "sha256:a1a7aed4a3ddc21d59f2cedb8250e159c76db90261e3e0584f2f963634d7e937"
+  },
+  "prohibited_repairs": [
+    "do not remove the project-owned Handler or make Runtime implement CRM business orchestration",
+    "do not weaken or bypass the fail-closed source finalizer",
+    "do not restore a retired implicit action-source write command",
+    "do not increase store quota as a substitute for department delivery",
+    "do not label the Workspace root company or a store as a department",
+    "do not add CRM-specific foundation behavior or a business registry that copies the Identity organization tree"
+  ],
+  "restored_file_count": 1077,
+  "ignored_appledouble_member_count": 0,
+  "ignored_git_member_count": 0,
+  "ignored_runtime_state_member_count": 0,
+  "ignored_sqlite_member_count": 0,
+  "ignored_agent_session_member_count": 0,
+  "ignored_lock_member_count": 0,
+  "git_history_restored": false,
+  "runtime_state_restored": false,
+  "sqlite_restored": false,
+  "agent_session_restored": false,
+  "locks_restored": false
+}

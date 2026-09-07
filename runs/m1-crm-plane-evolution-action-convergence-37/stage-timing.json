@@ -1,0 +1,84 @@
+{
+  "contract_version": "domainry-eval-stage-timing-v1",
+  "boundary_rule": "evaluator-cli-transition-v1",
+  "stage_order": [
+    "discovery",
+    "plan",
+    "apply",
+    "finalize",
+    "verify"
+  ],
+  "status": "partial",
+  "stages": {
+    "discovery": {
+      "started_epoch": null,
+      "ended_epoch": null,
+      "seconds": null,
+      "status": "unknown",
+      "start_provenance": null,
+      "end_provenance": null
+    },
+    "plan": {
+      "started_epoch": null,
+      "ended_epoch": null,
+      "seconds": null,
+      "status": "unknown",
+      "start_provenance": null,
+      "end_provenance": null
+    },
+    "apply": {
+      "started_epoch": 1788721007.3738382,
+      "ended_epoch": 1788721008.382169,
+      "seconds": 1.008,
+      "status": "observed",
+      "start_provenance": {
+        "source": "agent-event-observations.jsonl",
+        "capture_file": "cli/001-apply_model.json",
+        "family": "apply_model",
+        "event": "started",
+        "event_item_id": "item_4",
+        "event_line": 9,
+        "boundary_reason": "stage_cli_started"
+      },
+      "end_provenance": {
+        "source": "agent-event-observations.jsonl",
+        "capture_file": "cli/001-apply_model.json",
+        "family": "apply_model",
+        "event": "completed",
+        "event_item_id": "item_4",
+        "event_line": 10,
+        "boundary_reason": "terminal_stage_cli_completed"
+      }
+    },
+    "finalize": {
+      "started_epoch": null,
+      "ended_epoch": null,
+      "seconds": null,
+      "status": "unknown",
+      "start_provenance": null,
+      "end_provenance": null
+    },
+    "verify": {
+      "started_epoch": null,
+      "ended_epoch": null,
+      "seconds": null,
+      "status": "unknown",
+      "start_provenance": null,
+      "end_provenance": null
+    }
+  },
+  "critical_path": {
+    "observed_seconds": 1.008,
+    "unknown_stages": [
+      "discovery",
+      "plan",
+      "finalize",
+      "verify"
+    ],
+    "hotspot": {
+      "stage": "apply",
+      "seconds": 1.008
+    }
+  },
+  "diagnostic_intervals": []
+}

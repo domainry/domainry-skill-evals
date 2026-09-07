@@ -1,0 +1,120 @@
+{
+  "family": "verify_fixture",
+  "command": "/bin/zsh -lc '/private/tmp/domainry-m1-v39-offline-closure-baseline-21/codex-home/skills/domainry-builder-v1/bin/domainry-cli verify fixture --json --project /private/tmp/domainry-m1-v39-offline-closure-baseline-21/project'",
+  "exit_code": 0,
+  "output": {
+    "contract_version": "domainry-managed-runtime-acceptance-fixture-projection-v2",
+    "runtime_manifest_sha256": "16e3b5996c38a5644122c9ac3f3b23d035da6f9d74267af29139085ee68d3f54",
+    "organization_count": 2,
+    "actor_count": 3,
+    "startup_fixture_path": "backend/tests/businessflow/acceptance-fixtures.json",
+    "startup_fixture_count": 1,
+    "eligible_role_keys": [
+      "sales_director",
+      "sales_rep"
+    ],
+    "roles": [
+      {
+        "role_key": "sales_director",
+        "placement": "global_manager",
+        "actor_count": 1,
+        "business_permissions": [
+          "customer.read;all",
+          "lead.approve_conversion;all",
+          "lead.export;all",
+          "lead.read;all",
+          "lead.reject_conversion;all",
+          "lead_conversion.read;all",
+          "lead_export_audit.create;owner",
+          "lead_export_audit.read;owner",
+          "lead_export_audit.update;owner",
+          "lead_export_download.create;owner",
+          "lead_export_download.read;owner"
+        ]
+      },
+      {
+        "role_key": "sales_rep",
+        "placement": "department",
+        "actor_count": 2,
+        "business_permissions": [
+          "customer.read;owner",
+          "lead.contact;owner",
+          "lead.convert_direct;owner",
+          "lead.edit;owner",
+          "lead.lose;owner",
+          "lead.qualify;owner",
+          "lead.read;org",
+          "lead.register;owner",
+          "lead_conversion.read;owner"
+        ]
+      }
+    ],
+    "role_eligibility": [
+      {
+        "role_key": "crm_scheduler",
+        "audience": "service",
+        "assignment_mode": "system_managed",
+        "provision_to_workspaces": false,
+        "business_permissions": [
+          "lead.send_overdue_reminders;all"
+        ],
+        "state": "system_managed",
+        "reason": "System-managed roles cannot be assigned to human workspace logins.",
+        "remediation": "Keep this role system-managed; add a separate human role when business-flow verification needs an actor."
+      },
+      {
+        "role_key": "sales_director",
+        "audience": "any",
+        "assignment_mode": "manual",
+        "provision_to_workspaces": true,
+        "business_permissions": [
+          "customer.read;all",
+          "lead.approve_conversion;all",
+          "lead.export;all",
+          "lead.read;all",
+          "lead.reject_conversion;all",
+          "lead_conversion.read;all",
+          "lead_export_audit.create;owner",
+          "lead_export_audit.read;owner",
+          "lead_export_audit.update;owner",
+          "lead_export_download.create;owner",
+          "lead_export_download.read;owner"
+        ],
+        "state": "eligible",
+        "reason": "Human workspace role with compiler-bound Object permissions."
+      },
+      {
+        "role_key": "sales_rep",
+        "audience": "any",
+        "assignment_mode": "manual",
+        "provision_to_workspaces": true,
+        "business_permissions": [
+          "customer.read;owner",
+          "lead.contact;owner",
+          "lead.convert_direct;owner",
+          "lead.edit;owner",
+          "lead.lose;owner",
+          "lead.qualify;owner",
+          "lead.read;org",
+          "lead.register;owner",
+          "lead_conversion.read;owner"
+        ],
+        "state": "eligible",
+        "reason": "Human workspace role with compiler-bound Object permissions."
+      }
+    ]
+  },
+  "raw_output": "{\"contract_version\":\"domainry-managed-runtime-acceptance-fixture-projection-v2\",\"runtime_manifest_sha256\":\"16e3b5996c38a5644122c9ac3f3b23d035da6f9d74267af29139085ee68d3f54\",\"organization_count\":2,\"actor_count\":3,\"startup_fixture_path\":\"backend/tests/businessflow/acceptance-fixtures.json\",\"startup_fixture_count\":1,\"eligible_role_keys\":[\"sales_director\",\"sales_rep\"],\"roles\":[{\"role_key\":\"sales_director\",\"placement\":\"global_manager\",\"actor_count\":1,\"business_permissions\":[\"customer.read;all\",\"lead.approve_conversion;all\",\"lead.export;all\",\"lead.read;all\",\"lead.reject_conversion;all\",\"lead_conversion.read;all\",\"lead_export_audit.create;owner\",\"lead_export_audit.read;owner\",\"lead_export_audit.update;owner\",\"lead_export_download.create;owner\",\"lead_export_download.read;owner\"]},{\"role_key\":\"sales_rep\",\"placement\":\"department\",\"actor_count\":2,\"business_permissions\":[\"customer.read;owner\",\"lead.contact;owner\",\"lead.convert_direct;owner\",\"lead.edit;owner\",\"lead.lose;owner\",\"lead.qualify;owner\",\"lead.read;org\",\"lead.register;owner\",\"lead_conversion.read;owner\"]}],\"role_eligibility\":[{\"role_key\":\"crm_scheduler\",\"audience\":\"service\",\"assignment_mode\":\"system_managed\",\"provision_to_workspaces\":false,\"business_permissions\":[\"lead.send_overdue_reminders;all\"],\"state\":\"system_managed\",\"reason\":\"System-managed roles cannot be assigned to human workspace logins.\",\"remediation\":\"Keep this role system-managed; add a separate human role when business-flow verification needs an actor.\"},{\"role_key\":\"sales_director\",\"audience\":\"any\",\"assignment_mode\":\"manual\",\"provision_to_workspaces\":true,\"business_permissions\":[\"customer.read;all\",\"lead.approve_conversion;all\",\"lead.export;all\",\"lead.read;all\",\"lead.reject_conversion;all\",\"lead_conversion.read;all\",\"lead_export_audit.create;owner\",\"lead_export_audit.read;owner\",\"lead_export_audit.update;owner\",\"lead_export_download.create;owner\",\"lead_export_download.read;owner\"],\"state\":\"eligible\",\"reason\":\"Human workspace role with compiler-bound Object permissions.\"},{\"role_key\":\"sales_rep\",\"audience\":\"any\",\"assignment_mode\":\"manual\",\"provision_to_workspaces\":true,\"business_permissions\":[\"customer.read;owner\",\"lead.contact;owner\",\"lead.convert_direct;owner\",\"lead.edit;owner\",\"lead.lose;owner\",\"lead.qualify;owner\",\"lead.read;org\",\"lead.register;owner\",\"lead_conversion.read;owner\"],\"state\":\"eligible\",\"reason\":\"Human workspace role with compiler-bound Object permissions.\"}]}\n",
+  "stdout": null,
+  "stderr": null,
+  "output_streams_status": "aggregated_only",
+  "event_item_id": "item_71",
+  "event_line": 135,
+  "observed_started_epoch": 1788633542.59433,
+  "observed_completed_epoch": 1788633542.637873,
+  "observed_started_event_line": 134,
+  "observed_completed_event_line": 135,
+  "duration_seconds": 0.044,
+  "timing_source": "agent-event-observations.jsonl",
+  "capture_file": "cli/007-verify_fixture.json"
+}

@@ -1,0 +1,199 @@
+{
+  "contract_version": "domainry-eval-run-lifecycle-v1",
+  "run_id": "m1-crm-structured-plan-resume-convergence-45",
+  "run_kind": "convergence",
+  "parent_run_id": "m1-crm-reviewed-removal-resume-convergence-44",
+  "state": "delivery_incomplete",
+  "measurement_complete": false,
+  "environment_valid": true,
+  "measurement_boundary": "delivery_incomplete",
+  "started_epoch": 1788755870.948643,
+  "ended_epoch": 1788756049.9266849,
+  "budgets": {
+    "wall_clock_seconds": 3600.0,
+    "total_tokens": 10000000,
+    "cli_invocations": 40,
+    "cli_retries": 0
+  },
+  "usage": {
+    "wall_clock_seconds": 178.978,
+    "total_tokens": 331135,
+    "token_usage": {
+      "input_tokens": 327992,
+      "cached_input_tokens": 294144,
+      "non_cached_input_tokens": 33848,
+      "output_tokens": 3143,
+      "reasoning_output_tokens": 1368,
+      "budget_tokens": 331135,
+      "budget_basis": "provider_cumulative_input_plus_output",
+      "cached_input_included_in_input": true,
+      "reasoning_output_included_in_output": true,
+      "observability_status": "complete"
+    },
+    "cli_invocations_started": 3,
+    "cli_invocations_captured": 2,
+    "cli_retries_started": 0,
+    "diagnostic_cli_invocations_started": 0,
+    "diagnostic_cli_invocations_captured": 0,
+    "diagnostic_cli_completions": 0,
+    "diagnostic_cli_failures": 0,
+    "diagnostic_cli_retries": 0,
+    "agent_command_invocations": 7,
+    "agent_command_completions": 6,
+    "agent_command_failures": 0
+  },
+  "termination": null,
+  "first_failure": null,
+  "scoring_first_failure": null,
+  "diagnostic_first_failure": null,
+  "command_first_failure": null,
+  "first_scoring_failure": null,
+  "diagnostic_cli": {
+    "invocations_total": 0,
+    "completed_total": 0,
+    "failed_total": 0,
+    "retries_total": 0,
+    "latest": null,
+    "first_failure": null
+  },
+  "checkpoint": {
+    "contract_version": "domainry-eval-checkpoint-v1",
+    "source_run_id": "m1-crm-reviewed-removal-resume-convergence-44",
+    "checkpoint_kind": "convergence44_structured_plan_apply_resume_v10",
+    "measurement_class": "checkpoint_convergence_not_baseline",
+    "baseline_eligibility": false,
+    "manifest_sha256": "bb0eca40ff75c83ff8c34de652c63e9f4f0275d813899fbbc2c98ce19e8fcc59",
+    "archive_sha256": "457fda2f5a3a56cead2e0aadd127149e5806a669b1ff69032d00591588e0a055",
+    "manifest_only_boundary_migration": true,
+    "resume_boundary": {
+      "stage": "apply",
+      "next_node": "Preserve the restored preflight-valid model and all existing business source. After the required Skill reading, run model plan --json --project <project> and inspect its returned JSON envelope directly; do not grep the disposable provenance artifact for envelope-only change-set fields. Expected authorized delete_items are exactly crm/resource/actions.lead.scan_stale_contacted, crm/resource/scheduled_jobs.weekday_stale_lead_followup and crm/resource/workflows.stale_lead_followup. Apply this unchanged model with --allow-destructive, --go-module-path example.com/domainry-m1-crm/backend and the evaluator's service target. If evolution_review_required is returned, validate its immutable file hash/size and canonical semantic audit SHA, then run its exact next_command with the reviewed reason. Gate on implementation_ready/applied before reading the new packet and implementing lead.advance due set/clear, lead.continue_followup_due, their tests and BF06. Remove obsolete scan source/test only in that reviewed project closure. Continue focused checks, source finalization and managed initial/restart verify.",
+      "rule": "The three named obsolete-resource deletions are already authorized by the user's requested Scheduler-to-Workflow replacement. Do not ask again, broaden the deletion set, or bypass evolution review. The business model is valid but Handler implementation and BF06 are not complete. Preserve status_changed_at and Handler-calculated exact next_followup_at, the contacted true condition dominating the source-field timer, per-record stale/exit no-op and daily deduped continuation, and canonical composite uniqueness over exactly lead plus local date. Keep the five Handler tests, two actual external Runtime timer integration tests, evaluator-owned source-field/default-worker probe, canonical graph binding and full initial/restart black-box evidence. Seven-day next-workday-morning semantics remain production behavior. No Scheduler, production evaluation_time, artificial CRM short-delay Action, direct database manipulation, manual timer resume or invented proof API. Do not re-author the valid model, redo non-Req14 work, modify foundations, dispatch tasks or start nested evaluation. Continue this convergence only; it is never baseline evidence.",
+      "prior_delivery_id": "sha256:000477f0e464666cbf57696e82c15ccc5482a2d5a65395c29cf5c2be3321e471"
+    },
+    "prohibited_repairs": [
+      "do not re-author the valid model or discard retained non-Req14 work",
+      "do not broaden the three authorized deletions or bypass evolution review",
+      "do not weaken the Workflow-only Req14 or BF01-BF08/restart acceptance",
+      "do not modify foundations, dispatch tasks, or call this convergence a baseline"
+    ],
+    "failure_boundary": {
+      "terminal_state": "convergence_first_command_failure",
+      "attribution_status": "confirmed",
+      "owner": "agent.auxiliary_plan_inspection",
+      "runtime_defect": false,
+      "first_failure": {
+        "failure_kind": "command",
+        "exit_code": 1,
+        "command_sha256": "3b6066e7bb251f1d190dac52e8897a788eac545f6c9f715be73f7b87359a6160"
+      },
+      "details": "A grep for delete_items in .domainry/builder/disposable/model-preflight-result.json returned no match. That artifact contains full provenance, not the stdout envelope's Ledger change-set fields. No Domainry CLI command or apply was executed in convergence44. The source model remains the preflight-valid convergence43 replacement. This is an auxiliary inspection mistake, not a candidate schema/runtime defect."
+    }
+  },
+  "checkpoint_restore": {
+    "archive_sha256": "457fda2f5a3a56cead2e0aadd127149e5806a669b1ff69032d00591588e0a055",
+    "restored_file_count": 1388,
+    "ignored_appledouble_member_count": 0,
+    "ignored_git_member_count": 0,
+    "ignored_runtime_state_member_count": 0,
+    "ignored_sqlite_member_count": 0,
+    "ignored_agent_session_member_count": 0,
+    "ignored_lock_member_count": 0,
+    "ignored_evaluator_temporary_source_member_count": 0,
+    "git_history_restored": false,
+    "runtime_state_restored": false,
+    "sqlite_restored": false,
+    "agent_session_restored": false,
+    "locks_restored": false
+  },
+  "failure_checkpoint_policy": {
+    "checkpoint_on_first_failure": true,
+    "agent_failure_action": "stop_then_checkpoint",
+    "checkpoint_baseline_eligibility": false
+  },
+  "failure_checkpoint": {
+    "status": "sealed",
+    "terminal_state": "delivery_incomplete",
+    "baseline_eligibility": false,
+    "stage": "complete",
+    "agent_process_group": {
+      "status": "confirmed_stopped",
+      "process_group_id": 56107,
+      "confirmed_epoch": 1788756049.5619268,
+      "live_member_count": 0
+    },
+    "directory": "/Users/tiger/Projects/domainry-skill-evals/runs/m1-crm-structured-plan-resume-convergence-45/failure-checkpoint-1788756049926689000",
+    "manifest_path": "/Users/tiger/Projects/domainry-skill-evals/runs/m1-crm-structured-plan-resume-convergence-45/failure-checkpoint-1788756049926689000/checkpoint.json",
+    "archive_path": "/Users/tiger/Projects/domainry-skill-evals/runs/m1-crm-structured-plan-resume-convergence-45/failure-checkpoint-1788756049926689000/checkpoint-project.tar.gz",
+    "identity": {
+      "contract_version": "domainry-eval-checkpoint-v1",
+      "source_run_id": "m1-crm-structured-plan-resume-convergence-45",
+      "checkpoint_kind": "automatic_failure_source_snapshot",
+      "measurement_class": "checkpoint_convergence_not_baseline",
+      "baseline_eligibility": false,
+      "manifest_sha256": "f3269c0f70ef76c537bdb9712a3c05d186ce14dab188f671208a7449927a07d4",
+      "archive_sha256": "0d78dda4bf815942f93463997150f8e7755194b9256d8ea9cc05817c3f3e04a2",
+      "manifest_only_boundary_migration": false,
+      "resume_boundary": {
+        "stage": "failure_review",
+        "next_node": "Diagnose this checkpoint's failure_boundary and select the affected retry stage",
+        "rule": "This source snapshot is not accepted. Attribute the saved failure before repairing; route foundation defects to the owning project and resume after its fix. Revalidate delivery/runtime identities before reuse. Do not inherit a previously executed resume boundary or restart completed source authoring blindly."
+      },
+      "prohibited_repairs": [
+        "do not re-author the valid model or discard retained non-Req14 work",
+        "do not broaden the three authorized deletions or bypass evolution review",
+        "do not weaken the Workflow-only Req14 or BF01-BF08/restart acceptance",
+        "do not modify foundations, dispatch tasks, or call this convergence a baseline"
+      ],
+      "failure_boundary": {
+        "terminal_state": "delivery_incomplete",
+        "first_failure": null,
+        "termination": null,
+        "agent_exit_code": 0,
+        "checker_exit_code": null,
+        "latest_cli": {
+          "subcommand": "apply_model",
+          "status": "in_progress",
+          "exit_code": null,
+          "output_state": null,
+          "observed_epoch": 1788755999.937957
+        },
+        "latest_diagnostic": null,
+        "attribution_status": "pending"
+      }
+    },
+    "archived_file_count": 1529,
+    "excluded_counts": {
+      "git": 1,
+      "lock": 1,
+      "runtime_state": 1
+    }
+  },
+  "freeze_manifest_sha256": "67700199ada68f02d88035883c4ea79bd24a606f263a17b50278b257151fed20",
+  "ephemeral_auth_staged": true,
+  "auth_cleanup_status": "removed",
+  "agent_result_state": "not_done",
+  "agent_exit_code": 0,
+  "checker_exit_code": null,
+  "checker_gate": {
+    "ready": false,
+    "reason": "agent_declared_not_done",
+    "missing": [
+      "agent_result:not_done",
+      "apply_model:unexpected_success_state",
+      "apply_finalize:missing",
+      "verify:missing",
+      "verify_artifact:missing_or_unparseable",
+      "flow_evidence:missing_invalid_or_unparseable"
+    ]
+  },
+  "agent_ended_epoch": 1788756049.562261,
+  "agent_session_id": "01a07a28-8dcc-7131-b197-d53f572705e7",
+  "business_flow_evidence_source": "missing",
+  "business_flow_evidence_contract_valid": null,
+  "business_flow_evidence_sha256": null,
+  "business_flow_evidence_error": null,
+  "service_identity_before_sha256": "7c47e5140946f84f4cef05a4f24d62cca3bcbd8d7c78f1c8ebbac3fc1f4d6630",
+  "service_identity_after_sha256": "7c47e5140946f84f4cef05a4f24d62cca3bcbd8d7c78f1c8ebbac3fc1f4d6630",
+  "scorer_exit_code": 0
+}

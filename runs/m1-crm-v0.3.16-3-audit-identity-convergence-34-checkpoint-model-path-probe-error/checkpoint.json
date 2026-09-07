@@ -1,0 +1,32 @@
+{
+  "contract_version": "domainry-eval-checkpoint-v1",
+  "source_run_id": "m1-crm-v0.3.16-3-audit-identity-convergence-34",
+  "checkpoint_kind": "model_capability_investigation_after_missing_path_probe",
+  "measurement_class": "checkpoint_convergence_not_baseline",
+  "baseline_eligibility": false,
+  "archive": {
+    "path": "checkpoint-project.tar.gz",
+    "sha256": "7565bdc827d1a6bdda16dae40790b8181802cbad54ef6dc13bf1a2ebd9d41150"
+  },
+  "candidate": {
+    "candidate_id": "v0.3.16-3-m1-audit-identity-20260906+554bd6a0a04e",
+    "skill_tree_sha256": "554bd6a0a04e590aa9c1ecb5cab5c7b0ee1304e618e101bc85d56166a592d78c",
+    "cli_binary_sha256": "d8c6da6938262183720ddf81d9cfa39ee5a65be69ff06a1e40c3ac2e69467af4"
+  },
+  "invalidating_error": {
+    "agent_session_id": "01a07776-958c-7ad1-abee-933790c10a55",
+    "agent_event_item_id": "item_87",
+    "event_line": 167,
+    "command_sha256": "af4f2156b1f24f261d91ad02677d0438a9de374294b1e54b148ae30db9046c6e",
+    "exit_code": 1,
+    "classification": "agent_assumed_nonexistent_model_filename",
+    "owner": "agent",
+    "domainry_foundation_defect": false,
+    "diagnostic": "A combined read command successfully opened 10-organization-identity.json but also assumed backend/model/20-lead-core.json existed; sed returned 1 because the actual project uses different model filenames."
+  },
+  "resume_boundary": {
+    "stage": "model",
+    "next_node": "enumerate actual backend/model filenames safely, then continue the organization capability-gap investigation without repeating completed delivery work",
+    "rule": "This is an Agent filesystem-probe mistake and must not be attributed to Domainry foundation."
+  }
+}

@@ -1,0 +1,70 @@
+{
+  "contract_version": "domainry-eval-checkpoint-v1",
+  "source_run_id": "m1-crm-v0.3.16-2-hermetic-go-baseline-32",
+  "checkpoint_kind": "post_reapply_evolution_audit_identity_probe_error",
+  "measurement_class": "checkpoint_convergence_not_baseline",
+  "baseline_eligibility": false,
+  "live_project_path": "/private/tmp/domainry-m1-v0316-2-baseline-32/project",
+  "archive": {
+    "path": "checkpoint-project.tar.gz",
+    "sha256": "b32909d18c690b29d4e6758e9f7058776050b2e115ff630c42ff2d3c9ffe4ab9"
+  },
+  "candidate": {
+    "candidate_id": "v0.3.16-2-m1-hermetic-go-20260906+bba6de26cd84",
+    "skill_tree_sha256": "bba6de26cd84e14ebb68a8a9cff6cbff5201742fa9e3f83a35e028e6502b05e1",
+    "cli_binary_sha256": "7da3109f49128090af146367304cf1e8e6a728c4c66c1e08b0f830a161d5e3b7",
+    "auto_update_contract": "preserved"
+  },
+  "completed_before_checkpoint": [
+    "requirements and BF01-BF08 traceability",
+    "single capability reading-plan request",
+    "initial model plan valid with zero diagnostics",
+    "initial apply model implementation_ready",
+    "post_apply_repair adding three business reachability outputs",
+    "updated model plan valid with zero diagnostics",
+    "updated apply model evolution_review_required",
+    "reviewed reapply implementation_ready with packet v14"
+  ],
+  "authoritative_artifacts": {
+    "models": [
+      {"path": "project/backend/model/00-project.json", "sha256": "c0f621092ac23034edfa8538daba3cb2c4ce5002a3b16bc347eddda5d3be9621"},
+      {"path": "project/backend/model/10-organization-identity.json", "sha256": "0f1f064b49fb25b752cf2ee6e1df47d8d3f5643691ab9c605409b68074a9644b"},
+      {"path": "project/backend/model/20-lead-management.json", "sha256": "6c63760a835f4bf34f49e60c79c202e3ae51570213decc6c22e746bfe548f087"},
+      {"path": "project/backend/model/30-conversion-approval.json", "sha256": "de6618ae8d4c5eb812291cda97ddc78c1fff5dbc7a9035e847038e6414174d67"},
+      {"path": "project/backend/model/40-followup-reminder.json", "sha256": "18649524d8b00b33a6c4ad55f6cb7b93150c43053031a3cf3221a2d24e7fa88c"},
+      {"path": "project/backend/model/50-funnel-export.json", "sha256": "535f074ff3445d0e123f13ff78d23c4c7f1afab6e9e0a83ecf5f80f905b2af8a"}
+    ],
+    "evolution_audit": {
+      "path": "project/.domainry/builder/audits/project-delivery-561c62a6abedb2c6caf6eadcaf35ea0f3d693cbbaac7604dae7f9f69bbd72dec.json",
+      "semantic_audit_sha256": "561c62a6abedb2c6caf6eadcaf35ea0f3d693cbbaac7604dae7f9f69bbd72dec",
+      "raw_file_sha256": "c08744a7938ae4f23991a2690398963d4908f183fa84146ee8d36f4307b135fd"
+    },
+    "model_apply_receipt": {
+      "path": "project/.domainry/builder/model-apply.json",
+      "raw_file_sha256": "bcde2702c25b0064de01c37d0f18813ebd7b4941580255dcebb7b8f0e190db77"
+    },
+    "implementation_packet": {
+      "path": "project/.domainry/builder/source/implementation-packets/095dbd52c98d456012367dfda8cff04d4b601bc868c9ed470a4d7c5af851ac9e.json",
+      "file_sha256": "095dbd52c98d456012367dfda8cff04d4b601bc868c9ed470a4d7c5af851ac9e",
+      "contract_version": "domainry-action-implementation-packet-v14"
+    }
+  },
+  "invalidating_error": {
+    "agent_event_item_id": "item_63",
+    "command_family": "auxiliary_audit_identity_probe",
+    "exit_code": 1,
+    "command_intent": "compare raw audit file SHA256 with evolution_audit_sha256 before reading",
+    "classification": "builder_evolution_audit_contract_ambiguity",
+    "owner": "domainry-plane",
+    "diagnostic": "evolution_audit_sha256 is the canonical semantic audit identity and equals the embedded audit_sha256/next_command value; it is not the raw JSON file SHA256, but the Skill contract did not make that distinction explicit"
+  },
+  "foundation_repair_task": {
+    "task_id": "01a0773e-f8c7-7022-b5e7-af440c83122d",
+    "status_at_checkpoint": "dispatched"
+  },
+  "resume_boundary": {
+    "stage": "apply",
+    "next_node": "after the generic evolution-audit identity contract repair is packaged, restore into a new convergence working copy with a fresh SQLite cohort and continue from packet/context consumption",
+    "rule": "This archive must remain immutable. It can validate the repair and later implementation convergence, but it can never be used as one-shot baseline evidence."
+  }
+}

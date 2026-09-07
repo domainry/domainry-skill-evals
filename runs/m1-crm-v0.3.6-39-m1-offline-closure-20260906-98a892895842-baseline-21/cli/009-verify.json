@@ -1,0 +1,60 @@
+{
+  "family": "verify",
+  "command": "/bin/zsh -lc '/private/tmp/domainry-m1-v39-offline-closure-baseline-21/codex-home/skills/domainry-builder-v1/bin/domainry-cli verify --json --project /private/tmp/domainry-m1-v39-offline-closure-baseline-21/project --address 127.0.0.1:19286'",
+  "exit_code": 1,
+  "output": {
+    "contract_version": "domainry-project-verify-v2",
+    "error": "verification failed: go_format(failed); inspect .domainry/builder/receipts/verification-failed.json",
+    "state": "failed",
+    "telemetry": {
+      "contract_version": "domainry-verify-telemetry-v1",
+      "elapsed_ms": 67961,
+      "cache": {
+        "signed_runtime_package": false,
+        "verification_receipt": false
+      },
+      "cache_misses": {
+        "verification_receipt": "verification receipt is missing"
+      },
+      "stages": [
+        {
+          "name": "validate compiler-bound acceptance actor graph",
+          "status": "done",
+          "elapsed_ms": 4,
+          "owner": "domainry-builder.runtime_acceptance_fixture"
+        },
+        {
+          "name": "validate reusable verification and signed Runtime package",
+          "status": "done",
+          "elapsed_ms": 0,
+          "owner": "domainry-runtime"
+        },
+        {
+          "name": "run structural checks and complete backend tests",
+          "status": "failed",
+          "elapsed_ms": 67957,
+          "owner": "domainry-builder"
+        }
+      ],
+      "first_failure": {
+        "name": "run structural checks and complete backend tests",
+        "status": "failed",
+        "elapsed_ms": 67957,
+        "owner": "domainry-builder"
+      }
+    }
+  },
+  "raw_output": "[domainry] verify: validate compiler-bound acceptance actor graph...\n[domainry] verify: validate compiler-bound acceptance actor graph done (4ms)\n[domainry] verify: validate reusable verification and signed Runtime package...\n[domainry] verify: validate reusable verification and signed Runtime package done (0s)\n[domainry] verify: run structural checks and complete backend tests...\n[domainry] verify: run structural checks and complete backend tests failed (1m7.957s)\nerror: verification failed: go_format(failed); inspect .domainry/builder/receipts/verification-failed.json\n{\"contract_version\":\"domainry-project-verify-v2\",\"error\":\"verification failed: go_format(failed); inspect .domainry/builder/receipts/verification-failed.json\",\"state\":\"failed\",\"telemetry\":{\"contract_version\":\"domainry-verify-telemetry-v1\",\"elapsed_ms\":67961,\"cache\":{\"signed_runtime_package\":false,\"verification_receipt\":false},\"cache_misses\":{\"verification_receipt\":\"verification receipt is missing\"},\"stages\":[{\"name\":\"validate compiler-bound acceptance actor graph\",\"status\":\"done\",\"elapsed_ms\":4,\"owner\":\"domainry-builder.runtime_acceptance_fixture\"},{\"name\":\"validate reusable verification and signed Runtime package\",\"status\":\"done\",\"elapsed_ms\":0,\"owner\":\"domainry-runtime\"},{\"name\":\"run structural checks and complete backend tests\",\"status\":\"failed\",\"elapsed_ms\":67957,\"owner\":\"domainry-builder\"}],\"first_failure\":{\"name\":\"run structural checks and complete backend tests\",\"status\":\"failed\",\"elapsed_ms\":67957,\"owner\":\"domainry-builder\"}}}\n",
+  "stdout": null,
+  "stderr": null,
+  "output_streams_status": "aggregated_only",
+  "event_item_id": "item_79",
+  "event_line": 150,
+  "observed_started_epoch": 1788633645.444937,
+  "observed_completed_epoch": 1788633713.4373372,
+  "observed_started_event_line": 149,
+  "observed_completed_event_line": 150,
+  "duration_seconds": 67.992,
+  "timing_source": "agent-event-observations.jsonl",
+  "capture_file": "cli/009-verify.json"
+}

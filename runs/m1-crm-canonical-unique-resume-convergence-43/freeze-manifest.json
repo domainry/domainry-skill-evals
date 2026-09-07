@@ -1,0 +1,219 @@
+{
+  "contract_version": "domainry-eval-freeze-manifest-v1",
+  "run_id": "m1-crm-canonical-unique-resume-convergence-43",
+  "benchmark": "m1-crm",
+  "run_kind": "convergence",
+  "parent_run_id": "m1-crm-workflow-delay-resume-convergence-42",
+  "model": "gpt-5.6-sol",
+  "budgets": {
+    "wall_clock_seconds": 3600.0,
+    "total_tokens": 10000000,
+    "cli_invocations": 40,
+    "cli_retries": 0
+  },
+  "absence_proof": {
+    "checked_epoch": 1788755255.261327,
+    "isolation_root_absent": true,
+    "project_absent": true,
+    "codex_home_absent": true,
+    "agent_home_absent": true,
+    "sqlite_database_absent": true,
+    "sqlite_wal_absent": true,
+    "sqlite_shm_absent": true
+  },
+  "isolation": {
+    "root": "/private/tmp/domainry-m1-canonical-unique-resume-convergence-43",
+    "codex_home": "/private/tmp/domainry-m1-canonical-unique-resume-convergence-43/codex-home",
+    "agent_home": "/private/tmp/domainry-m1-canonical-unique-resume-convergence-43/home",
+    "temp": "/private/tmp/domainry-m1-canonical-unique-resume-convergence-43/tmp",
+    "project": "/private/tmp/domainry-m1-canonical-unique-resume-convergence-43/project",
+    "runtime": "/private/tmp/domainry-m1-canonical-unique-resume-convergence-43/runtime",
+    "database": "/private/tmp/domainry-m1-canonical-unique-resume-convergence-43/runtime/cohort.sqlite",
+    "candidate_copy": "/private/tmp/domainry-m1-canonical-unique-resume-convergence-43/codex-home/skills/domainry-builder-v1"
+  },
+  "candidate": {
+    "candidate_id": "v0.3.17-5-composite-unique-authoring-20260907+b408d35ad257",
+    "skill_name": "domainry-builder-v1",
+    "skill_version": "v0.3.17-5-composite-unique-authoring-20260907",
+    "skill_identity_sha256": "ebd64d96025aeabc3ec803e2cef1d6330e670533269edbfc0dda8172909aaceb",
+    "package_metadata_sha256": "b370c03b3f95d7982d5e392ec55889e95b09a800b3ae32b3c229026903c58cbf",
+    "skill_tree_sha256": "b408d35ad2571adef130b9f248805229cedbc3ec852880497fc520c7805bd1d7",
+    "cli_binary_sha256": "f16fd4446a23d996f9df2d179acaf1386d48a84510cde131f96de2eb313009b2",
+    "runtime_api_contract_version": "runtime-domain-api-v1",
+    "runtime_api_contract_hash": "4fe655cbfd4fa0bc0b0c04c89b86926fc6aceb059c9fccf5b09eec9b459330f7",
+    "apply_target_flag": "--service",
+    "apply_target_value": "http://127.0.0.1:8283"
+  },
+  "isolated_candidate": {
+    "candidate_id": "v0.3.17-5-composite-unique-authoring-20260907+b408d35ad257",
+    "skill_name": "domainry-builder-v1",
+    "skill_version": "v0.3.17-5-composite-unique-authoring-20260907",
+    "skill_identity_sha256": "ebd64d96025aeabc3ec803e2cef1d6330e670533269edbfc0dda8172909aaceb",
+    "package_metadata_sha256": "b370c03b3f95d7982d5e392ec55889e95b09a800b3ae32b3c229026903c58cbf",
+    "skill_tree_sha256": "b408d35ad2571adef130b9f248805229cedbc3ec852880497fc520c7805bd1d7",
+    "cli_binary_sha256": "f16fd4446a23d996f9df2d179acaf1386d48a84510cde131f96de2eb313009b2",
+    "runtime_api_contract_version": "runtime-domain-api-v1",
+    "runtime_api_contract_hash": "4fe655cbfd4fa0bc0b0c04c89b86926fc6aceb059c9fccf5b09eec9b459330f7",
+    "apply_target_flag": "--service",
+    "apply_target_value": "http://127.0.0.1:8283"
+  },
+  "service_identity": {
+    "target_kind": "service",
+    "healthy": true,
+    "http_status": 200,
+    "health_document_sha256": "a02bcaa4de39c69d053aba00820537f7c6c872d0964a6ad3d89dba541170f315",
+    "published_identity": {
+      "contract_version": "domainry-control-plane-health-v1",
+      "discovery": "/.well-known/domainry-plane",
+      "service_kind": "template-control-plane",
+      "version": "v0.3.17-5-composite-unique-authoring-20260907",
+      "checks": [
+        {
+          "detail": "v0.3.17-5-composite-unique-authoring-20260907",
+          "name": "application_delivery",
+          "status": "passed"
+        },
+        {
+          "detail": "domainry-frontend-product_v0.3.17-5-composite-unique-authoring-20260907.tar.gz sha256:58d41be62d6a8731a3ebabfdeed1dfaae66cef6439da857c789e7431ce3f71ae",
+          "name": "frontend_product",
+          "status": "passed"
+        },
+        {
+          "detail": "github.com/domainry/domainry-identity@v0.999.0-domainry.00eaaf31938b9793",
+          "name": "identity_module",
+          "status": "passed"
+        },
+        {
+          "detail": "github.com/domainry/domainry-notification@v0.999.0-domainry.cea1cbbe680d85d8",
+          "name": "notification_module",
+          "status": "passed"
+        },
+        {
+          "detail": "github.com/domainry/domainry-notification-sdk@v0.999.0-domainry.c0a526a508a992fd",
+          "name": "notification_sdk",
+          "status": "passed"
+        },
+        {
+          "detail": "domainry-project-delivery-local-development",
+          "name": "project_delivery_signer",
+          "status": "passed"
+        },
+        {
+          "detail": "available",
+          "name": "project_delivery_store",
+          "status": "passed"
+        },
+        {
+          "detail": "local.domainry.project-delivery revision 1",
+          "name": "project_delivery_trust",
+          "status": "passed"
+        },
+        {
+          "detail": "domainry-project-template_v0.3.17-5-composite-unique-authoring-20260907.tar.gz sha256:9f42f06ff630bd4d7eec330ee1d70e57ca73af98918b4c5029d85d162be4af40",
+          "name": "project_template",
+          "status": "passed"
+        },
+        {
+          "detail": "domainry-runtime-client-sdk_v0.3.17-5-composite-unique-authoring-20260907.tar.gz sha256:7a86bfc5a252cf12d26ce518927bf76994c948b08a5a30da4b89ce3304b4b8ac",
+          "name": "runtime_client_sdk",
+          "status": "passed"
+        },
+        {
+          "detail": "runtime-domain-api-v1 + runtime-authoring-v1",
+          "name": "runtime_contract",
+          "status": "passed"
+        },
+        {
+          "detail": "github.com/domainry/domainry-runtime@v0.0.0-source-23fdf18c548b1401",
+          "name": "runtime_module",
+          "status": "passed"
+        },
+        {
+          "detail": "1 platforms",
+          "name": "skill_packages",
+          "status": "passed"
+        }
+      ]
+    }
+  },
+  "checkpoint": {
+    "contract_version": "domainry-eval-checkpoint-v1",
+    "source_run_id": "m1-crm-workflow-delay-resume-convergence-42",
+    "checkpoint_kind": "convergence42_canonical_composite_unique_resume_v8",
+    "measurement_class": "checkpoint_convergence_not_baseline",
+    "baseline_eligibility": false,
+    "manifest_sha256": "b4108848ade34b29acb75210b29fd31de40d4bec551b5b9ea4c49f6c3ce29a07",
+    "archive_sha256": "b03027b370e98d1449f34ce5e843737c4c1ca2e413bc566f2da90573a5857dda",
+    "manifest_only_boundary_migration": true,
+    "resume_boundary": {
+      "stage": "model",
+      "next_node": "Restore the exact convergence-42 archive. Preserve existing non-Req14 code; the archive still contains the old Req14 Scheduler implementation and only the revised development TODO, so replace logical Feature40, the minimal shared lead-field/lead.advance closure, and BF06. Add status_changed_at and Handler-calculated next_followup_at; entering contacted sets due, exiting clears it. Use next_followup_at field_changed -> canonical field_equals(status,contacted) true branch -> source_field-only timer -> internal per-record continuation Action. Keep valid unique graph IDs/endpoints and no false branch to the timer. The due Action reloads current state/due, treats stale or exited-state calls as no-op, emits a locally daily-deduped reminder/notification, and advances next_followup_at. Declare composite uniqueness over exactly the lead relation and local reminder date through the candidate's published Object validation contract. Remove the old scheduled scan and production evaluation_time. Perform only the model plan/review/apply/finalize and source implementation required for this slice, followed by focused tests, whole-project checks and managed initial/restart verification.",
+      "rule": "This v8 boundary supersedes all restored Scheduler/evaluation_time and earlier failure-review instructions. It does not claim Req14 code has been accepted. Preserve seven-day next-workday-morning business semantics; do not shorten production business time. BF06 requires ordinary lead.advance black-box persisted due/no immediate reminder and same due after restart, the five named project Handler tests with non-zero coverage, the two named external Runtime record-timer integration tests with non-zero coverage, the evaluator-owned exact source-field/default-worker probe, and canonical graph binding. Use the file-only delivery-first hermetic module proxy and verify external Runtime module identity/checksums against delivery. Read the current candidate Skill's relevant authoring contract and use it directly. Continue this evaluator-started convergence only; do not start a nested evaluation, new task, or from-zero baseline. The controller handles foundation repairs itself; do not modify foundation repositories from this measured project.",
+      "prior_delivery_id": "sha256:000477f0e464666cbf57696e82c15ccc5482a2d5a65395c29cf5c2be3321e471"
+    },
+    "prohibited_repairs": [
+      "do not follow the restored Scheduler or controlled evaluation_time resume instructions; this v8 manifest is authoritative",
+      "do not create or invoke any tenant Scheduler definition or standalone scheduled lead/follow-up scan for Req14",
+      "do not expose evaluation_time in production or substitute updated_at for status_changed_at",
+      "do not add CRM-only rearm, snooze, short-delay or test Actions",
+      "do not mutate or backdate SQLite, override the global clock, manually resume timers, or invent internal timer IDs",
+      "do not invent a new Runtime proof API; use actual externally bound Runtime package tests",
+      "do not modify any foundation repository or dispatch another task from the measured project",
+      "do not redo retained non-Req14 business code or weaken BF01-BF08/restart checks",
+      "do not label this checkpoint or successor convergence as baseline evidence"
+    ],
+    "failure_boundary": {
+      "terminal_state": "delivery_incomplete",
+      "first_failure": null,
+      "agent_exit_code": 0,
+      "checker_exit_code": null,
+      "attribution_status": "confirmed",
+      "interruption_initiator": "evaluator_controller",
+      "interruption_reason": "Controller stopped the Agent after independently proving the checker rejected the actual Runtime composite-unique representation. No failed Agent command or managed verify result was observed before this interruption.",
+      "owners": [
+        "evaluator.m1.req14",
+        "builder.skill.records_disclosure"
+      ],
+      "runtime_defect": false,
+      "details": [
+        "Runtime ObjectSchema publishes validations with type composite_unique; the old evaluator guessed unique_constraints/constraints and type unique, causing a false negative for a correct compiled Object.",
+        "The candidate Skill lacked a composite uniqueness authoring example. The Agent spent its model-stage time searching the binary and had not authored the Req14 replacement before interruption.",
+        "The evaluator is corrected to the canonical Runtime contract, and the next candidate includes a generic invoice-line example checked by the real model compiler. Business requirements and the exact lead/local-date uniqueness invariant are unchanged."
+      ]
+    }
+  },
+  "failure_checkpoint_policy": {
+    "checkpoint_on_first_failure": true,
+    "agent_failure_action": "stop_then_checkpoint",
+    "checkpoint_baseline_eligibility": false
+  },
+  "hashes": {
+    "candidate_config_sha256": "67cbdfddf7124987f96a669ce0c49005e9517a5f12335909fc1aedc3e0ce65f4",
+    "requirements_sha256": "238ba26d17783e16989a964419576d775c24db777a1b7b8e9524d4457a17bb4e",
+    "rendered_driver_prompt_sha256": "4871049b74e497aac46a324575140ebf20cf260bc7a0956a073049383c33159a",
+    "checker_sha256": "9ff2410ab7ee5bbff2f5d972bbb2ac0b80a007eaf2a6082884f69d83f4b3215a",
+    "scorer_sha256": "0e7fc7903e0f4e957d5860c3b7b8e4a5d07fc0d4b77f4faeb117a7db20d32109",
+    "frozen_checker_sha256": "9ff2410ab7ee5bbff2f5d972bbb2ac0b80a007eaf2a6082884f69d83f4b3215a",
+    "frozen_scorer_sha256": "0e7fc7903e0f4e957d5860c3b7b8e4a5d07fc0d4b77f4faeb117a7db20d32109",
+    "driver_sha256": "f4ec3397b04fe0bd50a7e0635380c999bdecf854894d3cc484af83e56fc2fc0e",
+    "agent_command_sha256": "40492e010ba0c0e27247d5322413f2b6133cd2e5d93a21fece58a9285f35bfa1",
+    "checker_command_sha256": "03bb0f85ec953b1bc3b317616e76fe65950acc8de966d5aac01491f1b9229d75"
+  },
+  "agent_context": {
+    "fresh_session_required": true,
+    "resume_forbidden": true,
+    "codex_home_contents_during_agent": [
+      "auth.json",
+      "skills/domainry-builder-v1"
+    ],
+    "ephemeral_auth_staged": true,
+    "auth_retention": "remove_immediately_after_agent",
+    "environment_policy": "minimal-isolated-v1",
+    "prompt_inputs": [
+      "requirements",
+      "evaluator-owned measured-run policy"
+    ],
+    "evaluator_assets_exposed": false,
+    "checkpoint_project_restored": true
+  }
+}

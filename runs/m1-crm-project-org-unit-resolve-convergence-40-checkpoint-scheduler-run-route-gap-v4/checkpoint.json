@@ -1,0 +1,137 @@
+{
+  "contract_version": "domainry-eval-checkpoint-v1",
+  "source_run_id": "m1-crm-project-org-unit-resolve-convergence-40",
+  "checkpoint_kind": "post_apply_foundation_scheduler_published_run_route_gap_v4",
+  "measurement_class": "checkpoint_convergence_not_baseline",
+  "baseline_eligibility": false,
+  "parent_checkpoint": {
+    "checkpoint_id": "m1-crm-evaluator-cache-convergence-38-checkpoint-project-org-unit-resolve-gap-v3",
+    "manifest_sha256": "965e3c9426702df3bec02a2a88e2a93a5230216ae1b25bde39cdae7a1b78ba08",
+    "archive_sha256": "ddb854750cff2f232b3d65e99f400b7ca704d9a4a422f217de4d945ece381111",
+    "restored_file_count": 1288
+  },
+  "archive": {
+    "path": "checkpoint-project.tar.gz",
+    "sha256": "6c8ce635d7fed2544f6755385ae227d74e9be2c00514c716b092768b148ec67a"
+  },
+  "archive_policy": {
+    "git_history_included": false,
+    "runtime_state_included": false,
+    "sqlite_included": false,
+    "lock_files_included": false,
+    "agent_sessions_included": false,
+    "temporary_state_included": false,
+    "cache_state_included": false,
+    "appledouble_included": false
+  },
+  "restore_expectations": {
+    "restored_file_count": 1299,
+    "restored_directory_count": 305,
+    "archive_member_count": 1604,
+    "ignored_appledouble_member_count": 0,
+    "ignored_git_member_count": 0,
+    "ignored_runtime_state_member_count": 0,
+    "ignored_sqlite_member_count": 0,
+    "ignored_lock_member_count": 0,
+    "ignored_agent_session_member_count": 0
+  },
+  "candidate": {
+    "candidate_id": "v0.3.16-7-m1-report-export-idempotency-20260907+7ea885b7fc54",
+    "skill_version": "v0.3.16-7-m1-report-export-idempotency-20260907",
+    "skill_identity_sha256": "ebd64d96025aeabc3ec803e2cef1d6330e670533269edbfc0dda8172909aaceb",
+    "package_metadata_sha256": "cf192f2f2bd612133c1cc480755499685186033065de11412507f760af9c64f4",
+    "skill_tree_sha256": "7ea885b7fc54735cc0331722cb7b9cf41819d87f82103e433f8468027f39cd9a",
+    "cli_binary_sha256": "cf22b5ecb446f2426c4045bc6522ab5b31d204e91be004507c6f6d1f8fa49720",
+    "runtime_api_contract_version": "runtime-domain-api-v1",
+    "runtime_api_contract_hash": "4fe655cbfd4fa0bc0b0c04c89b86926fc6aceb059c9fccf5b09eec9b459330f7"
+  },
+  "source_run_terminal": {
+    "agent_session_id": "01a078e2-55d4-7b71-967d-68f287e0ddd9",
+    "lifecycle_state": "budget_exhausted_tokens",
+    "measurement_complete": false,
+    "environment_valid": true,
+    "measurement_boundary": "interrupted_or_invalid",
+    "checker_allowed": false,
+    "checker_decision_reason": "agent_declared_not_done",
+    "delivery_stage": "apply",
+    "total_tokens_observed": 5803268,
+    "total_tokens_limit": 5000000,
+    "wall_clock_seconds_observed": 710.877,
+    "domainry_cli_invocations_total": 5,
+    "domainry_cli_completed_total": 5,
+    "domainry_cli_failed_total": 0,
+    "agent_command_invocations_total": 42,
+    "agent_command_completions_total": 42,
+    "agent_command_failures_total": 2
+  },
+  "captured_progress": {
+    "stage": "apply",
+    "model_apply_state": "implementation_ready",
+    "delivery_id": "sha256:1870f602d78cb8c104373fc1627b27213cdf3990b2bc8e24b846614c919f9919",
+    "materialization_receipt_sha256": "1ca907c83136423cd9bfb44eb78951c037e70063675526d0960c5ce649e515f3",
+    "materialization_file_sha256": "d896afaa7c23c619037a9e1faa39268c27f5a55d65bfad10092b523d64ebd967",
+    "verification_guide_path": ".domainry/builder/source/implementation-packets/verification/21b019a16af78de786496bd771f16305647df1ae6c0db6507d71283bf4497f15.json",
+    "verification_guide_sha256": "21b019a16af78de786496bd771f16305647df1ae6c0db6507d71283bf4497f15",
+    "route_catalog_sha256": "fd70cea663ae3a7a160df419c72f0c199989b5e37d2e3e113a62aea3558bf05f",
+    "route_catalog_count": 104,
+    "successful_evidence": [
+      "candidate-7 focused Action tests passed",
+      "project check --scope actions passed with state valid, issue_count 0, and no diagnostics",
+      "business-flow package compiled and passed before BF06 was changed to the explicit foundation-blocker assertion",
+      "the project now consumes typed department resolution before explicit target and Identity delivery",
+      "manual Workflow requester attribution consumes Runtime-owned workflow.initiating_user_id while preserving crm_workflow_service run_as",
+      "Workflow payload/task-status and Report object-key/durable replay project contracts were repaired"
+    ],
+    "unfinished": [
+      "replace the deliberate BF06 foundation-blocker failure only after an authorized Scheduler-owned run route is published",
+      "run reviewed apply finalize, full backend tree, and one managed verify spanning initial plus restart",
+      "obtain verified_and_stopped evidence and allow the evaluator checker"
+    ]
+  },
+  "command_errors": [
+    {
+      "event_item_id": "item_30",
+      "event_line": 60,
+      "exit_code": 1,
+      "command_sha256": "1de83aaa765cc49544ae1acaf9e9ec378397044e50a9c3b2dc34359dec707aef",
+      "classification": "auxiliary_shell_quoting_error",
+      "diagnostic": "The loop used set -- with a quoted '<sha> <bytes>' pair, so the filename incorrectly contained both fields and shasum reported '<sha> <bytes>.json' missing.",
+      "resolution": "item_31 used read -r expected_sha expected_bytes, verified every declared route shard SHA/byte count, and exited 0.",
+      "business_or_domainry_cli_failure": false
+    },
+    {
+      "event_item_id": "item_49",
+      "event_line": 96,
+      "exit_code": 2,
+      "classification": "auxiliary_working_directory_path_error",
+      "diagnostic": "The command ran from backend but passed backend/tests/businessflow/bf06_test.go to gofmt, producing lstat backend/tests/businessflow/bf06_test.go: no such file or directory.",
+      "resolution": "item_50 used tests/businessflow/bf06_test.go from the backend working directory and the business-flow package passed.",
+      "business_or_domainry_cli_failure": false
+    }
+  ],
+  "blocking_condition": {
+    "classification": "foundation_scheduler_permission_accepted_without_published_run_route",
+    "domainry_foundation_gap": true,
+    "owner": "foundation.scheduler_delivery_contract",
+    "details": [
+      "Candidate 7 accepted scheduler.definitions.run;all in the reviewed model and materialized delivery sha256:1870f602d78cb8c104373fc1627b27213cdf3990b2bc8e24b846614c919f9919.",
+      "The content-addressed verification guide and all nine referenced route shards were SHA/byte verified. Its complete minimum_read_plan, routes, and route_shards contain no authorized Scheduler-owned definition-run operation; the bound route catalog contains 104 routes at SHA fd70cea663ae3a7a160df419c72f0c199989b5e37d2e3e113a62aea3558bf05f.",
+      "BF06 therefore cannot exercise the accepted Scheduler permission through a published black-box contract. The project intentionally stops at apply/implementation_ready and backend/tests/businessflow/bf06_test.go preserves this blocker explicitly."
+    ],
+    "prohibited_repairs": [
+      "do not invent or guess an unpublished /scheduler route",
+      "do not invoke stale_lead_followup through the manual Workflow route",
+      "do not grant lead.scan_stale_contacted or any internal scheduled-workflow Action to a human Role",
+      "do not alter Plane, Builder, Runtime, Scheduler, SDKs, evaluator code, or other foundation code from this project checkpoint",
+      "do not discard the accepted candidate-7 project model, generated types, Handler repairs, Workflow repairs, Report replay repairs, or successful focused checks",
+      "do not finalize or claim verify completion until the Scheduler-owned black-box route is present and BF06 exercises it",
+      "do not restore Git history, managed Runtime/cache state, databases, SQLite, Agent sessions, locks, temporary files, or measured-run evidence"
+    ]
+  },
+  "resume_boundary": {
+    "stage": "apply",
+    "next_node": "Restore this exact convergence-40 project checkpoint only after the Scheduler foundation gap has a published, authorized black-box definition-run route. Preserve the candidate-7 accepted model, generated bindings, typed OrganizationUnits.Resolve then TargetOrganization.Resolve and Identity delivery Handler closure, trusted workflow.initiating_user_id requester attribution under crm_workflow_service run_as, payload-wrapped manual Workflow request, open approval-task query, report object key lead, and exact durable BF08 caller-operation replay. Do not redo those repairs or treat item_30/item_49 as product defects. Read and verify the new candidate's content-addressed implementation/verification packet before editing BF06; consume only its exact Scheduler-owned method, path, headers, body, response, permission, and scope. Replace the deliberate BF06 t.Fatal with a real Scheduler invocation using a stable Idempotency-Key and operation reason, a genuinely stale fixture, weekday semantics, notification evidence, denial/scope evidence, deduplication, and restart persistence. Then rerun focused Action tests, project check, business-flow compile, reviewed apply finalize, full backend tree, and exactly one managed verify over initial plus restart on one database/binary/delivery cohort. Require verified_and_stopped and checker eligibility before claiming completion.",
+    "prior_delivery_id": "sha256:1870f602d78cb8c104373fc1627b27213cdf3990b2bc8e24b846614c919f9919",
+    "rule": "The archived project and candidate-7 packet are authority for retained project work, but they are not authority for a Scheduler route that the packet did not publish. The Scheduler gap is foundation-owned and must be resolved outside this project checkpoint. On resume, never guess a route, widen human permissions, use the manual Workflow endpoint for a scheduled definition, modify any foundation repository, or weaken BF06/BF08/restart evidence. The source run ended only because observed provider tokens exceeded its convergence budget; its two command errors were corrected auxiliary-shell mistakes, all five Domainry CLI invocations completed successfully, and no checker/managed verify result exists."
+  }
+}

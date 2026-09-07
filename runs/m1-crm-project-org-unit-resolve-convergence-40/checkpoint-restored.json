@@ -1,0 +1,38 @@
+{
+  "contract_version": "domainry-eval-checkpoint-v1",
+  "source_run_id": "m1-crm-evaluator-cache-convergence-38",
+  "checkpoint_kind": "post_verify_project_contract_gaps_c7_resume_boundary_after_rejected_convergence_39",
+  "measurement_class": "checkpoint_convergence_not_baseline",
+  "baseline_eligibility": false,
+  "manifest_sha256": "965e3c9426702df3bec02a2a88e2a93a5230216ae1b25bde39cdae7a1b78ba08",
+  "archive_sha256": "ddb854750cff2f232b3d65e99f400b7ca704d9a4a422f217de4d945ece381111",
+  "resume_boundary": {
+    "stage": "model",
+    "next_node": "Restore only the validated convergence-38 archive; never reuse convergence-39 isolation or approve either archived unmaterialized evolution. Before model plan, restore sales_person_profile.provision_department to the generated create-only object_operation: input exactly code:text!, name:text!, sort_order:integer!; output exactly organization_id:text!; target source delivered_organization_unit; organization_unit_delivery create department with parent_source workspace_company; no Identity fields, manager, role_key, identity_handler_delivery, or first-user delivery. Restore deliver_identity as object_operation with explicit target_organization_id, sales_director org_child, and organization_unit_delivery resolve department with no parent_source. Fresh reviewed model apply, then implement only with regenerated symbols in this order: OrganizationUnits.Resolve typed department request; require non-empty delivered organization ID; TargetOrganization.Resolve; require exact ID equality; Identity.CreateWithSalesPersonProfile; require returned User.OrganizationID equality. Preserve authorization-stale admin re-login and same-key retry. Keep large_lead_conversion run_as=crm_workflow_service and its internal lead Action grants only on that service Role. Add requested_by:user! to open_conversion_approval, bind open_request.requested_by from Runtime-owned workflow.initiating_user_id, and validate/persist it as conversion_request.requested_by plus audit actor; never use the service execution principal or caller payload as requester. Author idempotency_keys=[record_id], grant sales_rep workflow.large_lead_conversion.run;owner, and invoke with {\"payload\":{\"record_id\":\"<lead-id>\",...}} plus one stable HTTP Idempotency-Key; no top-level record/object key or input wrapper. Query approval_mode=any tasks as open; the assigned sales_director decides while conversion_request remains pending. Keep stale_lead_followup scheduled and service-run; remove trigger object_key/compiled per-record target because scan_stale_contacted performs the bounded global scan. Grant sales_director scheduler.definitions.run;all, exercise the published Scheduler-owned run endpoint with stable key/reason and a genuinely stale fixture, and never grant scan_stale_contacted to a human or invoke it through the manual workflow route. If candidate 7 exposes no authorized Scheduler black-box path, checkpoint that exact packet gap and dispatch a foundation task instead of inventing a workaround. For BF08 use POST /report/lead_detail/exports/lead/prepare. Initial and restart are one logical operation: reuse the same director, audit ID/create key, report/object/scope/purpose/freshness/projection, and prepare key; restart reissues the identical prepare only to exercise durable-receipt replay, must return the same completed job, inspect/download that requester-owned job, validate durable lead_report_export_download.job_id and CSV, and prove foreign denial. Never create a restart audit/fingerprint/key/job. Run focused tests, project check, BF compile, reviewed finalize, full tree, then exactly one managed verify spanning initial and restart on the same database/binary/delivery cohort.",
+    "rule": "Do not redo accepted requirements or unrelated model/Handler work. Generated context and existing Handler/tests are authoritative for the create-only provision_department shape; archived model source, TODO, rejected evolution receipts, and convergence-39 are not authority. Candidate 7 published contracts supersede stale v2 guesses: a manual workflow may retain run_as while Runtime keeps the service node principal and trusted-injects the authenticated human as workflow.initiating_user_id/role; Report claims durable coordination before mutable audit reads, so exact restart replay returns the persisted job even after audit status advanced to downloaded. Project model, Handler, and BF source must consume these contracts. Do not move organization resolution, requester attribution, workflow wire shape/permissions/task status, Scheduler invocation, report object-key choice, or BF08 replay into foundation or evaluator code, and do not weaken evidence.",
+    "prior_delivery_id": "sha256:34b9a96a419db10d6ca99c4048aa70c4276eeb9ee33453c60fd1c870acd26026"
+  },
+  "prohibited_repairs": [
+    "do not change Plane, Builder, Runtime, Identity, Scheduler, Report, Data Exchange, any SDK, or evaluator code for these project-owned repairs",
+    "do not widen sales_person_profile.deliver_identity from org_child to all; restore the accepted org_child scope",
+    "do not combine first-user delivery into provision_department or convert deliver_identity to record_owner",
+    "do not create a CRM department registry, substitute a store Organization, or increase store quota",
+    "do not remove run_as from manual large_lead_conversion or grant its internal node Actions to human Roles",
+    "do not trust caller-supplied requested_by or initiating identity; bind the Runtime-owned workflow.initiating_user_id",
+    "do not create a second BF08 audit or job on restart; replay the exact durable caller operation and assert the same job",
+    "do not invoke the scheduled workflow through the manual route or grant lead.scan_stale_contacted to a human",
+    "do not restore Git history, Agent sessions, managed Runtime databases, SQLite, locks, or stale measured-run evidence"
+  ],
+  "restored_file_count": 1288,
+  "ignored_appledouble_member_count": 0,
+  "ignored_git_member_count": 0,
+  "ignored_runtime_state_member_count": 0,
+  "ignored_sqlite_member_count": 0,
+  "ignored_agent_session_member_count": 0,
+  "ignored_lock_member_count": 0,
+  "git_history_restored": false,
+  "runtime_state_restored": false,
+  "sqlite_restored": false,
+  "agent_session_restored": false,
+  "locks_restored": false
+}

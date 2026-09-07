@@ -1,0 +1,395 @@
+{
+  "family": "model_capability",
+  "command": "/bin/zsh -lc '/private/tmp/domainry-m1-v32-fixture-projection-baseline-18/codex-home/skills/domainry-builder-v1/bin/domainry-cli model capability --json --project /private/tmp/domainry-m1-v32-fixture-projection-baseline-18/project --key scheduler.authoring'",
+  "exit_code": 0,
+  "output": {
+    "category": {
+      "key": "scheduler.authoring",
+      "name": "Scheduler authoring",
+      "description": "Read, validate, preview, and simulate published Scheduler definitions."
+    },
+    "contracts": [
+      {
+        "kind": "scheduler.authoring_capability",
+        "key": "scheduler.business_job",
+        "lifecycle": "business_schedule",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "additionalProperties": false,
+          "properties": {
+            "condition_json": {
+              "type": "string"
+            },
+            "connection_key": {
+              "type": "string"
+            },
+            "day_of_month": {
+              "maximum": 31,
+              "minimum": 1,
+              "type": "integer"
+            },
+            "day_of_week": {
+              "enum": [
+                "friday",
+                "monday",
+                "saturday",
+                "sunday",
+                "thursday",
+                "tuesday",
+                "wednesday"
+              ],
+              "type": "string"
+            },
+            "description": {
+              "type": "string"
+            },
+            "dispatch_mode": {
+              "default": "runtime_callback",
+              "enum": [
+                "direct",
+                "runtime_callback"
+              ],
+              "type": "string"
+            },
+            "i18n": {
+              "type": "object"
+            },
+            "idempotency_keys": {
+              "type": "string"
+            },
+            "interval_hours": {
+              "minimum": 1,
+              "type": "integer"
+            },
+            "interval_minutes": {
+              "minimum": 1,
+              "type": "integer"
+            },
+            "interval_seconds": {
+              "minimum": 1,
+              "type": "integer"
+            },
+            "max_attempts": {
+              "default": 1,
+              "maximum": 100,
+              "minimum": 1,
+              "type": "integer"
+            },
+            "max_catchup_windows": {
+              "maximum": 100,
+              "minimum": 0,
+              "type": "integer"
+            },
+            "missed_window_policy": {
+              "default": "skip",
+              "enum": [
+                "catch_up_bounded",
+                "catch_up_one",
+                "skip"
+              ],
+              "type": "string"
+            },
+            "name": {
+              "type": "string"
+            },
+            "operation": {
+              "type": "string"
+            },
+            "payload_json": {
+              "type": "string"
+            },
+            "retry_backoff": {
+              "enum": [
+                "capped_exponential",
+                "exponential",
+                "fixed"
+              ],
+              "type": "string"
+            },
+            "retry_delay_seconds": {
+              "minimum": 0,
+              "type": "integer"
+            },
+            "retry_max_delay_seconds": {
+              "minimum": 0,
+              "type": "integer"
+            },
+            "run_as_role": {
+              "type": "string"
+            },
+            "schedule_expression": {
+              "type": "string"
+            },
+            "schedule_type": {
+              "enum": [
+                "cron",
+                "daily_at",
+                "interval",
+                "monthly_at",
+                "weekly_at"
+              ],
+              "type": "string"
+            },
+            "status": {
+              "default": "draft",
+              "enum": [
+                "archived",
+                "disabled",
+                "draft",
+                "enabled",
+                "paused"
+              ],
+              "type": "string"
+            },
+            "target_key": {
+              "type": "string"
+            },
+            "target_object": {
+              "type": "string"
+            },
+            "target_type": {
+              "enum": [
+                "http",
+                "report_snapshot_refresh",
+                "workflow"
+              ],
+              "type": "string"
+            },
+            "time_of_day": {
+              "type": "string"
+            },
+            "timeout_seconds": {
+              "default": 300,
+              "maximum": 86400,
+              "minimum": 1,
+              "type": "integer"
+            },
+            "timezone": {
+              "type": "string"
+            },
+            "trigger_type": {
+              "default": "scheduled",
+              "enum": [
+                "external_event",
+                "manual",
+                "object_scan",
+                "scheduled",
+                "workflow"
+              ],
+              "type": "string"
+            }
+          },
+          "required": [
+            "name",
+            "status",
+            "trigger_type",
+            "target_type",
+            "target_key",
+            "max_attempts",
+            "timeout_seconds"
+          ],
+          "type": "object"
+        },
+        "references": [
+          {
+            "input_json_pointer": "/target_key",
+            "kind": "scheduler_target_key",
+            "resolver_endpoint": "/discovery/references/scheduler_target_key",
+            "scope_from": "/target_type"
+          },
+          {
+            "input_json_pointer": "/target_object",
+            "kind": "object_key",
+            "resolver_endpoint": "/discovery/references/object_key"
+          },
+          {
+            "input_json_pointer": "/run_as_role",
+            "kind": "role_key",
+            "resolver_endpoint": "/discovery/references/role_key"
+          }
+        ]
+      },
+      {
+        "kind": "scheduler.authoring_capability",
+        "key": "scheduler.dead_letter.resolve",
+        "lifecycle": "business_administrator_recovery",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "additionalProperties": false,
+          "properties": {
+            "dead_letter_id": {
+              "type": "string"
+            },
+            "idempotency_key": {
+              "type": "string"
+            },
+            "note": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "dead_letter_id",
+            "idempotency_key"
+          ],
+          "type": "object"
+        }
+      },
+      {
+        "kind": "scheduler.authoring_capability",
+        "key": "scheduler.job.run",
+        "lifecycle": "business_schedule_execution",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "additionalProperties": false,
+          "properties": {
+            "definition_id": {
+              "type": "string"
+            },
+            "idempotency_key": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "definition_id",
+            "idempotency_key"
+          ],
+          "type": "object"
+        }
+      },
+      {
+        "kind": "scheduler.authoring_capability",
+        "key": "scheduler.job.simulate",
+        "lifecycle": "business_schedule_simulation",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "additionalProperties": false,
+          "properties": {
+            "definition_id": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "definition_id"
+          ],
+          "type": "object"
+        }
+      },
+      {
+        "kind": "scheduler.authoring_capability",
+        "key": "scheduler.run.cancel",
+        "lifecycle": "business_administrator_recovery",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "additionalProperties": false,
+          "properties": {
+            "idempotency_key": {
+              "type": "string"
+            },
+            "run_id": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "run_id",
+            "idempotency_key"
+          ],
+          "type": "object"
+        }
+      },
+      {
+        "kind": "scheduler.authoring_capability",
+        "key": "scheduler.run.retry",
+        "lifecycle": "business_administrator_recovery",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "additionalProperties": false,
+          "properties": {
+            "idempotency_key": {
+              "type": "string"
+            },
+            "run_id": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "run_id",
+            "idempotency_key"
+          ],
+          "type": "object"
+        }
+      },
+      {
+        "kind": "scheduler.authoring_capability",
+        "key": "scheduler.schedule",
+        "lifecycle": "definition_fragment",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "additionalProperties": false,
+          "properties": {
+            "day_of_month": {
+              "maximum": 31,
+              "minimum": 1,
+              "type": "integer"
+            },
+            "day_of_week": {
+              "enum": [
+                "friday",
+                "monday",
+                "saturday",
+                "sunday",
+                "thursday",
+                "tuesday",
+                "wednesday"
+              ],
+              "type": "string"
+            },
+            "interval_hours": {
+              "minimum": 1,
+              "type": "integer"
+            },
+            "interval_minutes": {
+              "minimum": 1,
+              "type": "integer"
+            },
+            "interval_seconds": {
+              "minimum": 1,
+              "type": "integer"
+            },
+            "schedule_expression": {
+              "type": "string"
+            },
+            "schedule_type": {
+              "enum": [
+                "cron",
+                "daily_at",
+                "interval",
+                "monthly_at",
+                "weekly_at"
+              ],
+              "type": "string"
+            },
+            "time_of_day": {
+              "type": "string"
+            },
+            "timezone": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "schedule_type"
+          ],
+          "type": "object"
+        }
+      }
+    ],
+    "validations": [
+      {
+        "kind": "scheduler.definition",
+        "description": "Validate one complete scheduled job definition, including its nested schedule."
+      }
+    ]
+  },
+  "raw_output": "{\"category\":{\"key\":\"scheduler.authoring\",\"name\":\"Scheduler authoring\",\"description\":\"Read, validate, preview, and simulate published Scheduler definitions.\"},\"contracts\":[{\"kind\":\"scheduler.authoring_capability\",\"key\":\"scheduler.business_job\",\"lifecycle\":\"business_schedule\",\"schema\":{\"$schema\":\"https://json-schema.org/draft/2020-12/schema\",\"additionalProperties\":false,\"properties\":{\"condition_json\":{\"type\":\"string\"},\"connection_key\":{\"type\":\"string\"},\"day_of_month\":{\"maximum\":31,\"minimum\":1,\"type\":\"integer\"},\"day_of_week\":{\"enum\":[\"friday\",\"monday\",\"saturday\",\"sunday\",\"thursday\",\"tuesday\",\"wednesday\"],\"type\":\"string\"},\"description\":{\"type\":\"string\"},\"dispatch_mode\":{\"default\":\"runtime_callback\",\"enum\":[\"direct\",\"runtime_callback\"],\"type\":\"string\"},\"i18n\":{\"type\":\"object\"},\"idempotency_keys\":{\"type\":\"string\"},\"interval_hours\":{\"minimum\":1,\"type\":\"integer\"},\"interval_minutes\":{\"minimum\":1,\"type\":\"integer\"},\"interval_seconds\":{\"minimum\":1,\"type\":\"integer\"},\"max_attempts\":{\"default\":1,\"maximum\":100,\"minimum\":1,\"type\":\"integer\"},\"max_catchup_windows\":{\"maximum\":100,\"minimum\":0,\"type\":\"integer\"},\"missed_window_policy\":{\"default\":\"skip\",\"enum\":[\"catch_up_bounded\",\"catch_up_one\",\"skip\"],\"type\":\"string\"},\"name\":{\"type\":\"string\"},\"operation\":{\"type\":\"string\"},\"payload_json\":{\"type\":\"string\"},\"retry_backoff\":{\"enum\":[\"capped_exponential\",\"exponential\",\"fixed\"],\"type\":\"string\"},\"retry_delay_seconds\":{\"minimum\":0,\"type\":\"integer\"},\"retry_max_delay_seconds\":{\"minimum\":0,\"type\":\"integer\"},\"run_as_role\":{\"type\":\"string\"},\"schedule_expression\":{\"type\":\"string\"},\"schedule_type\":{\"enum\":[\"cron\",\"daily_at\",\"interval\",\"monthly_at\",\"weekly_at\"],\"type\":\"string\"},\"status\":{\"default\":\"draft\",\"enum\":[\"archived\",\"disabled\",\"draft\",\"enabled\",\"paused\"],\"type\":\"string\"},\"target_key\":{\"type\":\"string\"},\"target_object\":{\"type\":\"string\"},\"target_type\":{\"enum\":[\"http\",\"report_snapshot_refresh\",\"workflow\"],\"type\":\"string\"},\"time_of_day\":{\"type\":\"string\"},\"timeout_seconds\":{\"default\":300,\"maximum\":86400,\"minimum\":1,\"type\":\"integer\"},\"timezone\":{\"type\":\"string\"},\"trigger_type\":{\"default\":\"scheduled\",\"enum\":[\"external_event\",\"manual\",\"object_scan\",\"scheduled\",\"workflow\"],\"type\":\"string\"}},\"required\":[\"name\",\"status\",\"trigger_type\",\"target_type\",\"target_key\",\"max_attempts\",\"timeout_seconds\"],\"type\":\"object\"},\"references\":[{\"input_json_pointer\":\"/target_key\",\"kind\":\"scheduler_target_key\",\"resolver_endpoint\":\"/discovery/references/scheduler_target_key\",\"scope_from\":\"/target_type\"},{\"input_json_pointer\":\"/target_object\",\"kind\":\"object_key\",\"resolver_endpoint\":\"/discovery/references/object_key\"},{\"input_json_pointer\":\"/run_as_role\",\"kind\":\"role_key\",\"resolver_endpoint\":\"/discovery/references/role_key\"}]},{\"kind\":\"scheduler.authoring_capability\",\"key\":\"scheduler.dead_letter.resolve\",\"lifecycle\":\"business_administrator_recovery\",\"schema\":{\"$schema\":\"https://json-schema.org/draft/2020-12/schema\",\"additionalProperties\":false,\"properties\":{\"dead_letter_id\":{\"type\":\"string\"},\"idempotency_key\":{\"type\":\"string\"},\"note\":{\"type\":\"string\"}},\"required\":[\"dead_letter_id\",\"idempotency_key\"],\"type\":\"object\"}},{\"kind\":\"scheduler.authoring_capability\",\"key\":\"scheduler.job.run\",\"lifecycle\":\"business_schedule_execution\",\"schema\":{\"$schema\":\"https://json-schema.org/draft/2020-12/schema\",\"additionalProperties\":false,\"properties\":{\"definition_id\":{\"type\":\"string\"},\"idempotency_key\":{\"type\":\"string\"}},\"required\":[\"definition_id\",\"idempotency_key\"],\"type\":\"object\"}},{\"kind\":\"scheduler.authoring_capability\",\"key\":\"scheduler.job.simulate\",\"lifecycle\":\"business_schedule_simulation\",\"schema\":{\"$schema\":\"https://json-schema.org/draft/2020-12/schema\",\"additionalProperties\":false,\"properties\":{\"definition_id\":{\"type\":\"string\"}},\"required\":[\"definition_id\"],\"type\":\"object\"}},{\"kind\":\"scheduler.authoring_capability\",\"key\":\"scheduler.run.cancel\",\"lifecycle\":\"business_administrator_recovery\",\"schema\":{\"$schema\":\"https://json-schema.org/draft/2020-12/schema\",\"additionalProperties\":false,\"properties\":{\"idempotency_key\":{\"type\":\"string\"},\"run_id\":{\"type\":\"string\"}},\"required\":[\"run_id\",\"idempotency_key\"],\"type\":\"object\"}},{\"kind\":\"scheduler.authoring_capability\",\"key\":\"scheduler.run.retry\",\"lifecycle\":\"business_administrator_recovery\",\"schema\":{\"$schema\":\"https://json-schema.org/draft/2020-12/schema\",\"additionalProperties\":false,\"properties\":{\"idempotency_key\":{\"type\":\"string\"},\"run_id\":{\"type\":\"string\"}},\"required\":[\"run_id\",\"idempotency_key\"],\"type\":\"object\"}},{\"kind\":\"scheduler.authoring_capability\",\"key\":\"scheduler.schedule\",\"lifecycle\":\"definition_fragment\",\"schema\":{\"$schema\":\"https://json-schema.org/draft/2020-12/schema\",\"additionalProperties\":false,\"properties\":{\"day_of_month\":{\"maximum\":31,\"minimum\":1,\"type\":\"integer\"},\"day_of_week\":{\"enum\":[\"friday\",\"monday\",\"saturday\",\"sunday\",\"thursday\",\"tuesday\",\"wednesday\"],\"type\":\"string\"},\"interval_hours\":{\"minimum\":1,\"type\":\"integer\"},\"interval_minutes\":{\"minimum\":1,\"type\":\"integer\"},\"interval_seconds\":{\"minimum\":1,\"type\":\"integer\"},\"schedule_expression\":{\"type\":\"string\"},\"schedule_type\":{\"enum\":[\"cron\",\"daily_at\",\"interval\",\"monthly_at\",\"weekly_at\"],\"type\":\"string\"},\"time_of_day\":{\"type\":\"string\"},\"timezone\":{\"type\":\"string\"}},\"required\":[\"schedule_type\"],\"type\":\"object\"}}],\"validations\":[{\"kind\":\"scheduler.definition\",\"description\":\"Validate one complete scheduled job definition, including its nested schedule.\"}]}\n",
+  "event_item_id": "item_20",
+  "event_line": 40
+}

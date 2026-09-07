@@ -38,6 +38,16 @@
     "isolation": {"type": "object"},
     "candidate": {"type": "object"},
     "isolated_candidate": {"type": "object"},
+    "checkpoint": {"type": ["object", "null"]},
+    "failure_checkpoint_policy": {
+      "type": "object",
+      "required": ["checkpoint_on_first_failure", "agent_failure_action", "checkpoint_baseline_eligibility"],
+      "properties": {
+        "checkpoint_on_first_failure": {"type": "boolean"},
+        "agent_failure_action": {"enum": ["stop_then_checkpoint", "mode_default"]},
+        "checkpoint_baseline_eligibility": {"const": false}
+      }
+    },
     "service_identity": {
       "type": "object",
       "required": ["target_kind"],
@@ -71,7 +81,8 @@
         "resume_forbidden": {"const": true},
         "ephemeral_auth_staged": {"type": "boolean"},
         "auth_retention": {"const": "remove_immediately_after_agent"},
-        "evaluator_assets_exposed": {"const": false}
+        "evaluator_assets_exposed": {"const": false},
+        "checkpoint_project_restored": {"type": "boolean"}
       }
     }
   }

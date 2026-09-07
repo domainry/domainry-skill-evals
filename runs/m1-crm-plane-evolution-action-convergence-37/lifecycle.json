@@ -1,0 +1,138 @@
+{
+  "contract_version": "domainry-eval-run-lifecycle-v1",
+  "run_id": "m1-crm-plane-evolution-action-convergence-37",
+  "run_kind": "convergence",
+  "parent_run_id": "m1-crm-foundation-organization-unit-convergence-36",
+  "state": "delivery_incomplete",
+  "measurement_complete": false,
+  "environment_valid": true,
+  "measurement_boundary": "delivery_incomplete",
+  "started_epoch": 1788720972.630296,
+  "ended_epoch": 1788721082.310943,
+  "budgets": {
+    "wall_clock_seconds": 3600.0,
+    "total_tokens": 5000000,
+    "cli_invocations": 40,
+    "cli_retries": 20
+  },
+  "usage": {
+    "wall_clock_seconds": 109.681,
+    "total_tokens": 388264,
+    "token_usage": {
+      "input_tokens": 385571,
+      "cached_input_tokens": 351872,
+      "non_cached_input_tokens": 33699,
+      "output_tokens": 2693,
+      "reasoning_output_tokens": 812,
+      "budget_tokens": 388264,
+      "budget_basis": "provider_cumulative_input_plus_output",
+      "cached_input_included_in_input": true,
+      "reasoning_output_included_in_output": true,
+      "observability_status": "complete"
+    },
+    "cli_invocations_started": 1,
+    "cli_invocations_captured": 1,
+    "cli_retries_started": 0,
+    "diagnostic_cli_invocations_started": 0,
+    "diagnostic_cli_invocations_captured": 0,
+    "diagnostic_cli_completions": 0,
+    "diagnostic_cli_failures": 0,
+    "diagnostic_cli_retries": 0,
+    "agent_command_invocations": 7,
+    "agent_command_completions": 7,
+    "agent_command_failures": 1
+  },
+  "termination": null,
+  "first_failure": {
+    "failure_kind": "scoring",
+    "family": "apply_model",
+    "exit_code": 1,
+    "output_state": null
+  },
+  "scoring_first_failure": {
+    "family": "apply_model",
+    "exit_code": 1,
+    "output_state": null
+  },
+  "diagnostic_first_failure": null,
+  "command_first_failure": null,
+  "first_scoring_failure": {
+    "family": "apply_model",
+    "exit_code": 1,
+    "output_state": null
+  },
+  "diagnostic_cli": {
+    "invocations_total": 0,
+    "completed_total": 0,
+    "failed_total": 0,
+    "retries_total": 0,
+    "latest": null,
+    "first_failure": null
+  },
+  "checkpoint": {
+    "contract_version": "domainry-eval-checkpoint-v1",
+    "source_run_id": "m1-crm-foundation-organization-unit-convergence-36",
+    "checkpoint_kind": "post_implementation_ready_plane_evolution_added_action_lifecycle_gap",
+    "measurement_class": "checkpoint_convergence_not_baseline",
+    "baseline_eligibility": false,
+    "manifest_sha256": "4f811ee38dd6320e860eea54fcc6ddb9762635c67f77bff7aac3eb2a73b3b696",
+    "archive_sha256": "663045dcdf6f6f4f31b3f35624d63aa50e4a95e843c08ec7db26f643fdf942d3",
+    "resume_boundary": {
+      "stage": "apply",
+      "next_node": "after a compatible Plane candidate with the reviewed-evolution implementation-stage fix is installed, restore this implementation-ready project, preserve the typed provision_department Handler and its paired tests, rebase model/apply only if the changed candidate requires it, then continue with focused tests, business-flow completion, apply finalize, and managed verify",
+      "rule": "Do not repeat accepted requirements or unrelated model work; do not resurrect the deleted store-backed department registry; do not reuse Runtime databases, Git history, Agent sessions, locks, or stale verification/finalization receipts.",
+      "prior_delivery_id": "sha256:a1a7aed4a3ddc21d59f2cedb8250e159c76db90261e3e0584f2f963634d7e937"
+    },
+    "prohibited_repairs": [
+      "do not remove the project-owned Handler or make Runtime implement CRM business orchestration",
+      "do not weaken or bypass the fail-closed source finalizer",
+      "do not restore a retired implicit action-source write command",
+      "do not increase store quota as a substitute for department delivery",
+      "do not label the Workspace root company or a store as a department",
+      "do not add CRM-specific foundation behavior or a business registry that copies the Identity organization tree"
+    ]
+  },
+  "checkpoint_restore": {
+    "archive_sha256": "663045dcdf6f6f4f31b3f35624d63aa50e4a95e843c08ec7db26f643fdf942d3",
+    "restored_file_count": 1077,
+    "ignored_appledouble_member_count": 0,
+    "ignored_git_member_count": 0,
+    "ignored_runtime_state_member_count": 0,
+    "ignored_sqlite_member_count": 0,
+    "ignored_agent_session_member_count": 0,
+    "ignored_lock_member_count": 0,
+    "git_history_restored": false,
+    "runtime_state_restored": false,
+    "sqlite_restored": false,
+    "agent_session_restored": false,
+    "locks_restored": false
+  },
+  "freeze_manifest_sha256": "677de85fcdbd4e4ae648960ebaf8021519f49f559c3ce919c661ed6909c601a0",
+  "ephemeral_auth_staged": true,
+  "auth_cleanup_status": "removed",
+  "agent_result_state": "not_done",
+  "agent_exit_code": 0,
+  "checker_exit_code": null,
+  "checker_gate": {
+    "ready": false,
+    "reason": "agent_declared_not_done",
+    "missing": [
+      "agent_result:not_done",
+      "model_plan:missing",
+      "apply_model:failed",
+      "apply_finalize:missing",
+      "verify:missing",
+      "verify_artifact:missing_or_unparseable",
+      "flow_evidence:missing_invalid_or_unparseable"
+    ]
+  },
+  "agent_ended_epoch": 1788721082.0546482,
+  "agent_session_id": "01a07814-0c61-7c92-9090-7818215afdb3",
+  "business_flow_evidence_source": "missing",
+  "business_flow_evidence_contract_valid": null,
+  "business_flow_evidence_sha256": null,
+  "business_flow_evidence_error": null,
+  "service_identity_before_sha256": "14a4f6844fe808c9d97af242c37ef27f4b7e1dd9968782ed74afe217ed0deb06",
+  "service_identity_after_sha256": "14a4f6844fe808c9d97af242c37ef27f4b7e1dd9968782ed74afe217ed0deb06",
+  "scorer_exit_code": 0
+}

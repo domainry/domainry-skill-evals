@@ -1,0 +1,69 @@
+{
+  "family": "verify",
+  "command": "/bin/zsh -lc '/private/tmp/domainry-m1-v29-baseline-references-baseline-14/codex-home/skills/domainry-builder-v1/bin/domainry-cli verify --json --project /private/tmp/domainry-m1-v29-baseline-references-baseline-14/project --address 127.0.0.1:19286'",
+  "exit_code": 1,
+  "output": {
+    "contract_version": "domainry-project-verify-v2",
+    "error": "verify initial Runtime business flows: managed business-flow tests failed for initial: exit status 1: === RUN   TestBF01LeadLifecycleAndOwnership\n    businessflow_test.go:323: company \"BF01 幂等线索\" not visible\n--- FAIL: TestBF01LeadLifecycleAndOwnership (0.36s)\n=== RUN   TestBF02DirectConversionIdempotency\n    businessflow_test.go:354: company \"BF02 小额转化\" not visible\n--- FAIL: TestBF02DirectConversionIdempotency (0.24s)\n=== RUN   TestBF03HighValueApproval\n    businessflow_test.go:420: company \"BF03 大额通过\" not visible\n--- FAIL: TestBF03HighValueApproval (0.34s)\n=== RUN   TestBF04HighValueRejection\n    businessflow_test.go:444: company \"BF04 大额拒绝\" not visible\n--- FAIL: TestBF04HighValueRejection (0.35s)\n=== RUN   TestBF05DepartmentScopePaginationAndMenus\n    businessflow_test.go:468: company \"BF05 华东线索\" not visible\n--- FAIL: TestBF05DepartmentScopePaginationAndMenus (0.43s)\n=== RUN   TestBF06OverdueReminderDedupeAndRestart\n    businessflow_test.go:502: status=403 body={\"code\":\"auth.permission_denied\",\"error\":{\"code\":\"auth.permission_denied\"}}\n--- FAIL: TestBF06OverdueReminderDedupeAndRestart (0.21s)\n=== RUN   TestBF07FunnelReportAuthorizationAndTotals\n    businessflow_test.go:522: status=403 body={\"code\":\"auth.permission_denied\",\"error\":{\"code\":\"auth.permission_denied\"}}\n--- FAIL: TestBF07FunnelReportAuthorizationAndTotals (0.20s)\n=== RUN   TestBF08GovernedCSVExportIsolation\n    businessflow_test.go:538: status=403 body={\"code\":\"auth.permission_denied\",\"error\":{\"code\":\"auth.permission_denied\"}}\n--- FAIL: TestBF08GovernedCSVExportIsolation (0.21s)\nFAIL",
+    "state": "failed",
+    "telemetry": {
+      "contract_version": "domainry-verify-telemetry-v1",
+      "elapsed_ms": 130498,
+      "cache": {
+        "signed_runtime_package": false,
+        "verification_receipt": false
+      },
+      "cache_misses": {
+        "signed_runtime_package": "current V6 package receipt is missing: lstat /private/tmp/domainry-m1-v29-baseline-references-baseline-14/project/.domainry/builder/receipts/package.json: no such file or directory",
+        "verification_receipt": "verification receipt is missing"
+      },
+      "stages": [
+        {
+          "name": "validate reusable verification and signed Runtime package",
+          "status": "done",
+          "elapsed_ms": 0,
+          "owner": "domainry-runtime"
+        },
+        {
+          "name": "run structural checks and complete backend tests",
+          "status": "done",
+          "elapsed_ms": 72606,
+          "owner": "domainry-builder"
+        },
+        {
+          "name": "build and sign exact Runtime package",
+          "status": "done",
+          "elapsed_ms": 50134,
+          "owner": "domainry-runtime"
+        },
+        {
+          "name": "compile managed Runtime business-flow tests",
+          "status": "done",
+          "elapsed_ms": 1116,
+          "owner": "domainry-runtime"
+        },
+        {
+          "name": "start initial managed Runtime",
+          "status": "done",
+          "elapsed_ms": 2424,
+          "owner": "domainry-runtime"
+        },
+        {
+          "name": "run initial Runtime business flows",
+          "status": "failed",
+          "elapsed_ms": 2729,
+          "owner": "project.business_flow_tests"
+        }
+      ],
+      "first_failure": {
+        "name": "run initial Runtime business flows",
+        "status": "failed",
+        "elapsed_ms": 2729,
+        "owner": "project.business_flow_tests"
+      }
+    }
+  },
+  "raw_output": "[domainry] verify: run structural checks and complete backend tests done (1m12.606s)\n[domainry] verify: build and sign exact Runtime package...\n[domainry] verify: build and sign exact Runtime package done (50.134s)\n[domainry] verify: compile managed Runtime business-flow tests...\n[domainry] verify: compile managed Runtime business-flow tests done (1.116s)\n[domainry] verify: start initial managed Runtime...\n[domainry] verify: start initial managed Runtime done (2.424s)\n[domainry] verify: run initial Runtime business flows...\n[domainry] verify: run initial Runtime business flows failed (2.729s)\n{\"contract_version\":\"domainry-project-verify-v2\",\"error\":\"verify initial Runtime business flows: managed business-flow tests failed for initial: exit status 1: === RUN   TestBF01LeadLifecycleAndOwnership\\n    businessflow_test.go:323: company \\\"BF01 幂等线索\\\" not visible\\n--- FAIL: TestBF01LeadLifecycleAndOwnership (0.36s)\\n=== RUN   TestBF02DirectConversionIdempotency\\n    businessflow_test.go:354: company \\\"BF02 小额转化\\\" not visible\\n--- FAIL: TestBF02DirectConversionIdempotency (0.24s)\\n=== RUN   TestBF03HighValueApproval\\n    businessflow_test.go:420: company \\\"BF03 大额通过\\\" not visible\\n--- FAIL: TestBF03HighValueApproval (0.34s)\\n=== RUN   TestBF04HighValueRejection\\n    businessflow_test.go:444: company \\\"BF04 大额拒绝\\\" not visible\\n--- FAIL: TestBF04HighValueRejection (0.35s)\\n=== RUN   TestBF05DepartmentScopePaginationAndMenus\\n    businessflow_test.go:468: company \\\"BF05 华东线索\\\" not visible\\n--- FAIL: TestBF05DepartmentScopePaginationAndMenus (0.43s)\\n=== RUN   TestBF06OverdueReminderDedupeAndRestart\\n    businessflow_test.go:502: status=403 body={\\\"code\\\":\\\"auth.permission_denied\\\",\\\"error\\\":{\\\"code\\\":\\\"auth.permission_denied\\\"}}\\n--- FAIL: TestBF06OverdueReminderDedupeAndRestart (0.21s)\\n=== RUN   TestBF07FunnelReportAuthorizationAndTotals\\n    businessflow_test.go:522: status=403 body={\\\"code\\\":\\\"auth.permission_denied\\\",\\\"error\\\":{\\\"code\\\":\\\"auth.permission_denied\\\"}}\\n--- FAIL: TestBF07FunnelReportAuthorizationAndTotals (0.20s)\\n=== RUN   TestBF08GovernedCSVExportIsolation\\n    businessflow_test.go:538: status=403 body={\\\"code\\\":\\\"auth.permission_denied\\\",\\\"error\\\":{\\\"code\\\":\\\"auth.permission_denied\\\"}}\\n--- FAIL: TestBF08GovernedCSVExportIsolation (0.21s)\\nFAIL\",\"state\":\"failed\",\"telemetry\":{\"contract_version\":\"domainry-verify-telemetry-v1\",\"elapsed_ms\":130498,\"cache\":{\"signed_runtime_package\":false,\"verification_receipt\":false},\"cache_misses\":{\"signed_runtime_package\":\"current V6 package receipt is missing: lstat /private/tmp/domainry-m1-v29-baseline-references-baseline-14/project/.domainry/builder/receipts/package.json: no such file or directory\",\"verification_receipt\":\"verification receipt is missing\"},\"stages\":[{\"name\":\"validate reusable verification and signed Runtime package\",\"status\":\"done\",\"elapsed_ms\":0,\"owner\":\"domainry-runtime\"},{\"name\":\"run structural checks and complete backend tests\",\"status\":\"done\",\"elapsed_ms\":72606,\"owner\":\"domainry-builder\"},{\"name\":\"build and sign exact Runtime package\",\"status\":\"done\",\"elapsed_ms\":50134,\"owner\":\"domainry-runtime\"},{\"name\":\"compile managed Runtime business-flow tests\",\"status\":\"done\",\"elapsed_ms\":1116,\"owner\":\"domainry-runtime\"},{\"name\":\"start initial managed Runtime\",\"status\":\"done\",\"elapsed_ms\":2424,\"owner\":\"domainry-runtime\"},{\"name\":\"run initial Runtime business flows\",\"status\":\"failed\",\"elapsed_ms\":2729,\"owner\":\"project.business_flow_tests\"}],\"first_failure\":{\"name\":\"run initial Runtime business flows\",\"status\":\"failed\",\"elapsed_ms\":2729,\"owner\":\"project.business_flow_tests\"}}}\nerror: verify initial Runtime business flows: managed business-flow tests failed for initial: exit status 1: === RUN   TestBF01LeadLifecycleAndOwnership\n    businessflow_test.go:323: company \"BF01 幂等线索\" not visible\n--- FAIL: TestBF01LeadLifecycleAndOwnership (0.36s)\n=== RUN   TestBF02DirectConversionIdempotency\n    businessflow_test.go:354: company \"BF02 小额转化\" not visible\n--- FAIL: TestBF02DirectConversionIdempotency (0.24s)\n=== RUN   TestBF03HighValueApproval\n    businessflow_test.go:420: company \"BF03 大额通过\" not visible\n--- FAIL: TestBF03HighValueApproval (0.34s)\n=== RUN   TestBF04HighValueRejection\n    businessflow_test.go:444: company \"BF04 大额拒绝\" not visible\n--- FAIL: TestBF04HighValueRejection (0.35s)\n=== RUN   TestBF05DepartmentScopePaginationAndMenus\n    businessflow_test.go:468: company \"BF05 华东线索\" not visible\n--- FAIL: TestBF05DepartmentScopePaginationAndMenus (0.43s)\n=== RUN   TestBF06OverdueReminderDedupeAndRestart\n    businessflow_test.go:502: status=403 body={\"code\":\"auth.permission_denied\",\"error\":{\"code\":\"auth.permission_denied\"}}\n--- FAIL: TestBF06OverdueReminderDedupeAndRestart (0.21s)\n=== RUN   TestBF07FunnelReportAuthorizationAndTotals\n    businessflow_test.go:522: status=403 body={\"code\":\"auth.permission_denied\",\"error\":{\"code\":\"auth.permission_denied\"}}\n--- FAIL: TestBF07FunnelReportAuthorizationAndTotals (0.20s)\n=== RUN   TestBF08GovernedCSVExportIsolation\n    businessflow_test.go:538: status=403 body={\"code\":\"auth.permission_denied\",\"error\":{\"code\":\"auth.permission_denied\"}}\n--- FAIL: TestBF08GovernedCSVExportIsolation (0.21s)\nFAIL\n",
+  "event_item_id": "item_92",
+  "event_line": 173
+}

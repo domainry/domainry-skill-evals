@@ -1,0 +1,14 @@
+Reading additional input from stdin...
+2026-09-05T10:58:57.058010Z ERROR codex_core::tools::router: error=apply_patch verification failed: Failed to find expected lines in /private/tmp/domainry-m1-v29-baseline-references-baseline-14/project/backend/actions/crm/lead_edit_details_test.go:
+// domainry:action-test-scaffold-v1
+package crm
+import (
+	"errors"
+	capabilities "example.com/domainry-m1-crm/backend/generated/capabilities"
+	"testing"
+)
+func TestEditDetailsSeedFailsClosed(t *testing.T) {
+	_, err := EditDetails(t.Context(), capabilities.EditDetailsCapabilities{}, capabilities.EditDetailsInput{})
+	var businessError *capabilities.BusinessError
+	if !errors.As(err, &businessError) || businessError.Code != "lead.edit_details.not_implemented" { t.Fatalf("unexpected seed error: %T %v", err, err) }
+}

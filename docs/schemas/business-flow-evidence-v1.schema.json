@@ -47,7 +47,7 @@
         "source": {
           "enum": [
             "runtime.records", "runtime.action", "runtime.workflow",
-            "runtime.scheduler", "runtime.report", "runtime.data_exchange",
+            "runtime.record_timer", "runtime.scheduler", "runtime.report", "runtime.data_exchange",
             "runtime.identity", "runtime.navigation", "project_handler"
           ]
         },

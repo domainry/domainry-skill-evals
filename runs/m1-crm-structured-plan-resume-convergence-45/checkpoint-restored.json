@@ -1,0 +1,47 @@
+{
+  "contract_version": "domainry-eval-checkpoint-v1",
+  "source_run_id": "m1-crm-reviewed-removal-resume-convergence-44",
+  "checkpoint_kind": "convergence44_structured_plan_apply_resume_v10",
+  "measurement_class": "checkpoint_convergence_not_baseline",
+  "baseline_eligibility": false,
+  "manifest_sha256": "bb0eca40ff75c83ff8c34de652c63e9f4f0275d813899fbbc2c98ce19e8fcc59",
+  "archive_sha256": "457fda2f5a3a56cead2e0aadd127149e5806a669b1ff69032d00591588e0a055",
+  "manifest_only_boundary_migration": true,
+  "resume_boundary": {
+    "stage": "apply",
+    "next_node": "Preserve the restored preflight-valid model and all existing business source. After the required Skill reading, run model plan --json --project <project> and inspect its returned JSON envelope directly; do not grep the disposable provenance artifact for envelope-only change-set fields. Expected authorized delete_items are exactly crm/resource/actions.lead.scan_stale_contacted, crm/resource/scheduled_jobs.weekday_stale_lead_followup and crm/resource/workflows.stale_lead_followup. Apply this unchanged model with --allow-destructive, --go-module-path example.com/domainry-m1-crm/backend and the evaluator's service target. If evolution_review_required is returned, validate its immutable file hash/size and canonical semantic audit SHA, then run its exact next_command with the reviewed reason. Gate on implementation_ready/applied before reading the new packet and implementing lead.advance due set/clear, lead.continue_followup_due, their tests and BF06. Remove obsolete scan source/test only in that reviewed project closure. Continue focused checks, source finalization and managed initial/restart verify.",
+    "rule": "The three named obsolete-resource deletions are already authorized by the user's requested Scheduler-to-Workflow replacement. Do not ask again, broaden the deletion set, or bypass evolution review. The business model is valid but Handler implementation and BF06 are not complete. Preserve status_changed_at and Handler-calculated exact next_followup_at, the contacted true condition dominating the source-field timer, per-record stale/exit no-op and daily deduped continuation, and canonical composite uniqueness over exactly lead plus local date. Keep the five Handler tests, two actual external Runtime timer integration tests, evaluator-owned source-field/default-worker probe, canonical graph binding and full initial/restart black-box evidence. Seven-day next-workday-morning semantics remain production behavior. No Scheduler, production evaluation_time, artificial CRM short-delay Action, direct database manipulation, manual timer resume or invented proof API. Do not re-author the valid model, redo non-Req14 work, modify foundations, dispatch tasks or start nested evaluation. Continue this convergence only; it is never baseline evidence.",
+    "prior_delivery_id": "sha256:000477f0e464666cbf57696e82c15ccc5482a2d5a65395c29cf5c2be3321e471"
+  },
+  "prohibited_repairs": [
+    "do not re-author the valid model or discard retained non-Req14 work",
+    "do not broaden the three authorized deletions or bypass evolution review",
+    "do not weaken the Workflow-only Req14 or BF01-BF08/restart acceptance",
+    "do not modify foundations, dispatch tasks, or call this convergence a baseline"
+  ],
+  "failure_boundary": {
+    "terminal_state": "convergence_first_command_failure",
+    "attribution_status": "confirmed",
+    "owner": "agent.auxiliary_plan_inspection",
+    "runtime_defect": false,
+    "first_failure": {
+      "failure_kind": "command",
+      "exit_code": 1,
+      "command_sha256": "3b6066e7bb251f1d190dac52e8897a788eac545f6c9f715be73f7b87359a6160"
+    },
+    "details": "A grep for delete_items in .domainry/builder/disposable/model-preflight-result.json returned no match. That artifact contains full provenance, not the stdout envelope's Ledger change-set fields. No Domainry CLI command or apply was executed in convergence44. The source model remains the preflight-valid convergence43 replacement. This is an auxiliary inspection mistake, not a candidate schema/runtime defect."
+  },
+  "restored_file_count": 1388,
+  "ignored_appledouble_member_count": 0,
+  "ignored_git_member_count": 0,
+  "ignored_runtime_state_member_count": 0,
+  "ignored_sqlite_member_count": 0,
+  "ignored_agent_session_member_count": 0,
+  "ignored_lock_member_count": 0,
+  "ignored_evaluator_temporary_source_member_count": 0,
+  "git_history_restored": false,
+  "runtime_state_restored": false,
+  "sqlite_restored": false,
+  "agent_session_restored": false,
+  "locks_restored": false
+}

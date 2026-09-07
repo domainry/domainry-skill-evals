@@ -1,0 +1,230 @@
+{
+  "scorer_schema": "domainry-builder-eval-v3",
+  "benchmark": "m1-crm",
+  "candidate_id": "v0.3.16-6-m1-evolution-action-20260907+9b42936cb7ec",
+  "skill_version": "v0.3.16-6-m1-evolution-action-20260907",
+  "run_id": "m1-crm-evaluator-cache-convergence-38",
+  "run_kind": "convergence",
+  "parent_run_id": "m1-crm-plane-evolution-action-convergence-37",
+  "terminal_state": "delivery_incomplete",
+  "measurement_complete": false,
+  "environment_valid": true,
+  "pass_at_1_eligible": false,
+  "pass_at_1": null,
+  "run_outcome_pass": false,
+  "A_source": {
+    "A1": "cli-capture",
+    "A2": "cli-capture",
+    "A3": "cli-capture",
+    "A4": "cli-capture",
+    "A5": "not_measurable",
+    "A6": "cli-capture"
+  },
+  "A1_plan_first_pass": true,
+  "A1_plan_error_count": 0,
+  "A2_apply_first_pass": false,
+  "A3_finalize_first_pass": true,
+  "A4_verify_first_pass": false,
+  "A5_acceptance_first_pass": null,
+  "A6_rework_rounds": 3,
+  "A7_false_done": false,
+  "A7_oracle_done_mismatch": false,
+  "A7_false_done_classification": "no_oracle_done_mismatch",
+  "B1_golden_hit_rate": null,
+  "B1_hit_detail": {},
+  "B2_silent_downgrade_count": 0,
+  "B3_platform_reuse_rate": null,
+  "C1_wall_clock_seconds": 1718.9499452114105,
+  "C2_total_tokens": null,
+  "C2_usage_breakdown": {
+    "input_tokens": null,
+    "cached_input_tokens": null,
+    "non_cached_input_tokens": null,
+    "output_tokens": null,
+    "reasoning_output_tokens": null,
+    "budget_tokens": null,
+    "budget_basis": "provider_cumulative_input_plus_output",
+    "cached_input_included_in_input": true,
+    "reasoning_output_included_in_output": true,
+    "observability_status": "unavailable"
+  },
+  "C3_reading_token_ratio": null,
+  "C4_cli_invocations": 15,
+  "C4_cli_retries": 3,
+  "C4_diagnostic_cli": {
+    "invocations": 0,
+    "failures": 0,
+    "first_failure": null,
+    "included_in_scoring_invocations": false,
+    "included_in_retry_budget": false
+  },
+  "C5_stage_seconds": {
+    "requirements": null,
+    "model": null,
+    "apply": 746.516,
+    "verify": 770.672
+  },
+  "C5_stage_seconds_source": "evaluator-events",
+  "C5_stage_seconds_status": "partial",
+  "C5_stage_timing": {
+    "contract_version": "domainry-eval-stage-timing-v1",
+    "boundary_rule": "evaluator-cli-transition-v1",
+    "stage_order": [
+      "discovery",
+      "plan",
+      "apply",
+      "finalize",
+      "verify"
+    ],
+    "status": "partial",
+    "stages": {
+      "discovery": {
+        "started_epoch": null,
+        "ended_epoch": null,
+        "seconds": null,
+        "status": "unknown",
+        "start_provenance": null,
+        "end_provenance": null
+      },
+      "plan": {
+        "started_epoch": null,
+        "ended_epoch": null,
+        "seconds": null,
+        "status": "unknown",
+        "start_provenance": null,
+        "end_provenance": null
+      },
+      "apply": {
+        "started_epoch": 1788721336.57837,
+        "ended_epoch": 1788721946.926338,
+        "seconds": 610.348,
+        "status": "observed",
+        "start_provenance": {
+          "source": "agent-event-observations.jsonl",
+          "capture_file": "cli/001-apply_model.json",
+          "family": "apply_model",
+          "event": "started",
+          "event_item_id": "item_5",
+          "event_line": 10,
+          "boundary_reason": "stage_cli_started"
+        },
+        "end_provenance": {
+          "source": "agent-event-observations.jsonl",
+          "capture_file": "cli/005-apply_finalize.json",
+          "family": "apply_finalize",
+          "event": "started",
+          "event_item_id": "item_57",
+          "event_line": 106,
+          "boundary_reason": "next_stage_cli_started"
+        }
+      },
+      "finalize": {
+        "started_epoch": 1788721946.926338,
+        "ended_epoch": 1788722083.094568,
+        "seconds": 136.168,
+        "status": "observed",
+        "start_provenance": {
+          "source": "agent-event-observations.jsonl",
+          "capture_file": "cli/005-apply_finalize.json",
+          "family": "apply_finalize",
+          "event": "started",
+          "event_item_id": "item_57",
+          "event_line": 106,
+          "boundary_reason": "stage_cli_started"
+        },
+        "end_provenance": {
+          "source": "agent-event-observations.jsonl",
+          "capture_file": "cli/006-verify.json",
+          "family": "verify",
+          "event": "started",
+          "event_item_id": "item_67",
+          "event_line": 124,
+          "boundary_reason": "next_stage_cli_started"
+        }
+      },
+      "verify": {
+        "started_epoch": 1788722083.094568,
+        "ended_epoch": 1788722853.7661362,
+        "seconds": 770.672,
+        "status": "observed",
+        "start_provenance": {
+          "source": "agent-event-observations.jsonl",
+          "capture_file": "cli/006-verify.json",
+          "family": "verify",
+          "event": "started",
+          "event_item_id": "item_67",
+          "event_line": 124,
+          "boundary_reason": "stage_cli_started"
+        },
+        "end_provenance": {
+          "source": "agent-event-observations.jsonl",
+          "capture_file": "cli/013-verify.json",
+          "family": "verify",
+          "event": "completed",
+          "event_item_id": "item_105",
+          "event_line": 194,
+          "boundary_reason": "terminal_stage_cli_completed"
+        }
+      }
+    },
+    "critical_path": {
+      "observed_seconds": 1517.188,
+      "unknown_stages": [
+        "discovery",
+        "plan"
+      ],
+      "hotspot": {
+        "stage": "verify",
+        "seconds": 770.672
+      }
+    },
+    "diagnostic_intervals": []
+  },
+  "C5_project_stage_report": {
+    "source": "agent-stages.json",
+    "status": "invalid_out_of_bounds",
+    "stage_seconds": {
+      "requirements": null,
+      "model": null,
+      "apply": null,
+      "verify": null
+    },
+    "comparison": {
+      "requirements": {
+        "evaluator_seconds": null,
+        "reported_seconds": null,
+        "delta_seconds": null,
+        "status": "unknown"
+      },
+      "model": {
+        "evaluator_seconds": null,
+        "reported_seconds": null,
+        "delta_seconds": null,
+        "status": "unknown"
+      },
+      "apply": {
+        "evaluator_seconds": 746.516,
+        "reported_seconds": null,
+        "delta_seconds": null,
+        "status": "unknown"
+      },
+      "verify": {
+        "evaluator_seconds": 770.672,
+        "reported_seconds": null,
+        "delta_seconds": null,
+        "status": "unknown"
+      }
+    }
+  },
+  "D2_human_interventions": 0,
+  "failure_attribution": {
+    "agent": 1
+  },
+  "diagnostic_failure_attribution": null,
+  "scoring_first_failure": {
+    "family": "apply_model",
+    "exit_code": 1,
+    "output_state": null
+  },
+  "diagnostic_first_failure": null
+}

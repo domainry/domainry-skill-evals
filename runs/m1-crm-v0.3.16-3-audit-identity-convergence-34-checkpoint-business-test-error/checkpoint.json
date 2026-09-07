@@ -1,0 +1,33 @@
+{
+  "contract_version": "domainry-eval-checkpoint-v1",
+  "source_run_id": "m1-crm-v0.3.16-3-audit-identity-convergence-34",
+  "checkpoint_kind": "action_implementation_after_business_seed_test_error",
+  "measurement_class": "checkpoint_convergence_not_baseline",
+  "baseline_eligibility": false,
+  "archive": {
+    "path": "checkpoint-project.tar.gz",
+    "sha256": "df540696fbdd6726646e369d0c4705af94a8ce90157f9f74e5c868b58458078f"
+  },
+  "candidate": {
+    "candidate_id": "v0.3.16-3-m1-audit-identity-20260906+554bd6a0a04e",
+    "skill_tree_sha256": "554bd6a0a04e590aa9c1ecb5cab5c7b0ee1304e618e101bc85d56166a592d78c",
+    "cli_binary_sha256": "d8c6da6938262183720ddf81d9cfa39ee5a65be69ff06a1e40c3ac2e69467af4"
+  },
+  "invalidating_error": {
+    "agent_session_id": "01a07776-958c-7ad1-abee-933790c10a55",
+    "agent_event_item_id": "item_32",
+    "event_line": 64,
+    "command_sha256": "93089e99a08229d472cad7d20e3bb5c1503bb51ca88fcf80a507bc1e1682d97d",
+    "exit_code": 1,
+    "classification": "project_business_action_seed_not_implemented",
+    "owner": "agent",
+    "domainry_foundation_defect": false,
+    "diagnostic": "TestAdvanceSeedFailsClosed panicked because the checkpoint's lead_advance.go seed stub dereferenced a nil capability dependency."
+  },
+  "resume_boundary": {
+    "stage": "apply",
+    "next_node": "finish the packet-scoped Action implementations and rerun project tests",
+    "implementation_packet": "095dbd52c98d456012367dfda8cff04d4b601bc868c9ed470a4d7c5af851ac9e",
+    "rule": "This is a business implementation checkpoint; do not route it into Domainry foundation code."
+  }
+}

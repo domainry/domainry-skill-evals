@@ -1,0 +1,207 @@
+{
+  "contract_version": "domainry-eval-freeze-manifest-v1",
+  "run_id": "m1-crm-structured-plan-resume-convergence-45",
+  "benchmark": "m1-crm",
+  "run_kind": "convergence",
+  "parent_run_id": "m1-crm-reviewed-removal-resume-convergence-44",
+  "model": "gpt-5.6-sol",
+  "budgets": {
+    "wall_clock_seconds": 3600.0,
+    "total_tokens": 10000000,
+    "cli_invocations": 40,
+    "cli_retries": 0
+  },
+  "absence_proof": {
+    "checked_epoch": 1788755868.578474,
+    "isolation_root_absent": true,
+    "project_absent": true,
+    "codex_home_absent": true,
+    "agent_home_absent": true,
+    "sqlite_database_absent": true,
+    "sqlite_wal_absent": true,
+    "sqlite_shm_absent": true
+  },
+  "isolation": {
+    "root": "/private/tmp/domainry-m1-structured-plan-resume-convergence-45",
+    "codex_home": "/private/tmp/domainry-m1-structured-plan-resume-convergence-45/codex-home",
+    "agent_home": "/private/tmp/domainry-m1-structured-plan-resume-convergence-45/home",
+    "temp": "/private/tmp/domainry-m1-structured-plan-resume-convergence-45/tmp",
+    "project": "/private/tmp/domainry-m1-structured-plan-resume-convergence-45/project",
+    "runtime": "/private/tmp/domainry-m1-structured-plan-resume-convergence-45/runtime",
+    "database": "/private/tmp/domainry-m1-structured-plan-resume-convergence-45/runtime/cohort.sqlite",
+    "candidate_copy": "/private/tmp/domainry-m1-structured-plan-resume-convergence-45/codex-home/skills/domainry-builder-v1"
+  },
+  "candidate": {
+    "candidate_id": "v0.3.17-6-reviewed-removal-guidance-20260907+69df32b918eb",
+    "skill_name": "domainry-builder-v1",
+    "skill_version": "v0.3.17-6-reviewed-removal-guidance-20260907",
+    "skill_identity_sha256": "ebd64d96025aeabc3ec803e2cef1d6330e670533269edbfc0dda8172909aaceb",
+    "package_metadata_sha256": "85223c9ac640194d41c6f256e0ce1697244738c5cef83d5c8b68be6145a5b417",
+    "skill_tree_sha256": "69df32b918ebb019d446803c13ccd40abe58988ed9e566e09da59d8b8b359a9d",
+    "cli_binary_sha256": "f2bd71c1cc637ce61350993a1abbf3f35e0b3f7d8c13476f19b9bc8c06a00fed",
+    "runtime_api_contract_version": "runtime-domain-api-v1",
+    "runtime_api_contract_hash": "4fe655cbfd4fa0bc0b0c04c89b86926fc6aceb059c9fccf5b09eec9b459330f7",
+    "apply_target_flag": "--service",
+    "apply_target_value": "http://127.0.0.1:8283"
+  },
+  "isolated_candidate": {
+    "candidate_id": "v0.3.17-6-reviewed-removal-guidance-20260907+69df32b918eb",
+    "skill_name": "domainry-builder-v1",
+    "skill_version": "v0.3.17-6-reviewed-removal-guidance-20260907",
+    "skill_identity_sha256": "ebd64d96025aeabc3ec803e2cef1d6330e670533269edbfc0dda8172909aaceb",
+    "package_metadata_sha256": "85223c9ac640194d41c6f256e0ce1697244738c5cef83d5c8b68be6145a5b417",
+    "skill_tree_sha256": "69df32b918ebb019d446803c13ccd40abe58988ed9e566e09da59d8b8b359a9d",
+    "cli_binary_sha256": "f2bd71c1cc637ce61350993a1abbf3f35e0b3f7d8c13476f19b9bc8c06a00fed",
+    "runtime_api_contract_version": "runtime-domain-api-v1",
+    "runtime_api_contract_hash": "4fe655cbfd4fa0bc0b0c04c89b86926fc6aceb059c9fccf5b09eec9b459330f7",
+    "apply_target_flag": "--service",
+    "apply_target_value": "http://127.0.0.1:8283"
+  },
+  "service_identity": {
+    "target_kind": "service",
+    "healthy": true,
+    "http_status": 200,
+    "health_document_sha256": "891a58d05c7be3b2cae45366723b2067a009fb2c333db4f34b23b5b09ca7c282",
+    "published_identity": {
+      "contract_version": "domainry-control-plane-health-v1",
+      "discovery": "/.well-known/domainry-plane",
+      "service_kind": "template-control-plane",
+      "version": "v0.3.17-6-reviewed-removal-guidance-20260907",
+      "checks": [
+        {
+          "detail": "v0.3.17-6-reviewed-removal-guidance-20260907",
+          "name": "application_delivery",
+          "status": "passed"
+        },
+        {
+          "detail": "domainry-frontend-product_v0.3.17-6-reviewed-removal-guidance-20260907.tar.gz sha256:58d41be62d6a8731a3ebabfdeed1dfaae66cef6439da857c789e7431ce3f71ae",
+          "name": "frontend_product",
+          "status": "passed"
+        },
+        {
+          "detail": "github.com/domainry/domainry-identity@v0.999.0-domainry.00eaaf31938b9793",
+          "name": "identity_module",
+          "status": "passed"
+        },
+        {
+          "detail": "github.com/domainry/domainry-notification@v0.999.0-domainry.cea1cbbe680d85d8",
+          "name": "notification_module",
+          "status": "passed"
+        },
+        {
+          "detail": "github.com/domainry/domainry-notification-sdk@v0.999.0-domainry.c0a526a508a992fd",
+          "name": "notification_sdk",
+          "status": "passed"
+        },
+        {
+          "detail": "domainry-project-delivery-local-development",
+          "name": "project_delivery_signer",
+          "status": "passed"
+        },
+        {
+          "detail": "available",
+          "name": "project_delivery_store",
+          "status": "passed"
+        },
+        {
+          "detail": "local.domainry.project-delivery revision 1",
+          "name": "project_delivery_trust",
+          "status": "passed"
+        },
+        {
+          "detail": "domainry-project-template_v0.3.17-6-reviewed-removal-guidance-20260907.tar.gz sha256:9f42f06ff630bd4d7eec330ee1d70e57ca73af98918b4c5029d85d162be4af40",
+          "name": "project_template",
+          "status": "passed"
+        },
+        {
+          "detail": "domainry-runtime-client-sdk_v0.3.17-6-reviewed-removal-guidance-20260907.tar.gz sha256:7a86bfc5a252cf12d26ce518927bf76994c948b08a5a30da4b89ce3304b4b8ac",
+          "name": "runtime_client_sdk",
+          "status": "passed"
+        },
+        {
+          "detail": "runtime-domain-api-v1 + runtime-authoring-v1",
+          "name": "runtime_contract",
+          "status": "passed"
+        },
+        {
+          "detail": "github.com/domainry/domainry-runtime@v0.0.0-source-23fdf18c548b1401",
+          "name": "runtime_module",
+          "status": "passed"
+        },
+        {
+          "detail": "1 platforms",
+          "name": "skill_packages",
+          "status": "passed"
+        }
+      ]
+    }
+  },
+  "checkpoint": {
+    "contract_version": "domainry-eval-checkpoint-v1",
+    "source_run_id": "m1-crm-reviewed-removal-resume-convergence-44",
+    "checkpoint_kind": "convergence44_structured_plan_apply_resume_v10",
+    "measurement_class": "checkpoint_convergence_not_baseline",
+    "baseline_eligibility": false,
+    "manifest_sha256": "bb0eca40ff75c83ff8c34de652c63e9f4f0275d813899fbbc2c98ce19e8fcc59",
+    "archive_sha256": "457fda2f5a3a56cead2e0aadd127149e5806a669b1ff69032d00591588e0a055",
+    "manifest_only_boundary_migration": true,
+    "resume_boundary": {
+      "stage": "apply",
+      "next_node": "Preserve the restored preflight-valid model and all existing business source. After the required Skill reading, run model plan --json --project <project> and inspect its returned JSON envelope directly; do not grep the disposable provenance artifact for envelope-only change-set fields. Expected authorized delete_items are exactly crm/resource/actions.lead.scan_stale_contacted, crm/resource/scheduled_jobs.weekday_stale_lead_followup and crm/resource/workflows.stale_lead_followup. Apply this unchanged model with --allow-destructive, --go-module-path example.com/domainry-m1-crm/backend and the evaluator's service target. If evolution_review_required is returned, validate its immutable file hash/size and canonical semantic audit SHA, then run its exact next_command with the reviewed reason. Gate on implementation_ready/applied before reading the new packet and implementing lead.advance due set/clear, lead.continue_followup_due, their tests and BF06. Remove obsolete scan source/test only in that reviewed project closure. Continue focused checks, source finalization and managed initial/restart verify.",
+      "rule": "The three named obsolete-resource deletions are already authorized by the user's requested Scheduler-to-Workflow replacement. Do not ask again, broaden the deletion set, or bypass evolution review. The business model is valid but Handler implementation and BF06 are not complete. Preserve status_changed_at and Handler-calculated exact next_followup_at, the contacted true condition dominating the source-field timer, per-record stale/exit no-op and daily deduped continuation, and canonical composite uniqueness over exactly lead plus local date. Keep the five Handler tests, two actual external Runtime timer integration tests, evaluator-owned source-field/default-worker probe, canonical graph binding and full initial/restart black-box evidence. Seven-day next-workday-morning semantics remain production behavior. No Scheduler, production evaluation_time, artificial CRM short-delay Action, direct database manipulation, manual timer resume or invented proof API. Do not re-author the valid model, redo non-Req14 work, modify foundations, dispatch tasks or start nested evaluation. Continue this convergence only; it is never baseline evidence.",
+      "prior_delivery_id": "sha256:000477f0e464666cbf57696e82c15ccc5482a2d5a65395c29cf5c2be3321e471"
+    },
+    "prohibited_repairs": [
+      "do not re-author the valid model or discard retained non-Req14 work",
+      "do not broaden the three authorized deletions or bypass evolution review",
+      "do not weaken the Workflow-only Req14 or BF01-BF08/restart acceptance",
+      "do not modify foundations, dispatch tasks, or call this convergence a baseline"
+    ],
+    "failure_boundary": {
+      "terminal_state": "convergence_first_command_failure",
+      "attribution_status": "confirmed",
+      "owner": "agent.auxiliary_plan_inspection",
+      "runtime_defect": false,
+      "first_failure": {
+        "failure_kind": "command",
+        "exit_code": 1,
+        "command_sha256": "3b6066e7bb251f1d190dac52e8897a788eac545f6c9f715be73f7b87359a6160"
+      },
+      "details": "A grep for delete_items in .domainry/builder/disposable/model-preflight-result.json returned no match. That artifact contains full provenance, not the stdout envelope's Ledger change-set fields. No Domainry CLI command or apply was executed in convergence44. The source model remains the preflight-valid convergence43 replacement. This is an auxiliary inspection mistake, not a candidate schema/runtime defect."
+    }
+  },
+  "failure_checkpoint_policy": {
+    "checkpoint_on_first_failure": true,
+    "agent_failure_action": "stop_then_checkpoint",
+    "checkpoint_baseline_eligibility": false
+  },
+  "hashes": {
+    "candidate_config_sha256": "67cbdfddf7124987f96a669ce0c49005e9517a5f12335909fc1aedc3e0ce65f4",
+    "requirements_sha256": "238ba26d17783e16989a964419576d775c24db777a1b7b8e9524d4457a17bb4e",
+    "rendered_driver_prompt_sha256": "c6384406bf532040c12eb93dce6c5e745d9cfd3ea2f09f0ccf392baffdab8bb0",
+    "checker_sha256": "9ff2410ab7ee5bbff2f5d972bbb2ac0b80a007eaf2a6082884f69d83f4b3215a",
+    "scorer_sha256": "0e7fc7903e0f4e957d5860c3b7b8e4a5d07fc0d4b77f4faeb117a7db20d32109",
+    "frozen_checker_sha256": "9ff2410ab7ee5bbff2f5d972bbb2ac0b80a007eaf2a6082884f69d83f4b3215a",
+    "frozen_scorer_sha256": "0e7fc7903e0f4e957d5860c3b7b8e4a5d07fc0d4b77f4faeb117a7db20d32109",
+    "driver_sha256": "f4ec3397b04fe0bd50a7e0635380c999bdecf854894d3cc484af83e56fc2fc0e",
+    "agent_command_sha256": "40492e010ba0c0e27247d5322413f2b6133cd2e5d93a21fece58a9285f35bfa1",
+    "checker_command_sha256": "03bb0f85ec953b1bc3b317616e76fe65950acc8de966d5aac01491f1b9229d75"
+  },
+  "agent_context": {
+    "fresh_session_required": true,
+    "resume_forbidden": true,
+    "codex_home_contents_during_agent": [
+      "auth.json",
+      "skills/domainry-builder-v1"
+    ],
+    "ephemeral_auth_staged": true,
+    "auth_retention": "remove_immediately_after_agent",
+    "environment_policy": "minimal-isolated-v1",
+    "prompt_inputs": [
+      "requirements",
+      "evaluator-owned measured-run policy"
+    ],
+    "evaluator_assets_exposed": false,
+    "checkpoint_project_restored": true
+  }
+}

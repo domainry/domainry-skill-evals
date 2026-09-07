@@ -1,0 +1,187 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "domainry-bf06-evaluator-certificates-v1",
+  "title": "M1 BF06 evaluator-executed Handler and Runtime timer certificates",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["contract_version", "handler", "runtime_record_timer"],
+  "properties": {
+    "contract_version": {"const": "domainry-bf06-evaluator-certificates-v1"},
+    "handler": {
+      "allOf": [
+        {"$ref": "#/$defs/suite"},
+        {
+          "required": ["project_handler_coverage"],
+          "properties": {
+            "suite_id": {"const": "m1_req14_handler"},
+            "test_outcomes": {"$ref": "#/$defs/handler_outcomes"},
+            "project_handler_coverage": {"$ref": "#/$defs/runtime_coverage"}
+          }
+        }
+      ]
+    },
+    "runtime_record_timer": {
+      "allOf": [
+        {"$ref": "#/$defs/suite"},
+        {
+          "required": [
+            "runtime_dependencies", "dependency_command_exit_code",
+            "dependency_output_sha256", "runtime_module_query_command",
+            "runtime_module_query_exit_code", "runtime_module_query_output_sha256",
+            "runtime_module_identity", "runtime_delivery_binding",
+            "runtime_record_timer_coverage", "hermetic_go_environment",
+            "evaluator_runtime_probe"
+          ],
+          "properties": {
+            "suite_id": {"const": "m1_req14_runtime_record_timer"},
+            "test_outcomes": {"$ref": "#/$defs/runtime_outcomes"},
+            "runtime_dependencies": {
+              "type": "array", "minItems": 1,
+              "items": {"type": "string", "minLength": 1}
+            },
+            "dependency_command_exit_code": {"const": 0},
+            "dependency_output_sha256": {"$ref": "#/$defs/sha256"},
+            "runtime_module_query_command": {
+              "type": "array", "minItems": 5,
+              "items": {"type": "string", "minLength": 1}
+            },
+            "runtime_module_query_exit_code": {"const": 0},
+            "runtime_module_query_output_sha256": {"$ref": "#/$defs/sha256"},
+            "runtime_module_identity": {"$ref": "#/$defs/runtime_module_identity"},
+            "runtime_delivery_binding": {"$ref": "#/$defs/runtime_delivery_binding"},
+            "runtime_record_timer_coverage": {"$ref": "#/$defs/runtime_coverage"},
+            "hermetic_go_environment": {"$ref": "#/$defs/hermetic_go_environment"},
+            "evaluator_runtime_probe": {"$ref": "#/$defs/evaluator_runtime_probe"}
+          }
+        }
+      ]
+    }
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "suite": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "suite_id", "command", "exit_code", "test_outcomes",
+        "output_sha256", "source_sha256"
+      ],
+      "properties": {
+        "suite_id": {"type": "string", "minLength": 1},
+        "command": {
+          "type": "array", "minItems": 1,
+          "items": {"type": "string", "minLength": 1}
+        },
+        "exit_code": {"const": 0},
+        "output_sha256": {"$ref": "#/$defs/sha256"},
+        "source_sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "runtime_module_identity": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "Path", "Version", "Sum", "GoModSum", "Main", "Replace",
+        "Dir", "GoMod", "within_project_tree"
+      ],
+      "properties": {
+        "Path": {"const": "github.com/domainry/domainry-runtime"},
+        "Version": {"type": "string", "minLength": 1},
+        "Sum": {"type": "string", "pattern": "^h1:"},
+        "GoModSum": {"type": "string", "pattern": "^h1:"},
+        "Main": {"const": false},
+        "Replace": {"type": "null"},
+        "Dir": {"type": "string", "minLength": 1},
+        "GoMod": {"type": "string", "minLength": 1},
+        "within_project_tree": {"const": false}
+      }
+    },
+    "runtime_delivery_binding": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "path", "version", "zip_sha256", "go_mod_sha256",
+        "binding_sha256", "matches_resolved_module"
+      ],
+      "properties": {
+        "path": {"const": "github.com/domainry/domainry-runtime"},
+        "version": {"type": "string", "minLength": 1},
+        "zip_sha256": {"$ref": "#/$defs/sha256"},
+        "go_mod_sha256": {"$ref": "#/$defs/sha256"},
+        "binding_sha256": {"$ref": "#/$defs/sha256"},
+        "matches_resolved_module": {"const": true}
+      }
+    },
+    "runtime_coverage": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["total_statements", "covered_statements", "profile_sha256"],
+      "properties": {
+        "total_statements": {"type": "integer", "minimum": 1},
+        "covered_statements": {"type": "integer", "minimum": 1},
+        "profile_sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "hermetic_go_environment": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["GOPROXY", "GOFLAGS", "GOWORK", "GONOPROXY", "GOSUMDB"],
+      "properties": {
+        "GOPROXY": {"type": "string", "pattern": "^file://"},
+        "GOFLAGS": {"type": "string", "pattern": "(^| )-mod=readonly($| )"},
+        "GOWORK": {"const": "off"},
+        "GONOPROXY": {"const": "none"},
+        "GOSUMDB": {"const": "off"}
+      }
+    },
+    "evaluator_runtime_probe": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "command", "exit_code", "test_outcome", "output_sha256",
+        "source_sha256", "source_owned_by_evaluator"
+      ],
+      "properties": {
+        "command": {
+          "type": "array", "minItems": 7,
+          "items": {"type": "string", "minLength": 1}
+        },
+        "exit_code": {"const": 0},
+        "test_outcome": {"const": "pass"},
+        "output_sha256": {"$ref": "#/$defs/sha256"},
+        "source_sha256": {"$ref": "#/$defs/sha256"},
+        "source_owned_by_evaluator": {"const": true}
+      }
+    },
+    "handler_outcomes": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "TestM1Req14DueCalculation",
+        "TestM1Req14EnterContactedPersistsDue",
+        "TestM1Req14ExitContactedClearsDue",
+        "TestM1Req14DueActionIdempotentContinuation",
+        "TestM1Req14ExitedStateNoop"
+      ],
+      "properties": {
+        "TestM1Req14DueCalculation": {"const": "pass"},
+        "TestM1Req14EnterContactedPersistsDue": {"const": "pass"},
+        "TestM1Req14ExitContactedClearsDue": {"const": "pass"},
+        "TestM1Req14DueActionIdempotentContinuation": {"const": "pass"},
+        "TestM1Req14ExitedStateNoop": {"const": "pass"}
+      }
+    },
+    "runtime_outcomes": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "TestM1Req14RuntimeRecordTimerExactDue",
+        "TestM1Req14RuntimeRecordTimerRestartRecovery"
+      ],
+      "properties": {
+        "TestM1Req14RuntimeRecordTimerExactDue": {"const": "pass"},
+        "TestM1Req14RuntimeRecordTimerRestartRecovery": {"const": "pass"}
+      }
+    }
+  }
+}

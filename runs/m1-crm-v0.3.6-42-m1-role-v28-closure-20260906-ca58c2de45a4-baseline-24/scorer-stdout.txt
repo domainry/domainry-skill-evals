@@ -1,0 +1,211 @@
+{
+  "scorer_schema": "domainry-builder-eval-v3",
+  "benchmark": "m1-crm",
+  "candidate_id": "v0.3.6-42-m1-role-v28-closure-20260906+ca58c2de45a4",
+  "skill_version": "v0.3.6-42-m1-role-v28-closure-20260906",
+  "run_id": "m1-crm-v0.3.6-42-m1-role-v28-closure-20260906-ca58c2de45a4-baseline-24",
+  "run_kind": "baseline",
+  "parent_run_id": null,
+  "terminal_state": "baseline_first_scoring_failure",
+  "measurement_complete": false,
+  "environment_valid": true,
+  "pass_at_1_eligible": false,
+  "pass_at_1": false,
+  "run_outcome_pass": false,
+  "A_source": {
+    "A1": "cli-capture",
+    "A2": "not_measurable",
+    "A3": "not_measurable",
+    "A4": "not_measurable",
+    "A5": "not_measurable",
+    "A6": "cli-capture"
+  },
+  "A1_plan_first_pass": false,
+  "A1_plan_error_count": 1,
+  "A2_apply_first_pass": null,
+  "A3_finalize_first_pass": null,
+  "A4_verify_first_pass": null,
+  "A5_acceptance_first_pass": null,
+  "A6_rework_rounds": 0,
+  "A7_false_done": false,
+  "A7_oracle_done_mismatch": false,
+  "A7_false_done_classification": "no_oracle_done_mismatch",
+  "B1_golden_hit_rate": null,
+  "B1_hit_detail": {},
+  "B2_silent_downgrade_count": 0,
+  "B3_platform_reuse_rate": null,
+  "C1_wall_clock_seconds": 639.4362750053406,
+  "C2_total_tokens": null,
+  "C2_usage_breakdown": {
+    "input_tokens": null,
+    "cached_input_tokens": null,
+    "non_cached_input_tokens": null,
+    "output_tokens": null,
+    "reasoning_output_tokens": null,
+    "budget_tokens": null,
+    "budget_basis": "provider_cumulative_input_plus_output",
+    "cached_input_included_in_input": true,
+    "reasoning_output_included_in_output": true,
+    "observability_status": "unavailable"
+  },
+  "C3_reading_token_ratio": null,
+  "C4_cli_invocations": 2,
+  "C4_cli_retries": 0,
+  "C4_diagnostic_cli": {
+    "invocations": 0,
+    "failures": 0,
+    "first_failure": null,
+    "included_in_scoring_invocations": false,
+    "included_in_retry_budget": false
+  },
+  "C5_stage_seconds": {
+    "requirements": 226.013,
+    "model": 411.234,
+    "apply": null,
+    "verify": null
+  },
+  "C5_stage_seconds_source": "evaluator-events",
+  "C5_stage_seconds_status": "partial",
+  "C5_stage_timing": {
+    "contract_version": "domainry-eval-stage-timing-v1",
+    "boundary_rule": "evaluator-cli-transition-v1",
+    "stage_order": [
+      "discovery",
+      "plan",
+      "apply",
+      "finalize",
+      "verify"
+    ],
+    "status": "partial",
+    "stages": {
+      "discovery": {
+        "started_epoch": 1788657389.039372,
+        "ended_epoch": 1788657615.052865,
+        "seconds": 226.013,
+        "status": "observed",
+        "start_provenance": {
+          "source": "lifecycle.json",
+          "field": "started_epoch",
+          "boundary_reason": "agent_lifecycle_started"
+        },
+        "end_provenance": {
+          "source": "agent-event-observations.jsonl",
+          "capture_file": "cli/001-model_capability.json",
+          "family": "model_capability",
+          "event": "completed",
+          "event_item_id": "item_13",
+          "event_line": 28,
+          "boundary_reason": "discovery_capability_completed"
+        }
+      },
+      "plan": {
+        "started_epoch": 1788657615.052865,
+        "ended_epoch": 1788658026.287148,
+        "seconds": 411.234,
+        "status": "observed",
+        "start_provenance": {
+          "source": "agent-event-observations.jsonl",
+          "capture_file": "cli/001-model_capability.json",
+          "family": "model_capability",
+          "event": "completed",
+          "event_item_id": "item_13",
+          "event_line": 28,
+          "boundary_reason": "discovery_capability_completed"
+        },
+        "end_provenance": {
+          "source": "agent-event-observations.jsonl",
+          "capture_file": "cli/002-model_plan.json",
+          "family": "model_plan",
+          "event": "completed",
+          "event_item_id": "item_23",
+          "event_line": 47,
+          "boundary_reason": "terminal_stage_cli_completed"
+        }
+      },
+      "apply": {
+        "started_epoch": null,
+        "ended_epoch": null,
+        "seconds": null,
+        "status": "unknown",
+        "start_provenance": null,
+        "end_provenance": null
+      },
+      "finalize": {
+        "started_epoch": null,
+        "ended_epoch": null,
+        "seconds": null,
+        "status": "unknown",
+        "start_provenance": null,
+        "end_provenance": null
+      },
+      "verify": {
+        "started_epoch": null,
+        "ended_epoch": null,
+        "seconds": null,
+        "status": "unknown",
+        "start_provenance": null,
+        "end_provenance": null
+      }
+    },
+    "critical_path": {
+      "observed_seconds": 637.247,
+      "unknown_stages": [
+        "apply",
+        "finalize",
+        "verify"
+      ],
+      "hotspot": {
+        "stage": "plan",
+        "seconds": 411.234
+      }
+    },
+    "diagnostic_intervals": []
+  },
+  "C5_project_stage_report": {
+    "source": "agent-stages.json",
+    "status": "valid",
+    "stage_seconds": {
+      "requirements": 167,
+      "model": null,
+      "apply": null,
+      "verify": null
+    },
+    "comparison": {
+      "requirements": {
+        "evaluator_seconds": 226.013,
+        "reported_seconds": 167,
+        "delta_seconds": -59.013,
+        "status": "comparable"
+      },
+      "model": {
+        "evaluator_seconds": 411.234,
+        "reported_seconds": null,
+        "delta_seconds": null,
+        "status": "unknown"
+      },
+      "apply": {
+        "evaluator_seconds": null,
+        "reported_seconds": null,
+        "delta_seconds": null,
+        "status": "unknown"
+      },
+      "verify": {
+        "evaluator_seconds": null,
+        "reported_seconds": null,
+        "delta_seconds": null,
+        "status": "unknown"
+      }
+    }
+  },
+  "D2_human_interventions": 0,
+  "failure_attribution": {
+    "domainry-cli": 1
+  },
+  "diagnostic_failure_attribution": null,
+  "scoring_first_failure": {
+    "family": "model_plan",
+    "exit_code": 1,
+    "output_state": "repair_required"
+  },
+  "diagnostic_first_failure": null
+}

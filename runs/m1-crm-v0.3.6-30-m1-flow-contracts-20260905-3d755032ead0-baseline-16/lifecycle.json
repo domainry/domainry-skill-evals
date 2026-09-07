@@ -1,0 +1,63 @@
+{
+  "contract_version": "domainry-eval-run-lifecycle-v1",
+  "run_id": "m1-crm-v0.3.6-30-m1-flow-contracts-20260905-3d755032ead0-baseline-16",
+  "run_kind": "baseline",
+  "parent_run_id": null,
+  "state": "baseline_first_scoring_failure",
+  "measurement_complete": false,
+  "environment_valid": true,
+  "measurement_boundary": "baseline_first_failure_sealed",
+  "started_epoch": 1788609424.984511,
+  "ended_epoch": 1788610065.698588,
+  "budgets": {
+    "wall_clock_seconds": 3600.0,
+    "total_tokens": 5000000,
+    "cli_invocations": 40,
+    "cli_retries": 0
+  },
+  "usage": {
+    "wall_clock_seconds": 640.714,
+    "total_tokens": null,
+    "cli_invocations_started": 11,
+    "cli_invocations_captured": 11,
+    "cli_retries_started": 0
+  },
+  "termination": {
+    "family": "model_plan",
+    "exit_code": 1,
+    "output_state": "repair_required"
+  },
+  "freeze_manifest_sha256": "4f3c6e1a98a5036b3240371a8734e083fdc7f53886c9750f494fe2dc37df05cb",
+  "ephemeral_auth_staged": true,
+  "auth_cleanup_status": "removed",
+  "first_scoring_failure": {
+    "family": "model_plan",
+    "exit_code": 1,
+    "output_state": "repair_required"
+  },
+  "agent_result_state": null,
+  "agent_exit_code": 0,
+  "checker_exit_code": null,
+  "checker_gate": {
+    "ready": false,
+    "reason": "delivery_prerequisites_incomplete",
+    "missing": [
+      "agent_result:missing",
+      "model_plan:failed",
+      "apply_model:missing",
+      "apply_finalize:missing",
+      "verify:missing",
+      "verify_artifact:missing_or_unparseable",
+      "flow_evidence:missing_invalid_or_unparseable"
+    ]
+  },
+  "agent_ended_epoch": 1788610065.409392,
+  "agent_session_id": "01a0716d-f776-75e0-ad17-34d35f9a75e9",
+  "business_flow_evidence_source": "missing",
+  "business_flow_evidence_contract_valid": null,
+  "business_flow_evidence_sha256": null,
+  "business_flow_evidence_error": null,
+  "service_identity_before_sha256": "68cedf0fe324968046745c419e2df3185ba4d2c6feaed7d54106f560ba2bfa62",
+  "service_identity_after_sha256": "68cedf0fe324968046745c419e2df3185ba4d2c6feaed7d54106f560ba2bfa62",
+  "scorer_exit_code": 0
+}

@@ -1,0 +1,19 @@
+{
+  "family": "apply_model",
+  "command": "/bin/zsh -lc '/private/tmp/domainry-m1-plane-evolution-action-convergence-37/codex-home/skills/domainry-builder-v1/bin/domainry-cli apply model --json --project /private/tmp/domainry-m1-plane-evolution-action-convergence-37/project --go-module-path example.com/domainry-m1-crm/backend --service http://127.0.0.1:8283'",
+  "exit_code": 1,
+  "output": "error: create cache: mkdir /private/tmp/domainry-m1-plane-evolution-action-convergence-37/home/Library: operation not permitted",
+  "raw_output": "error: create cache: mkdir /private/tmp/domainry-m1-plane-evolution-action-convergence-37/home/Library: operation not permitted\n",
+  "stdout": null,
+  "stderr": null,
+  "output_streams_status": "aggregated_only",
+  "event_item_id": "item_4",
+  "event_line": 10,
+  "observed_started_epoch": 1788721007.3738382,
+  "observed_completed_epoch": 1788721008.382169,
+  "observed_started_event_line": 9,
+  "observed_completed_event_line": 10,
+  "duration_seconds": 1.008,
+  "timing_source": "agent-event-observations.jsonl",
+  "capture_file": "cli/001-apply_model.json"
+}

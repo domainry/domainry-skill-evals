@@ -1,0 +1,19 @@
+{
+  "candidate_id": "v0.3.6-39-m1-offline-closure-20260906+98a892895842",
+  "skill_name": "domainry-builder-v1",
+  "skill_root": "/private/tmp/domainry-m1-v39-offline-closure-baseline-21/codex-home/skills/domainry-builder-v1",
+  "cli": "/private/tmp/domainry-m1-v39-offline-closure-baseline-21/codex-home/skills/domainry-builder-v1/bin/domainry-cli",
+  "skill_version": "v0.3.6-39-m1-offline-closure-20260906",
+  "skill_identity_sha256": "ebd64d96025aeabc3ec803e2cef1d6330e670533269edbfc0dda8172909aaceb",
+  "package_metadata_sha256": "2846b12f75762906794027f2b0ea5bf909e5c0c405cdbe4d2f89803d602933e1",
+  "skill_tree_sha256": "98a892895842d38d7348af79f27e398a27fbbb12ada57516f49e6eb6b47d81f9",
+  "cli_binary_sha256": "4e472e45831fa83cb482d5afe8e9e22ccee35d5366092dd6b62cca2bd29f4961",
+  "runtime_api_contract_version": "runtime-domain-api-v1",
+  "runtime_api_contract_hash": "4fe655cbfd4fa0bc0b0c04c89b86926fc6aceb059c9fccf5b09eec9b459330f7",
+  "apply_target_flag": "--service",
+  "apply_target_value": "http://127.0.0.1:8283",
+  "apply_target_args": [
+    "--service",
+    "http://127.0.0.1:8283"
+  ]
+}

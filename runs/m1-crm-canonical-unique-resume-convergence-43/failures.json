@@ -1,0 +1,14 @@
+[
+  {
+    "stage": "apply_model",
+    "owner": null,
+    "note": "evaluator terminal state: convergence_first_scoring_failure",
+    "terminal_state": "convergence_first_scoring_failure",
+    "detail": {
+      "family": "apply_model",
+      "exit_code": 1,
+      "output_state": null
+    },
+    "attribution_status": "pending"
+  }
+]

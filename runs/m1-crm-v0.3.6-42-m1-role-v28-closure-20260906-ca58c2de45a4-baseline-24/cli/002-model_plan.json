@@ -1,0 +1,61 @@
+{
+  "family": "model_plan",
+  "command": "/bin/zsh -lc '/private/tmp/domainry-m1-v42-role-v28-baseline-24/codex-home/skills/domainry-builder-v1/bin/domainry-cli model plan --json --project /private/tmp/domainry-m1-v42-role-v28-baseline-24/project'",
+  "exit_code": 1,
+  "output": {
+    "artifact": ".domainry/builder/disposable/model-preflight-result.json",
+    "artifact_relative_to": "--project",
+    "contract_version": "domainry-model-preflight-envelope-v1",
+    "diagnostics": [
+      {
+        "code": "model.action_field_source_not_found",
+        "message": "Action sales_profile.deliver_identity input field display_name has Object-only constraints but no exact same-key source field in its Handler access closure",
+        "path": "backend/model/10-identity-org.json#modules/crm/features/crm_identity_org/actions/sales_profile.deliver_identity/input/display_name",
+        "file": "backend/model/10-identity-org.json",
+        "json_pointer": "/modules/crm/features/crm_identity_org/actions/sales_profile.deliver_identity/input/display_name",
+        "line": 134,
+        "column": 17,
+        "constraint": "model.action_field_source_not_found",
+        "actual": "text!;max_length=120",
+        "allowed_values": [
+          "text!"
+        ],
+        "repair_hint": "replace text!;max_length=120 with text! to keep this Action field standalone; otherwise rename the Action field and every invocation to an exact same-key Object field already present in handler.access",
+        "owner": "domainry-cli",
+        "stage": "model_loader",
+        "ledger_path": "backend/model/10-identity-org.json#modules/crm/features/crm_identity_org/actions/sales_profile.deliver_identity/input/display_name",
+        "repair_facts": {
+          "action": "sales_profile.deliver_identity",
+          "actual": "text!;max_length=120",
+          "allowed_values": [
+            "text!"
+          ],
+          "artifact_path": ".domainry/builder/disposable/model-preflight-result.json",
+          "artifact_relative_to": "--project",
+          "direction": "input",
+          "field": "display_name",
+          "operation": "replace",
+          "repair_hint": "replace text!;max_length=120 with text! to keep this Action field standalone; otherwise rename the Action field and every invocation to an exact same-key Object field already present in handler.access",
+          "source_file": "backend/model/10-identity-org.json"
+        }
+      }
+    ],
+    "identity": "c091114d5e54957826f340180fa79f57f3186c0557b2e5c5094b08238ea75fec",
+    "issue_count": 1,
+    "sha256": "7392e900a87ce08df93655661ec364d0a2d04b7b938e4f0dc2c64df183ec0aa7",
+    "state": "repair_required"
+  },
+  "raw_output": "backend/model/10-identity-org.json:134:17: model.action_field_source_not_found: Action sales_profile.deliver_identity input field display_name has Object-only constraints but no exact same-key source field in its Handler access closure\nerror: Builder validation found 1 issue(s)\n{\"artifact\":\".domainry/builder/disposable/model-preflight-result.json\",\"artifact_relative_to\":\"--project\",\"contract_version\":\"domainry-model-preflight-envelope-v1\",\"diagnostics\":[{\"code\":\"model.action_field_source_not_found\",\"message\":\"Action sales_profile.deliver_identity input field display_name has Object-only constraints but no exact same-key source field in its Handler access closure\",\"path\":\"backend/model/10-identity-org.json#modules/crm/features/crm_identity_org/actions/sales_profile.deliver_identity/input/display_name\",\"file\":\"backend/model/10-identity-org.json\",\"json_pointer\":\"/modules/crm/features/crm_identity_org/actions/sales_profile.deliver_identity/input/display_name\",\"line\":134,\"column\":17,\"constraint\":\"model.action_field_source_not_found\",\"actual\":\"text!;max_length=120\",\"allowed_values\":[\"text!\"],\"repair_hint\":\"replace text!;max_length=120 with text! to keep this Action field standalone; otherwise rename the Action field and every invocation to an exact same-key Object field already present in handler.access\",\"owner\":\"domainry-cli\",\"stage\":\"model_loader\",\"ledger_path\":\"backend/model/10-identity-org.json#modules/crm/features/crm_identity_org/actions/sales_profile.deliver_identity/input/display_name\",\"repair_facts\":{\"action\":\"sales_profile.deliver_identity\",\"actual\":\"text!;max_length=120\",\"allowed_values\":[\"text!\"],\"artifact_path\":\".domainry/builder/disposable/model-preflight-result.json\",\"artifact_relative_to\":\"--project\",\"direction\":\"input\",\"field\":\"display_name\",\"operation\":\"replace\",\"repair_hint\":\"replace text!;max_length=120 with text! to keep this Action field standalone; otherwise rename the Action field and every invocation to an exact same-key Object field already present in handler.access\",\"source_file\":\"backend/model/10-identity-org.json\"}}],\"identity\":\"c091114d5e54957826f340180fa79f57f3186c0557b2e5c5094b08238ea75fec\",\"issue_count\":1,\"sha256\":\"7392e900a87ce08df93655661ec364d0a2d04b7b938e4f0dc2c64df183ec0aa7\",\"state\":\"repair_required\"}\n",
+  "stdout": null,
+  "stderr": null,
+  "output_streams_status": "aggregated_only",
+  "event_item_id": "item_23",
+  "event_line": 47,
+  "observed_started_epoch": 1788658025.533847,
+  "observed_completed_epoch": 1788658026.287148,
+  "observed_started_event_line": 46,
+  "observed_completed_event_line": 47,
+  "duration_seconds": 0.753,
+  "timing_source": "agent-event-observations.jsonl",
+  "capture_file": "cli/002-model_plan.json"
+}

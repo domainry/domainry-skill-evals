@@ -1,0 +1,100 @@
+{
+  "contract_version": "domainry-eval-run-lifecycle-v1",
+  "run_id": "m1-crm-v0.3.6-41-m1-plan-coverage-20260906-68d397b10a96-baseline-23",
+  "run_kind": "baseline",
+  "parent_run_id": null,
+  "state": "baseline_first_scoring_failure",
+  "measurement_complete": false,
+  "environment_valid": true,
+  "measurement_boundary": "baseline_first_failure_sealed",
+  "started_epoch": 1788651243.9908311,
+  "ended_epoch": 1788651902.6887722,
+  "budgets": {
+    "wall_clock_seconds": 3600.0,
+    "total_tokens": 5000000,
+    "cli_invocations": 40,
+    "cli_retries": 0
+  },
+  "usage": {
+    "wall_clock_seconds": 658.698,
+    "total_tokens": null,
+    "token_usage": {
+      "input_tokens": null,
+      "cached_input_tokens": null,
+      "non_cached_input_tokens": null,
+      "output_tokens": null,
+      "reasoning_output_tokens": null,
+      "budget_tokens": null,
+      "budget_basis": "provider_cumulative_input_plus_output",
+      "cached_input_included_in_input": true,
+      "reasoning_output_included_in_output": true,
+      "observability_status": "unavailable"
+    },
+    "cli_invocations_started": 2,
+    "cli_invocations_captured": 2,
+    "cli_retries_started": 0,
+    "diagnostic_cli_invocations_started": 0,
+    "diagnostic_cli_invocations_captured": 0,
+    "diagnostic_cli_completions": 0,
+    "diagnostic_cli_failures": 0,
+    "diagnostic_cli_retries": 0
+  },
+  "termination": {
+    "family": "model_plan",
+    "exit_code": 1,
+    "output_state": "repair_required"
+  },
+  "first_failure": {
+    "failure_kind": "scoring",
+    "family": "model_plan",
+    "exit_code": 1,
+    "output_state": "repair_required"
+  },
+  "scoring_first_failure": {
+    "family": "model_plan",
+    "exit_code": 1,
+    "output_state": "repair_required"
+  },
+  "diagnostic_first_failure": null,
+  "first_scoring_failure": {
+    "family": "model_plan",
+    "exit_code": 1,
+    "output_state": "repair_required"
+  },
+  "diagnostic_cli": {
+    "invocations_total": 0,
+    "completed_total": 0,
+    "failed_total": 0,
+    "retries_total": 0,
+    "latest": null,
+    "first_failure": null
+  },
+  "freeze_manifest_sha256": "a14b6825ba8b216d1e4d2678e509a20bd387d935713dc3b73040a2523fcaf187",
+  "ephemeral_auth_staged": true,
+  "auth_cleanup_status": "removed",
+  "agent_result_state": null,
+  "agent_exit_code": 0,
+  "checker_exit_code": null,
+  "checker_gate": {
+    "ready": false,
+    "reason": "delivery_prerequisites_incomplete",
+    "missing": [
+      "agent_result:missing",
+      "model_plan:failed",
+      "apply_model:missing",
+      "apply_finalize:missing",
+      "verify:missing",
+      "verify_artifact:missing_or_unparseable",
+      "flow_evidence:missing_invalid_or_unparseable"
+    ]
+  },
+  "agent_ended_epoch": 1788651902.419613,
+  "agent_session_id": "01a073ec-13f7-79b0-b036-42aa34891e1d",
+  "business_flow_evidence_source": "missing",
+  "business_flow_evidence_contract_valid": null,
+  "business_flow_evidence_sha256": null,
+  "business_flow_evidence_error": null,
+  "service_identity_before_sha256": "31f376483b04965efeac9b74aaf2600a0543b20657feb270e0e9ce040f04d453",
+  "service_identity_after_sha256": "31f376483b04965efeac9b74aaf2600a0543b20657feb270e0e9ce040f04d453",
+  "scorer_exit_code": 0
+}

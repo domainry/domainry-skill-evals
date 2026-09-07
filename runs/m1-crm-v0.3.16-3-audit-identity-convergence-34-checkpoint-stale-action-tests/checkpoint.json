@@ -1,0 +1,33 @@
+{
+  "contract_version": "domainry-eval-checkpoint-v1",
+  "source_run_id": "m1-crm-v0.3.16-3-audit-identity-convergence-34",
+  "checkpoint_kind": "post_action_test_scaffold_cleanup_after_project_check_error",
+  "measurement_class": "checkpoint_convergence_not_baseline",
+  "baseline_eligibility": false,
+  "archive": {
+    "path": "checkpoint-project.tar.gz",
+    "sha256": "2a1324a635d9baf509c86626c2b9bf9f42b73f9af83d1217a299d600e4230ffa"
+  },
+  "candidate": {
+    "candidate_id": "v0.3.16-3-m1-audit-identity-20260906+554bd6a0a04e",
+    "skill_tree_sha256": "554bd6a0a04e590aa9c1ecb5cab5c7b0ee1304e618e101bc85d56166a592d78c",
+    "cli_binary_sha256": "d8c6da6938262183720ddf81d9cfa39ee5a65be69ff06a1e40c3ac2e69467af4"
+  },
+  "invalidating_error": {
+    "agent_session_id": "01a07776-958c-7ad1-abee-933790c10a55",
+    "agent_event_item_id": "item_45",
+    "event_line": 89,
+    "command_sha256": "6550f9cb997801884af71078007fd4c73130bbd917a6393d1ba1bfb036c6d261",
+    "exit_code": 1,
+    "classification": "project_business_action_test_scaffolds_stale",
+    "owner": "agent",
+    "domainry_foundation_defect": false,
+    "diagnostic": "Action validation found three project-source tests that still used generated nil/not_implemented scaffolds after their handlers had been implemented."
+  },
+  "resume_boundary": {
+    "stage": "apply",
+    "next_node": "continue from the corrected Action tests into the real Runtime BF01-BF08 journey and delivery verification",
+    "implementation_packet": "095dbd52c98d456012367dfda8cff04d4b601bc868c9ed470a4d7c5af851ac9e",
+    "rule": "This is a business-delivery omission in project source; do not route it into Domainry foundation code."
+  }
+}

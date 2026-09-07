@@ -1,0 +1,79 @@
+{
+  "family": "verify",
+  "command": "/bin/zsh -lc 'DOMAINRY_EVAL_SQLITE_PATH=\"$DOMAINRY_EVAL_SQLITE_PATH\" /private/tmp/domainry-m1-v44-evolution-control-baseline-26/codex-home/skills/domainry-builder-v1/bin/domainry-cli verify --json --project /private/tmp/domainry-m1-v44-evolution-control-baseline-26/project --address 127.0.0.1:19286'",
+  "exit_code": 1,
+  "output": {
+    "contract_version": "domainry-project-verify-v2",
+    "error": "verify initial Runtime start: managed Runtime process failed: Runtime exited before health became ready; inspect /private/tmp/domainry-m1-v44-evolution-control-baseline-26/project/.domainry/builder/runtime/runtime.log",
+    "state": "failed",
+    "telemetry": {
+      "contract_version": "domainry-verify-telemetry-v1",
+      "elapsed_ms": 146868,
+      "cache": {
+        "signed_runtime_package": false,
+        "verification_receipt": false
+      },
+      "cache_misses": {
+        "signed_runtime_package": "current V6 package receipt is missing: lstat /private/tmp/domainry-m1-v44-evolution-control-baseline-26/project/.domainry/builder/receipts/package.json: no such file or directory",
+        "verification_receipt": "verification receipt is missing"
+      },
+      "stages": [
+        {
+          "name": "prepare isolated initial Workspace authority",
+          "status": "done",
+          "elapsed_ms": 0,
+          "owner": "domainry-runtime"
+        },
+        {
+          "name": "validate reusable verification and signed Runtime package",
+          "status": "done",
+          "elapsed_ms": 0,
+          "owner": "domainry-runtime"
+        },
+        {
+          "name": "run structural checks and complete backend tests",
+          "status": "done",
+          "elapsed_ms": 71435,
+          "owner": "domainry-builder"
+        },
+        {
+          "name": "build and sign exact Runtime package",
+          "status": "done",
+          "elapsed_ms": 71273,
+          "owner": "domainry-runtime"
+        },
+        {
+          "name": "compile managed Runtime business-flow tests",
+          "status": "done",
+          "elapsed_ms": 1252,
+          "owner": "domainry-runtime"
+        },
+        {
+          "name": "start initial managed Runtime",
+          "status": "failed",
+          "elapsed_ms": 1928,
+          "owner": "domainry-runtime"
+        }
+      ],
+      "first_failure": {
+        "name": "start initial managed Runtime",
+        "status": "failed",
+        "elapsed_ms": 1928,
+        "owner": "domainry-runtime"
+      }
+    }
+  },
+  "raw_output": "[domainry] verify: run structural checks and complete backend tests done (1m11.435s)\n[domainry] verify: build and sign exact Runtime package...\n[domainry] verify: build and sign exact Runtime package done (1m11.273s)\n[domainry] verify: compile managed Runtime business-flow tests...\n[domainry] verify: compile managed Runtime business-flow tests done (1.252s)\n[domainry] verify: start initial managed Runtime...\n[domainry] verify: start initial managed Runtime failed (1.928s)\n{\"contract_version\":\"domainry-project-verify-v2\",\"error\":\"verify initial Runtime start: managed Runtime process failed: Runtime exited before health became ready; inspect /private/tmp/domainry-m1-v44-evolution-control-baseline-26/project/.domainry/builder/runtime/runtime.log\",\"state\":\"failed\",\"telemetry\":{\"contract_version\":\"domainry-verify-telemetry-v1\",\"elapsed_ms\":146868,\"cache\":{\"signed_runtime_package\":false,\"verification_receipt\":false},\"cache_misses\":{\"signed_runtime_package\":\"current V6 package receipt is missing: lstat /private/tmp/domainry-m1-v44-evolution-control-baseline-26/project/.domainry/builder/receipts/package.json: no such file or directory\",\"verification_receipt\":\"verification receipt is missing\"},\"stages\":[{\"name\":\"prepare isolated initial Workspace authority\",\"status\":\"done\",\"elapsed_ms\":0,\"owner\":\"domainry-runtime\"},{\"name\":\"validate reusable verification and signed Runtime package\",\"status\":\"done\",\"elapsed_ms\":0,\"owner\":\"domainry-runtime\"},{\"name\":\"run structural checks and complete backend tests\",\"status\":\"done\",\"elapsed_ms\":71435,\"owner\":\"domainry-builder\"},{\"name\":\"build and sign exact Runtime package\",\"status\":\"done\",\"elapsed_ms\":71273,\"owner\":\"domainry-runtime\"},{\"name\":\"compile managed Runtime business-flow tests\",\"status\":\"done\",\"elapsed_ms\":1252,\"owner\":\"domainry-runtime\"},{\"name\":\"start initial managed Runtime\",\"status\":\"failed\",\"elapsed_ms\":1928,\"owner\":\"domainry-runtime\"}],\"first_failure\":{\"name\":\"start initial managed Runtime\",\"status\":\"failed\",\"elapsed_ms\":1928,\"owner\":\"domainry-runtime\"}}}\nerror: verify initial Runtime start: managed Runtime process failed: Runtime exited before health became ready; inspect /private/tmp/domainry-m1-v44-evolution-control-baseline-26/project/.domainry/builder/runtime/runtime.log\n",
+  "stdout": null,
+  "stderr": null,
+  "output_streams_status": "aggregated_only",
+  "event_item_id": "item_93",
+  "event_line": 177,
+  "observed_started_epoch": 1788669474.437354,
+  "observed_completed_epoch": 1788669621.286072,
+  "observed_started_event_line": 174,
+  "observed_completed_event_line": 177,
+  "duration_seconds": 146.849,
+  "timing_source": "agent-event-observations.jsonl",
+  "capture_file": "cli/005-verify.json"
+}

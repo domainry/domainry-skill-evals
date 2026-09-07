@@ -1,0 +1,73 @@
+[
+  {
+    "stage": "model_loader",
+    "owner": "domainry-cli",
+    "note": "Action sales_profile.deliver_identity input field display_name has Object-only constraints but no exact same-key source field in its Handler access closure",
+    "terminal_state": "baseline_first_scoring_failure",
+    "attribution_status": "attributed",
+    "diagnostic": {
+      "code": "model.action_field_source_not_found",
+      "message": "Action sales_profile.deliver_identity input field display_name has Object-only constraints but no exact same-key source field in its Handler access closure",
+      "path": "backend/model/10-identity-org.json#modules/crm/features/crm_identity_org/actions/sales_profile.deliver_identity/input/display_name",
+      "file": "backend/model/10-identity-org.json",
+      "json_pointer": "/modules/crm/features/crm_identity_org/actions/sales_profile.deliver_identity/input/display_name",
+      "line": 134,
+      "column": 17,
+      "constraint": "model.action_field_source_not_found",
+      "actual": "text!;max_length=120",
+      "allowed_values": [
+        "text!"
+      ],
+      "repair_hint": "replace text!;max_length=120 with text! to keep this Action field standalone; otherwise rename the Action field and every invocation to an exact same-key Object field already present in handler.access",
+      "owner": "domainry-cli",
+      "stage": "model_loader",
+      "ledger_path": "backend/model/10-identity-org.json#modules/crm/features/crm_identity_org/actions/sales_profile.deliver_identity/input/display_name",
+      "repair_facts": {
+        "action": "sales_profile.deliver_identity",
+        "actual": "text!;max_length=120",
+        "allowed_values": [
+          "text!"
+        ],
+        "artifact_path": ".domainry/builder/disposable/model-preflight-result.json",
+        "artifact_relative_to": "--project",
+        "direction": "input",
+        "field": "display_name",
+        "operation": "replace",
+        "repair_hint": "replace text!;max_length=120 with text! to keep this Action field standalone; otherwise rename the Action field and every invocation to an exact same-key Object field already present in handler.access",
+        "source_file": "backend/model/10-identity-org.json"
+      }
+    },
+    "detail": {
+      "code": "model.action_field_source_not_found",
+      "message": "Action sales_profile.deliver_identity input field display_name has Object-only constraints but no exact same-key source field in its Handler access closure",
+      "path": "backend/model/10-identity-org.json#modules/crm/features/crm_identity_org/actions/sales_profile.deliver_identity/input/display_name",
+      "file": "backend/model/10-identity-org.json",
+      "json_pointer": "/modules/crm/features/crm_identity_org/actions/sales_profile.deliver_identity/input/display_name",
+      "line": 134,
+      "column": 17,
+      "constraint": "model.action_field_source_not_found",
+      "actual": "text!;max_length=120",
+      "allowed_values": [
+        "text!"
+      ],
+      "repair_hint": "replace text!;max_length=120 with text! to keep this Action field standalone; otherwise rename the Action field and every invocation to an exact same-key Object field already present in handler.access",
+      "owner": "domainry-cli",
+      "stage": "model_loader",
+      "ledger_path": "backend/model/10-identity-org.json#modules/crm/features/crm_identity_org/actions/sales_profile.deliver_identity/input/display_name",
+      "repair_facts": {
+        "action": "sales_profile.deliver_identity",
+        "actual": "text!;max_length=120",
+        "allowed_values": [
+          "text!"
+        ],
+        "artifact_path": ".domainry/builder/disposable/model-preflight-result.json",
+        "artifact_relative_to": "--project",
+        "direction": "input",
+        "field": "display_name",
+        "operation": "replace",
+        "repair_hint": "replace text!;max_length=120 with text! to keep this Action field standalone; otherwise rename the Action field and every invocation to an exact same-key Object field already present in handler.access",
+        "source_file": "backend/model/10-identity-org.json"
+      }
+    }
+  }
+]

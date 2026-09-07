@@ -1,0 +1,9 @@
+停在 finalization 后的 full-tree gate，项目已原样保留。
+
+- 模型修复、`model plan`、evolution review/reapply 均成功。
+- BF05–BF08 已实现；focused tests、`project check`、business-flow compile 均通过。
+- `apply finalize` 退出码为 0，但生成的 `go.mod` 引用了本地 module proxy 中不存在的 Domainry 私有版本。Go 回退公共 proxy 后报 `unknown revision`。
+- `127.0.0.1:8283` 可达（返回 401），因此归类为 CLI/platform 的依赖制品闭包问题，不是业务实现或服务不可达。
+- full-tree 未通过，故未运行 stale `verify`；BF01–BF08 尚未取得两阶段 Runtime 成功证据。
+
+EVAL_RESULT={"state":"not_done"}

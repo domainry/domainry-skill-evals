@@ -1,0 +1,73 @@
+{
+  "contract_version": "domainry-eval-checkpoint-v1",
+  "source_run_id": "m1-crm-foundation-organization-unit-convergence-36",
+  "checkpoint_kind": "post_implementation_ready_plane_evolution_added_action_lifecycle_gap",
+  "measurement_class": "checkpoint_convergence_not_baseline",
+  "baseline_eligibility": false,
+  "archive": {
+    "path": "checkpoint-project.tar.gz",
+    "sha256": "663045dcdf6f6f4f31b3f35624d63aa50e4a95e843c08ec7db26f643fdf942d3"
+  },
+  "archive_policy": {
+    "git_history_included": false,
+    "runtime_state_included": false,
+    "sqlite_included": false,
+    "lock_files_included": false,
+    "appledouble_included": false
+  },
+  "candidate": {
+    "candidate_id": "v0.3.16-5-m1-org-unit-20260907+9aeea6610bf4",
+    "skill_tree_sha256": "9aeea6610bf41f8467d491049782b95c4e1b4e14a9ebab1963e64a304a0c7ed8",
+    "cli_binary_sha256": "d5c872905b2b8545418e3f19457681630b8d92c8ba868164706492f0aec710da"
+  },
+  "invalidating_error": {
+    "agent_session_id": "01a077e4-aae5-71c2-933d-dfba276c7b3c",
+    "agent_event_item_id": "item_25",
+    "event_line": 57,
+    "exit_code": 1,
+    "classification": "plane_reviewed_evolution_added_action_implementation_stage_unreachable",
+    "owner": "domainry-plane",
+    "domainry_foundation_defect": true,
+    "diagnostic": "For a finalized baseline that adds a project-owned Action, reviewed evolution invokes staged source finalization before the public CLI can return the new implementation packet; the fail-closed seed therefore makes the first reviewed apply fail even though project implementation remains the correct owner."
+  },
+  "captured_progress": {
+    "agent_event_item_id": "item_51",
+    "event_line": 102,
+    "state": "implementation_ready",
+    "delivery_id": "sha256:a1a7aed4a3ddc21d59f2cedb8250e159c76db90261e3e0584f2f963634d7e937",
+    "implementation_packet_sha256": "23711415ddf3811700cfb2db87e85ed2aa0639025e9fa50230bd6f4f668d3ee5",
+    "business_handler_status": "sales_person_profile.provision_department uses the generated typed OrganizationUnits.Create capability and preserves Runtime-owned workspace, parent, authorization, idempotency, and transaction boundaries",
+    "pending": [
+      "run the packet-prescribed focused Action tests and project source check",
+      "compile and complete the business-flow harness for the changed department delivery path",
+      "apply finalize",
+      "run full tree and managed verify"
+    ],
+    "measurement_reuse": "none; only project source, model, and delivery-working-state files are retained, while all prior managed Runtime cohort state is excluded"
+  },
+  "blocking_condition": {
+    "classification": "plane_reviewed_evolution_added_action_lifecycle_gap",
+    "domainry_foundation_gap": true,
+    "owners": [
+      "domainry-plane"
+    ],
+    "details": [
+      "Project Action handler ownership is correct; the defect is only the ordering and public reachability of the evolution implementation stage.",
+      "The fixed flow must activate an implementation-required state and packet before source finalization, then retain the normal fail-closed finalize gate after project source is implemented."
+    ],
+    "prohibited_repairs": [
+      "do not remove the project-owned Handler or make Runtime implement CRM business orchestration",
+      "do not weaken or bypass the fail-closed source finalizer",
+      "do not restore a retired implicit action-source write command",
+      "do not increase store quota as a substitute for department delivery",
+      "do not label the Workspace root company or a store as a department",
+      "do not add CRM-specific foundation behavior or a business registry that copies the Identity organization tree"
+    ]
+  },
+  "resume_boundary": {
+    "stage": "apply",
+    "next_node": "after a compatible Plane candidate with the reviewed-evolution implementation-stage fix is installed, restore this implementation-ready project, preserve the typed provision_department Handler and its paired tests, rebase model/apply only if the changed candidate requires it, then continue with focused tests, business-flow completion, apply finalize, and managed verify",
+    "prior_delivery_id": "sha256:a1a7aed4a3ddc21d59f2cedb8250e159c76db90261e3e0584f2f963634d7e937",
+    "rule": "Do not repeat accepted requirements or unrelated model work; do not resurrect the deleted store-backed department registry; do not reuse Runtime databases, Git history, Agent sessions, locks, or stale verification/finalization receipts."
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "contract_version": "domainry-eval-checkpoint-v1",
+  "source_run_id": "m1-crm-v0.3.16-3-audit-identity-convergence-34",
+  "checkpoint_kind": "pre_semantic_workaround_foundation_organization_unit_delivery_gap",
+  "measurement_class": "checkpoint_convergence_not_baseline",
+  "baseline_eligibility": false,
+  "manifest_sha256": "804c2fa67ab6f368aaaa37672888664eb64f26c77169ce127af52f771d4b8e04",
+  "archive_sha256": "6aab8c8c3f5c8b02a8360eb4853c8c7ab61e429adc96cf4066810e0a6923cb94",
+  "restored_file_count": 555,
+  "ignored_appledouble_member_count": 0,
+  "git_history_restored": false,
+  "sqlite_restored": false
+}

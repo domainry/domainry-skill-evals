@@ -1,0 +1,114 @@
+{
+  "contract_version": "domainry-eval-stage-timing-v1",
+  "boundary_rule": "evaluator-cli-transition-v1",
+  "stage_order": [
+    "discovery",
+    "plan",
+    "apply",
+    "finalize",
+    "verify"
+  ],
+  "status": "partial",
+  "stages": {
+    "discovery": {
+      "started_epoch": null,
+      "ended_epoch": null,
+      "seconds": null,
+      "status": "unknown",
+      "start_provenance": null,
+      "end_provenance": null
+    },
+    "plan": {
+      "started_epoch": null,
+      "ended_epoch": null,
+      "seconds": null,
+      "status": "unknown",
+      "start_provenance": null,
+      "end_provenance": null
+    },
+    "apply": {
+      "started_epoch": 1788721336.57837,
+      "ended_epoch": 1788721946.926338,
+      "seconds": 610.348,
+      "status": "observed",
+      "start_provenance": {
+        "source": "agent-event-observations.jsonl",
+        "capture_file": "cli/001-apply_model.json",
+        "family": "apply_model",
+        "event": "started",
+        "event_item_id": "item_5",
+        "event_line": 10,
+        "boundary_reason": "stage_cli_started"
+      },
+      "end_provenance": {
+        "source": "agent-event-observations.jsonl",
+        "capture_file": "cli/005-apply_finalize.json",
+        "family": "apply_finalize",
+        "event": "started",
+        "event_item_id": "item_57",
+        "event_line": 106,
+        "boundary_reason": "next_stage_cli_started"
+      }
+    },
+    "finalize": {
+      "started_epoch": 1788721946.926338,
+      "ended_epoch": 1788722083.094568,
+      "seconds": 136.168,
+      "status": "observed",
+      "start_provenance": {
+        "source": "agent-event-observations.jsonl",
+        "capture_file": "cli/005-apply_finalize.json",
+        "family": "apply_finalize",
+        "event": "started",
+        "event_item_id": "item_57",
+        "event_line": 106,
+        "boundary_reason": "stage_cli_started"
+      },
+      "end_provenance": {
+        "source": "agent-event-observations.jsonl",
+        "capture_file": "cli/006-verify.json",
+        "family": "verify",
+        "event": "started",
+        "event_item_id": "item_67",
+        "event_line": 124,
+        "boundary_reason": "next_stage_cli_started"
+      }
+    },
+    "verify": {
+      "started_epoch": 1788722083.094568,
+      "ended_epoch": 1788722853.7661362,
+      "seconds": 770.672,
+      "status": "observed",
+      "start_provenance": {
+        "source": "agent-event-observations.jsonl",
+        "capture_file": "cli/006-verify.json",
+        "family": "verify",
+        "event": "started",
+        "event_item_id": "item_67",
+        "event_line": 124,
+        "boundary_reason": "stage_cli_started"
+      },
+      "end_provenance": {
+        "source": "agent-event-observations.jsonl",
+        "capture_file": "cli/013-verify.json",
+        "family": "verify",
+        "event": "completed",
+        "event_item_id": "item_105",
+        "event_line": 194,
+        "boundary_reason": "terminal_stage_cli_completed"
+      }
+    }
+  },
+  "critical_path": {
+    "observed_seconds": 1517.188,
+    "unknown_stages": [
+      "discovery",
+      "plan"
+    ],
+    "hotspot": {
+      "stage": "verify",
+      "seconds": 770.672
+    }
+  },
+  "diagnostic_intervals": []
+}

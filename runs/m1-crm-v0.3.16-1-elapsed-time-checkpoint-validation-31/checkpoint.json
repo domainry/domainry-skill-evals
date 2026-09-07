@@ -1,0 +1,80 @@
+{
+  "contract_version": "domainry-eval-checkpoint-v1",
+  "source_run_id": "m1-crm-v0.3.16-1-elapsed-time-checkpoint-validation-31",
+  "parent_checkpoint_run_id": "m1-crm-v0.3.6-53-runtime-baseline-pattern-20260906-37d309b4d22d-baseline-30",
+  "checkpoint_kind": "post_finalize_full_tree_dependency_closure_failure",
+  "measurement_class": "checkpoint_convergence_not_baseline",
+  "live_project_path": "/private/tmp/domainry-m1-v316-checkpoint-validation-31/project",
+  "archive": {
+    "path": "checkpoint-project.tar.gz",
+    "sha256": "b255ff2e7fd328c0f75044cef64f3bde0888819c1e2e14e85e14b06742123c3c"
+  },
+  "candidate": {
+    "candidate_id": "v0.3.16-1-m1-elapsed-time-20260906+70ebb10e1851",
+    "skill_tree_sha256": "70ebb10e18517fa9c7d9742693c04eaa04a327737ac0dc7a1c27953b7b786cfa",
+    "cli_binary_sha256": "35cbdd434e8a19ec08671237122a1fb0668069193c93df04bae8a50e84176220",
+    "auto_update_contract": "preserved"
+  },
+  "authoritative_artifacts": {
+    "model": {
+      "path": "project/backend/model/crm.json",
+      "sha256": "14292c2892843bbf4907fa22bee95f0a77aa6df427a71e02d3f1aa638ee58cdd"
+    },
+    "go_mod": {
+      "path": "project/backend/go.mod",
+      "sha256": "21a2e6e92e5589a2f68ddfe30b03a84cef0c881a68eae791a592c161ad3d3ddc"
+    },
+    "finalization_receipt": {
+      "path": "project/.domainry/builder/receipts/finalization.json",
+      "sha256": "4fc01c3cf560726bdaf42bb4c86f821c37dc55f402abb3571e40c6a1eaae76ba"
+    },
+    "bf05": {
+      "path": "project/backend/tests/businessflow/bf05_test.go",
+      "sha256": "fcbe5d1ce15e4ccd72948299143013af0de4682dece2257b34329e1d0e6c4ee5"
+    },
+    "bf06": {
+      "path": "project/backend/tests/businessflow/bf06_test.go",
+      "sha256": "25333c3f14dcf00700e996c731baa355f203cf895855d2ae3dfec9f2a04302f6"
+    },
+    "bf07": {
+      "path": "project/backend/tests/businessflow/bf07_test.go",
+      "sha256": "7a73a0248f870fd1a173b1788ec16854dad7b5fa53476946f99d1517a57549f7"
+    },
+    "bf08": {
+      "path": "project/backend/tests/businessflow/bf08_test.go",
+      "sha256": "87f9bd9f8c3938dae6cb9a1b01d1abc5ea2261c227f40dc0130a52c167cc3078"
+    }
+  },
+  "completed_after_resume": [
+    "repair Workflow evaluation_time binding to $workflow.evaluation_time",
+    "model plan with one expected update and zero diagnostics",
+    "evolution audit review and reapply",
+    "preserve all 11 Action implementations and tests",
+    "BF05",
+    "BF06",
+    "BF07",
+    "BF08",
+    "Action focused tests",
+    "project check",
+    "business-flow compile",
+    "apply finalize"
+  ],
+  "resume_boundary": {
+    "stage": "verify",
+    "next_node": "apply the Builder hermetic Go-environment repair, rerun the packet full-tree gate, then full verify without editing project source",
+    "failed_command_family": "full_tree",
+    "owner": "cli_platform",
+    "diagnostic": "the packet command set GOPROXY but inherited host GOPRIVATE/GONOPROXY=github.com/domainry/*, so Go bypassed the complete local proxy and public/direct resolution returned unknown revision",
+    "reproduction": {
+      "inherited_host_go_environment": "full-tree fails with Domainry pseudo-version unknown revision",
+      "same_archive_with_GONOPROXY_none_and_VCS_disabled": "full-tree passes",
+      "local_proxy_closure": "complete for the final build list; the earlier missing_examples probe was invalid"
+    }
+  },
+  "observed_non_platform_command_errors": [
+    "first apply model invocation omitted --service and reached the default remote target",
+    "first apply finalize invocation incorrectly added unsupported --service",
+    "one read-only rg probe returned exit 1 because it found no matches"
+  ],
+  "rule": "Preserve this archive unchanged. After the owning platform repair, restore into a new working copy with a fresh SQLite cohort and continue from the full-tree gate. This convergence evidence is never a one-shot baseline."
+}

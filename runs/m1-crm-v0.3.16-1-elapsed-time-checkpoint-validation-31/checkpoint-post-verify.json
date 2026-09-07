@@ -1,0 +1,91 @@
+{
+  "contract_version": "domainry-eval-checkpoint-v1",
+  "source_run_id": "m1-crm-v0.3.16-1-elapsed-time-checkpoint-validation-31",
+  "parent_checkpoint_run_id": "m1-crm-v0.3.6-53-runtime-baseline-pattern-20260906-37d309b4d22d-baseline-30",
+  "checkpoint_kind": "post_verify_success",
+  "measurement_class": "checkpoint_convergence_not_baseline",
+  "live_project_path": "/private/tmp/domainry-m1-v316-checkpoint-validation-31/project",
+  "archive": {
+    "path": "checkpoint-project-post-verify.tar.gz",
+    "sha256": "d3416026760cdae25a50a6e4fa46ed3d91d86089dbb55657da41356f50d189d2"
+  },
+  "candidate": {
+    "candidate_id": "v0.3.16-1-m1-elapsed-time-20260906+70ebb10e1851",
+    "skill_tree_sha256": "70ebb10e18517fa9c7d9742693c04eaa04a327737ac0dc7a1c27953b7b786cfa",
+    "cli_binary_sha256": "35cbdd434e8a19ec08671237122a1fb0668069193c93df04bae8a50e84176220",
+    "auto_update_contract": "preserved"
+  },
+  "foundation_repairs": [
+    {
+      "task_id": "01a076bb-7d63-7b32-bab2-7906a31b758d",
+      "owner": "domainry-plane",
+      "classification": "generic_cli_platform",
+      "result": "implemented hermetic Go environment and complete private-module proxy closure validation; checkpoint-compatible validation passed"
+    }
+  ],
+  "business_source_repairs": [
+    {
+      "path": "project/backend/tests/businessflow/bf01_test.go",
+      "classification": "business_source",
+      "repair": "gofmt only",
+      "sha256": "fde482a400ed927c1585f386cece5218f424fd995dcc58daded09a76b2038b34"
+    }
+  ],
+  "authoritative_artifacts": {
+    "model": {
+      "path": "project/backend/model/crm.json",
+      "sha256": "14292c2892843bbf4907fa22bee95f0a77aa6df427a71e02d3f1aa638ee58cdd"
+    },
+    "go_mod": {
+      "path": "project/backend/go.mod",
+      "sha256": "21a2e6e92e5589a2f68ddfe30b03a84cef0c881a68eae791a592c161ad3d3ddc"
+    },
+    "finalization_receipt": {
+      "path": "project/.domainry/builder/receipts/finalization.json",
+      "sha256": "bffd8e54ff8b49f1dfd55100660f727d9d45d876967bd17693c9f8f6a48e4c80",
+      "receipt_sha256": "9a205659a02029071afda43db2cfd213320622f446aa58d9c9480edec7c6f15e"
+    },
+    "verification_receipt": {
+      "path": "project/.domainry/builder/receipts/verification.json",
+      "sha256": "3618613213393ebec8c1e30dbb3cf7b4347c770b59afb5f5fbaca26825fc363e",
+      "receipt_sha256": "63681aed50d23709f07e4c7db9527b3728bac3f458684fa6f73faa8b17f6b5bf"
+    },
+    "package_receipt": {
+      "path": "project/.domainry/builder/receipts/package.json",
+      "sha256": "1e6c7ba4481b898139a6285fa8d6f811af5f550bffef682717d724f694bfe625",
+      "receipt_sha256": "1eb616ac81c7ea2eee4a10966bc8a67ec5d829206ad33567da0c7b6d01babd5c",
+      "manifest_sha256": "12e5baa8eea5a0d356222183503830c04fcc3bf2b34b9a9e73062edaa8fbe70b"
+    }
+  },
+  "verification": {
+    "result": "passed",
+    "project_source_tree_sha256": "3dd24f3c78a4673ba510ba6abe5dab6a422845288bc61eecabad396cfcb8dd85",
+    "checks": [
+      "delivery_closure",
+      "generated_closure",
+      "placeholder_scan",
+      "backend_technical_contract",
+      "lint",
+      "module_verify",
+      "go_format",
+      "go_vet",
+      "go_test",
+      "identity_stability"
+    ],
+    "environment": {
+      "tmpdir": "/private/tmp/domainry-m1-v316-checkpoint-validation-31/verify-tmp",
+      "gotmpdir": "/private/tmp/domainry-m1-v316-checkpoint-validation-31/verify-gotmp",
+      "gocache": "/private/tmp/domainry-m1-v316-checkpoint-validation-31/verify-gocache",
+      "sqlite": "/private/tmp/domainry-m1-v316-checkpoint-validation-31/runtime/cohort.sqlite"
+    }
+  },
+  "preserved_failures": [
+    "the original full-tree failure caused by inherited host GONOPROXY remains documented in checkpoint.json",
+    "the first full verify failed at go_vet because the system temporary volume was full; verification-failed.json remains in the archive"
+  ],
+  "next_boundary": {
+    "stage": "fresh_baseline",
+    "next_node": "package and install a candidate containing both elapsed-time binding and the generic hermetic Go fix, then start M1 from an empty project",
+    "rule": "Do not resume this checkpoint for baseline measurement. It proves convergence only and is never one-shot baseline evidence."
+  }
+}

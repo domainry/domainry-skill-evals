@@ -1,0 +1,192 @@
+{
+  "contract_version": "domainry-eval-freeze-manifest-v1",
+  "run_id": "m1-crm-scheduler-run-route-resume-convergence-41",
+  "benchmark": "m1-crm",
+  "run_kind": "convergence",
+  "parent_run_id": "m1-crm-project-org-unit-resolve-convergence-40",
+  "model": "gpt-5.6-sol",
+  "budgets": {
+    "wall_clock_seconds": 3600.0,
+    "total_tokens": 10000000,
+    "cli_invocations": 40,
+    "cli_retries": 20
+  },
+  "absence_proof": {
+    "checked_epoch": 1788738954.39219,
+    "isolation_root_absent": true,
+    "project_absent": true,
+    "codex_home_absent": true,
+    "agent_home_absent": true,
+    "sqlite_database_absent": true,
+    "sqlite_wal_absent": true,
+    "sqlite_shm_absent": true
+  },
+  "isolation": {
+    "root": "/private/tmp/domainry-m1-scheduler-run-route-resume-convergence-41",
+    "codex_home": "/private/tmp/domainry-m1-scheduler-run-route-resume-convergence-41/codex-home",
+    "agent_home": "/private/tmp/domainry-m1-scheduler-run-route-resume-convergence-41/home",
+    "temp": "/private/tmp/domainry-m1-scheduler-run-route-resume-convergence-41/tmp",
+    "project": "/private/tmp/domainry-m1-scheduler-run-route-resume-convergence-41/project",
+    "runtime": "/private/tmp/domainry-m1-scheduler-run-route-resume-convergence-41/runtime",
+    "database": "/private/tmp/domainry-m1-scheduler-run-route-resume-convergence-41/runtime/cohort.sqlite",
+    "candidate_copy": "/private/tmp/domainry-m1-scheduler-run-route-resume-convergence-41/codex-home/skills/domainry-builder-v1"
+  },
+  "candidate": {
+    "candidate_id": "v0.3.16-8-m1-scheduler-run-route-20260907+2ca45a33a705",
+    "skill_name": "domainry-builder-v1",
+    "skill_version": "v0.3.16-8-m1-scheduler-run-route-20260907",
+    "skill_identity_sha256": "ebd64d96025aeabc3ec803e2cef1d6330e670533269edbfc0dda8172909aaceb",
+    "package_metadata_sha256": "1901497e11d111a6ee6ca1f257b37014a99f50a10dc64d5d255d7c1aa9fdc180",
+    "skill_tree_sha256": "2ca45a33a705428b0d81412c15792978426d42734cb013d5c908a27373a3c6dc",
+    "cli_binary_sha256": "33f62c9d4a710b7a7473ed335e29ac836457d4382eb891154422ae6a7e850ae2",
+    "runtime_api_contract_version": "runtime-domain-api-v1",
+    "runtime_api_contract_hash": "4fe655cbfd4fa0bc0b0c04c89b86926fc6aceb059c9fccf5b09eec9b459330f7",
+    "apply_target_flag": "--service",
+    "apply_target_value": "http://127.0.0.1:8283"
+  },
+  "isolated_candidate": {
+    "candidate_id": "v0.3.16-8-m1-scheduler-run-route-20260907+2ca45a33a705",
+    "skill_name": "domainry-builder-v1",
+    "skill_version": "v0.3.16-8-m1-scheduler-run-route-20260907",
+    "skill_identity_sha256": "ebd64d96025aeabc3ec803e2cef1d6330e670533269edbfc0dda8172909aaceb",
+    "package_metadata_sha256": "1901497e11d111a6ee6ca1f257b37014a99f50a10dc64d5d255d7c1aa9fdc180",
+    "skill_tree_sha256": "2ca45a33a705428b0d81412c15792978426d42734cb013d5c908a27373a3c6dc",
+    "cli_binary_sha256": "33f62c9d4a710b7a7473ed335e29ac836457d4382eb891154422ae6a7e850ae2",
+    "runtime_api_contract_version": "runtime-domain-api-v1",
+    "runtime_api_contract_hash": "4fe655cbfd4fa0bc0b0c04c89b86926fc6aceb059c9fccf5b09eec9b459330f7",
+    "apply_target_flag": "--service",
+    "apply_target_value": "http://127.0.0.1:8283"
+  },
+  "service_identity": {
+    "target_kind": "service",
+    "healthy": true,
+    "http_status": 200,
+    "health_document_sha256": "f0e9b11638c8da32a8e72408fce8d4fb6c0f9d77afd42e6a41360aeca7f5db2f",
+    "published_identity": {
+      "contract_version": "domainry-control-plane-health-v1",
+      "discovery": "/.well-known/domainry-plane",
+      "service_kind": "template-control-plane",
+      "version": "v0.3.16-8-m1-scheduler-run-route-20260907",
+      "checks": [
+        {
+          "detail": "v0.3.16-8-m1-scheduler-run-route-20260907",
+          "name": "application_delivery",
+          "status": "passed"
+        },
+        {
+          "detail": "domainry-frontend-product_v0.3.16-8-m1-scheduler-run-route-20260907.tar.gz sha256:95c5157613d71d7cfb2adbc512cfe7f5d6bf6b644b347d28af2250f1c00fe581",
+          "name": "frontend_product",
+          "status": "passed"
+        },
+        {
+          "detail": "github.com/domainry/domainry-identity@v0.999.0-domainry.3572eabd8b03e50d",
+          "name": "identity_module",
+          "status": "passed"
+        },
+        {
+          "detail": "github.com/domainry/domainry-notification@v0.999.0-domainry.cea1cbbe680d85d8",
+          "name": "notification_module",
+          "status": "passed"
+        },
+        {
+          "detail": "github.com/domainry/domainry-notification-sdk@v0.999.0-domainry.c0a526a508a992fd",
+          "name": "notification_sdk",
+          "status": "passed"
+        },
+        {
+          "detail": "domainry-project-delivery-local-development",
+          "name": "project_delivery_signer",
+          "status": "passed"
+        },
+        {
+          "detail": "available",
+          "name": "project_delivery_store",
+          "status": "passed"
+        },
+        {
+          "detail": "local.domainry.project-delivery revision 1",
+          "name": "project_delivery_trust",
+          "status": "passed"
+        },
+        {
+          "detail": "domainry-project-template_v0.3.16-8-m1-scheduler-run-route-20260907.tar.gz sha256:9f42f06ff630bd4d7eec330ee1d70e57ca73af98918b4c5029d85d162be4af40",
+          "name": "project_template",
+          "status": "passed"
+        },
+        {
+          "detail": "domainry-runtime-client-sdk_v0.3.16-8-m1-scheduler-run-route-20260907.tar.gz sha256:7a86bfc5a252cf12d26ce518927bf76994c948b08a5a30da4b89ce3304b4b8ac",
+          "name": "runtime_client_sdk",
+          "status": "passed"
+        },
+        {
+          "detail": "runtime-domain-api-v1 + runtime-authoring-v1",
+          "name": "runtime_contract",
+          "status": "passed"
+        },
+        {
+          "detail": "github.com/domainry/domainry-runtime@v0.0.0-source-9777c25e5423a49f",
+          "name": "runtime_module",
+          "status": "passed"
+        },
+        {
+          "detail": "1 platforms",
+          "name": "skill_packages",
+          "status": "passed"
+        }
+      ]
+    }
+  },
+  "checkpoint": {
+    "contract_version": "domainry-eval-checkpoint-v1",
+    "source_run_id": "m1-crm-project-org-unit-resolve-convergence-40",
+    "checkpoint_kind": "post_apply_foundation_scheduler_published_run_route_gap_v4",
+    "measurement_class": "checkpoint_convergence_not_baseline",
+    "baseline_eligibility": false,
+    "manifest_sha256": "2031b14e838678080853bcf02725bfd2c21f9f3dbd7201622e451d9371e71d9e",
+    "archive_sha256": "6c8ce635d7fed2544f6755385ae227d74e9be2c00514c716b092768b148ec67a",
+    "resume_boundary": {
+      "stage": "apply",
+      "next_node": "Restore this exact convergence-40 project checkpoint only after the Scheduler foundation gap has a published, authorized black-box definition-run route. Preserve the candidate-7 accepted model, generated bindings, typed OrganizationUnits.Resolve then TargetOrganization.Resolve and Identity delivery Handler closure, trusted workflow.initiating_user_id requester attribution under crm_workflow_service run_as, payload-wrapped manual Workflow request, open approval-task query, report object key lead, and exact durable BF08 caller-operation replay. Do not redo those repairs or treat item_30/item_49 as product defects. Read and verify the new candidate's content-addressed implementation/verification packet before editing BF06; consume only its exact Scheduler-owned method, path, headers, body, response, permission, and scope. Replace the deliberate BF06 t.Fatal with a real Scheduler invocation using a stable Idempotency-Key and operation reason, a genuinely stale fixture, weekday semantics, notification evidence, denial/scope evidence, deduplication, and restart persistence. Then rerun focused Action tests, project check, business-flow compile, reviewed apply finalize, full backend tree, and exactly one managed verify over initial plus restart on one database/binary/delivery cohort. Require verified_and_stopped and checker eligibility before claiming completion.",
+      "rule": "The archived project and candidate-7 packet are authority for retained project work, but they are not authority for a Scheduler route that the packet did not publish. The Scheduler gap is foundation-owned and must be resolved outside this project checkpoint. On resume, never guess a route, widen human permissions, use the manual Workflow endpoint for a scheduled definition, modify any foundation repository, or weaken BF06/BF08/restart evidence. The source run ended only because observed provider tokens exceeded its convergence budget; its two command errors were corrected auxiliary-shell mistakes, all five Domainry CLI invocations completed successfully, and no checker/managed verify result exists.",
+      "prior_delivery_id": "sha256:1870f602d78cb8c104373fc1627b27213cdf3990b2bc8e24b846614c919f9919"
+    },
+    "prohibited_repairs": [
+      "do not invent or guess an unpublished /scheduler route",
+      "do not invoke stale_lead_followup through the manual Workflow route",
+      "do not grant lead.scan_stale_contacted or any internal scheduled-workflow Action to a human Role",
+      "do not alter Plane, Builder, Runtime, Scheduler, SDKs, evaluator code, or other foundation code from this project checkpoint",
+      "do not discard the accepted candidate-7 project model, generated types, Handler repairs, Workflow repairs, Report replay repairs, or successful focused checks",
+      "do not finalize or claim verify completion until the Scheduler-owned black-box route is present and BF06 exercises it",
+      "do not restore Git history, managed Runtime/cache state, databases, SQLite, Agent sessions, locks, temporary files, or measured-run evidence"
+    ]
+  },
+  "hashes": {
+    "candidate_config_sha256": "67cbdfddf7124987f96a669ce0c49005e9517a5f12335909fc1aedc3e0ce65f4",
+    "requirements_sha256": "e59edec731f9ff2bcda8a6b928681b273be7873a22c3f9ea93c9bb27e6cea83e",
+    "rendered_driver_prompt_sha256": "b7c015512aaf67b4b2e894dc24796ba4165c2538e16e2ccb41fe3de5b19cefe9",
+    "checker_sha256": "7b75ecf646c7dfc07bb0c51b8730b6fef61d24f45ae77665695b4b1c58832f5f",
+    "scorer_sha256": "0e7fc7903e0f4e957d5860c3b7b8e4a5d07fc0d4b77f4faeb117a7db20d32109",
+    "frozen_checker_sha256": "7b75ecf646c7dfc07bb0c51b8730b6fef61d24f45ae77665695b4b1c58832f5f",
+    "frozen_scorer_sha256": "0e7fc7903e0f4e957d5860c3b7b8e4a5d07fc0d4b77f4faeb117a7db20d32109",
+    "driver_sha256": "072409e514aea1c18332b1053f6a9107c2459e3ae9a89a307876d67f3e8d4057",
+    "agent_command_sha256": "35a6e26632c6a1ffd90135372680e41a1501e379b50cbfd0017d60e6a3976ef1",
+    "checker_command_sha256": "03bb0f85ec953b1bc3b317616e76fe65950acc8de966d5aac01491f1b9229d75"
+  },
+  "agent_context": {
+    "fresh_session_required": true,
+    "resume_forbidden": true,
+    "codex_home_contents_during_agent": [
+      "auth.json",
+      "skills/domainry-builder-v1"
+    ],
+    "ephemeral_auth_staged": true,
+    "auth_retention": "remove_immediately_after_agent",
+    "environment_policy": "minimal-isolated-v1",
+    "prompt_inputs": [
+      "requirements",
+      "evaluator-owned measured-run policy"
+    ],
+    "evaluator_assets_exposed": false,
+    "checkpoint_project_restored": true
+  }
+}

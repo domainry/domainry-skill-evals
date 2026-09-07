@@ -1,0 +1,19 @@
+{
+  "candidate_id": "v0.3.6-30-m1-flow-contracts-20260905+3d755032ead0",
+  "skill_name": "domainry-builder-v1",
+  "skill_root": "/private/tmp/domainry-m1-v30-flow-contracts-baseline-15/codex-home/skills/domainry-builder-v1",
+  "cli": "/private/tmp/domainry-m1-v30-flow-contracts-baseline-15/codex-home/skills/domainry-builder-v1/bin/domainry-cli",
+  "skill_version": "v0.3.6-30-m1-flow-contracts-20260905",
+  "skill_identity_sha256": "ebd64d96025aeabc3ec803e2cef1d6330e670533269edbfc0dda8172909aaceb",
+  "package_metadata_sha256": "1633278cca205de37013601cac1ba19c60abfd4b000186be3798a52d10a34681",
+  "skill_tree_sha256": "3d755032ead07424689bedf26b391b5261f12d8ee5ee41a232b18e797466d279",
+  "cli_binary_sha256": "bf5c2f823e37043624f59acd29976280e78693490bf3ffa7361bab2918074bc2",
+  "runtime_api_contract_version": "runtime-domain-api-v1",
+  "runtime_api_contract_hash": "4fe655cbfd4fa0bc0b0c04c89b86926fc6aceb059c9fccf5b09eec9b459330f7",
+  "apply_target_flag": "--service",
+  "apply_target_value": "http://127.0.0.1:8283",
+  "apply_target_args": [
+    "--service",
+    "http://127.0.0.1:8283"
+  ]
+}

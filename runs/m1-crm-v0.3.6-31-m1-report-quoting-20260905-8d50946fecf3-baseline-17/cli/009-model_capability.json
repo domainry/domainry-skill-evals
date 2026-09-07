@@ -1,0 +1,21 @@
+{
+  "family": "model_capability",
+  "command": "/bin/zsh -lc '/private/tmp/domainry-m1-v31-report-quoting-baseline-17/codex-home/skills/domainry-builder-v1/bin/domainry-cli model capability --json --project /private/tmp/domainry-m1-v31-report-quoting-baseline-17/project --key identity.roles'",
+  "exit_code": 0,
+  "output": {
+    "category": {
+      "key": "identity.roles",
+      "name": "Identity roles",
+      "description": "Configure roles, permission grants, and user-role assignments."
+    },
+    "validations": [
+      {
+        "kind": "identity.role",
+        "description": "Validate one complete project role definition and its embedded permission/data/field policy."
+      }
+    ]
+  },
+  "raw_output": "{\"category\":{\"key\":\"identity.roles\",\"name\":\"Identity roles\",\"description\":\"Configure roles, permission grants, and user-role assignments.\"},\"validations\":[{\"kind\":\"identity.role\",\"description\":\"Validate one complete project role definition and its embedded permission/data/field policy.\"}]}\n",
+  "event_item_id": "item_41",
+  "event_line": 80
+}

@@ -1,9 +1,11 @@
 import importlib.util
 import hashlib
+import io
 import json
 import os
 from pathlib import Path
 import sys
+import tarfile
 import threading
 import time
 
@@ -20,7 +22,7 @@ SPEC.loader.exec_module(MOD)
 import eval_config
 
 
-def healthy_service(version="service-v1"):
+def healthy_service(version="v1.0.0"):
     details = {
         "application_delivery": version,
         "runtime_contract": "runtime-domain-api-v1 + runtime-authoring-v1",
@@ -69,7 +71,7 @@ def write_candidate(tmp_path):
         "skill_tree_sha256": eval_config.installed_tree_sha256(
             root, "skill-package.json"),
         "cli_binary_sha256": hashlib.sha256(cli.read_bytes()).hexdigest(),
-        "version": "test-v1",
+        "version": "v1.0.0",
         "runtime_api_contract_version": "runtime-domain-api-v1",
         "runtime_api_contract_hash": "a" * 64,
     }
@@ -111,6 +113,84 @@ def run_arguments(tmp_path, script, *, run_name="run", session_id="fresh-session
         "budgets": MOD.Budgets(),
         "service_fetcher": stable_service_fetcher,
     }
+
+
+def write_checkpoint(tmp_path, parent_run_id="baseline-parent"):
+    source = tmp_path / "checkpoint-source/project"
+    (source / ".domainry/builder").mkdir(parents=True)
+    (source / ".git").mkdir()
+    (source / "resume-marker.txt").write_text("packet-ready")
+    (source / ".domainry/builder/model-apply.json").write_text("{}")
+    (source / ".git/old-history").write_text("must-not-restore")
+    archive = tmp_path / "checkpoint-project.tar.gz"
+    with tarfile.open(archive, "w:gz") as output:
+        output.add(source, arcname="project")
+    manifest = tmp_path / "checkpoint.json"
+    manifest.write_text(json.dumps({
+        "contract_version": "domainry-eval-checkpoint-v1",
+        "source_run_id": parent_run_id,
+        "checkpoint_kind": "packet_ready",
+        "measurement_class": "checkpoint_convergence_not_baseline",
+        "baseline_eligibility": False,
+        "archive": {
+            "path": archive.name,
+            "sha256": hashlib.sha256(archive.read_bytes()).hexdigest(),
+        },
+        "resume_boundary": {
+            "stage": "model",
+            "next_node": "migrate the affected model and rerun its apply/finalize closure",
+            "rule": "do not verify the stale signed Runtime package",
+            "prior_delivery_id": "sha256:prior-delivery",
+        },
+        "blocking_condition": {
+            "prohibited_repairs": ["do not replace the missing capability with a business copy"],
+        },
+    }))
+    return manifest, archive
+
+
+def test_req14_v6_manifest_reuses_v5_archive_and_injects_new_boundary(tmp_path):
+    v5 = ROOT / (
+        "runs/m1-crm-scheduler-run-route-resume-convergence-41-checkpoint-"
+        "managed-elapsed-time-verification-seam-gap-v5")
+    v6 = ROOT / (
+        "runs/m1-crm-scheduler-run-route-resume-convergence-41-checkpoint-"
+        "req14-due-continuation-v6/checkpoint.json")
+    identity = MOD.checkpoint_identity(
+        v6, v5 / "checkpoint-project.tar.gz",
+        "m1-crm-scheduler-run-route-resume-convergence-41")
+
+    assert identity["archive_sha256"] == (
+        "4aec796c2809fddc88d9d18172029bc4e991140277b4cbcc23c76522cc17ecd9")
+    assert identity["baseline_eligibility"] is False
+    assert identity["manifest_only_boundary_migration"] is True
+    assert identity["resume_boundary"]["stage"] == "model"
+    assert "Feature40" in identity["resume_boundary"]["next_node"]
+    assert any("evaluation_time" in item for item in identity["prohibited_repairs"])
+
+    source = tmp_path / "prompt.md"
+    destination = tmp_path / "injected.md"
+    source.write_text("base benchmark prompt")
+    MOD.append_prompt_policy(
+        source, destination, "convergence", checkpoint_restored=True,
+        checkpoint=identity)
+    injected = destination.read_text()
+    assert "Authoritative checkpoint resume boundary" in injected
+    assert "next_followup_at field change" in injected
+    assert "go list module identity must be external" in injected
+
+
+def test_checkpoint_v1_rejects_unbound_manifest_only_archive_migration(tmp_path):
+    manifest_path, archive_path = write_checkpoint(tmp_path)
+    manifest = json.loads(manifest_path.read_text())
+    manifest["archive_policy"] = {
+        "manifest_only_boundary_migration": True,
+        "reused_parent_archive_byte_for_byte": True,
+    }
+    manifest_path.write_text(json.dumps(manifest))
+
+    with pytest.raises(ValueError, match="parent identity is missing"):
+        MOD.checkpoint_identity(manifest_path, archive_path, "baseline-parent")
 
 
 def command_event(kind, family_command, code=None):
@@ -239,7 +319,7 @@ def test_token_usage_optional_details_fail_closed_per_event():
     }}) is None
 
 
-def test_verify_fixture_is_independent_diagnostic_and_never_a_scoring_retry():
+def test_failed_diagnostic_seals_strict_baseline_without_becoming_scoring_retry():
     monitor = MOD.RunMonitor("baseline", MOD.Budgets(cli_invocations=1, cli_retries=0))
     diagnostic = "/candidate/domainry-cli verify fixture --json --project ."
     verify = "/candidate/domainry-cli verify --json --project ."
@@ -249,14 +329,35 @@ def test_verify_fixture_is_independent_diagnostic_and_never_a_scoring_retry():
     monitor.observe(failed, observed_at=12, event_line=2)
     monitor.observe(command_event("item.started", verify), observed_at=13, event_line=3)
 
-    assert monitor.stop_state is None
+    assert monitor.stop_state == "baseline_first_command_failure"
     assert monitor.cli_invocations == 1
     assert monitor.cli_retries == 0
     assert monitor.diagnostic_invocations == 1
     assert monitor.diagnostic_failures == 1
     assert monitor.first_scoring_failure is None
     assert monitor.diagnostic_first_failure["family"] == "verify_fixture"
-    assert monitor.first_failure()["failure_kind"] == "diagnostic"
+    assert monitor.first_failure()["failure_kind"] == "command"
+    assert monitor.command_first_failure["family"] == "verify_fixture"
+
+
+def test_baseline_stops_on_first_failed_auxiliary_agent_command():
+    monitor = MOD.RunMonitor("baseline", MOD.Budgets())
+    command = "rg --quiet missing backend/model"
+    monitor.observe(command_event("item.started", command), observed_at=10, event_line=1)
+    monitor.observe(command_event("item.completed", command, 1), observed_at=11, event_line=2)
+
+    assert monitor.stop_state == "baseline_first_command_failure"
+    assert monitor.first_scoring_failure is None
+    assert monitor.command_first_failure == {
+        "failure_kind": "command",
+        "family": None,
+        "exit_code": 1,
+        "output_state": None,
+        "command_sha256": MOD.sha256_bytes(command.encode("utf-8")),
+        "event_item_id": None,
+        "event_line": 2,
+        "observed_epoch": 11,
+    }
 
 
 def test_prompt_policy_separates_baseline_and_convergence(tmp_path):
@@ -267,7 +368,35 @@ def test_prompt_policy_separates_baseline_and_convergence(tmp_path):
     MOD.append_prompt_policy(source, baseline, "baseline")
     MOD.append_prompt_policy(source, convergence, "convergence")
     assert "Do not repair or retry" in baseline.read_text()
+    assert "including auxiliary and read-only probes" in baseline.read_text()
     assert "never pass@1 evidence" in convergence.read_text()
+
+
+def test_prompt_policy_injects_authoritative_checkpoint_resume_boundary(tmp_path):
+    source = tmp_path / "source.md"
+    source.write_text("do the work")
+    destination = tmp_path / "convergence.md"
+    checkpoint = {
+        "resume_boundary": {
+            "stage": "model",
+            "next_node": "replace the incompatible model before verify",
+            "rule": "never reuse the stale signed Runtime package",
+        },
+        "prohibited_repairs": ["do not alias a store to a department"],
+    }
+
+    MOD.append_prompt_policy(
+        source, destination, "convergence",
+        checkpoint_restored=True, checkpoint=checkpoint)
+
+    prompt = destination.read_text()
+    assert "Authoritative checkpoint resume boundary" in prompt
+    assert "authoritative over restored project-local stage reports" in prompt
+    assert '"stage": "model"' in prompt
+    assert "replace the incompatible model before verify" in prompt
+    assert "do not alias a store to a department" in prompt
+    assert prompt.index("Authoritative checkpoint resume boundary") < prompt.index(
+        "Evaluator-owned measured-run policy")
 
 
 def test_command_json_is_argv_not_shell_text():
@@ -306,7 +435,304 @@ def test_driver_seals_baseline_evidence_after_first_failure(tmp_path):
     assert scorecard["terminal_state"] == "baseline_first_scoring_failure"
 
 
-def test_baseline20_shape_preserves_diagnostic_failure_and_token_terminal(tmp_path):
+def test_driver_seals_baseline_after_failed_auxiliary_command(tmp_path):
+    command = "rg --quiet missing backend/model"
+    script = (
+        "import json,time\n"
+        f"item={{'id':'aux_1','type':'command_execution','command':{command!r}}}\n"
+        "print(json.dumps({'type':'item.started','item':item}), flush=True)\n"
+        "done=dict(item); done['exit_code']=1; done['aggregated_output']=''\n"
+        "print(json.dumps({'type':'item.completed','item':done}), flush=True)\n"
+        "time.sleep(5)\n"
+    )
+    arguments = run_arguments(tmp_path, script, run_name="baseline-aux-failure")
+    arguments["budgets"] = MOD.Budgets(wall_clock_seconds=30)
+
+    assert MOD.execute_run(**arguments) == 1
+    run = arguments["run_dir"]
+    lifecycle = json.loads((run / "lifecycle.json").read_text())
+    progress = json.loads((run / "progress.json").read_text())
+    failures = json.loads((run / "failures.json").read_text())
+
+    assert lifecycle["state"] == "baseline_first_command_failure"
+    assert lifecycle["measurement_boundary"] == "baseline_first_failure_sealed"
+    assert lifecycle["environment_valid"] is True
+    assert lifecycle["checker_exit_code"] is None
+    assert lifecycle["command_first_failure"]["command_sha256"] == (
+        MOD.sha256_bytes(command.encode("utf-8")))
+    assert progress["first_failure_seal_triggered"] is True
+    assert progress["checker_decision_reason"] == (
+        "baseline_first_agent_command_failure")
+    assert failures == [{
+        "failure_kind": "command",
+        "stage": "agent_command",
+        "owner": "agent",
+        "note": "Agent command failed during strict baseline measurement",
+        "terminal_state": "baseline_first_command_failure",
+        "attribution_status": "attributed",
+        "detail": lifecycle["command_first_failure"],
+    }]
+
+
+@pytest.mark.parametrize("mode", ["baseline", "convergence"])
+def test_checkpoint_first_failure_stops_followup_and_seals_after_group_exit(tmp_path, mode):
+    child = (
+        "import signal,time\nfrom pathlib import Path\n"
+        "def stop(*_):\n"
+        " signal.signal(signal.SIGTERM, signal.SIG_IGN)\n"
+        " time.sleep(.15)\n"
+        " Path('child-cleanup.txt').write_text('stopped')\n"
+        " raise SystemExit(0)\n"
+        "signal.signal(signal.SIGTERM, stop)\n"
+        "Path('child-ready.txt').write_text('ready')\n"
+        "time.sleep(15)\n"
+        "Path('child-late-write.txt').write_text('must not run')\n"
+    )
+    command = "python3 first-command.py"
+    script = (
+        "import subprocess,sys,time\nfrom pathlib import Path\n"
+        "Path('source.py').write_text('before failure')\n"
+        f"subprocess.Popen([sys.executable,'-c',{child!r}])\n"
+        "while not Path('child-ready.txt').exists(): time.sleep(.01)\n"
+        f"event={command_event('item.completed', command, 7)!r}\n"
+        "print(json.dumps(event),flush=True)\n"
+        "time.sleep(10)\n"
+        "Path('second-write.txt').write_text('must not run')\n"
+    )
+    arguments = run_arguments(tmp_path, script, run_name=f"{mode}-auto-checkpoint")
+    arguments.update(
+        mode=mode, parent_run_id="previous-run" if mode == "convergence" else None,
+        checkpoint_on_first_failure=True)
+    assert MOD.execute_run(**arguments) == 1
+    run = arguments["run_dir"]
+    lifecycle = json.loads((run / "lifecycle.json").read_text())
+    receipt = json.loads((run / "failure-checkpoint-result.json").read_text())
+    progress = json.loads((run / "progress.json").read_text())
+    freeze = json.loads((run / "freeze-manifest.json").read_text())
+    project = arguments["isolation_root"] / "project"
+    assert lifecycle["state"] == f"{mode}_first_command_failure"
+    assert lifecycle["measurement_boundary"] == f"{mode}_first_failure_sealed"
+    assert receipt == lifecycle["failure_checkpoint"] == progress["failure_checkpoint"]
+    assert freeze["failure_checkpoint_policy"]["checkpoint_on_first_failure"] is True
+    assert progress["first_failure_seal_triggered"] is True
+    assert receipt["status"] == "sealed"
+    assert receipt["agent_process_group"]["status"] == "confirmed_stopped"
+    assert receipt["agent_process_group"]["live_member_count"] == 0
+    assert not (project / "second-write.txt").exists()
+    assert not (project / "child-late-write.txt").exists()
+    manifest = Path(receipt["manifest_path"])
+    archive = Path(receipt["archive_path"])
+    identity = MOD.checkpoint_identity(manifest, archive, arguments["run_id"])
+    assert identity["baseline_eligibility"] is False
+    prompt_source = tmp_path / "next-requirements.md"
+    prompt_source.write_text("continue")
+    next_prompt = tmp_path / "next-prompt.md"
+    MOD.append_prompt_policy(
+        prompt_source, next_prompt, "convergence", checkpoint_restored=True,
+        checkpoint=identity, checkpoint_on_first_failure=True)
+    injected = next_prompt.read_text()
+    assert "captured unaccepted source state" in injected
+    assert "packet-ready" not in injected
+    assert '"failure_boundary"' in injected
+    assert f"{mode}_first_command_failure" in injected
+    assert "Repairs and retries are allowed" not in injected
+    sealed = json.loads(manifest.read_text())
+    assert sealed["failure_boundary"]["attribution_status"] == "pending"
+    assert sealed["source_parent_run_id"] == arguments["parent_run_id"]
+    assert sealed["project_acceptance_status"] == "unaccepted_failure_snapshot"
+    restored = tmp_path / "restored"
+    restored.mkdir()
+    MOD.restore_checkpoint_project(archive, restored)
+    assert (restored / "source.py").read_text() == "before failure"
+    assert (restored / "child-cleanup.txt").read_text() == "stopped"
+    assert not (restored / "second-write.txt").exists()
+    assert not (restored / ".git").exists()
+    scorecard = json.loads((run / "scorecard.json").read_text())
+    assert scorecard["pass_at_1"] is (None if mode == "convergence" else False)
+
+
+@pytest.mark.parametrize("family,command", [
+    ("model_plan", "/candidate/domainry-cli model plan --json --project ."),
+    ("verify_fixture", "/candidate/domainry-cli verify fixture --json --project ."),
+])
+def test_checkpoint_policy_stops_zero_exit_explicit_domainry_failure(family, command):
+    monitor = MOD.RunMonitor(
+        "convergence", MOD.Budgets(), checkpoint_on_first_failure=True)
+    event = command_event("item.completed", command, 0)
+    event["item"]["aggregated_output"] = json.dumps({"state": "failed"})
+    monitor.observe(event, observed_at=42.0, event_line=9)
+    assert monitor.stop_state == (
+        "convergence_first_scoring_failure" if family == "model_plan"
+        else "convergence_first_command_failure")
+    assert monitor.first_failure()["family"] == family
+    assert monitor.cli_failures == (1 if family == "model_plan" else 0)
+    assert monitor.diagnostic_failures == (1 if family == "verify_fixture" else 0)
+
+
+def test_automatic_checkpoint_excludes_state_links_and_refreshes_resume_boundary(tmp_path):
+    source = tmp_path / "project"
+    source.mkdir()
+    for name in (
+        "source.py", ".git/HEAD", ".domainry/builder/runtime/server",
+        ".domainry/locks/apply.lock", ".domainry/builder/apply.lock",
+        ".domainry/agent-sessions/history", ".codex/history.jsonl", ".agents/session",
+        "data.sqlite3", "nested/data.db-wal", "._source.py",
+        "backend/bf06evaluatorprobe-interrupted/runtime_probe_test.go",
+    ):
+        path = source / name
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text(name)
+    outside = tmp_path / "outside-secret.txt"
+    outside.write_text("must not archive")
+    (source / "external-link").symlink_to(outside)
+    (source / "directory-link").symlink_to(tmp_path, target_is_directory=True)
+    os.mkfifo(source / "pipe")
+    run = tmp_path / "run"
+    run.mkdir()
+    prior = {"resume_boundary": {"stage": "apply", "next_node": "old-done-node", "rule": "old"}}
+    monitor = MOD.RunMonitor("convergence", MOD.Budgets(), checkpoint_on_first_failure=True)
+    kwargs = dict(
+        run_dir=run, project=source, run_id="failed-run", mode="convergence",
+        parent_run_id="prior-run", checkpoint=prior, monitor=monitor,
+        terminal="agent_process_failed", agent_code=1, checker_code=None)
+    receipt = MOD.seal_failure_checkpoint(**kwargs)
+    assert receipt["status"] == "sealed"
+    manifest_path = Path(receipt["manifest_path"])
+    original_manifest = manifest_path.read_bytes()
+    archive_path = Path(receipt["archive_path"])
+    original_archive = archive_path.read_bytes()
+    manifest = json.loads(original_manifest)
+    assert manifest["resume_boundary"]["stage"] == "failure_review"
+    assert "old-done-node" not in json.dumps(manifest["resume_boundary"])
+    assert manifest["source_input_checkpoint"] == prior
+    with tarfile.open(archive_path) as archive:
+        assert [member.name for member in archive if member.isfile()] == ["project/source.py"]
+        assert all(not member.issym() and not member.islnk() for member in archive)
+    assert receipt["excluded_counts"]["symlink"] == 2
+    assert receipt["excluded_counts"]["special_file"] == 1
+    assert receipt["excluded_counts"]["evaluator_temporary_source"] == 1
+    restored = tmp_path / "restore"
+    restored.mkdir()
+    assert MOD.restore_checkpoint_project(archive_path, restored)["restored_file_count"] == 1
+    assert (restored / "source.py").read_text() == "source.py"
+    second = MOD.seal_failure_checkpoint(**kwargs)
+    assert second["status"] == "sealed"
+    assert second["directory"] != receipt["directory"]
+    assert manifest_path.read_bytes() == original_manifest
+    assert archive_path.read_bytes() == original_archive
+
+
+@pytest.mark.parametrize("exit_code", [0, 3])
+def test_checkpoint_policy_seals_checker_failure_but_not_completed_run(tmp_path, exit_code):
+    evidence = {"contract_version": MOD.FLOW_EVIDENCE_CONTRACT, "phases": {}}
+    commands = [
+        ("model plan", "valid"), ("apply model", "implementation_ready"),
+        ("apply finalize", "finalized"), ("verify", "verified_and_stopped"),
+    ]
+    script = (
+        "from pathlib import Path\nPath('source.py').write_text('finished source')\n"
+        f"commands={commands!r}\n"
+        "for command,state in commands:\n"
+        f" output={{'state':state,'business_flow_evidence':{evidence!r}}}\n"
+        " item={'type':'command_execution','command':'/candidate/domainry-cli '+command+' --json --project .',"
+        "'exit_code':0,'aggregated_output':json.dumps(output)}\n"
+        " print(json.dumps({'type':'item.completed','item':item}),flush=True)\n"
+        "print(json.dumps({'type':'item.completed','item':{'type':'agent_message',"
+        "'text':'EVAL_RESULT={\"state\":\"done\"}'}}),flush=True)\n"
+    )
+    checker = tmp_path / "checker.py"
+    checker.write_text(
+        "from pathlib import Path\nimport sys\n"
+        "Path('checker-finished.txt').write_text('checker complete')\n"
+        f"raise SystemExit({exit_code})\n")
+    arguments = run_arguments(tmp_path, script)
+    arguments.update(checkpoint_on_first_failure=True, checker_source=checker,
+                     checker_command=[sys.executable, "{checker}"])
+    assert MOD.execute_run(**arguments) == (1 if exit_code else 0)
+    run = arguments["run_dir"]
+    lifecycle = json.loads((run / "lifecycle.json").read_text())
+    assert lifecycle["state"] == ("acceptance_failed" if exit_code else "completed")
+    if exit_code:
+        receipt = lifecycle["failure_checkpoint"]
+        assert receipt["status"] == "sealed"
+        manifest = json.loads(Path(receipt["manifest_path"]).read_text())
+        assert manifest["failure_boundary"]["checker_exit_code"] == exit_code
+        restored = tmp_path / "restored"
+        restored.mkdir()
+        MOD.restore_checkpoint_project(Path(receipt["archive_path"]), restored)
+        assert (restored / "checker-finished.txt").read_text() == "checker complete"
+    else:
+        assert lifecycle["failure_checkpoint"] is None
+        assert not list(run.glob("failure-checkpoint*"))
+
+
+def test_checkpoint_archive_failure_is_observable_and_does_not_claim_success(tmp_path, monkeypatch):
+    script = "from pathlib import Path\nPath('source.py').write_text('recoverable')\nraise SystemExit(2)\n"
+    arguments = run_arguments(tmp_path, script)
+    arguments["checkpoint_on_first_failure"] = True
+
+    def cannot_archive(*args, **kwargs):
+        raise OSError("archive unavailable")
+
+    monkeypatch.setattr(MOD.tarfile, "open", cannot_archive)
+    assert MOD.execute_run(**arguments) == 1
+    run = arguments["run_dir"]
+    receipt = json.loads((run / "failure-checkpoint-result.json").read_text())
+    assert receipt["status"] == "failed"
+    assert receipt["stage"] == "archive_project_source"
+    assert receipt["error_type"] == "OSError"
+    assert "identity" not in receipt
+    assert not list(run.glob("failure-checkpoint-*/checkpoint.json"))
+    assert json.loads((run / "lifecycle.json").read_text())["failure_checkpoint"] == receipt
+    assert json.loads((run / "progress.json").read_text())["failure_checkpoint"] == receipt
+
+
+@pytest.mark.parametrize("agent_exit_code", [0, 3])
+def test_checkpoint_policy_does_not_wait_forever_on_exited_leaders_stdout(tmp_path, agent_exit_code):
+    child = "import signal,time\nsignal.signal(signal.SIGTERM,signal.SIG_IGN)\ntime.sleep(20)\n"
+    script = (
+        "import subprocess,sys,time\nfrom pathlib import Path\n"
+        "Path('source.py').write_text('source to resume')\n"
+        f"subprocess.Popen([sys.executable,'-c',{child!r}])\n"
+        # Let the child install SIG_IGN before the leader exits, requiring KILL.
+        "time.sleep(.1)\n"
+        f"raise SystemExit({agent_exit_code})\n")
+    arguments = run_arguments(tmp_path, script)
+    arguments["checkpoint_on_first_failure"] = True
+    started = time.monotonic()
+    assert MOD.execute_run(**arguments) == 1
+    assert time.monotonic() - started < 8
+    run = arguments["run_dir"]
+    lifecycle = json.loads((run / "lifecycle.json").read_text())
+    assert lifecycle["state"] == (
+        "agent_process_failed" if agent_exit_code else "delivery_incomplete")
+    receipt = lifecycle["failure_checkpoint"]
+    assert receipt["status"] == "sealed"
+    assert receipt["agent_process_group"]["status"] == "confirmed_stopped"
+    restored = tmp_path / "restored"
+    restored.mkdir()
+    MOD.restore_checkpoint_project(Path(receipt["archive_path"]), restored)
+    assert (restored / "source.py").read_text() == "source to resume"
+
+
+def test_default_convergence_still_runs_retry_without_auto_checkpoint(tmp_path):
+    failed = command_event("item.completed", "false", 1)
+    script = (
+        "from pathlib import Path\n"
+        f"print(json.dumps({failed!r}),flush=True)\n"
+        "Path('retry-was-allowed.txt').write_text('retry completed')\n")
+    arguments = run_arguments(tmp_path, script)
+    arguments.update(mode="convergence", parent_run_id="previous-run")
+    assert MOD.execute_run(**arguments) == 1
+    run = arguments["run_dir"]
+    assert (arguments["isolation_root"] / "project/retry-was-allowed.txt").exists()
+    assert not list(run.glob("failure-checkpoint*"))
+    lifecycle = json.loads((run / "lifecycle.json").read_text())
+    assert lifecycle["state"] == "delivery_incomplete"
+    assert lifecycle["failure_checkpoint_policy"]["checkpoint_on_first_failure"] is False
+
+
+def test_convergence_shape_preserves_diagnostic_failure_and_token_terminal(tmp_path):
     commands = [
         ("model_capability", "/candidate/domainry-cli model capability --json --project .",
          {"state": "available"}, 0),
@@ -333,6 +759,7 @@ def test_baseline20_shape_preserves_diagnostic_failure_and_token_terminal(tmp_pa
         "'output_tokens':59969,'reasoning_output_tokens':14837}}),flush=True)\n"
     )
     arguments = run_arguments(tmp_path, script, run_name="baseline-20-shape")
+    arguments.update(mode="convergence", parent_run_id="baseline-19")
     arguments["budgets"] = MOD.Budgets(
         total_tokens=5_000_000, cli_invocations=5, cli_retries=0)
 
@@ -413,6 +840,138 @@ def test_driver_rejects_overwriting_measured_run(tmp_path):
         MOD.execute_run(**arguments)
 
 
+def test_convergence_restores_frozen_checkpoint_into_fresh_project(tmp_path):
+    parent = "baseline-with-checkpoint"
+    manifest, archive = write_checkpoint(tmp_path, parent)
+    script = (
+        "from pathlib import Path\n"
+        "assert Path('resume-marker.txt').read_text() == 'packet-ready'\n"
+        "assert Path('.domainry/builder/model-apply.json').is_file()\n"
+        "assert not Path('.git/old-history').exists()\n"
+        "Path('checkpoint-was-seen').write_text('yes')\n"
+        "message={'id':'result','type':'agent_message','text':'EVAL_RESULT={\"state\":\"not_done\"}'}\n"
+        "print(json.dumps({'type':'item.completed','item':message}),flush=True)\n"
+    )
+    arguments = run_arguments(tmp_path, script, run_name="checkpoint-convergence")
+    arguments.update(
+        mode="convergence",
+        parent_run_id=parent,
+        checkpoint_manifest=manifest,
+        checkpoint_archive=archive,
+    )
+
+    assert MOD.execute_run(**arguments) == 1
+    run = arguments["run_dir"]
+    lifecycle = json.loads((run / "lifecycle.json").read_text())
+    freeze = json.loads((run / "freeze-manifest.json").read_text())
+    restored = json.loads((run / "checkpoint-restored.json").read_text())
+    project = Path(json.loads((run / "meta.json").read_text())["project_path"])
+
+    assert lifecycle["state"] == "delivery_incomplete"
+    assert lifecycle["checkpoint"]["source_run_id"] == parent
+    assert lifecycle["checkpoint"]["resume_boundary"]["stage"] == "model"
+    assert lifecycle["checkpoint_restore"]["git_history_restored"] is False
+    assert lifecycle["checkpoint_restore"]["sqlite_restored"] is False
+    assert freeze["checkpoint"]["archive_sha256"] == (
+        hashlib.sha256(archive.read_bytes()).hexdigest())
+    assert freeze["agent_context"]["checkpoint_project_restored"] is True
+    assert restored["restored_file_count"] == 2
+    assert (project / "checkpoint-was-seen").read_text() == "yes"
+    assert "Continue from the existing packet-ready project state" in (
+        run / "agent-prompt.md").read_text()
+    assert "migrate the affected model and rerun its apply/finalize closure" in (
+        run / "agent-prompt.md").read_text()
+
+
+def test_checkpoint_restore_rejects_traversal_and_baseline_use(tmp_path):
+    project = tmp_path / "new-project"
+    project.mkdir()
+    unsafe = tmp_path / "unsafe.tar.gz"
+    payload = b"escape"
+    with tarfile.open(unsafe, "w:gz") as output:
+        member = tarfile.TarInfo("project/../../escaped")
+        member.size = len(payload)
+        output.addfile(member, io.BytesIO(payload))
+    with pytest.raises(ValueError, match="unsafe checkpoint archive member"):
+        MOD.restore_checkpoint_project(unsafe, project)
+    assert not (tmp_path / "escaped").exists()
+
+    manifest, archive = write_checkpoint(tmp_path / "baseline-case", "parent")
+    arguments = run_arguments(tmp_path / "baseline-case", "", run_name="baseline")
+    arguments.update(checkpoint_manifest=manifest, checkpoint_archive=archive)
+    with pytest.raises(ValueError, match="baseline runs cannot restore checkpoints"):
+        MOD.execute_run(**arguments)
+
+
+def test_checkpoint_restore_ignores_macos_appledouble_metadata(tmp_path):
+    project = tmp_path / "new-project"
+    project.mkdir()
+    archive = tmp_path / "appledouble.tar.gz"
+    payload = b"project-state"
+    with tarfile.open(archive, "w:gz") as output:
+        for name, content in (
+            ("._project", b"finder metadata"),
+            ("project/._resume-marker.txt", b"resource fork"),
+            ("project/resume-marker.txt", payload),
+        ):
+            member = tarfile.TarInfo(name)
+            member.size = len(content)
+            output.addfile(member, io.BytesIO(content))
+
+    receipt = MOD.restore_checkpoint_project(archive, project)
+
+    assert (project / "resume-marker.txt").read_bytes() == payload
+    assert not (project / "._resume-marker.txt").exists()
+    assert receipt["restored_file_count"] == 1
+    assert receipt["ignored_appledouble_member_count"] == 2
+
+
+def test_checkpoint_restore_excludes_runtime_sqlite_agent_and_lock_state(tmp_path):
+    source = tmp_path / "checkpoint-source/project"
+    files = {
+        "resume-marker.txt": b"packet-ready",
+        "backend/session_policy.go": b"package backend\n",
+        ".git/objects/old-history": b"git",
+        ".codex/sessions.db": b"agent-session",
+        ".agents/state.json": b"agent-state",
+        ".domainry/sessions/agent.json": b"agent-session",
+        ".domainry/builder/runtime/runtime-process.json": b"runtime-state",
+        ".domainry/builder/runtime/cohorts/old/runtime.db.cohort.json": b"cohort",
+        ".domainry/locks/project-mutation.lock": b"lock",
+        ".domainry/builder/evolution/staging/.domainry/locks/project-mutation.lock": b"lock",
+        "fixtures/cohort.sqlite": b"sqlite",
+        "fixtures/cohort.sqlite-wal": b"sqlite-wal",
+        "fixtures/runtime.db-journal": b"sqlite-journal",
+    }
+    for relative, content in files.items():
+        path = source / relative
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_bytes(content)
+    archive = tmp_path / "stateful-checkpoint.tar.gz"
+    with tarfile.open(archive, "w:gz") as output:
+        output.add(source, arcname="project")
+    project = tmp_path / "new-project"
+    project.mkdir()
+
+    receipt = MOD.restore_checkpoint_project(archive, project)
+
+    assert (project / "resume-marker.txt").read_bytes() == b"packet-ready"
+    assert (project / "backend/session_policy.go").read_bytes() == b"package backend\n"
+    for relative in files.keys() - {"resume-marker.txt", "backend/session_policy.go"}:
+        assert not (project / relative).exists(), relative
+    assert receipt["restored_file_count"] == 2
+    assert receipt["ignored_git_member_count"] > 0
+    assert receipt["ignored_runtime_state_member_count"] > 0
+    assert receipt["ignored_sqlite_member_count"] == 3
+    assert receipt["ignored_agent_session_member_count"] > 0
+    assert receipt["ignored_lock_member_count"] > 0
+    assert receipt["git_history_restored"] is False
+    assert receipt["runtime_state_restored"] is False
+    assert receipt["sqlite_restored"] is False
+    assert receipt["agent_session_restored"] is False
+    assert receipt["locks_restored"] is False
+
+
 @pytest.mark.parametrize(("dirty_path", "expected"), [
     ("project/.domainry/state.json", r"project/\.domainry"),
     ("runtime/cohort.sqlite", "SQLite cohort"),
@@ -469,6 +1028,22 @@ def test_agent_gets_clean_environment_and_fresh_git_project(tmp_path, monkeypatc
     assert all(freeze["absence_proof"].values())
     assert freeze["model"] == "test-model"
     assert freeze["candidate"] == freeze["isolated_candidate"]
+
+
+def test_clean_agent_environment_uses_checkpoint_excluded_project_cache(
+    tmp_path, monkeypatch,
+):
+    monkeypatch.setenv("DOMAINRY_CACHE_DIR", str(tmp_path / "host-cache"))
+    isolation = MOD.isolation_paths(tmp_path / "isolation", "candidate")
+
+    environment = MOD.clean_agent_environment(isolation)
+
+    expected = isolation.project / ".domainry/builder/runtime/cache"
+    assert environment["DOMAINRY_CACHE_DIR"] == str(expected)
+    assert expected.is_relative_to(isolation.project)
+    assert MOD.checkpoint_restore_exclusion(
+        expected.relative_to(isolation.project).parts
+    ) == "runtime_state"
 
 
 def test_candidate_copy_drift_invalidates_run(tmp_path):
@@ -728,7 +1303,7 @@ def test_service_identity_is_frozen_and_stable(tmp_path):
     assert before["healthy"] is True
     assert len(before["health_document_sha256"]) == 64
     published = before["published_identity"]
-    assert published["version"] == "service-v1"
+    assert published["version"] == "v1.0.0"
     names = {check["name"] for check in published["checks"]}
     assert MOD.REQUIRED_SERVICE_CHECKS <= names
 
@@ -746,8 +1321,18 @@ def test_unhealthy_service_fails_before_isolation_or_agent(tmp_path):
     assert not arguments["run_dir"].exists()
 
 
+def test_newer_service_fails_before_isolation_or_agent(tmp_path):
+    arguments = run_arguments(tmp_path, "")
+    arguments["service_fetcher"] = lambda _url, _timeout: healthy_service(
+        "v9.0.0")
+    with pytest.raises(ValueError, match="would auto-update the frozen candidate"):
+        MOD.execute_run(**arguments)
+    assert not arguments["isolation_root"].exists()
+    assert not arguments["run_dir"].exists()
+
+
 def test_service_drift_invalidates_run_and_skips_checker(tmp_path):
-    responses = [healthy_service("service-v1"), healthy_service("service-v2")]
+    responses = [healthy_service("v1.0.0"), healthy_service("v1.0.1")]
 
     def changing_service(_url, _timeout):
         return responses.pop(0)

@@ -1,0 +1,16 @@
+{
+  "contract_version": "domainry-evaluator-setup-failure-v1",
+  "run_id": "m1-crm-v0.3.16-3-audit-identity-convergence-33",
+  "run_kind": "convergence",
+  "parent_run_id": "m1-crm-v0.3.16-2-hermetic-go-baseline-32",
+  "state": "checkpoint_restore_rejected",
+  "agent_started": false,
+  "business_work_repeated": false,
+  "owner": "evaluator",
+  "error": "unsafe checkpoint archive member: ._project",
+  "classification": "macos_appledouble_checkpoint_compatibility",
+  "freeze_manifest_sha256": "91eb51f64ac4b6a9d6ba04693de5f331afdda846434289f82fa0b6bfb5fb1125",
+  "checkpoint_manifest_sha256": "f3c937c38d99950e81bac213c1de5d36018e427cb97af5a0d71d955123ea3125",
+  "checkpoint_archive_sha256": "b32909d18c690b29d4e6758e9f7058776050b2e115ff630c42ff2d3c9ffe4ab9",
+  "resume_rule": "Retry from the same immutable checkpoint in a new convergence run after the evaluator safely ignores AppleDouble metadata."
+}

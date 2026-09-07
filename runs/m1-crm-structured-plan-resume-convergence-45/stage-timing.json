@@ -1,0 +1,89 @@
+{
+  "contract_version": "domainry-eval-stage-timing-v1",
+  "boundary_rule": "evaluator-cli-transition-v1",
+  "stage_order": [
+    "discovery",
+    "plan",
+    "apply",
+    "finalize",
+    "verify"
+  ],
+  "status": "partial",
+  "stages": {
+    "discovery": {
+      "started_epoch": null,
+      "ended_epoch": null,
+      "seconds": null,
+      "status": "unknown",
+      "start_provenance": null,
+      "end_provenance": null
+    },
+    "plan": {
+      "started_epoch": null,
+      "ended_epoch": null,
+      "seconds": null,
+      "status": "unknown",
+      "start_provenance": null,
+      "end_provenance": null
+    },
+    "apply": {
+      "started_epoch": 1788755950.64547,
+      "ended_epoch": 1788756049.562261,
+      "seconds": 98.917,
+      "status": "observed",
+      "start_provenance": {
+        "source": "agent-event-observations.jsonl",
+        "capture_file": "cli/002-apply_model.json",
+        "family": "apply_model",
+        "event": "started",
+        "event_item_id": "item_5",
+        "event_line": 11,
+        "boundary_reason": "stage_cli_started"
+      },
+      "end_provenance": {
+        "source": "lifecycle.json",
+        "field": "agent_ended_epoch",
+        "boundary_reason": "active_stage_cli_open_at_agent_end",
+        "related_cli_start": {
+          "source": "agent-event-observations.jsonl",
+          "capture_file": null,
+          "family": "apply_model",
+          "event": "started",
+          "event_item_id": "item_9",
+          "event_line": 18,
+          "boundary_reason": "stage_cli_started"
+        }
+      }
+    },
+    "finalize": {
+      "started_epoch": null,
+      "ended_epoch": null,
+      "seconds": null,
+      "status": "unknown",
+      "start_provenance": null,
+      "end_provenance": null
+    },
+    "verify": {
+      "started_epoch": null,
+      "ended_epoch": null,
+      "seconds": null,
+      "status": "unknown",
+      "start_provenance": null,
+      "end_provenance": null
+    }
+  },
+  "critical_path": {
+    "observed_seconds": 98.917,
+    "unknown_stages": [
+      "discovery",
+      "plan",
+      "finalize",
+      "verify"
+    ],
+    "hotspot": {
+      "stage": "apply",
+      "seconds": 98.917
+    }
+  },
+  "diagnostic_intervals": []
+}

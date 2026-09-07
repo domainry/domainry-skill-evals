@@ -1,0 +1,94 @@
+{
+  "contract_version": "domainry-eval-run-lifecycle-v1",
+  "run_id": "m1-crm-v0.3.6-44-m1-evolution-control-20260906-bba567a8fad0-baseline-26",
+  "run_kind": "baseline",
+  "parent_run_id": null,
+  "state": "environment_invalid_service_drift",
+  "measurement_complete": false,
+  "environment_valid": false,
+  "measurement_boundary": "interrupted_or_invalid",
+  "started_epoch": 1788667792.2465742,
+  "ended_epoch": 1788669621.6155908,
+  "budgets": {
+    "wall_clock_seconds": 3600.0,
+    "total_tokens": 5000000,
+    "cli_invocations": 40,
+    "cli_retries": 0
+  },
+  "usage": {
+    "wall_clock_seconds": 1829.369,
+    "total_tokens": null,
+    "token_usage": {
+      "input_tokens": null,
+      "cached_input_tokens": null,
+      "non_cached_input_tokens": null,
+      "output_tokens": null,
+      "reasoning_output_tokens": null,
+      "budget_tokens": null,
+      "budget_basis": "provider_cumulative_input_plus_output",
+      "cached_input_included_in_input": true,
+      "reasoning_output_included_in_output": true,
+      "observability_status": "unavailable"
+    },
+    "cli_invocations_started": 5,
+    "cli_invocations_captured": 5,
+    "cli_retries_started": 0,
+    "diagnostic_cli_invocations_started": 0,
+    "diagnostic_cli_invocations_captured": 0,
+    "diagnostic_cli_completions": 0,
+    "diagnostic_cli_failures": 0,
+    "diagnostic_cli_retries": 0
+  },
+  "termination": {
+    "reason": "Application Delivery service identity changed during the run"
+  },
+  "first_failure": {
+    "failure_kind": "scoring",
+    "family": "verify",
+    "exit_code": 1,
+    "output_state": "failed"
+  },
+  "scoring_first_failure": {
+    "family": "verify",
+    "exit_code": 1,
+    "output_state": "failed"
+  },
+  "diagnostic_first_failure": null,
+  "first_scoring_failure": {
+    "family": "verify",
+    "exit_code": 1,
+    "output_state": "failed"
+  },
+  "diagnostic_cli": {
+    "invocations_total": 0,
+    "completed_total": 0,
+    "failed_total": 0,
+    "retries_total": 0,
+    "latest": null,
+    "first_failure": null
+  },
+  "freeze_manifest_sha256": "25f6d3f484b5d133ab100ace5d3459fa5fa85e52443bb20276a95a5e0b010a58",
+  "ephemeral_auth_staged": true,
+  "auth_cleanup_status": "removed",
+  "agent_result_state": null,
+  "agent_exit_code": 0,
+  "checker_exit_code": null,
+  "checker_gate": {
+    "ready": false,
+    "reason": "delivery_prerequisites_incomplete",
+    "missing": [
+      "agent_result:missing",
+      "verify:failed",
+      "flow_evidence:missing_invalid_or_unparseable"
+    ]
+  },
+  "agent_ended_epoch": 1788669621.327945,
+  "agent_session_id": "01a074e8-9450-7e50-830d-ed38aa57591d",
+  "business_flow_evidence_source": "missing",
+  "business_flow_evidence_contract_valid": null,
+  "business_flow_evidence_sha256": null,
+  "business_flow_evidence_error": null,
+  "service_identity_before_sha256": "7ea27c5012e3b05a5bba960d9c5313a370d2c33e5212692a1b78bbe520d72773",
+  "service_identity_after_sha256": "eba5031c1848e15138d41b49bd7c897316e281161375cd37d429ccc8cb222740",
+  "scorer_exit_code": 0
+}

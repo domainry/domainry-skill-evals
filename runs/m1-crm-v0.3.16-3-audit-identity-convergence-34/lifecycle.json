@@ -1,0 +1,126 @@
+{
+  "contract_version": "domainry-eval-run-lifecycle-v1",
+  "run_id": "m1-crm-v0.3.16-3-audit-identity-convergence-34",
+  "run_kind": "convergence",
+  "parent_run_id": "m1-crm-v0.3.16-2-hermetic-go-baseline-32",
+  "state": "delivery_incomplete",
+  "measurement_complete": false,
+  "environment_valid": true,
+  "measurement_boundary": "delivery_incomplete",
+  "started_epoch": 1788710652.8925471,
+  "ended_epoch": 1788712417.849617,
+  "budgets": {
+    "wall_clock_seconds": 3600.0,
+    "total_tokens": 5000000,
+    "cli_invocations": 40,
+    "cli_retries": 20
+  },
+  "usage": {
+    "wall_clock_seconds": 1764.957,
+    "total_tokens": null,
+    "token_usage": {
+      "input_tokens": null,
+      "cached_input_tokens": null,
+      "non_cached_input_tokens": null,
+      "output_tokens": null,
+      "reasoning_output_tokens": null,
+      "budget_tokens": null,
+      "budget_basis": "provider_cumulative_input_plus_output",
+      "cached_input_included_in_input": true,
+      "reasoning_output_included_in_output": true,
+      "observability_status": "unavailable"
+    },
+    "cli_invocations_started": 8,
+    "cli_invocations_captured": 7,
+    "cli_retries_started": 1,
+    "diagnostic_cli_invocations_started": 0,
+    "diagnostic_cli_invocations_captured": 0,
+    "diagnostic_cli_completions": 0,
+    "diagnostic_cli_failures": 0,
+    "diagnostic_cli_retries": 0,
+    "agent_command_invocations": 88,
+    "agent_command_completions": 87,
+    "agent_command_failures": 7
+  },
+  "termination": null,
+  "first_failure": {
+    "failure_kind": "command",
+    "family": null,
+    "exit_code": 1,
+    "output_state": null,
+    "command_sha256": "eda95c6710de519f018b58237d8b6e95de476a88023504ca28a08e612f31032f",
+    "event_item_id": "item_9",
+    "event_line": 19,
+    "observed_epoch": 1788710728.43282
+  },
+  "scoring_first_failure": {
+    "family": "verify",
+    "exit_code": 1,
+    "output_state": "failed"
+  },
+  "diagnostic_first_failure": null,
+  "command_first_failure": {
+    "failure_kind": "command",
+    "family": null,
+    "exit_code": 1,
+    "output_state": null,
+    "command_sha256": "eda95c6710de519f018b58237d8b6e95de476a88023504ca28a08e612f31032f",
+    "event_item_id": "item_9",
+    "event_line": 19,
+    "observed_epoch": 1788710728.43282
+  },
+  "first_scoring_failure": {
+    "family": "verify",
+    "exit_code": 1,
+    "output_state": "failed"
+  },
+  "diagnostic_cli": {
+    "invocations_total": 0,
+    "completed_total": 0,
+    "failed_total": 0,
+    "retries_total": 0,
+    "latest": null,
+    "first_failure": null
+  },
+  "checkpoint": {
+    "contract_version": "domainry-eval-checkpoint-v1",
+    "source_run_id": "m1-crm-v0.3.16-2-hermetic-go-baseline-32",
+    "checkpoint_kind": "post_reapply_evolution_audit_identity_probe_error",
+    "measurement_class": "checkpoint_convergence_not_baseline",
+    "baseline_eligibility": false,
+    "manifest_sha256": "f3c937c38d99950e81bac213c1de5d36018e427cb97af5a0d71d955123ea3125",
+    "archive_sha256": "b32909d18c690b29d4e6758e9f7058776050b2e115ff630c42ff2d3c9ffe4ab9"
+  },
+  "checkpoint_restore": {
+    "archive_sha256": "b32909d18c690b29d4e6758e9f7058776050b2e115ff630c42ff2d3c9ffe4ab9",
+    "restored_file_count": 520,
+    "ignored_appledouble_member_count": 651,
+    "git_history_restored": false,
+    "sqlite_restored": false
+  },
+  "freeze_manifest_sha256": "382709449d442222456ecdbad923c39f3d6e6ad6a47e44f9ab9609191e7a4fc6",
+  "ephemeral_auth_staged": true,
+  "auth_cleanup_status": "removed",
+  "agent_result_state": null,
+  "agent_exit_code": 0,
+  "checker_exit_code": null,
+  "checker_gate": {
+    "ready": false,
+    "reason": "delivery_prerequisites_incomplete",
+    "missing": [
+      "agent_result:missing",
+      "apply_model:unexpected_success_state",
+      "verify:failed",
+      "flow_evidence:missing_invalid_or_unparseable"
+    ]
+  },
+  "agent_ended_epoch": 1788712417.577615,
+  "agent_session_id": "01a07776-958c-7ad1-abee-933790c10a55",
+  "business_flow_evidence_source": "missing",
+  "business_flow_evidence_contract_valid": null,
+  "business_flow_evidence_sha256": null,
+  "business_flow_evidence_error": null,
+  "service_identity_before_sha256": "1c6c37a9da857b732e777e318b662b87fb22229f954aacc35c923fd2db8261a7",
+  "service_identity_after_sha256": "1c6c37a9da857b732e777e318b662b87fb22229f954aacc35c923fd2db8261a7",
+  "scorer_exit_code": 0
+}

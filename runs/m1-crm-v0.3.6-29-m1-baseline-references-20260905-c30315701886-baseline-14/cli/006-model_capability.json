@@ -1,0 +1,57 @@
+{
+  "family": "model_capability",
+  "command": "/bin/zsh -lc '/private/tmp/domainry-m1-v29-baseline-references-baseline-14/codex-home/skills/domainry-builder-v1/bin/domainry-cli model capability --json --project /private/tmp/domainry-m1-v29-baseline-references-baseline-14/project --key notification.delivery_governance'",
+  "exit_code": 0,
+  "output": {
+    "category": {
+      "key": "notification.delivery_governance",
+      "name": "Notification delivery governance",
+      "description": "Configure event types and delivery rules and inspect delivery and Inbox governance metrics."
+    },
+    "contracts": [
+      {
+        "kind": "notification.authoring_rule",
+        "key": "project_handler_event_semantic_route",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "title": "Project Handler notification event semantic route requirement",
+          "type": "object",
+          "x-domainry-cross-resource-rule": {
+            "requires": {
+              "contains": {
+                "resource_type": {
+                  "const": "project_record"
+                },
+                "route_key": {
+                  "minLength": 1,
+                  "type": "string"
+                }
+              },
+              "path": "actions[]"
+            },
+            "route_key_inference": "forbidden",
+            "target_collection": "notification_event_types",
+            "target_key_source": "referenced_event_type",
+            "when": {
+              "collection": "actions",
+              "path": "handler.notification_event_types[]"
+            }
+          }
+        }
+      }
+    ],
+    "validations": [
+      {
+        "kind": "notification.event_type",
+        "description": "Validate one published project notification event type; when a project Action Handler references it, require an explicit project_record semantic route action with a non-empty route_key."
+      },
+      {
+        "kind": "notification.rule",
+        "description": "Validate one notification rule against explicitly referenced event types."
+      }
+    ]
+  },
+  "raw_output": "{\"category\":{\"key\":\"notification.delivery_governance\",\"name\":\"Notification delivery governance\",\"description\":\"Configure event types and delivery rules and inspect delivery and Inbox governance metrics.\"},\"contracts\":[{\"kind\":\"notification.authoring_rule\",\"key\":\"project_handler_event_semantic_route\",\"schema\":{\"$schema\":\"https://json-schema.org/draft/2020-12/schema\",\"title\":\"Project Handler notification event semantic route requirement\",\"type\":\"object\",\"x-domainry-cross-resource-rule\":{\"requires\":{\"contains\":{\"resource_type\":{\"const\":\"project_record\"},\"route_key\":{\"minLength\":1,\"type\":\"string\"}},\"path\":\"actions[]\"},\"route_key_inference\":\"forbidden\",\"target_collection\":\"notification_event_types\",\"target_key_source\":\"referenced_event_type\",\"when\":{\"collection\":\"actions\",\"path\":\"handler.notification_event_types[]\"}}}}],\"validations\":[{\"kind\":\"notification.event_type\",\"description\":\"Validate one published project notification event type; when a project Action Handler references it, require an explicit project_record semantic route action with a non-empty route_key.\"},{\"kind\":\"notification.rule\",\"description\":\"Validate one notification rule against explicitly referenced event types.\"}]}\n",
+  "event_item_id": "item_31",
+  "event_line": 61
+}

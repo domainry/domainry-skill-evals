@@ -3,8 +3,8 @@
 
 The driver consumes a Codex ``--json`` event stream, persists every raw line
 plus an evaluator receive-time sidecar, and makes stopping policy evaluator-owned.
-A baseline is stopped after the first failed scoring CLI command. A convergence
-run is the only mode allowed to continue repairing, and it must name its parent run.
+A baseline is stopped after the first failed Agent command. A convergence run is
+the only mode allowed to continue repairing, and it must name its parent run.
 """
 
 from __future__ import annotations
@@ -15,17 +15,20 @@ import hashlib
 import json
 import os
 from pathlib import Path
+import re
 import selectors
 import shutil
 import signal
+import stat
 import subprocess
 import sys
+import tarfile
 import time
 from typing import Callable
 
 from eval_config import load as load_candidate
 from extract_cli_captures import extract, family_for, parse_output
-from preflight import assess_health, fetch_health
+from preflight import assess_candidate_update_risk, assess_health, fetch_health
 
 
 CONTRACT_VERSION = "domainry-eval-run-lifecycle-v1"
@@ -69,6 +72,18 @@ SERVICE_IDENTITY_KEYS = {
     "project_template", "runtime_client", "runtime_client_sdk", "skill_packages",
     "project_delivery_trust", "trust_identity", "identity",
 }
+FIRST_FAILURE_STATES = {
+    "baseline_first_scoring_failure", "baseline_first_command_failure",
+    "convergence_first_scoring_failure", "convergence_first_command_failure",
+}
+
+
+def checkpoint_failure_policy(enabled: bool) -> dict[str, object]:
+    return {
+        "checkpoint_on_first_failure": enabled,
+        "agent_failure_action": "stop_then_checkpoint" if enabled else "mode_default",
+        "checkpoint_baseline_eligibility": False,
+    }
 
 
 def write_json(path: Path, value: object) -> None:
@@ -473,6 +488,12 @@ def capture_service_identity(
     if missing:
         raise ValueError(
             "Application Delivery service identity is incomplete: " + ", ".join(missing))
+    update_diagnostics = assess_candidate_update_risk(
+        candidate.get("skill_version"), health)
+    if update_diagnostics:
+        raise ValueError(
+            "Application Delivery service would auto-update the frozen candidate: "
+            + ", ".join(update_diagnostics))
     public_identity = stable_public_service_identity(health)
     return {
         "target_kind": "service",
@@ -677,6 +698,27 @@ def command_event(event: object) -> tuple[str | None, bool, int | None]:
     return family, False, code if isinstance(code, int) else None
 
 
+def agent_command_event(
+    event: object,
+) -> tuple[str | None, bool, int | None, str | None]:
+    """Return every Agent command, including commands outside Domainry CLI."""
+    if not isinstance(event, dict) or event.get("type") not in {
+        "item.started", "item.completed",
+    }:
+        return None, False, None, None
+    item = event.get("item")
+    if not isinstance(item, dict) or item.get("type") != "command_execution":
+        return None, False, None, None
+    command = item.get("command")
+    command = command if isinstance(command, str) else None
+    item_id = item.get("id")
+    item_id = item_id if isinstance(item_id, str) else None
+    if event["type"] == "item.started":
+        return command, True, None, item_id
+    code = item.get("exit_code")
+    return command, False, code if isinstance(code, int) else None, item_id
+
+
 def command_output_failed(event: object) -> tuple[bool, str | None]:
     if not isinstance(event, dict):
         return False, None
@@ -761,7 +803,9 @@ def failures_from_first_scoring_capture(
     artifacts: list[dict[str, object]], first_failure: dict[str, object] | None,
     terminal: str,
 ) -> list[dict[str, object]]:
-    if terminal != "baseline_first_scoring_failure" or not first_failure:
+    if terminal not in {
+        "baseline_first_scoring_failure", "convergence_first_scoring_failure",
+    } or not first_failure:
         return []
     family = first_failure.get("family")
     artifact = next((
@@ -824,6 +868,31 @@ def failures_from_first_scoring_capture(
         "first_failure": telemetry_failure,
         "telemetry": telemetry,
         "detail": telemetry_failure,
+    }]
+
+
+def failures_from_first_command_failure(
+    first_failure: dict[str, object] | None, terminal: str,
+) -> list[dict[str, object]]:
+    if terminal not in {
+        "baseline_first_command_failure", "convergence_first_command_failure",
+    } or not first_failure:
+        return []
+    family = first_failure.get("family")
+    # Diagnostic captures already supply richer structured failure evidence.
+    if family in DIAGNOSTIC_FAMILIES:
+        return []
+    return [{
+        "failure_kind": "command",
+        "stage": family or "agent_command",
+        "owner": "domainry-cli" if family else "agent",
+        "note": (
+            "Agent command failed during strict baseline measurement"
+            if terminal == "baseline_first_command_failure"
+            else "Agent command failed under checkpoint-on-first-failure policy"),
+        "terminal_state": terminal,
+        "attribution_status": "attributed",
+        "detail": first_failure,
     }]
 
 
@@ -970,6 +1039,214 @@ def create_isolation(root: Path, candidate: dict[str, object]) -> tuple[Isolatio
     return isolation, absence
 
 
+def checkpoint_identity(
+    manifest_path: Path, archive_path: Path, parent_run_id: str,
+) -> dict[str, object]:
+    if not manifest_path.is_file():
+        raise ValueError(f"checkpoint manifest does not exist: {manifest_path}")
+    if not archive_path.is_file():
+        raise ValueError(f"checkpoint archive does not exist: {archive_path}")
+    manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    if manifest.get("contract_version") != "domainry-eval-checkpoint-v1":
+        raise ValueError("checkpoint manifest contract is unsupported")
+    if manifest.get("baseline_eligibility") is not False:
+        raise ValueError("checkpoint must be explicitly ineligible for baseline evidence")
+    if manifest.get("measurement_class") != "checkpoint_convergence_not_baseline":
+        raise ValueError("checkpoint measurement_class is not convergence-only")
+    if not isinstance(manifest.get("checkpoint_kind"), str) or not manifest["checkpoint_kind"]:
+        raise ValueError("checkpoint_kind must be a non-empty string")
+    if manifest.get("source_run_id") != parent_run_id:
+        raise ValueError("checkpoint source_run_id must equal convergence parent_run_id")
+    archive = manifest.get("archive")
+    if not isinstance(archive, dict):
+        raise ValueError("checkpoint manifest archive identity is missing")
+    expected_sha256 = archive.get("sha256")
+    if not isinstance(expected_sha256, str) or len(expected_sha256) != 64:
+        raise ValueError("checkpoint archive sha256 is invalid")
+    declared_path = archive.get("path")
+    if (not isinstance(declared_path, str)
+            or Path(declared_path).name != archive_path.name):
+        raise ValueError("checkpoint archive filename differs from its manifest")
+    actual_sha256 = sha256_file(archive_path)
+    if actual_sha256 != expected_sha256:
+        raise ValueError("checkpoint archive sha256 differs from its manifest")
+    archive_policy = manifest.get("archive_policy")
+    manifest_only_migration = bool(
+        isinstance(archive_policy, dict)
+        and archive_policy.get("manifest_only_boundary_migration") is True)
+    if manifest_only_migration:
+        if archive_policy.get("reused_parent_archive_byte_for_byte") is not True:
+            raise ValueError(
+                "derived checkpoint must explicitly reuse the parent archive byte-for-byte")
+        parent = manifest.get("parent_checkpoint")
+        if not isinstance(parent, dict) or not isinstance(
+                parent.get("checkpoint_id"), str) or not parent["checkpoint_id"].strip():
+            raise ValueError("derived checkpoint parent identity is missing")
+        for field in ("manifest_sha256", "archive_sha256"):
+            value = parent.get(field)
+            if not isinstance(value, str) or not re.fullmatch(r"[0-9a-f]{64}", value):
+                raise ValueError(f"derived checkpoint parent {field} is invalid")
+        if parent["archive_sha256"] != actual_sha256:
+            raise ValueError("derived checkpoint does not reuse the declared parent archive")
+    resume_boundary = manifest.get("resume_boundary")
+    if resume_boundary is not None:
+        if not isinstance(resume_boundary, dict):
+            raise ValueError("checkpoint resume_boundary must be an object")
+        normalized_boundary = {}
+        for field in ("stage", "next_node", "rule"):
+            value = resume_boundary.get(field)
+            if not isinstance(value, str) or not value.strip():
+                raise ValueError(
+                    f"checkpoint resume_boundary.{field} must be a non-empty string")
+            if len(value) > 4096:
+                raise ValueError(
+                    f"checkpoint resume_boundary.{field} is too long")
+            normalized_boundary[field] = value.strip()
+        prior_delivery_id = resume_boundary.get("prior_delivery_id")
+        if prior_delivery_id is not None:
+            if not isinstance(prior_delivery_id, str) or not prior_delivery_id.strip():
+                raise ValueError(
+                    "checkpoint resume_boundary.prior_delivery_id must be a non-empty string")
+            normalized_boundary["prior_delivery_id"] = prior_delivery_id.strip()
+        resume_boundary = normalized_boundary
+    prohibited_repairs: list[str] = []
+    blocking_condition = manifest.get("blocking_condition")
+    if isinstance(blocking_condition, dict):
+        raw_repairs = blocking_condition.get("prohibited_repairs", [])
+        if not isinstance(raw_repairs, list):
+            raise ValueError(
+                "checkpoint blocking_condition.prohibited_repairs must be an array")
+        for repair in raw_repairs:
+            if not isinstance(repair, str) or not repair.strip() or len(repair) > 4096:
+                raise ValueError(
+                    "checkpoint prohibited repair must be a bounded non-empty string")
+            prohibited_repairs.append(repair.strip())
+    failure_boundary = manifest.get("failure_boundary")
+    if failure_boundary is not None and not isinstance(failure_boundary, dict):
+        raise ValueError("checkpoint failure_boundary must be an object")
+    if manifest.get("checkpoint_kind") == "automatic_failure_source_snapshot":
+        if (not isinstance(failure_boundary, dict)
+                or not isinstance(failure_boundary.get("terminal_state"), str)
+                or not failure_boundary["terminal_state"]
+                or manifest.get("project_acceptance_status") != "unaccepted_failure_snapshot"):
+            raise ValueError("automatic failure checkpoint lacks its unaccepted failure boundary")
+    return {
+        "contract_version": manifest["contract_version"],
+        "source_run_id": manifest["source_run_id"],
+        "checkpoint_kind": manifest.get("checkpoint_kind"),
+        "measurement_class": manifest.get("measurement_class"),
+        "baseline_eligibility": False,
+        "manifest_sha256": sha256_file(manifest_path),
+        "archive_sha256": actual_sha256,
+        "manifest_only_boundary_migration": manifest_only_migration,
+        "resume_boundary": resume_boundary,
+        "prohibited_repairs": prohibited_repairs,
+        "failure_boundary": failure_boundary,
+    }
+
+
+def checkpoint_restore_exclusion(relative_parts: tuple[str, ...]) -> str | None:
+    """Classify state that a project checkpoint must never restore."""
+    if not relative_parts:
+        return None
+    lowered = tuple(part.lower() for part in relative_parts)
+    if ".git" in lowered:
+        return "git"
+    if lowered[0] in {".codex", ".agents"}:
+        return "agent_session"
+    if (len(lowered) >= 2 and lowered[0] == "backend"
+            and lowered[1].startswith("bf06evaluatorprobe-")):
+        return "evaluator_temporary_source"
+    if lowered[:3] == (".domainry", "builder", "runtime"):
+        return "runtime_state"
+    if lowered[:2] == (".domainry", "locks"):
+        return "lock"
+    if lowered[0] == ".domainry" and any(
+        part in {"agent-session", "agent-sessions", "session", "sessions"}
+        for part in lowered[1:]
+    ):
+        return "agent_session"
+    filename = lowered[-1]
+    if filename.endswith((
+        ".db", ".db-wal", ".db-shm", ".db-journal",
+        ".sqlite", ".sqlite-wal", ".sqlite-shm", ".sqlite-journal",
+        ".sqlite3", ".sqlite3-wal", ".sqlite3-shm", ".sqlite3-journal",
+    )):
+        return "sqlite"
+    if lowered[0] == ".domainry" and filename.endswith(".lock"):
+        return "lock"
+    return None
+
+
+def restore_checkpoint_project(archive_path: Path, project: Path) -> dict[str, object]:
+    """Restore project state while excluding Git, Runtime, SQLite, and Agent state."""
+    file_count = 0
+    appledouble_count = 0
+    ignored_state_counts = {
+        "git": 0,
+        "runtime_state": 0,
+        "sqlite": 0,
+        "agent_session": 0,
+        "lock": 0,
+        "evaluator_temporary_source": 0,
+    }
+    with tarfile.open(archive_path, mode="r:gz") as archive:
+        for member in archive.getmembers():
+            parts = Path(member.name).parts
+            if (parts and parts[0] == "__MACOSX") or any(
+                part.startswith("._") for part in parts
+            ):
+                appledouble_count += 1
+                continue
+            if (not parts or parts[0] != "project" or ".." in parts
+                    or Path(member.name).is_absolute()):
+                raise ValueError(f"unsafe checkpoint archive member: {member.name}")
+            relative_parts = parts[1:]
+            if not relative_parts:
+                continue
+            excluded = checkpoint_restore_exclusion(relative_parts)
+            if excluded is not None:
+                ignored_state_counts[excluded] += 1
+                continue
+            if member.issym() or member.islnk() or member.isdev() or member.isfifo():
+                raise ValueError(f"unsupported checkpoint archive member: {member.name}")
+            destination = project.joinpath(*relative_parts)
+            if member.isdir():
+                destination.mkdir(parents=True, exist_ok=True)
+                continue
+            if not member.isfile():
+                raise ValueError(f"unsupported checkpoint archive member: {member.name}")
+            destination.parent.mkdir(parents=True, exist_ok=True)
+            if destination.exists():
+                raise ValueError(f"checkpoint would overwrite project path: {destination}")
+            source = archive.extractfile(member)
+            if source is None:
+                raise ValueError(f"checkpoint file is unreadable: {member.name}")
+            with source, destination.open("xb") as output:
+                shutil.copyfileobj(source, output)
+            os.chmod(destination, member.mode & 0o777)
+            file_count += 1
+    if file_count == 0:
+        raise ValueError("checkpoint archive contains no restorable project files")
+    return {
+        "archive_sha256": sha256_file(archive_path),
+        "restored_file_count": file_count,
+        "ignored_appledouble_member_count": appledouble_count,
+        "ignored_git_member_count": ignored_state_counts["git"],
+        "ignored_runtime_state_member_count": ignored_state_counts["runtime_state"],
+        "ignored_sqlite_member_count": ignored_state_counts["sqlite"],
+        "ignored_agent_session_member_count": ignored_state_counts["agent_session"],
+        "ignored_lock_member_count": ignored_state_counts["lock"],
+        "ignored_evaluator_temporary_source_member_count": (
+            ignored_state_counts["evaluator_temporary_source"]),
+        "git_history_restored": False,
+        "runtime_state_restored": False,
+        "sqlite_restored": False,
+        "agent_session_restored": False,
+        "locks_restored": False,
+    }
+
+
 def clean_agent_environment(isolation: Isolation) -> dict[str, str]:
     environment = {
         "PATH": os.environ.get("PATH", "/usr/bin:/bin"),
@@ -980,6 +1257,8 @@ def clean_agent_environment(isolation: Isolation) -> dict[str, str]:
         "XDG_CACHE_HOME": str(isolation.agent_home / ".cache"),
         "XDG_DATA_HOME": str(isolation.agent_home / ".local/share"),
         "GIT_CONFIG_NOSYSTEM": "1",
+        "DOMAINRY_CACHE_DIR": str(
+            isolation.project / ".domainry/builder/runtime/cache"),
         "DOMAINRY_EVAL_SQLITE_PATH": str(isolation.database),
         "LANG": os.environ.get("LANG", "C.UTF-8"),
     }
@@ -1099,11 +1378,17 @@ def redact_auth_from_file(path: Path, tokens: set[bytes]) -> str | None:
 class RunMonitor:
     """Pure event policy used by the process driver and unit tests."""
 
-    def __init__(self, mode: str, budgets: Budgets) -> None:
+    def __init__(
+        self, mode: str, budgets: Budgets, *, checkpoint_on_first_failure: bool = False,
+    ) -> None:
         if mode not in {"baseline", "convergence"}:
             raise ValueError("mode must be baseline or convergence")
         self.mode = mode
         self.budgets = budgets
+        self.checkpoint_on_first_failure = checkpoint_on_first_failure
+        self.agent_process: subprocess.Popen | None = None
+        self.agent_process_stop: dict[str, object] | None = None
+        self.failure_checkpoint: dict[str, object] | None = None
         self.cli_invocations = 0
         self.cli_completions = 0
         self.cli_failures = 0
@@ -1114,6 +1399,9 @@ class RunMonitor:
         self.diagnostic_completions = 0
         self.diagnostic_failures = 0
         self.diagnostic_retries = 0
+        self.agent_command_invocations = 0
+        self.agent_command_completions = 0
+        self.agent_command_failures = 0
         self.agent_declared_done = False
         self.agent_result_state: str | None = None
         self.last_activity_epoch: float | None = None
@@ -1125,6 +1413,7 @@ class RunMonitor:
         self._failed_diagnostic_families: set[str] = set()
         self.first_scoring_failure: dict[str, object] | None = None
         self.diagnostic_first_failure: dict[str, object] | None = None
+        self.command_first_failure: dict[str, object] | None = None
         self._first_failure_kind: str | None = None
         self.stop_state: str | None = None
         self.stop_detail: dict[str, object] | None = None
@@ -1133,6 +1422,29 @@ class RunMonitor:
         if self.stop_state is None:
             self.stop_state = state
             self.stop_detail = detail
+
+    def record_command_failure(
+        self, *, command: str | None, family: str | None, exit_code: int | None,
+        output_state: str | None, item_id: str | None, event_line: int | None,
+    ) -> None:
+        if self.command_first_failure is not None:
+            return
+        failure = {
+            "failure_kind": "command",
+            "family": family,
+            "exit_code": exit_code,
+            "output_state": output_state,
+            "command_sha256": (
+                sha256_bytes(command.encode("utf-8")) if command is not None else None),
+            "event_item_id": item_id,
+            "event_line": event_line,
+            "observed_epoch": self.last_activity_epoch,
+        }
+        self.command_first_failure = failure
+        if self._first_failure_kind is None:
+            self._first_failure_kind = "command"
+        if self.mode == "baseline" or self.checkpoint_on_first_failure:
+            self.stop(f"{self.mode}_first_command_failure", failure)
 
     def observe(
         self, event: object, observed_at: float | None = None,
@@ -1171,8 +1483,24 @@ class RunMonitor:
                     "basis": "provider_cumulative_input_plus_output",
                 })
 
+        command, command_started, command_exit_code, command_item_id = (
+            agent_command_event(event))
+        if command is not None:
+            if command_started:
+                self.agent_command_invocations += 1
+            else:
+                self.agent_command_completions += 1
+
         family, started, exit_code = command_event(event)
         if family is None:
+            if command is not None and not command_started and (
+                command_exit_code is None or command_exit_code != 0
+            ):
+                self.agent_command_failures += 1
+                self.record_command_failure(
+                    command=command, family=None, exit_code=command_exit_code,
+                    output_state=None, item_id=command_item_id,
+                    event_line=event_line)
             return
         item = event.get("item") if isinstance(event, dict) else None
         item_id = item.get("id") if isinstance(item, dict) else None
@@ -1233,6 +1561,8 @@ class RunMonitor:
 
         output_failed, output_state = command_output_failed(event)
         failed = exit_code is None or exit_code != 0 or output_failed
+        if failed:
+            self.agent_command_failures += 1
         if completed_timing is not None:
             completed_timing["exit_code"] = exit_code
             completed_timing["output_state"] = output_state
@@ -1249,7 +1579,7 @@ class RunMonitor:
             if failed:
                 self.diagnostic_failures += 1
             self.latest_diagnostic = latest
-            if exit_code is not None and (exit_code != 0 or output_failed):
+            if failed:
                 self._failed_diagnostic_families.add(family)
                 if self.diagnostic_first_failure is None:
                     item = event.get("item") if isinstance(event, dict) else None
@@ -1267,13 +1597,17 @@ class RunMonitor:
                     }
                     if self._first_failure_kind is None:
                         self._first_failure_kind = "diagnostic"
+                self.record_command_failure(
+                    command=command, family=family, exit_code=exit_code,
+                    output_state=output_state, item_id=item_id,
+                    event_line=event_line)
             return
 
         self.cli_completions += 1
         if failed:
             self.cli_failures += 1
         self.latest_cli = latest
-        if exit_code is not None and (exit_code != 0 or output_failed):
+        if failed:
             self._failed_families.add(family)
             if family in SCORING_FAMILIES and self.first_scoring_failure is None:
                 self.first_scoring_failure = {
@@ -1283,11 +1617,20 @@ class RunMonitor:
                 }
                 if self._first_failure_kind is None:
                     self._first_failure_kind = "scoring"
-                if self.mode == "baseline":
-                    self.stop("baseline_first_scoring_failure", self.first_scoring_failure)
+                if self.mode == "baseline" or self.checkpoint_on_first_failure:
+                    self.stop(f"{self.mode}_first_scoring_failure", self.first_scoring_failure)
+            elif family not in SCORING_FAMILIES:
+                self.record_command_failure(
+                    command=command, family=family, exit_code=exit_code,
+                    output_state=output_state, item_id=item_id,
+                    event_line=event_line)
 
     def first_failure(self) -> dict[str, object] | None:
         """Return the first semantic CLI failure across independent channels."""
+        if self.mode == "baseline" and self.command_first_failure is not None:
+            return self.command_first_failure
+        if self._first_failure_kind == "command":
+            return self.command_first_failure
         if self._first_failure_kind == "diagnostic":
             return self.diagnostic_first_failure
         if self._first_failure_kind == "scoring" and self.first_scoring_failure is not None:
@@ -1375,10 +1718,10 @@ class ProgressWriter:
             self.monitor.latest_cli.get("subcommand")
             if isinstance(self.monitor.latest_cli, dict) else None)
         if (checker_allowed is None
-                and self.monitor.stop_state == "baseline_first_scoring_failure"
+                and self.monitor.stop_state in FIRST_FAILURE_STATES
                 and latest_subcommand != "verify"):
             checker_allowed = False
-            checker_reason = "baseline_first_failure_before_verify"
+            checker_reason = f"{self.run_kind}_first_failure_before_verify"
         snapshot = {
             "contract_version": PROGRESS_CONTRACT,
             "run_id": self.run_id,
@@ -1417,13 +1760,20 @@ class ProgressWriter:
                 "total_tokens": total_tokens,
                 "total_tokens_status": "observed" if total_tokens is not None else "unavailable",
                 "token_usage": token_usage,
+                "command_invocations_total": max(
+                    self.monitor.agent_command_invocations,
+                    self.monitor.agent_command_completions),
+                "command_completions_total": self.monitor.agent_command_completions,
+                "command_failures_total": self.monitor.agent_command_failures,
             },
             "scoring_first_failure": self.monitor.first_scoring_failure,
             "diagnostic_first_failure": self.monitor.diagnostic_first_failure,
+            "command_first_failure": self.monitor.command_first_failure,
             "first_failure": self.monitor.first_failure(),
-            "first_failure_seal_triggered": (
-                self.monitor.first_scoring_failure is not None
-                and self.monitor.mode == "baseline"),
+            "first_failure_seal_triggered": self.monitor.stop_state in FIRST_FAILURE_STATES,
+            "failure_checkpoint_policy": checkpoint_failure_policy(
+                self.monitor.checkpoint_on_first_failure),
+            "failure_checkpoint": self.monitor.failure_checkpoint,
             "checker_allowed": checker_allowed,
             "checker_decision_reason": checker_reason,
             "scorecard": self.scorecard,
@@ -1447,6 +1797,207 @@ def terminate_process_group(process: subprocess.Popen, grace_seconds: float = 5.
         except ProcessLookupError:
             pass
         process.wait()
+
+
+def confirm_agent_group_stopped(monitor: RunMonitor) -> dict[str, object]:
+    """Stop the whole owned group, including children left by an exited leader.
+
+    A reaped leader alone is insufficient for a stable checkpoint. Zombies cannot
+    write files; all other group members must be gone before source is archived.
+    Failure to inspect or terminate the group is surfaced, never treated as proof.
+    """
+    if monitor.agent_process_stop is not None:
+        return monitor.agent_process_stop
+    process = monitor.agent_process
+    if process is None:
+        receipt = {"status": "not_started", "confirmed_epoch": time.time()}
+        monitor.agent_process_stop = receipt
+        return receipt
+
+    def live_members() -> bool:
+        try:
+            os.killpg(process.pid, 0)
+        except ProcessLookupError:
+            return False
+        result = subprocess.run(
+            ["ps", "-ax", "-o", "pgid=,stat="], capture_output=True,
+            text=True, check=True, timeout=5)
+        for line in result.stdout.splitlines():
+            fields = line.split()
+            if len(fields) == 2 and fields[0] == str(process.pid):
+                if not fields[1].startswith("Z"):
+                    return True
+        return False
+
+    try:
+        for sig, grace in ((signal.SIGTERM, 1.0), (signal.SIGKILL, 5.0)):
+            try:
+                os.killpg(process.pid, sig)
+            except ProcessLookupError:
+                pass
+            deadline = time.monotonic() + grace
+            while True:
+                process.poll()  # Reap the leader before inspecting its group.
+                if not live_members():
+                    process.wait(timeout=1)
+                    receipt = {
+                        "status": "confirmed_stopped", "process_group_id": process.pid,
+                        "confirmed_epoch": time.time(), "live_member_count": 0,
+                    }
+                    monitor.agent_process_stop = receipt
+                    return receipt
+                if time.monotonic() >= deadline:
+                    break
+                time.sleep(0.05)
+        raise RuntimeError("Agent process group still has live members")
+    except Exception as error:
+        # Inspection can be denied by the sandbox. Still stop our owned group,
+        # while keeping the result explicitly unconfirmed and non-resumable.
+        try:
+            os.killpg(process.pid, signal.SIGKILL)
+        except ProcessLookupError:
+            pass
+        process.poll()
+        receipt = {
+            "status": "stop_unconfirmed", "process_group_id": process.pid,
+            "error_type": type(error).__name__,
+        }
+        monitor.agent_process_stop = receipt
+        return receipt
+
+
+def seal_failure_checkpoint(
+    *, run_dir: Path, project: Path, run_id: str, mode: str,
+    parent_run_id: str | None, checkpoint: dict[str, object] | None,
+    monitor: RunMonitor, terminal: str, agent_code: int,
+    checker_code: int | None,
+) -> dict[str, object]:
+    """Seal new, unaccepted project source only after the Agent group is quiet."""
+    # An exclusive directory gives every seal its own identity and never replaces
+    # either the input checkpoint or a partially written failed seal.
+    seal_dir = run_dir / f"failure-checkpoint-{time.time_ns()}"
+    receipt: dict[str, object] = {
+        "status": "failed", "terminal_state": terminal,
+        "baseline_eligibility": False, "stage": "agent_group_stop",
+    }
+    try:
+        stopped = confirm_agent_group_stopped(monitor)
+        receipt["agent_process_group"] = stopped
+        if stopped.get("status") not in {"confirmed_stopped", "not_started"}:
+            raise RuntimeError("Cannot checkpoint an unconfirmed Agent process group")
+        if project.is_symlink() or not project.is_dir():
+            raise ValueError("Checkpoint source must be a real project directory")
+        receipt["stage"] = "archive_project_source"
+        seal_dir.mkdir(mode=0o700, exist_ok=False)
+        receipt["directory"] = str(seal_dir.resolve())
+        archive_path = seal_dir / "checkpoint-project.tar.gz"
+        manifest_path = seal_dir / "checkpoint.json"
+        excluded_counts: dict[str, int] = {}
+        archived_file_count = 0
+
+        def include(path: Path) -> bool:
+            parts = path.relative_to(project).parts
+            reason = checkpoint_restore_exclusion(parts)
+            if any(part.startswith("._") for part in parts) or parts[0] == "__MACOSX":
+                reason = "appledouble"
+            mode_bits = path.lstat().st_mode
+            if stat.S_ISLNK(mode_bits):
+                reason = "symlink"
+            elif not (stat.S_ISREG(mode_bits) or stat.S_ISDIR(mode_bits)):
+                reason = "special_file"
+            if reason is not None:
+                excluded_counts[reason] = excluded_counts.get(reason, 0) + 1
+                return False
+            return True
+
+        with archive_path.open("xb") as archive_file:
+            with tarfile.open(fileobj=archive_file, mode="w:gz", dereference=True) as archive:
+                def walk_error(error: OSError) -> None:
+                    raise error
+
+                for directory, directories, files in os.walk(
+                    project, followlinks=False, onerror=walk_error,
+                ):
+                    root = Path(directory)
+                    directories[:] = [
+                        name for name in sorted(directories) if include(root / name)]
+                    for name in directories:
+                        path = root / name
+                        archive.add(path, arcname=str(Path("project") / path.relative_to(project)),
+                                    recursive=False)
+                    for name in sorted(files):
+                        path = root / name
+                        if include(path):
+                            archive.add(
+                                path, arcname=str(Path("project") / path.relative_to(project)),
+                                recursive=False)
+                            archived_file_count += 1
+        if not archived_file_count:
+            raise ValueError("Checkpoint source contains no restorable project files")
+        failure_boundary = {
+            "terminal_state": terminal,
+            "first_failure": monitor.first_failure(),
+            "termination": monitor.stop_detail,
+            "agent_exit_code": agent_code,
+            "checker_exit_code": checker_code,
+            "latest_cli": monitor.latest_cli,
+            "latest_diagnostic": monitor.latest_diagnostic,
+            "attribution_status": "pending",
+        }
+        manifest = {
+            "contract_version": "domainry-eval-checkpoint-v1",
+            "checkpoint_id": f"{run_id}/{seal_dir.name}",
+            "checkpoint_kind": "automatic_failure_source_snapshot",
+            "measurement_class": "checkpoint_convergence_not_baseline",
+            "baseline_eligibility": False,
+            "source_run_id": run_id,
+            "source_run_kind": mode,
+            "source_parent_run_id": parent_run_id,
+            "source_input_checkpoint": checkpoint,
+            "project_acceptance_status": "unaccepted_failure_snapshot",
+            "created_epoch": time.time(),
+            "agent_process_group": stopped,
+            "archive": {
+                "path": archive_path.name, "sha256": sha256_file(archive_path),
+                "file_count": archived_file_count,
+            },
+            "archive_policy": {
+                "source": "project_after_agent_group_stopped",
+                "exclusion_rule": "checkpoint_restore_exclusion",
+                "excluded_counts": excluded_counts,
+                "symlinks_and_special_files": "excluded_without_following",
+            },
+            "failure_boundary": failure_boundary,
+            "resume_boundary": {
+                "stage": "failure_review",
+                "next_node": "Diagnose this checkpoint's failure_boundary and select the affected retry stage",
+                "rule": (
+                    "This source snapshot is not accepted. Attribute the saved failure before repairing; "
+                    "route foundation defects to the owning project and resume after its fix. "
+                    "Revalidate delivery/runtime identities before reuse. Do not inherit a previously "
+                    "executed resume boundary or restart completed source authoring blindly."),
+            },
+            "blocking_condition": {
+                "attribution_status": "pending", "owner": None,
+                "prohibited_repairs": (checkpoint or {}).get("prohibited_repairs", []),
+            },
+        }
+        with manifest_path.open("x", encoding="utf-8") as output:
+            output.write(json.dumps(manifest, ensure_ascii=False, indent=2) + "\n")
+        receipt["stage"] = "validate_checkpoint_identity"
+        identity = checkpoint_identity(manifest_path, archive_path, run_id)
+        receipt.update({
+            "status": "sealed", "manifest_path": str(manifest_path.resolve()),
+            "archive_path": str(archive_path.resolve()), "identity": identity,
+            "archived_file_count": archived_file_count, "excluded_counts": excluded_counts,
+            "stage": "complete",
+        })
+    except Exception as error:
+        receipt["error_type"] = type(error).__name__
+        receipt["reason"] = "Failure checkpoint could not be safely sealed; do not resume from this attempt"
+    monitor.failure_checkpoint = receipt
+    atomic_write_json(run_dir / "failure-checkpoint-result.json", receipt)
+    return receipt
 
 
 def capture_artifacts(
@@ -1662,7 +2213,11 @@ def ensure_checklist(run_dir: Path, checker_code: int | None, reason: str | None
     })
 
 
-def append_prompt_policy(source: Path, destination: Path, mode: str) -> None:
+def append_prompt_policy(
+    source: Path, destination: Path, mode: str, *, checkpoint_restored: bool = False,
+    checkpoint: dict[str, object] | None = None,
+    checkpoint_on_first_failure: bool = False,
+) -> None:
     base = source.read_text(encoding="utf-8").rstrip()
     isolation_policy = (
         "\n\n## Evaluator-owned isolation policy\n\n"
@@ -1673,20 +2228,80 @@ def append_prompt_policy(source: Path, destination: Path, mode: str) -> None:
         "Do not search parent or external directories for evaluator assets, golden "
         "checks, scorers, or historical runs.\n"
     )
+    if checkpoint_restored:
+        automatic_failure = (
+            isinstance(checkpoint, dict)
+            and checkpoint.get("checkpoint_kind") == "automatic_failure_source_snapshot")
+        resume_progress = (
+            "Continue from the captured unaccepted source state. Its failed stage may need "
+            "repair and revalidation; read the saved failure boundary before choosing the "
+            "next stage and preserve unrelated completed source work. "
+            if automatic_failure else
+            "Continue from the existing packet-ready project state; do not repeat completed "
+            "requirements, model planning, or model application work unless the current "
+            "candidate requires a compatibility migration. ")
+        isolation_policy = (
+            "\n\n## Evaluator-owned isolation and checkpoint policy\n\n"
+            "Work only in the current Git project and use only the candidate Skill "
+            "installed in the provided isolated CODEX_HOME. The evaluator restored this "
+            "project from the immutable checkpoint named by the convergence lineage, but "
+            "created a new Agent session and a fresh Runtime SQLite cohort. "
+            + resume_progress + "This later policy overrides any base-prompt wording "
+            "that says to start from zero or assumes an empty project. Do not resume or import "
+            "any prior Agent session, "
+            "database, external project, TODO, or other checkpoint. Do not search parent or "
+            "external directories for evaluator assets, golden checks, scorers, or historical "
+            "runs. This convergence run can never be pass@1 evidence.\n"
+        )
+        resume_boundary = (
+            checkpoint.get("resume_boundary") if isinstance(checkpoint, dict) else None)
+        if isinstance(resume_boundary, dict):
+            resume_metadata = {
+                "resume_boundary": resume_boundary,
+                "prohibited_repairs": checkpoint.get("prohibited_repairs", []),
+            }
+            if checkpoint.get("failure_boundary") is not None:
+                resume_metadata["failure_boundary"] = checkpoint["failure_boundary"]
+            isolation_policy += (
+                "\n### Authoritative checkpoint resume boundary\n\n"
+                "The evaluator checkpoint manifest is authoritative over restored "
+                "project-local stage reports, TODOs, finalization receipts, and verification "
+                "receipts. Those files describe the state at capture time and can be stale "
+                "under the current candidate. Follow the resume boundary below before any "
+                "verify command. If it requires a compatibility migration, redo only the "
+                "affected plan/apply/finalize closure; do not repeat unrelated completed work "
+                "and do not reuse a stale signed Runtime package. The prohibited repairs are "
+                "hard semantic constraints.\n\n"
+                "```json\n"
+                + json.dumps(resume_metadata, ensure_ascii=False, sort_keys=True)
+                + "\n```\n"
+            )
     if mode == "baseline":
         policy = (
             "\n\n## Evaluator-owned measured-run policy\n\n"
-            "This is a baseline measurement. Stop after the first failed model plan, "
-            "apply model, apply finalize, or verify command. Do not repair or retry that "
-            "failure in this run; report `EVAL_RESULT={\"state\":\"not_done\"}`. The "
-            "driver independently enforces this boundary.\n"
+            "This is a strict baseline measurement. Stop after the first Agent command "
+            "that exits non-zero, or the first Domainry command that reports an explicit "
+            "failure state, including auxiliary and read-only probes. Do not use a shell "
+            "probe whose ordinary no-match or optional-absence result exits non-zero. Do "
+            "not repair or retry any failure in this run; report "
+            "`EVAL_RESULT={\"state\":\"not_done\"}`. The driver independently enforces "
+            "this boundary.\n"
         )
     else:
         policy = (
             "\n\n## Evaluator-owned measured-run policy\n\n"
-            "This is an explicitly selected convergence run. Repairs and retries are "
-            "allowed within the recorded budgets. This run is never pass@1 evidence.\n"
+            "This is an explicitly selected convergence run. "
+            + ("" if checkpoint_on_first_failure else
+               "Repairs and retries are allowed within the recorded budgets. ")
+            + "This run is never pass@1 evidence.\n"
         )
+    if checkpoint_on_first_failure:
+        policy += (
+            "\nThe evaluator has enabled checkpoint-on-first-failure. The first failed "
+            "Agent command or explicit Domainry failure (including diagnostics) ends this "
+            "Agent process. Do not attempt an in-run repair or retry. The evaluator stops "
+            "the process group and saves project source for a separate convergence run; "
+            "such a checkpoint is unaccepted and never baseline evidence.\n")
     destination.write_text(base + isolation_policy + policy, encoding="utf-8")
 
 
@@ -1698,7 +2313,8 @@ def build_freeze_manifest(
     candidate: dict[str, object], isolated_candidate: dict[str, object],
     isolation: Isolation, absence: dict[str, object], frozen_scorer_bytes: bytes,
     frozen_checker_bytes: bytes | None, auth_source: Path | None,
-    service_identity: dict[str, object],
+    service_identity: dict[str, object], checkpoint: dict[str, object] | None = None,
+    checkpoint_on_first_failure: bool = False,
 ) -> dict[str, object]:
     scorer = Path(__file__).with_name("scorer.py")
     return {
@@ -1714,6 +2330,8 @@ def build_freeze_manifest(
         "candidate": identity_fingerprint(candidate),
         "isolated_candidate": identity_fingerprint(isolated_candidate),
         "service_identity": service_identity,
+        "checkpoint": checkpoint,
+        "failure_checkpoint_policy": checkpoint_failure_policy(checkpoint_on_first_failure),
         "hashes": {
             "candidate_config_sha256": sha256_file(candidate_config),
             "requirements_sha256": sha256_file(prompt_source),
@@ -1739,6 +2357,7 @@ def build_freeze_manifest(
             "environment_policy": "minimal-isolated-v1",
             "prompt_inputs": ["requirements", "evaluator-owned measured-run policy"],
             "evaluator_assets_exposed": False,
+            "checkpoint_project_restored": checkpoint is not None,
         },
     }
 
@@ -1769,6 +2388,7 @@ def validate_freeze_manifest(
 def frozen_input_drift(
     manifest_path: Path, expected_manifest_sha256: str, prompt_source: Path,
     prompt_path: Path, candidate_config: Path, checker_source: Path | None,
+    checkpoint_manifest: Path | None = None, checkpoint_archive: Path | None = None,
 ) -> list[str]:
     expected = json.loads(manifest_path.read_text(encoding="utf-8"))
     hashes = expected.get("hashes", {})
@@ -1787,6 +2407,16 @@ def frozen_input_drift(
             sha256_file(Path(__file__).with_name("scorer.py")), hashes.get("scorer_sha256")),
         "driver_sha256": (sha256_file(Path(__file__)), hashes.get("driver_sha256")),
     }
+    checkpoint = expected.get("checkpoint")
+    if isinstance(checkpoint, dict):
+        checks.update({
+            "checkpoint_manifest_sha256": (
+                sha256_file(checkpoint_manifest) if checkpoint_manifest else None,
+                checkpoint.get("manifest_sha256")),
+            "checkpoint_archive_sha256": (
+                sha256_file(checkpoint_archive) if checkpoint_archive else None,
+                checkpoint.get("archive_sha256")),
+        })
     return [key for key, (actual, frozen) in checks.items() if actual != frozen]
 
 
@@ -1836,6 +2466,7 @@ def run_agent_process(
             command, cwd=project, stdout=subprocess.PIPE, stderr=stderr,
             env=environment, text=False, bufsize=0, start_new_session=True,
         )
+        monitor.agent_process = process
         assert process.stdout is not None
         selector = selectors.DefaultSelector()
         selector.register(process.stdout, selectors.EVENT_READ)
@@ -1878,6 +2509,10 @@ def run_agent_process(
             while b"\n" in pending:
                 raw_line, pending = pending.split(b"\n", 1)
                 observe_line(raw_line)
+                if monitor.checkpoint_on_first_failure and monitor.stop_state:
+                    # Act at the first observed failure, rather than after parsing
+                    # the rest of a large buffered event chunk.
+                    terminate_process_group(process)
 
         try:
             while process.poll() is None:
@@ -1898,6 +2533,14 @@ def run_agent_process(
                     if monitor.stop_state:
                         terminate_process_group(process)
                         break
+            if monitor.checkpoint_on_first_failure:
+                stopped = confirm_agent_group_stopped(monitor)
+                if stopped.get("status") == "stop_unconfirmed":
+                    raise RuntimeError("Agent process group stop could not be confirmed")
+                # A child can inherit stdout after the leader exits successfully.
+                # The group is now quiet; drain only buffered bytes so an unrelated
+                # detached process holding the pipe cannot postpone checkpointing.
+                os.set_blocking(process.stdout.fileno(), False)
             remainder = process.stdout.read()
             if remainder:
                 consume(remainder)
@@ -1906,6 +2549,8 @@ def run_agent_process(
             return process.wait()
         except BaseException:
             terminate_process_group(process)
+            if monitor.checkpoint_on_first_failure:
+                confirm_agent_group_stopped(monitor)
             raise
         finally:
             selector.close()
@@ -1928,6 +2573,9 @@ def execute_run(
     auth_source: Path | None,
     budgets: Budgets,
     flow_evidence_source: Path | None = None,
+    checkpoint_manifest: Path | None = None,
+    checkpoint_archive: Path | None = None,
+    checkpoint_on_first_failure: bool = False,
     clock: Callable[[], float] = time.time,
     service_timeout: float = 5.0,
     service_fetcher: Callable[[str, float], tuple[int, object]] = fetch_health,
@@ -1964,6 +2612,8 @@ def execute_run(
         "candidate-after.json", "candidate-isolated-after.json",
         "service-before.json", "service-after.json",
         "evaluator-scorer.py", "evaluator-checker.py", "progress.json",
+        "checkpoint-restored.json",
+        "failure-checkpoint-result.json",
     )
     if run_dir.exists() and any((run_dir / name).exists() for name in protected):
         raise ValueError(f"run directory already contains measured-run artifacts: {run_dir}")
@@ -1973,6 +2623,18 @@ def execute_run(
         raise ValueError("convergence runs require parent_run_id")
     if mode == "baseline" and parent_run_id:
         raise ValueError("baseline runs must not set parent_run_id")
+    if (checkpoint_manifest is None) != (checkpoint_archive is None):
+        raise ValueError("checkpoint manifest and archive must be provided together")
+    if mode == "baseline" and checkpoint_manifest is not None:
+        raise ValueError("baseline runs cannot restore checkpoints")
+    checkpoint_info = None
+    if checkpoint_manifest is not None and checkpoint_archive is not None:
+        if mode != "convergence" or parent_run_id is None:
+            raise ValueError("checkpoint restore requires a convergence parent_run_id")
+        checkpoint_manifest = checkpoint_manifest.expanduser().resolve()
+        checkpoint_archive = checkpoint_archive.expanduser().resolve()
+        checkpoint_info = checkpoint_identity(
+            checkpoint_manifest, checkpoint_archive, parent_run_id)
     run_resolved = run_dir.expanduser().resolve(strict=False)
     isolation_resolved = isolation_root.expanduser().resolve(strict=False)
     if (is_relative_to(isolation_resolved, run_resolved)
@@ -1990,7 +2652,11 @@ def execute_run(
     service_before = capture_service_identity(candidate, service_timeout, service_fetcher)
     run_dir.mkdir(parents=True, exist_ok=True)
     prompt_path = run_dir / "agent-prompt.md"
-    append_prompt_policy(prompt_source, prompt_path, mode)
+    append_prompt_policy(
+        prompt_source, prompt_path, mode,
+        checkpoint_restored=checkpoint_info is not None,
+        checkpoint=checkpoint_info,
+        checkpoint_on_first_failure=checkpoint_on_first_failure)
     frozen_scorer = run_dir / "evaluator-scorer.py"
     frozen_scorer_bytes = Path(__file__).with_name("scorer.py").read_bytes()
     frozen_checker = None
@@ -2016,6 +2682,8 @@ def execute_run(
         frozen_checker_bytes=frozen_checker_bytes,
         auth_source=auth_source,
         service_identity=service_before,
+        checkpoint=checkpoint_info,
+        checkpoint_on_first_failure=checkpoint_on_first_failure,
     )
     freeze_path = run_dir / "freeze-manifest.json"
     write_json(freeze_path, freeze)
@@ -2023,9 +2691,17 @@ def execute_run(
     validate_freeze_manifest(
         freeze_path, freeze, isolation, candidate_config, prompt_source,
         prompt_path, checker_source)
+    checkpoint_restore = None
+    if checkpoint_archive is not None:
+        checkpoint_restore = restore_checkpoint_project(
+            checkpoint_archive, isolation.project)
+        write_json(run_dir / "checkpoint-restored.json", {
+            **(checkpoint_info or {}),
+            **checkpoint_restore,
+        })
     project = isolation.project
     started = clock()
-    monitor = RunMonitor(mode, budgets)
+    monitor = RunMonitor(mode, budgets, checkpoint_on_first_failure=checkpoint_on_first_failure)
     progress = ProgressWriter(
         run_dir / "progress.json", run_id, mode, project, monitor, started)
     lifecycle: dict[str, object] = {
@@ -2045,6 +2721,7 @@ def execute_run(
         "first_failure": None,
         "scoring_first_failure": None,
         "diagnostic_first_failure": None,
+        "command_first_failure": None,
         # Legacy name retained for existing readers.
         "first_scoring_failure": None,
         "diagnostic_cli": {
@@ -2055,6 +2732,10 @@ def execute_run(
             "latest": None,
             "first_failure": None,
         },
+        "checkpoint": checkpoint_info,
+        "checkpoint_restore": checkpoint_restore,
+        "failure_checkpoint_policy": checkpoint_failure_policy(checkpoint_on_first_failure),
+        "failure_checkpoint": None,
         "freeze_manifest_sha256": freeze_sha256,
         "ephemeral_auth_staged": auth_source is not None,
         "auth_cleanup_status": "pending" if auth_source is not None else "not_required",
@@ -2165,7 +2846,7 @@ def execute_run(
     try:
         freeze_errors = frozen_input_drift(
             freeze_path, freeze_sha256, prompt_source, prompt_path, candidate_config,
-            checker_source)
+            checker_source, checkpoint_manifest, checkpoint_archive)
     except (OSError, ValueError, json.JSONDecodeError) as error:
         freeze_errors = [f"freeze_manifest_unreadable: {error}"]
 
@@ -2228,31 +2909,42 @@ def execute_run(
         "environment_invalid_freeze_drift", "environment_invalid_auth_cleanup",
         "environment_invalid_auth_sanitization", "environment_invalid_service_drift",
     }
-    baseline_first_failure = monitor.stop_state == "baseline_first_scoring_failure"
+    first_failure_stopped = monitor.stop_state in FIRST_FAILURE_STATES
     progress.set_phase("checker", clock())
     if pre_checker_environment_invalid:
         progress.checker_allowed = False
         progress.checker_decision_reason = "environment_invalid"
         progress.write(clock(), force=True)
         ensure_checklist(run_dir, None, "environment invalid; evaluator checker not executed")
-    elif baseline_first_failure:
+    elif first_failure_stopped:
         failed_family = (monitor.first_scoring_failure or {}).get("family")
         failure_reason = (
-            "baseline_first_failure_verify_failed"
+            f"{mode}_first_agent_command_failure"
+            if monitor.stop_state == f"{mode}_first_command_failure"
+            else
+            f"{mode}_first_failure_verify_failed"
             if failed_family == "verify"
-            else "baseline_first_failure_before_verify")
+            else f"{mode}_first_failure_before_verify")
         progress.checker_allowed = False
         progress.checker_decision_reason = failure_reason
         progress.write(clock(), force=True)
         ensure_checklist(
             run_dir, None,
             (
-                "baseline sealed at failed verify; checker not executed"
+                f"{mode} sealed at first failed Agent command; checker not executed"
+                if monitor.stop_state == f"{mode}_first_command_failure"
+                else
+                f"{mode} sealed at failed verify; checker not executed"
                 if failed_family == "verify"
-                else "baseline sealed at first scoring failure before verify; "
+                else f"{mode} sealed at first scoring failure before verify; "
                      "checker not executed"
             ),
         )
+    elif checkpoint_on_first_failure and (agent_code != 0 or monitor.stop_state):
+        progress.checker_allowed = False
+        progress.checker_decision_reason = "agent_failed_checkpoint_required"
+        progress.write(clock(), force=True)
+        ensure_checklist(run_dir, None, "Agent stopped with failure; checker not executed")
     elif not checker_gate_ready:
         progress.checker_allowed = False
         progress.checker_decision_reason = checker_gate_reason
@@ -2280,10 +2972,19 @@ def execute_run(
             progress.checker_allowed = True
             progress.checker_decision_reason = "eligible"
             progress.write(clock(), force=True)
-            checker_code, checker_timed_out = run_auxiliary(
-                expand_checker_command(checker_command, values), project,
-                run_dir / "checker-stdout.txt", run_dir / "checker-stderr.txt",
-                checker_timeout)
+            try:
+                checker_code, checker_timed_out = run_auxiliary(
+                    expand_checker_command(checker_command, values), project,
+                    run_dir / "checker-stdout.txt", run_dir / "checker-stderr.txt",
+                    checker_timeout)
+            except Exception as error:
+                if not checkpoint_on_first_failure:
+                    raise
+                checker_code, checker_timed_out = 127, False
+                monitor.stop("acceptance_failed", {
+                    "reason": "Checker launch or monitoring failed",
+                    "error_type": type(error).__name__, "phase": "checker",
+                })
             if checker_timed_out:
                 monitor.stop("budget_exhausted_wall_clock", {
                     "observed": round(clock() - started, 3),
@@ -2335,14 +3036,21 @@ def execute_run(
         "flow_evidence_archive_drift",
     }
     environment_valid = not environment_invalid
-    if terminal == "baseline_first_scoring_failure":
-        measurement_boundary = "baseline_first_failure_sealed"
+    if terminal in FIRST_FAILURE_STATES:
+        measurement_boundary = f"{mode}_first_failure_sealed"
     elif terminal == "delivery_incomplete":
         measurement_boundary = "delivery_incomplete"
     elif measurement_complete:
         measurement_boundary = "full_run_sealed"
     else:
         measurement_boundary = "interrupted_or_invalid"
+    if checkpoint_on_first_failure and terminal != "completed":
+        lifecycle["failure_checkpoint"] = seal_failure_checkpoint(
+            run_dir=run_dir, project=project, run_id=run_id, mode=mode,
+            parent_run_id=parent_run_id, checkpoint=checkpoint_info,
+            monitor=monitor, terminal=terminal, agent_code=agent_code,
+            checker_code=checker_code)
+        progress.write(clock(), force=True)
     token_usage = token_usage_snapshot_or_unavailable(monitor.token_usage)
     lifecycle.update({
         "state": terminal,
@@ -2366,11 +3074,17 @@ def execute_run(
             "diagnostic_cli_completions": monitor.diagnostic_completions,
             "diagnostic_cli_failures": monitor.diagnostic_failures,
             "diagnostic_cli_retries": monitor.diagnostic_retries,
+            "agent_command_invocations": max(
+                monitor.agent_command_invocations,
+                monitor.agent_command_completions),
+            "agent_command_completions": monitor.agent_command_completions,
+            "agent_command_failures": monitor.agent_command_failures,
         },
         "termination": monitor.stop_detail,
         "first_failure": monitor.first_failure(),
         "scoring_first_failure": monitor.first_scoring_failure,
         "diagnostic_first_failure": monitor.diagnostic_first_failure,
+        "command_first_failure": monitor.command_first_failure,
         "first_scoring_failure": monitor.first_scoring_failure,
         "diagnostic_cli": {
             "invocations_total": max(
@@ -2415,6 +3129,7 @@ def execute_run(
         "run_id": run_id,
         "run_kind": mode,
         "parent_run_id": parent_run_id,
+        "checkpoint": checkpoint_info,
         "terminal_state": terminal,
         "measurement_complete": measurement_complete,
         "environment_valid": environment_valid,
@@ -2435,6 +3150,8 @@ def execute_run(
         raw_failures = failures_from_diagnostic_captures(artifacts, terminal)
         raw_failures.extend(failures_from_first_scoring_capture(
             artifacts, monitor.first_scoring_failure, terminal))
+        raw_failures.extend(failures_from_first_command_failure(
+            monitor.command_first_failure, terminal))
         if (terminal == "delivery_incomplete" and not any(
             failure.get("failure_kind") != "diagnostic"
             for failure in raw_failures
@@ -2490,6 +3207,12 @@ def execute_run(
         run_dir / "scorer-stdout.txt", run_dir / "scorer-stderr.txt")
     lifecycle["scorer_exit_code"] = scorer_code
     lifecycle["state"] = terminal if scorer_code == 0 else "scorer_failed"
+    if checkpoint_on_first_failure and scorer_code != 0 and monitor.failure_checkpoint is None:
+        lifecycle["failure_checkpoint"] = seal_failure_checkpoint(
+            run_dir=run_dir, project=project, run_id=run_id, mode=mode,
+            parent_run_id=parent_run_id, checkpoint=checkpoint_info,
+            monitor=monitor, terminal="scorer_failed", agent_code=agent_code,
+            checker_code=checker_code)
     write_json(run_dir / "lifecycle.json", lifecycle)
     final_now = clock()
     progress.set_phase("terminal", final_now)
@@ -2552,6 +3275,18 @@ def main() -> int:
         "--flow-evidence-source", type=Path,
         help="structured BF evidence to archive after the Agent exits",
     )
+    parser.add_argument(
+        "--checkpoint-manifest", type=Path,
+        help="evaluator checkpoint manifest; convergence only and paired with archive",
+    )
+    parser.add_argument(
+        "--checkpoint-archive", type=Path,
+        help="immutable checkpoint project archive; convergence only",
+    )
+    parser.add_argument(
+        "--checkpoint-on-first-failure", action="store_true",
+        help="stop on the first failed Agent command and seal unaccepted project source for convergence",
+    )
     parser.add_argument("--budget-wall-seconds", type=positive_number)
     parser.add_argument("--budget-total-tokens", type=positive_integer)
     parser.add_argument("--budget-cli-invocations", type=positive_integer)
@@ -2576,6 +3311,9 @@ def main() -> int:
             auth_source=args.auth_source,
             service_timeout=args.service_timeout,
             flow_evidence_source=args.flow_evidence_source,
+            checkpoint_manifest=args.checkpoint_manifest,
+            checkpoint_archive=args.checkpoint_archive,
+            checkpoint_on_first_failure=args.checkpoint_on_first_failure,
             budgets=Budgets(
                 wall_clock_seconds=args.budget_wall_seconds,
                 total_tokens=args.budget_total_tokens,

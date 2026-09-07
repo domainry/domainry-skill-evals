@@ -1,0 +1,56 @@
+{
+  "contract_version": "domainry-eval-run-lifecycle-v1",
+  "run_id": "m1-crm-v0.3.6-36-m1-authoring-context-20260906-3c2636256e9f-baseline-20",
+  "run_kind": "baseline",
+  "parent_run_id": null,
+  "state": "budget_exhausted_tokens",
+  "measurement_complete": false,
+  "environment_valid": true,
+  "measurement_boundary": "interrupted_or_invalid",
+  "started_epoch": 1788626280.430217,
+  "ended_epoch": 1788627662.107192,
+  "budgets": {
+    "wall_clock_seconds": 3600.0,
+    "total_tokens": 5000000,
+    "cli_invocations": 40,
+    "cli_retries": 0
+  },
+  "usage": {
+    "wall_clock_seconds": 1381.677,
+    "total_tokens": 5673474,
+    "cli_invocations_started": 3,
+    "cli_invocations_captured": 3,
+    "cli_retries_started": 0
+  },
+  "termination": {
+    "observed": 5673474,
+    "limit": 5000000
+  },
+  "freeze_manifest_sha256": "ca8977ddbc0eebef354165673e61ca765a003721c6f17170a99cd105b3e197e2",
+  "ephemeral_auth_staged": true,
+  "auth_cleanup_status": "removed",
+  "first_scoring_failure": null,
+  "agent_result_state": "not_done",
+  "agent_exit_code": 0,
+  "checker_exit_code": null,
+  "checker_gate": {
+    "ready": false,
+    "reason": "agent_declared_not_done",
+    "missing": [
+      "agent_result:not_done",
+      "apply_finalize:missing",
+      "verify:missing",
+      "verify_artifact:missing_or_unparseable",
+      "flow_evidence:missing_invalid_or_unparseable"
+    ]
+  },
+  "agent_ended_epoch": 1788627661.751165,
+  "agent_session_id": "01a0726f-29cf-7c31-a4c8-cd8d9148e736",
+  "business_flow_evidence_source": "missing",
+  "business_flow_evidence_contract_valid": null,
+  "business_flow_evidence_sha256": null,
+  "business_flow_evidence_error": null,
+  "service_identity_before_sha256": "38ff5158cecd8594ed8b52857d1bc096fe94783abb19e3fbd4a5055f1d5d680f",
+  "service_identity_after_sha256": "38ff5158cecd8594ed8b52857d1bc096fe94783abb19e3fbd4a5055f1d5d680f",
+  "scorer_exit_code": 0
+}

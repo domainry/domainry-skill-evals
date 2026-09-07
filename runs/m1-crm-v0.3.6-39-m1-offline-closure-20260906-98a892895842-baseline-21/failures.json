@@ -1,0 +1,89 @@
+[
+  {
+    "failure_kind": "diagnostic",
+    "stage": "verify_fixture",
+    "owner": "domainry-cli",
+    "note": "error: project compiler-bound Runtime acceptance fixture: Runtime acceptance fixture \"bf06_overdue_contacted\" department owner organization index is invalid",
+    "terminal_state": "baseline_first_scoring_failure",
+    "attribution_status": "attributed",
+    "does_not_affect_scoring": true,
+    "detail": {
+      "failure_kind": "diagnostic",
+      "family": "verify_fixture",
+      "exit_code": 1,
+      "output_state": null,
+      "output": "error: project compiler-bound Runtime acceptance fixture: Runtime acceptance fixture \"bf06_overdue_contacted\" department owner organization index is invalid",
+      "raw_output": "error: project compiler-bound Runtime acceptance fixture: Runtime acceptance fixture \"bf06_overdue_contacted\" department owner organization index is invalid\n",
+      "stdout": null,
+      "stderr": null,
+      "output_streams_status": "aggregated_only",
+      "event_item_id": "item_56",
+      "event_line": 109,
+      "observed_started_epoch": 1788633285.289133,
+      "observed_completed_epoch": 1788633285.289763,
+      "duration_seconds": 0.001,
+      "capture_file": "cli/004-verify_fixture.json",
+      "scoring_effect": "none"
+    }
+  },
+  {
+    "stage": "run structural checks and complete backend tests",
+    "name": "run structural checks and complete backend tests",
+    "owner": "domainry-builder",
+    "elapsed_ms": 67957,
+    "note": "verification failed: go_format(failed); inspect .domainry/builder/receipts/verification-failed.json",
+    "terminal_state": "baseline_first_scoring_failure",
+    "attribution_status": "attributed",
+    "output_state": "failed",
+    "output_error": "verification failed: go_format(failed); inspect .domainry/builder/receipts/verification-failed.json",
+    "first_failure": {
+      "name": "run structural checks and complete backend tests",
+      "status": "failed",
+      "elapsed_ms": 67957,
+      "owner": "domainry-builder"
+    },
+    "telemetry": {
+      "contract_version": "domainry-verify-telemetry-v1",
+      "elapsed_ms": 67961,
+      "cache": {
+        "signed_runtime_package": false,
+        "verification_receipt": false
+      },
+      "cache_misses": {
+        "verification_receipt": "verification receipt is missing"
+      },
+      "stages": [
+        {
+          "name": "validate compiler-bound acceptance actor graph",
+          "status": "done",
+          "elapsed_ms": 4,
+          "owner": "domainry-builder.runtime_acceptance_fixture"
+        },
+        {
+          "name": "validate reusable verification and signed Runtime package",
+          "status": "done",
+          "elapsed_ms": 0,
+          "owner": "domainry-runtime"
+        },
+        {
+          "name": "run structural checks and complete backend tests",
+          "status": "failed",
+          "elapsed_ms": 67957,
+          "owner": "domainry-builder"
+        }
+      ],
+      "first_failure": {
+        "name": "run structural checks and complete backend tests",
+        "status": "failed",
+        "elapsed_ms": 67957,
+        "owner": "domainry-builder"
+      }
+    },
+    "detail": {
+      "name": "run structural checks and complete backend tests",
+      "status": "failed",
+      "elapsed_ms": 67957,
+      "owner": "domainry-builder"
+    }
+  }
+]

@@ -1,0 +1,194 @@
+{
+  "contract_version": "domainry-eval-freeze-manifest-v1",
+  "run_id": "m1-crm-project-org-unit-resolve-convergence-40",
+  "benchmark": "m1-crm",
+  "run_kind": "convergence",
+  "parent_run_id": "m1-crm-evaluator-cache-convergence-38",
+  "model": "gpt-5.6-sol",
+  "budgets": {
+    "wall_clock_seconds": 3600.0,
+    "total_tokens": 5000000,
+    "cli_invocations": 40,
+    "cli_retries": 20
+  },
+  "absence_proof": {
+    "checked_epoch": 1788734491.037424,
+    "isolation_root_absent": true,
+    "project_absent": true,
+    "codex_home_absent": true,
+    "agent_home_absent": true,
+    "sqlite_database_absent": true,
+    "sqlite_wal_absent": true,
+    "sqlite_shm_absent": true
+  },
+  "isolation": {
+    "root": "/private/tmp/domainry-m1-project-bf-closure-convergence-40",
+    "codex_home": "/private/tmp/domainry-m1-project-bf-closure-convergence-40/codex-home",
+    "agent_home": "/private/tmp/domainry-m1-project-bf-closure-convergence-40/home",
+    "temp": "/private/tmp/domainry-m1-project-bf-closure-convergence-40/tmp",
+    "project": "/private/tmp/domainry-m1-project-bf-closure-convergence-40/project",
+    "runtime": "/private/tmp/domainry-m1-project-bf-closure-convergence-40/runtime",
+    "database": "/private/tmp/domainry-m1-project-bf-closure-convergence-40/runtime/cohort.sqlite",
+    "candidate_copy": "/private/tmp/domainry-m1-project-bf-closure-convergence-40/codex-home/skills/domainry-builder-v1"
+  },
+  "candidate": {
+    "candidate_id": "v0.3.16-7-m1-report-export-idempotency-20260907+7ea885b7fc54",
+    "skill_name": "domainry-builder-v1",
+    "skill_version": "v0.3.16-7-m1-report-export-idempotency-20260907",
+    "skill_identity_sha256": "ebd64d96025aeabc3ec803e2cef1d6330e670533269edbfc0dda8172909aaceb",
+    "package_metadata_sha256": "cf192f2f2bd612133c1cc480755499685186033065de11412507f760af9c64f4",
+    "skill_tree_sha256": "7ea885b7fc54735cc0331722cb7b9cf41819d87f82103e433f8468027f39cd9a",
+    "cli_binary_sha256": "cf22b5ecb446f2426c4045bc6522ab5b31d204e91be004507c6f6d1f8fa49720",
+    "runtime_api_contract_version": "runtime-domain-api-v1",
+    "runtime_api_contract_hash": "4fe655cbfd4fa0bc0b0c04c89b86926fc6aceb059c9fccf5b09eec9b459330f7",
+    "apply_target_flag": "--service",
+    "apply_target_value": "http://127.0.0.1:8283"
+  },
+  "isolated_candidate": {
+    "candidate_id": "v0.3.16-7-m1-report-export-idempotency-20260907+7ea885b7fc54",
+    "skill_name": "domainry-builder-v1",
+    "skill_version": "v0.3.16-7-m1-report-export-idempotency-20260907",
+    "skill_identity_sha256": "ebd64d96025aeabc3ec803e2cef1d6330e670533269edbfc0dda8172909aaceb",
+    "package_metadata_sha256": "cf192f2f2bd612133c1cc480755499685186033065de11412507f760af9c64f4",
+    "skill_tree_sha256": "7ea885b7fc54735cc0331722cb7b9cf41819d87f82103e433f8468027f39cd9a",
+    "cli_binary_sha256": "cf22b5ecb446f2426c4045bc6522ab5b31d204e91be004507c6f6d1f8fa49720",
+    "runtime_api_contract_version": "runtime-domain-api-v1",
+    "runtime_api_contract_hash": "4fe655cbfd4fa0bc0b0c04c89b86926fc6aceb059c9fccf5b09eec9b459330f7",
+    "apply_target_flag": "--service",
+    "apply_target_value": "http://127.0.0.1:8283"
+  },
+  "service_identity": {
+    "target_kind": "service",
+    "healthy": true,
+    "http_status": 200,
+    "health_document_sha256": "c23ea12a218568a3ad96751b0ddc3540f628f5cbac130bc850b9e0c7df79d3fa",
+    "published_identity": {
+      "contract_version": "domainry-control-plane-health-v1",
+      "discovery": "/.well-known/domainry-plane",
+      "service_kind": "template-control-plane",
+      "version": "v0.3.16-7-m1-report-export-idempotency-20260907",
+      "checks": [
+        {
+          "detail": "v0.3.16-7-m1-report-export-idempotency-20260907",
+          "name": "application_delivery",
+          "status": "passed"
+        },
+        {
+          "detail": "domainry-frontend-product_v0.3.16-7-m1-report-export-idempotency-20260907.tar.gz sha256:6490913f05323e8b29ce96a2f31e5b7f4b5c5e8c3bafecdd2192f49b9b6b8d42",
+          "name": "frontend_product",
+          "status": "passed"
+        },
+        {
+          "detail": "github.com/domainry/domainry-identity@v0.999.0-domainry.3d78dbf94d09ca0d",
+          "name": "identity_module",
+          "status": "passed"
+        },
+        {
+          "detail": "github.com/domainry/domainry-notification@v0.999.0-domainry.cea1cbbe680d85d8",
+          "name": "notification_module",
+          "status": "passed"
+        },
+        {
+          "detail": "github.com/domainry/domainry-notification-sdk@v0.999.0-domainry.c0a526a508a992fd",
+          "name": "notification_sdk",
+          "status": "passed"
+        },
+        {
+          "detail": "domainry-project-delivery-local-development",
+          "name": "project_delivery_signer",
+          "status": "passed"
+        },
+        {
+          "detail": "available",
+          "name": "project_delivery_store",
+          "status": "passed"
+        },
+        {
+          "detail": "local.domainry.project-delivery revision 1",
+          "name": "project_delivery_trust",
+          "status": "passed"
+        },
+        {
+          "detail": "domainry-project-template_v0.3.16-7-m1-report-export-idempotency-20260907.tar.gz sha256:9f42f06ff630bd4d7eec330ee1d70e57ca73af98918b4c5029d85d162be4af40",
+          "name": "project_template",
+          "status": "passed"
+        },
+        {
+          "detail": "domainry-runtime-client-sdk_v0.3.16-7-m1-report-export-idempotency-20260907.tar.gz sha256:7a86bfc5a252cf12d26ce518927bf76994c948b08a5a30da4b89ce3304b4b8ac",
+          "name": "runtime_client_sdk",
+          "status": "passed"
+        },
+        {
+          "detail": "runtime-domain-api-v1 + runtime-authoring-v1",
+          "name": "runtime_contract",
+          "status": "passed"
+        },
+        {
+          "detail": "github.com/domainry/domainry-runtime@v0.0.0-source-30463a69c739986e",
+          "name": "runtime_module",
+          "status": "passed"
+        },
+        {
+          "detail": "1 platforms",
+          "name": "skill_packages",
+          "status": "passed"
+        }
+      ]
+    }
+  },
+  "checkpoint": {
+    "contract_version": "domainry-eval-checkpoint-v1",
+    "source_run_id": "m1-crm-evaluator-cache-convergence-38",
+    "checkpoint_kind": "post_verify_project_contract_gaps_c7_resume_boundary_after_rejected_convergence_39",
+    "measurement_class": "checkpoint_convergence_not_baseline",
+    "baseline_eligibility": false,
+    "manifest_sha256": "965e3c9426702df3bec02a2a88e2a93a5230216ae1b25bde39cdae7a1b78ba08",
+    "archive_sha256": "ddb854750cff2f232b3d65e99f400b7ca704d9a4a422f217de4d945ece381111",
+    "resume_boundary": {
+      "stage": "model",
+      "next_node": "Restore only the validated convergence-38 archive; never reuse convergence-39 isolation or approve either archived unmaterialized evolution. Before model plan, restore sales_person_profile.provision_department to the generated create-only object_operation: input exactly code:text!, name:text!, sort_order:integer!; output exactly organization_id:text!; target source delivered_organization_unit; organization_unit_delivery create department with parent_source workspace_company; no Identity fields, manager, role_key, identity_handler_delivery, or first-user delivery. Restore deliver_identity as object_operation with explicit target_organization_id, sales_director org_child, and organization_unit_delivery resolve department with no parent_source. Fresh reviewed model apply, then implement only with regenerated symbols in this order: OrganizationUnits.Resolve typed department request; require non-empty delivered organization ID; TargetOrganization.Resolve; require exact ID equality; Identity.CreateWithSalesPersonProfile; require returned User.OrganizationID equality. Preserve authorization-stale admin re-login and same-key retry. Keep large_lead_conversion run_as=crm_workflow_service and its internal lead Action grants only on that service Role. Add requested_by:user! to open_conversion_approval, bind open_request.requested_by from Runtime-owned workflow.initiating_user_id, and validate/persist it as conversion_request.requested_by plus audit actor; never use the service execution principal or caller payload as requester. Author idempotency_keys=[record_id], grant sales_rep workflow.large_lead_conversion.run;owner, and invoke with {\"payload\":{\"record_id\":\"<lead-id>\",...}} plus one stable HTTP Idempotency-Key; no top-level record/object key or input wrapper. Query approval_mode=any tasks as open; the assigned sales_director decides while conversion_request remains pending. Keep stale_lead_followup scheduled and service-run; remove trigger object_key/compiled per-record target because scan_stale_contacted performs the bounded global scan. Grant sales_director scheduler.definitions.run;all, exercise the published Scheduler-owned run endpoint with stable key/reason and a genuinely stale fixture, and never grant scan_stale_contacted to a human or invoke it through the manual workflow route. If candidate 7 exposes no authorized Scheduler black-box path, checkpoint that exact packet gap and dispatch a foundation task instead of inventing a workaround. For BF08 use POST /report/lead_detail/exports/lead/prepare. Initial and restart are one logical operation: reuse the same director, audit ID/create key, report/object/scope/purpose/freshness/projection, and prepare key; restart reissues the identical prepare only to exercise durable-receipt replay, must return the same completed job, inspect/download that requester-owned job, validate durable lead_report_export_download.job_id and CSV, and prove foreign denial. Never create a restart audit/fingerprint/key/job. Run focused tests, project check, BF compile, reviewed finalize, full tree, then exactly one managed verify spanning initial and restart on the same database/binary/delivery cohort.",
+      "rule": "Do not redo accepted requirements or unrelated model/Handler work. Generated context and existing Handler/tests are authoritative for the create-only provision_department shape; archived model source, TODO, rejected evolution receipts, and convergence-39 are not authority. Candidate 7 published contracts supersede stale v2 guesses: a manual workflow may retain run_as while Runtime keeps the service node principal and trusted-injects the authenticated human as workflow.initiating_user_id/role; Report claims durable coordination before mutable audit reads, so exact restart replay returns the persisted job even after audit status advanced to downloaded. Project model, Handler, and BF source must consume these contracts. Do not move organization resolution, requester attribution, workflow wire shape/permissions/task status, Scheduler invocation, report object-key choice, or BF08 replay into foundation or evaluator code, and do not weaken evidence.",
+      "prior_delivery_id": "sha256:34b9a96a419db10d6ca99c4048aa70c4276eeb9ee33453c60fd1c870acd26026"
+    },
+    "prohibited_repairs": [
+      "do not change Plane, Builder, Runtime, Identity, Scheduler, Report, Data Exchange, any SDK, or evaluator code for these project-owned repairs",
+      "do not widen sales_person_profile.deliver_identity from org_child to all; restore the accepted org_child scope",
+      "do not combine first-user delivery into provision_department or convert deliver_identity to record_owner",
+      "do not create a CRM department registry, substitute a store Organization, or increase store quota",
+      "do not remove run_as from manual large_lead_conversion or grant its internal node Actions to human Roles",
+      "do not trust caller-supplied requested_by or initiating identity; bind the Runtime-owned workflow.initiating_user_id",
+      "do not create a second BF08 audit or job on restart; replay the exact durable caller operation and assert the same job",
+      "do not invoke the scheduled workflow through the manual route or grant lead.scan_stale_contacted to a human",
+      "do not restore Git history, Agent sessions, managed Runtime databases, SQLite, locks, or stale measured-run evidence"
+    ]
+  },
+  "hashes": {
+    "candidate_config_sha256": "67cbdfddf7124987f96a669ce0c49005e9517a5f12335909fc1aedc3e0ce65f4",
+    "requirements_sha256": "e59edec731f9ff2bcda8a6b928681b273be7873a22c3f9ea93c9bb27e6cea83e",
+    "rendered_driver_prompt_sha256": "c39f9a4f2038337ac1733f9b6d3bc76aac9510635c56981f1d442650c1f7ec54",
+    "checker_sha256": "7b75ecf646c7dfc07bb0c51b8730b6fef61d24f45ae77665695b4b1c58832f5f",
+    "scorer_sha256": "0e7fc7903e0f4e957d5860c3b7b8e4a5d07fc0d4b77f4faeb117a7db20d32109",
+    "frozen_checker_sha256": "7b75ecf646c7dfc07bb0c51b8730b6fef61d24f45ae77665695b4b1c58832f5f",
+    "frozen_scorer_sha256": "0e7fc7903e0f4e957d5860c3b7b8e4a5d07fc0d4b77f4faeb117a7db20d32109",
+    "driver_sha256": "072409e514aea1c18332b1053f6a9107c2459e3ae9a89a307876d67f3e8d4057",
+    "agent_command_sha256": "35a6e26632c6a1ffd90135372680e41a1501e379b50cbfd0017d60e6a3976ef1",
+    "checker_command_sha256": "03bb0f85ec953b1bc3b317616e76fe65950acc8de966d5aac01491f1b9229d75"
+  },
+  "agent_context": {
+    "fresh_session_required": true,
+    "resume_forbidden": true,
+    "codex_home_contents_during_agent": [
+      "auth.json",
+      "skills/domainry-builder-v1"
+    ],
+    "ephemeral_auth_staged": true,
+    "auth_retention": "remove_immediately_after_agent",
+    "environment_policy": "minimal-isolated-v1",
+    "prompt_inputs": [
+      "requirements",
+      "evaluator-owned measured-run policy"
+    ],
+    "evaluator_assets_exposed": false,
+    "checkpoint_project_restored": true
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "contract_version": "domainry-eval-checkpoint-v1",
+  "source_run_id": "m1-crm-v0.3.16-3-audit-identity-convergence-34",
+  "checkpoint_kind": "pre_semantic_workaround_foundation_organization_unit_delivery_gap",
+  "measurement_class": "checkpoint_convergence_not_baseline",
+  "baseline_eligibility": false,
+  "manifest_sha256": "804c2fa67ab6f368aaaa37672888664eb64f26c77169ce127af52f771d4b8e04",
+  "archive_sha256": "6aab8c8c3f5c8b02a8360eb4853c8c7ab61e429adc96cf4066810e0a6923cb94",
+  "resume_boundary": {
+    "stage": "model",
+    "next_node": "after a compatible Plane/Runtime/Identity candidate is installed, replace the invalid store-backed department model with the generic typed organization-unit delivery contract, then rerun only the affected plan/apply/finalize/verify closure",
+    "rule": "Restore this pre-workaround archive; never restore the later root-company/store semantic workaround.",
+    "prior_delivery_id": "sha256:7301cf925a3461e9ad3f95b77b9a8be0cfca07481bc28d5da1beb3d98441385e"
+  },
+  "prohibited_repairs": [
+    "do not increase store quota as a substitute for department delivery",
+    "do not label the Workspace root company or a store as a department",
+    "do not add CRM-specific foundation behavior or a business registry that copies the Identity organization tree"
+  ],
+  "restored_file_count": 555,
+  "ignored_appledouble_member_count": 0,
+  "git_history_restored": false,
+  "sqlite_restored": false
+}

@@ -1,0 +1,198 @@
+{
+  "family": "model_capability",
+  "command": "/bin/zsh -lc '/private/tmp/domainry-m1-v31-report-quoting-baseline-17/codex-home/skills/domainry-builder-v1/bin/domainry-cli model capability --json --project /private/tmp/domainry-m1-v31-report-quoting-baseline-17/project --key schema.authoring'",
+  "exit_code": 0,
+  "output": {
+    "category": {
+      "key": "schema.authoring",
+      "name": "Schema authoring",
+      "description": "Author and validate complete project object fragments and inspect the embedded field, relation, and dictionary schemas owned by Runtime Application Schema."
+    },
+    "contracts": [
+      {
+        "kind": "runtime.authoring_capability",
+        "key": "schema.object",
+        "lifecycle": "versioned_metadata",
+        "schema": {
+          "additionalProperties": false,
+          "properties": {
+            "capabilities": {
+              "additionalProperties": false,
+              "properties": {
+                "create": {
+                  "default": true,
+                  "type": "boolean"
+                },
+                "delete": {
+                  "default": true,
+                  "type": "boolean"
+                },
+                "export": {
+                  "default": true,
+                  "type": "boolean"
+                },
+                "read": {
+                  "default": true,
+                  "type": "boolean"
+                },
+                "update": {
+                  "default": true,
+                  "type": "boolean"
+                }
+              },
+              "type": "object"
+            },
+            "config": {
+              "additionalProperties": false,
+              "properties": {
+                "title_field": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "write_policy": {
+                  "default": "direct_crud",
+                  "enum": [
+                    "direct_crud",
+                    "action_only"
+                  ],
+                  "type": "string"
+                }
+              },
+              "type": "object"
+            },
+            "description": {
+              "type": "string"
+            },
+            "export_assurance_policy": {
+              "additionalProperties": false,
+              "properties": {
+                "recent_reauth_max_age_seconds": {
+                  "maximum": 86400,
+                  "minimum": 1,
+                  "type": "integer"
+                },
+                "required_methods": {
+                  "items": {
+                    "enum": [
+                      "normal_login",
+                      "recent_reauth",
+                      "otp",
+                      "maker_checker",
+                      "workflow_approval"
+                    ],
+                    "type": "string"
+                  },
+                  "minItems": 1,
+                  "type": "array"
+                }
+              },
+              "required": [
+                "required_methods"
+              ],
+              "type": "object"
+            },
+            "fields": {
+              "default": [],
+              "items": {
+                "additionalProperties": false,
+                "type": "object"
+              },
+              "type": "array"
+            },
+            "ledger_policy": {
+              "additionalProperties": false,
+              "properties": {
+                "signature": {
+                  "default": "none",
+                  "enum": [
+                    "none",
+                    "hmac_sha256"
+                  ],
+                  "type": "string"
+                }
+              },
+              "type": "object"
+            },
+            "lifecycle_policy": {
+              "additionalProperties": false,
+              "properties": {
+                "immutable_states": {
+                  "items": {
+                    "type": "string"
+                  },
+                  "type": "array"
+                },
+                "mode": {
+                  "enum": [
+                    "mutable",
+                    "soft_delete_only",
+                    "append_only",
+                    "immutable_after_state"
+                  ],
+                  "type": "string"
+                },
+                "state_field": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "mode"
+              ],
+              "type": "object"
+            },
+            "name": {
+              "description": "Human-readable object name.",
+              "minLength": 1,
+              "type": "string"
+            },
+            "ux": {
+              "additionalProperties": false,
+              "properties": {
+                "config": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "identity_relation_field": {
+                      "minLength": 1,
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                },
+                "display": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "title_field": {
+                      "minLength": 1,
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                },
+                "kind": {
+                  "enum": [
+                    "identity_profile_extension"
+                  ],
+                  "type": "string"
+                }
+              },
+              "type": "object"
+            }
+          },
+          "required": [
+            "name"
+          ],
+          "type": "object"
+        }
+      }
+    ],
+    "validations": [
+      {
+        "kind": "schema.object",
+        "description": "Validate one complete project object definition, including its embedded fields and relations."
+      }
+    ]
+  },
+  "raw_output": "{\"category\":{\"key\":\"schema.authoring\",\"name\":\"Schema authoring\",\"description\":\"Author and validate complete project object fragments and inspect the embedded field, relation, and dictionary schemas owned by Runtime Application Schema.\"},\"contracts\":[{\"kind\":\"runtime.authoring_capability\",\"key\":\"schema.object\",\"lifecycle\":\"versioned_metadata\",\"schema\":{\"additionalProperties\":false,\"properties\":{\"capabilities\":{\"additionalProperties\":false,\"properties\":{\"create\":{\"default\":true,\"type\":\"boolean\"},\"delete\":{\"default\":true,\"type\":\"boolean\"},\"export\":{\"default\":true,\"type\":\"boolean\"},\"read\":{\"default\":true,\"type\":\"boolean\"},\"update\":{\"default\":true,\"type\":\"boolean\"}},\"type\":\"object\"},\"config\":{\"additionalProperties\":false,\"properties\":{\"title_field\":{\"minLength\":1,\"type\":\"string\"},\"write_policy\":{\"default\":\"direct_crud\",\"enum\":[\"direct_crud\",\"action_only\"],\"type\":\"string\"}},\"type\":\"object\"},\"description\":{\"type\":\"string\"},\"export_assurance_policy\":{\"additionalProperties\":false,\"properties\":{\"recent_reauth_max_age_seconds\":{\"maximum\":86400,\"minimum\":1,\"type\":\"integer\"},\"required_methods\":{\"items\":{\"enum\":[\"normal_login\",\"recent_reauth\",\"otp\",\"maker_checker\",\"workflow_approval\"],\"type\":\"string\"},\"minItems\":1,\"type\":\"array\"}},\"required\":[\"required_methods\"],\"type\":\"object\"},\"fields\":{\"default\":[],\"items\":{\"additionalProperties\":false,\"type\":\"object\"},\"type\":\"array\"},\"ledger_policy\":{\"additionalProperties\":false,\"properties\":{\"signature\":{\"default\":\"none\",\"enum\":[\"none\",\"hmac_sha256\"],\"type\":\"string\"}},\"type\":\"object\"},\"lifecycle_policy\":{\"additionalProperties\":false,\"properties\":{\"immutable_states\":{\"items\":{\"type\":\"string\"},\"type\":\"array\"},\"mode\":{\"enum\":[\"mutable\",\"soft_delete_only\",\"append_only\",\"immutable_after_state\"],\"type\":\"string\"},\"state_field\":{\"type\":\"string\"}},\"required\":[\"mode\"],\"type\":\"object\"},\"name\":{\"description\":\"Human-readable object name.\",\"minLength\":1,\"type\":\"string\"},\"ux\":{\"additionalProperties\":false,\"properties\":{\"config\":{\"additionalProperties\":false,\"properties\":{\"identity_relation_field\":{\"minLength\":1,\"type\":\"string\"}},\"type\":\"object\"},\"display\":{\"additionalProperties\":false,\"properties\":{\"title_field\":{\"minLength\":1,\"type\":\"string\"}},\"type\":\"object\"},\"kind\":{\"enum\":[\"identity_profile_extension\"],\"type\":\"string\"}},\"type\":\"object\"}},\"required\":[\"name\"],\"type\":\"object\"}}],\"validations\":[{\"kind\":\"schema.object\",\"description\":\"Validate one complete project object definition, including its embedded fields and relations.\"}]}\n",
+  "event_item_id": "item_42",
+  "event_line": 82
+}

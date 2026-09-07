@@ -1,0 +1,19 @@
+{
+  "family": "apply_model",
+  "command": "/bin/zsh -lc '/private/tmp/domainry-m1-canonical-unique-resume-convergence-43/codex-home/skills/domainry-builder-v1/bin/domainry-cli apply model --json --project /private/tmp/domainry-m1-canonical-unique-resume-convergence-43/project --go-module-path example.com/domainry-m1-crm/backend --service http://127.0.0.1:8283'",
+  "exit_code": 1,
+  "output": "[domainry] apply model: load and preflight model done (2.634s)\n[domainry] apply model: synchronize Blueprint Ledger...\n[domainry] apply model: synchronize Blueprint Ledger failed (17ms)\nerror: model.destructive_blocked: these Ledger items are absent from the model and would be deleted: crm/resource/actions.lead.scan_stale_contacted, crm/resource/scheduled_jobs.weekday_stale_lead_followup, crm/resource/workflows.stale_lead_followup; restore them in the model or re-run with --allow-destructive",
+  "raw_output": "[domainry] apply model: load and preflight model done (2.634s)\n[domainry] apply model: synchronize Blueprint Ledger...\n[domainry] apply model: synchronize Blueprint Ledger failed (17ms)\nerror: model.destructive_blocked: these Ledger items are absent from the model and would be deleted: crm/resource/actions.lead.scan_stale_contacted, crm/resource/scheduled_jobs.weekday_stale_lead_followup, crm/resource/workflows.stale_lead_followup; restore them in the model or re-run with --allow-destructive\n",
+  "stdout": null,
+  "stderr": null,
+  "output_streams_status": "aggregated_only",
+  "event_item_id": "item_22",
+  "event_line": 44,
+  "observed_started_epoch": 1788755519.978812,
+  "observed_completed_epoch": 1788755522.550455,
+  "observed_started_event_line": 43,
+  "observed_completed_event_line": 44,
+  "duration_seconds": 2.572,
+  "timing_source": "agent-event-observations.jsonl",
+  "capture_file": "cli/003-apply_model.json"
+}

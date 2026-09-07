@@ -1,0 +1,23 @@
+{
+  "benchmark": "m1-crm",
+  "candidate_id": "v0.3.6-30-m1-flow-contracts-20260905+3d755032ead0",
+  "skill_version": "v0.3.6-30-m1-flow-contracts-20260905",
+  "model": "gpt-5.6-sol",
+  "run_id": "m1-crm-v0.3.6-30-m1-flow-contracts-20260905-3d755032ead0-baseline-16",
+  "run_kind": "baseline",
+  "parent_run_id": null,
+  "terminal_state": "baseline_first_scoring_failure",
+  "measurement_complete": false,
+  "environment_valid": true,
+  "agent_declared_done": false,
+  "agent_result_state": null,
+  "human_interventions": 0,
+  "started_epoch": 1788609424.984511,
+  "agent_ended_epoch": 1788610065.409392,
+  "ended_epoch": 1788610065.698588,
+  "project_path": "/private/tmp/domainry-m1-v30-flow-contracts-baseline-16/project",
+  "isolation_root": "/private/tmp/domainry-m1-v30-flow-contracts-baseline-16",
+  "codex_home": "/private/tmp/domainry-m1-v30-flow-contracts-baseline-16/codex-home",
+  "database_path": "/private/tmp/domainry-m1-v30-flow-contracts-baseline-16/runtime/cohort.sqlite",
+  "agent_session_id": "01a0716d-f776-75e0-ad17-34d35f9a75e9"
+}

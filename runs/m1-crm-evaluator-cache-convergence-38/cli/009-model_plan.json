@@ -1,0 +1,40 @@
+{
+  "family": "model_plan",
+  "command": "/bin/zsh -lc '/private/tmp/domainry-m1-evaluator-cache-convergence-38/codex-home/skills/domainry-builder-v1/bin/domainry-cli model plan --json --project /private/tmp/domainry-m1-evaluator-cache-convergence-38/project'",
+  "exit_code": 0,
+  "output": {
+    "artifact": ".domainry/builder/disposable/model-preflight-result.json",
+    "artifact_relative_to": "--project",
+    "contract_version": "domainry-model-preflight-envelope-v1",
+    "create_items": [],
+    "creates": 0,
+    "delete_items": [],
+    "deletes": 0,
+    "diagnostics": [],
+    "files": 6,
+    "identity": "1744f1ad81db016f88f27aeee99019179b437a38aa91f2fe09f1fb48059b212e",
+    "issue_count": 0,
+    "items": 40,
+    "sha256": "ac10f3d3b4438e4d0557009dcc9a88a0ba7f4d588fd149111f78a95135dc9ffc",
+    "sql_files": 2,
+    "state": "valid",
+    "unchanged": 39,
+    "update_items": [
+      "crm/resource/roles.sales_director"
+    ],
+    "updates": 1
+  },
+  "raw_output": "{\"artifact\":\".domainry/builder/disposable/model-preflight-result.json\",\"artifact_relative_to\":\"--project\",\"contract_version\":\"domainry-model-preflight-envelope-v1\",\"create_items\":[],\"creates\":0,\"delete_items\":[],\"deletes\":0,\"diagnostics\":[],\"files\":6,\"identity\":\"1744f1ad81db016f88f27aeee99019179b437a38aa91f2fe09f1fb48059b212e\",\"issue_count\":0,\"items\":40,\"sha256\":\"ac10f3d3b4438e4d0557009dcc9a88a0ba7f4d588fd149111f78a95135dc9ffc\",\"sql_files\":2,\"state\":\"valid\",\"unchanged\":39,\"update_items\":[\"crm/resource/roles.sales_director\"],\"updates\":1}\n",
+  "stdout": null,
+  "stderr": null,
+  "output_streams_status": "aggregated_only",
+  "event_item_id": "item_84",
+  "event_line": 154,
+  "observed_started_epoch": 1788722511.958328,
+  "observed_completed_epoch": 1788722513.330814,
+  "observed_started_event_line": 153,
+  "observed_completed_event_line": 154,
+  "duration_seconds": 1.372,
+  "timing_source": "agent-event-observations.jsonl",
+  "capture_file": "cli/009-model_plan.json"
+}

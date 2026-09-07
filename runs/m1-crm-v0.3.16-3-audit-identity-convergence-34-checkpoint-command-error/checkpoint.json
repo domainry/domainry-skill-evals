@@ -1,0 +1,33 @@
+{
+  "contract_version": "domainry-eval-checkpoint-v1",
+  "source_run_id": "m1-crm-v0.3.16-3-audit-identity-convergence-34",
+  "checkpoint_kind": "packet_ready_after_agent_shell_probe_error",
+  "measurement_class": "checkpoint_convergence_not_baseline",
+  "baseline_eligibility": false,
+  "archive": {
+    "path": "checkpoint-project.tar.gz",
+    "sha256": "f9f9f4b7f13294cb35014b4e14ce62d43ebe144e856a13a6b927de16feaada80"
+  },
+  "candidate": {
+    "candidate_id": "v0.3.16-3-m1-audit-identity-20260906+554bd6a0a04e",
+    "skill_tree_sha256": "554bd6a0a04e590aa9c1ecb5cab5c7b0ee1304e618e101bc85d56166a592d78c",
+    "cli_binary_sha256": "d8c6da6938262183720ddf81d9cfa39ee5a65be69ff06a1e40c3ac2e69467af4"
+  },
+  "invalidating_error": {
+    "agent_session_id": "01a07776-958c-7ad1-abee-933790c10a55",
+    "agent_event_item_id": "item_9",
+    "event_line": 19,
+    "command_sha256": "eda95c6710de519f018b58237d8b6e95de476a88023504ca28a08e612f31032f",
+    "exit_code": 1,
+    "classification": "agent_shell_quoting_error",
+    "owner": "agent",
+    "domainry_cli_involved": false,
+    "project_mutation_before_error": false
+  },
+  "resume_boundary": {
+    "stage": "apply",
+    "next_node": "continue packet/context consumption and source implementation",
+    "implementation_packet": "095dbd52c98d456012367dfda8cff04d4b601bc868c9ed470a4d7c5af851ac9e",
+    "rule": "This checkpoint is convergence-only and can never be baseline evidence."
+  }
+}

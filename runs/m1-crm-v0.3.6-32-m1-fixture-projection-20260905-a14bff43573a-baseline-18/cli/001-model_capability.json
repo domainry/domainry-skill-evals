@@ -1,0 +1,167 @@
+{
+  "family": "model_capability",
+  "command": "/bin/zsh -lc '/private/tmp/domainry-m1-v32-fixture-projection-baseline-18/codex-home/skills/domainry-builder-v1/bin/domainry-cli model capability --json --project /private/tmp/domainry-m1-v32-fixture-projection-baseline-18/project --reading-profile initial-delivery --topics records,permissions,identity-profile,organization,reporting-line,workflow,scheduler,reports,report-export,notifications,entrypoints,workspace-provisioning,files,domain-truth'",
+  "exit_code": 0,
+  "output": {
+    "contract_version": "domainry-model-authoring-reading-plan-v1",
+    "profile": "initial-delivery",
+    "topics": [
+      "domain-truth",
+      "entrypoints",
+      "files",
+      "identity-profile",
+      "notifications",
+      "organization",
+      "permissions",
+      "records",
+      "report-export",
+      "reporting-line",
+      "reports",
+      "scheduler",
+      "workflow",
+      "workspace-provisioning"
+    ],
+    "read_order": [
+      {
+        "path": "references/capabilities/README.md",
+        "purpose": "capability routing and minimum-reading policy"
+      },
+      {
+        "path": "references/domainry-plane.md",
+        "purpose": "Plane and Runtime ownership boundary"
+      },
+      {
+        "path": "references/project-mutation.md",
+        "purpose": "project mutation and CAS boundary"
+      },
+      {
+        "path": "references/backend-model.md",
+        "purpose": "compact backend model contract"
+      },
+      {
+        "path": "references/authorization.md",
+        "purpose": "authorization ownership and model rules"
+      },
+      {
+        "path": "references/backend-runtime.md",
+        "purpose": "Runtime integration boundary"
+      },
+      {
+        "path": "references/domain-truth-and-settlement.md",
+        "purpose": "calculation, snapshot, correction, and source-of-truth decisions"
+      },
+      {
+        "path": "references/capabilities/business-entrypoints.md",
+        "purpose": "business journey entrypoint coverage"
+      },
+      {
+        "path": "templates/ledger-business-entrypoint/README.md",
+        "purpose": "business entrypoint pattern guidance"
+      },
+      {
+        "path": "templates/ledger-business-entrypoint/pattern.json",
+        "purpose": "copyable business entrypoint pattern"
+      },
+      {
+        "path": "templates/ledger-controlled-file-delivery/README.md",
+        "purpose": "controlled file delivery guidance"
+      },
+      {
+        "path": "templates/ledger-controlled-file-delivery/pattern.json",
+        "purpose": "copyable controlled file pattern"
+      },
+      {
+        "path": "references/capabilities/identity-account-and-profile.md",
+        "purpose": "Identity account and business Profile boundary"
+      },
+      {
+        "path": "templates/ledger-profile-scope/pattern.json",
+        "purpose": "copyable business Profile scope pattern"
+      },
+      {
+        "path": "references/capabilities/in-app-notifications.md",
+        "purpose": "business Inbox and notification intent"
+      },
+      {
+        "path": "references/capabilities/organization-unit.md",
+        "purpose": "organization unit ownership and scope"
+      },
+      {
+        "path": "references/capabilities/permissions-and-data-scope.md",
+        "purpose": "RBAC, field policy, and data scope"
+      },
+      {
+        "path": "references/capabilities/rbac-and-data-scope-cookbook.md",
+        "purpose": "standard actor and scope mappings"
+      },
+      {
+        "path": "references/capabilities/records-fields-and-relations.md",
+        "purpose": "record, field, relation, and default semantics"
+      },
+      {
+        "path": "references/capabilities/crud-and-state-machine.md",
+        "purpose": "CRUD and guarded lifecycle ownership"
+      },
+      {
+        "path": "references/capabilities/actions-and-transactions.md",
+        "purpose": "Action and transaction ownership"
+      },
+      {
+        "path": "templates/ledger-record-lifecycle/pattern.json",
+        "purpose": "copyable record lifecycle pattern"
+      },
+      {
+        "path": "templates/ledger-transaction-handler/pattern.json",
+        "purpose": "copyable transaction Handler pattern"
+      },
+      {
+        "path": "references/capabilities/reports.md",
+        "purpose": "Object SQL field and result projection contract"
+      },
+      {
+        "path": "references/frontend-offline-report-export.md",
+        "purpose": "governed offline export boundary"
+      },
+      {
+        "path": "templates/ledger-report-export/README.md",
+        "purpose": "Report export pattern guidance"
+      },
+      {
+        "path": "templates/ledger-report-export/pattern.json",
+        "purpose": "copyable Report export pattern"
+      },
+      {
+        "path": "references/capabilities/identity-user-and-reporting-line.md",
+        "purpose": "Identity User and manager hierarchy"
+      },
+      {
+        "path": "references/capabilities/scheduler.md",
+        "purpose": "scheduled process ownership"
+      },
+      {
+        "path": "templates/ledger-scheduled-process/pattern.json",
+        "purpose": "copyable scheduled process pattern"
+      },
+      {
+        "path": "references/capabilities/workflow.md",
+        "purpose": "Workflow definition and assignee resolution"
+      },
+      {
+        "path": "templates/ledger-workflow-approval/pattern.json",
+        "purpose": "copyable Workflow approval pattern"
+      },
+      {
+        "path": "references/capabilities/workspace-provisioning.md",
+        "purpose": "tenant and initial administrator provisioning"
+      }
+    ],
+    "instructions": [
+      "Resolve every path relative to SKILL_ROOT and read the listed files in order before authoring.",
+      "Do not open capability indexes, templates, or patterns not listed by this plan.",
+      "The listed documents remain authoritative; this plan is navigation, not a semantic summary."
+    ]
+  },
+  "raw_output": "{\"contract_version\":\"domainry-model-authoring-reading-plan-v1\",\"profile\":\"initial-delivery\",\"topics\":[\"domain-truth\",\"entrypoints\",\"files\",\"identity-profile\",\"notifications\",\"organization\",\"permissions\",\"records\",\"report-export\",\"reporting-line\",\"reports\",\"scheduler\",\"workflow\",\"workspace-provisioning\"],\"read_order\":[{\"path\":\"references/capabilities/README.md\",\"purpose\":\"capability routing and minimum-reading policy\"},{\"path\":\"references/domainry-plane.md\",\"purpose\":\"Plane and Runtime ownership boundary\"},{\"path\":\"references/project-mutation.md\",\"purpose\":\"project mutation and CAS boundary\"},{\"path\":\"references/backend-model.md\",\"purpose\":\"compact backend model contract\"},{\"path\":\"references/authorization.md\",\"purpose\":\"authorization ownership and model rules\"},{\"path\":\"references/backend-runtime.md\",\"purpose\":\"Runtime integration boundary\"},{\"path\":\"references/domain-truth-and-settlement.md\",\"purpose\":\"calculation, snapshot, correction, and source-of-truth decisions\"},{\"path\":\"references/capabilities/business-entrypoints.md\",\"purpose\":\"business journey entrypoint coverage\"},{\"path\":\"templates/ledger-business-entrypoint/README.md\",\"purpose\":\"business entrypoint pattern guidance\"},{\"path\":\"templates/ledger-business-entrypoint/pattern.json\",\"purpose\":\"copyable business entrypoint pattern\"},{\"path\":\"templates/ledger-controlled-file-delivery/README.md\",\"purpose\":\"controlled file delivery guidance\"},{\"path\":\"templates/ledger-controlled-file-delivery/pattern.json\",\"purpose\":\"copyable controlled file pattern\"},{\"path\":\"references/capabilities/identity-account-and-profile.md\",\"purpose\":\"Identity account and business Profile boundary\"},{\"path\":\"templates/ledger-profile-scope/pattern.json\",\"purpose\":\"copyable business Profile scope pattern\"},{\"path\":\"references/capabilities/in-app-notifications.md\",\"purpose\":\"business Inbox and notification intent\"},{\"path\":\"references/capabilities/organization-unit.md\",\"purpose\":\"organization unit ownership and scope\"},{\"path\":\"references/capabilities/permissions-and-data-scope.md\",\"purpose\":\"RBAC, field policy, and data scope\"},{\"path\":\"references/capabilities/rbac-and-data-scope-cookbook.md\",\"purpose\":\"standard actor and scope mappings\"},{\"path\":\"references/capabilities/records-fields-and-relations.md\",\"purpose\":\"record, field, relation, and default semantics\"},{\"path\":\"references/capabilities/crud-and-state-machine.md\",\"purpose\":\"CRUD and guarded lifecycle ownership\"},{\"path\":\"references/capabilities/actions-and-transactions.md\",\"purpose\":\"Action and transaction ownership\"},{\"path\":\"templates/ledger-record-lifecycle/pattern.json\",\"purpose\":\"copyable record lifecycle pattern\"},{\"path\":\"templates/ledger-transaction-handler/pattern.json\",\"purpose\":\"copyable transaction Handler pattern\"},{\"path\":\"references/capabilities/reports.md\",\"purpose\":\"Object SQL field and result projection contract\"},{\"path\":\"references/frontend-offline-report-export.md\",\"purpose\":\"governed offline export boundary\"},{\"path\":\"templates/ledger-report-export/README.md\",\"purpose\":\"Report export pattern guidance\"},{\"path\":\"templates/ledger-report-export/pattern.json\",\"purpose\":\"copyable Report export pattern\"},{\"path\":\"references/capabilities/identity-user-and-reporting-line.md\",\"purpose\":\"Identity User and manager hierarchy\"},{\"path\":\"references/capabilities/scheduler.md\",\"purpose\":\"scheduled process ownership\"},{\"path\":\"templates/ledger-scheduled-process/pattern.json\",\"purpose\":\"copyable scheduled process pattern\"},{\"path\":\"references/capabilities/workflow.md\",\"purpose\":\"Workflow definition and assignee resolution\"},{\"path\":\"templates/ledger-workflow-approval/pattern.json\",\"purpose\":\"copyable Workflow approval pattern\"},{\"path\":\"references/capabilities/workspace-provisioning.md\",\"purpose\":\"tenant and initial administrator provisioning\"}],\"instructions\":[\"Resolve every path relative to SKILL_ROOT and read the listed files in order before authoring.\",\"Do not open capability indexes, templates, or patterns not listed by this plan.\",\"The listed documents remain authoritative; this plan is navigation, not a semantic summary.\"]}\n",
+  "event_item_id": "item_9",
+  "event_line": 19
+}

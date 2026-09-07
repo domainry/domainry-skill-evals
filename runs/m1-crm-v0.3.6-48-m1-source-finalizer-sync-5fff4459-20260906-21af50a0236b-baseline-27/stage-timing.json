@@ -1,0 +1,95 @@
+{
+  "contract_version": "domainry-eval-stage-timing-v1",
+  "boundary_rule": "evaluator-cli-transition-v1",
+  "stage_order": [
+    "discovery",
+    "plan",
+    "apply",
+    "finalize",
+    "verify"
+  ],
+  "status": "partial",
+  "stages": {
+    "discovery": {
+      "started_epoch": 1788676194.34346,
+      "ended_epoch": 1788676446.63358,
+      "seconds": 252.29,
+      "status": "observed",
+      "start_provenance": {
+        "source": "lifecycle.json",
+        "field": "started_epoch",
+        "boundary_reason": "agent_lifecycle_started"
+      },
+      "end_provenance": {
+        "source": "agent-event-observations.jsonl",
+        "capture_file": "cli/001-model_capability.json",
+        "family": "model_capability",
+        "event": "completed",
+        "event_item_id": "item_28",
+        "event_line": 56,
+        "boundary_reason": "discovery_capability_completed"
+      }
+    },
+    "plan": {
+      "started_epoch": 1788676446.63358,
+      "ended_epoch": 1788676818.902581,
+      "seconds": 372.269,
+      "status": "observed",
+      "start_provenance": {
+        "source": "agent-event-observations.jsonl",
+        "capture_file": "cli/001-model_capability.json",
+        "family": "model_capability",
+        "event": "completed",
+        "event_item_id": "item_28",
+        "event_line": 56,
+        "boundary_reason": "discovery_capability_completed"
+      },
+      "end_provenance": {
+        "source": "agent-event-observations.jsonl",
+        "capture_file": "cli/002-model_plan.json",
+        "family": "model_plan",
+        "event": "completed",
+        "event_item_id": "item_43",
+        "event_line": 84,
+        "boundary_reason": "terminal_stage_cli_completed"
+      }
+    },
+    "apply": {
+      "started_epoch": null,
+      "ended_epoch": null,
+      "seconds": null,
+      "status": "unknown",
+      "start_provenance": null,
+      "end_provenance": null
+    },
+    "finalize": {
+      "started_epoch": null,
+      "ended_epoch": null,
+      "seconds": null,
+      "status": "unknown",
+      "start_provenance": null,
+      "end_provenance": null
+    },
+    "verify": {
+      "started_epoch": null,
+      "ended_epoch": null,
+      "seconds": null,
+      "status": "unknown",
+      "start_provenance": null,
+      "end_provenance": null
+    }
+  },
+  "critical_path": {
+    "observed_seconds": 624.559,
+    "unknown_stages": [
+      "apply",
+      "finalize",
+      "verify"
+    ],
+    "hotspot": {
+      "stage": "plan",
+      "seconds": 372.269
+    }
+  },
+  "diagnostic_intervals": []
+}

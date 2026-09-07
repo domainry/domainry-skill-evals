@@ -1,0 +1,25 @@
+{
+  "contract_version": "domainry-eval-interruption-v1",
+  "run_id": "m1-crm-foundation-organization-unit-convergence-36",
+  "status": "interrupted_for_foundation_repair",
+  "measurement_valid": false,
+  "baseline_eligibility": false,
+  "reason": "The convergence run exposed a Domainry Plane reviewed-evolution lifecycle defect after the business model had correctly moved to generic typed organization-unit delivery. The run was interrupted only after item_51 completed with state=implementation_ready and no evaluator or Agent process remained, so the stable project state could be sealed as an evaluator checkpoint before the foundation repair.",
+  "evaluator_findings": [
+    {
+      "classification": "checkpoint_restore_runtime_state_leak",
+      "owner": "evaluator",
+      "diagnostic": "The source checkpoint archive contained managed Runtime cohort files, and the pre-fix restore implementation copied every non-Git member while unconditionally reporting sqlite_restored=false. This makes convergence-36 invalid as measurement evidence and explains why prior verify-first diagnostics could observe stale Runtime identity.",
+      "repair": "The restore implementation now excludes managed Runtime state, SQLite sidecars, Agent-session directories, Domainry locks, Git metadata, and AppleDouble metadata. The new checkpoint archive independently excludes those classes and restores 1077 project files with neither a .git directory nor a .domainry/builder/runtime directory.",
+      "verification": "pytest -q: 120 passed"
+    }
+  ],
+  "checkpoint": {
+    "manifest": "../m1-crm-foundation-organization-unit-convergence-36-checkpoint-plane-evolution-added-action-gap/checkpoint.json",
+    "archive": "../m1-crm-foundation-organization-unit-convergence-36-checkpoint-plane-evolution-added-action-gap/checkpoint-project.tar.gz",
+    "archive_sha256": "663045dcdf6f6f4f31b3f35624d63aa50e4a95e843c08ec7db26f643fdf942d3"
+  },
+  "foundation_owner": "domainry-plane",
+  "foundation_task_thread_id": "01a077f3-266c-7790-8fd9-265e58448f48",
+  "resume_policy": "Create a new convergence run and isolation root with parent_run_id=m1-crm-foundation-organization-unit-convergence-36, restore only this checkpoint, use a new Agent session and SQLite cohort, and continue from the authoritative apply-stage resume boundary."
+}

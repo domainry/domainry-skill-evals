@@ -1,0 +1,104 @@
+{
+  "contract_version": "domainry-eval-checkpoint-v1",
+  "created_epoch": 1788693384,
+  "source_run_id": "m1-crm-v0.3.6-53-runtime-baseline-pattern-20260906-37d309b4d22d-baseline-30",
+  "source_terminal_state": "environment_invalid_candidate_drift",
+  "source_environment_valid": false,
+  "checkpoint_kind": "post_apply_model_partial_business_flow_source",
+  "live_project_path": "/private/tmp/domainry-m1-v53-runtime-baseline-pattern-baseline-30/project",
+  "archive": {
+    "path": "checkpoint-project.tar.gz",
+    "sha256": "3ff8bf04783bb34b634156b077d6a682adcb4e4339ab9eb0d2043814c5251768"
+  },
+  "frozen_candidate": {
+    "candidate_id": "v0.3.6-53-runtime-baseline-pattern-20260906+37d309b4d22d",
+    "skill_tree_sha256": "37d309b4d22d80ddfd5ed791e7bac7a6e3430b97c98f83901f497d30305f82b9",
+    "cli_binary_sha256": "52844bea52714320c660a76f0fec0b21ee5184037b2614de31cbf3678c95973c"
+  },
+  "authoritative_artifacts": {
+    "requirements_prd": {
+      "path": "project/docs/backend-requirements-prd.md",
+      "sha256": "56d23df54e08e31e2381dd943063f31188248ced23879fdb3b61de2782eb5457"
+    },
+    "model": {
+      "path": "project/backend/model/crm.json",
+      "sha256": "850ceabed12480834953fdd6572e6193e5fc8aab5ad571179a326d68d1a67329"
+    },
+    "development_todo": {
+      "path": "project/.domainry/development/m1-crm-baseline.md",
+      "sha256": "2ba6827c0b33dd5177e9162302945464ab7f23f7499b714f57a1fe1600eed459"
+    }
+  },
+  "completed_once_without_error": [
+    "requirements authoring",
+    "model capability",
+    "initial model plan",
+    "apply model",
+    "Action implementation",
+    "Action focused unit tests",
+    "business-flow harness",
+    "BF01",
+    "BF02",
+    "BF03",
+    "BF04"
+  ],
+  "resume_boundary": {
+    "stage": "apply",
+    "next_node": "repair elapsed-time Workflow authoring bridge, then continue BF05-BF08 before finalize",
+    "failed_command_family": "model_plan",
+    "diagnostic_code": "behavior.workflow_action_input_reference_invalid",
+    "invalid_value": "$workflow.input.evaluation_time",
+    "contract_allowed_value": "$workflow.evaluation_time",
+    "source_file": "project/backend/model/crm.json",
+    "source_json_pointer": "/modules/crm/features/crm_delivery/workflows/lead_followup_reminders/graph/nodes/0/contract/action/input/evaluation_time"
+  },
+  "environment_drift": {
+    "installed_candidate_after": "v0.3.6-54-project-navigation-20260906+3431267c2d40",
+    "isolated_candidate_after": "v0.3.6-53-verify-stability-diagnostics-20260906+0cfb56a9dcbf",
+    "rule": "Do not use this invalid run as a timing or pass baseline. Resume only in a new working copy after the owning platform fix and a stable candidate/service preflight. Preserve this archive unchanged."
+  },
+  "platform_repair": {
+    "task_id": "01a0766e-1dd5-7b30-ac89-2cb5bfd5d522",
+    "task_title": "修复 M1 elapsed-time 与候选漂移",
+    "correction_task_id": "01a07695-28bf-7ff2-9152-47851e90c34b",
+    "correction_task_title": "纠正 CLI 自动更新归因",
+    "status": "elapsed_time_bridge_locally_implemented_and_verified_not_published",
+    "root_causes": [
+      "elapsed-time authoring contracts described the concept but did not publish the exact compact V3 Workflow bridge",
+      "the evaluator preflight accepted a service Application Delivery newer than the frozen candidate, so the CLI correctly exercised its documented atomic auto-update contract and invalidated candidate immutability"
+    ],
+    "verified_repairs": [
+      "the documented CLI auto-update path, entrypoint call, source, tests, and release semantics were fully restored and remain unchanged from HEAD",
+      "model capability and implementation packet publish Workflow input_fields.evaluation_time=datetime and Action binding $workflow.evaluation_time",
+      "validator accepts $workflow.evaluation_time and continues to reject $workflow.input.evaluation_time",
+      "targeted Go tests, Skill quick_validate.py, deterministic release packaging, restored CLI source-closure verification, and git diff --check passed"
+    ],
+    "rejected_candidate": {
+      "version": "v0.3.6-55-m1-elapsed-time-candidate-drift-20260906",
+      "artifact_sha256": "048f0f65f4919ef6cf93470984bdcb0efc24c43b18ac86f1ffdd8fa52a392245",
+      "reason": "built before the auto-update correction; must not be installed, published, or used for evaluation"
+    },
+    "corrected_candidate": {
+      "packaging_task_id": "01a0769e-26c6-78c2-82fe-b42db34eda44",
+      "version": "v0.3.16-1-m1-elapsed-time-20260906",
+      "artifact_path": "/Users/tiger/Projects/domainry-plane/dist/skills/domainry-builder-v1_v0.3.16-1-m1-elapsed-time-20260906_darwin-arm64.tar.gz",
+      "artifact_sha256": "11fefda1f06fbedb611d86b9a62b8acfe55e3fe83cd1444c788f62208d4c31f1",
+      "skill_tree_sha256": "70ebb10e18517fa9c7d9742693c04eaa04a327737ac0dc7a1c27953b7b786cfa",
+      "cli_binary_sha256": "35cbdd434e8a19ec08671237122a1fb0668069193c93df04bae8a50e84176220",
+      "status": "packaged_and_verified_not_installed",
+      "auto_update_contract": "preserved"
+    },
+    "evaluator_isolation_repair": {
+      "status": "implemented_and_verified",
+      "diagnostic": "service.application_delivery_newer_than_candidate",
+      "rule": "fail before creating isolation when the CLI SemVer predicate proves the service would auto-update the frozen candidate",
+      "tests": "113 passed"
+    },
+    "publication_required_before_resume": true,
+    "publication_side_effects_not_authorized": [
+      "commit_or_push domainry-plane",
+      "replace installed Builder Skill",
+      "restart or mutate Plane service"
+    ]
+  }
+}

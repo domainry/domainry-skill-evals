@@ -1,0 +1,55 @@
+[
+  {
+    "stage": "model_loader",
+    "owner": "domainry-cli",
+    "note": "scheduled_jobs.weekday_followup_reminders contains unknown field \"trigger_type\"",
+    "terminal_state": "baseline_first_scoring_failure",
+    "attribution_status": "attributed",
+    "diagnostic": {
+      "code": "model.unknown_field",
+      "message": "scheduled_jobs.weekday_followup_reminders contains unknown field \"trigger_type\"",
+      "path": "backend/model/40-followup-reminders.json#modules/crm/features/followup_reminders/scheduled_jobs/weekday_followup_reminders",
+      "file": "backend/model/40-followup-reminders.json",
+      "json_pointer": "/modules/crm/features/followup_reminders/scheduled_jobs/weekday_followup_reminders",
+      "line": 91,
+      "column": 13,
+      "constraint": "model.unknown_field",
+      "repair_hint": "repair the reported constraint at the file/JSON Pointer and rerun model plan",
+      "owner": "domainry-cli",
+      "stage": "model_loader",
+      "ledger_path": "backend/model/40-followup-reminders.json#modules/crm/features/followup_reminders/scheduled_jobs/weekday_followup_reminders",
+      "repair_facts": {
+        "artifact_path": ".domainry/builder/disposable/model-preflight-result.json",
+        "artifact_relative_to": "--project",
+        "collection": "scheduled_jobs",
+        "feature": "followup_reminders",
+        "key": "weekday_followup_reminders",
+        "module": "crm",
+        "source_file": "backend/model/40-followup-reminders.json"
+      }
+    },
+    "detail": {
+      "code": "model.unknown_field",
+      "message": "scheduled_jobs.weekday_followup_reminders contains unknown field \"trigger_type\"",
+      "path": "backend/model/40-followup-reminders.json#modules/crm/features/followup_reminders/scheduled_jobs/weekday_followup_reminders",
+      "file": "backend/model/40-followup-reminders.json",
+      "json_pointer": "/modules/crm/features/followup_reminders/scheduled_jobs/weekday_followup_reminders",
+      "line": 91,
+      "column": 13,
+      "constraint": "model.unknown_field",
+      "repair_hint": "repair the reported constraint at the file/JSON Pointer and rerun model plan",
+      "owner": "domainry-cli",
+      "stage": "model_loader",
+      "ledger_path": "backend/model/40-followup-reminders.json#modules/crm/features/followup_reminders/scheduled_jobs/weekday_followup_reminders",
+      "repair_facts": {
+        "artifact_path": ".domainry/builder/disposable/model-preflight-result.json",
+        "artifact_relative_to": "--project",
+        "collection": "scheduled_jobs",
+        "feature": "followup_reminders",
+        "key": "weekday_followup_reminders",
+        "module": "crm",
+        "source_file": "backend/model/40-followup-reminders.json"
+      }
+    }
+  }
+]

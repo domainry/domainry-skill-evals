@@ -1,0 +1,109 @@
+{
+  "contract_version": "domainry-eval-progress-v1",
+  "run_id": "m1-crm-v0.3.6-44-m1-evolution-control-20260906-bba567a8fad0-baseline-26",
+  "run_kind": "baseline",
+  "status": "terminal",
+  "lifecycle_phase": "terminal",
+  "lifecycle_state": "environment_invalid_service_drift",
+  "lifecycle_phase_timing": {
+    "agent": {
+      "started_epoch": 1788667792.2465742,
+      "ended_epoch": 1788669621.327945
+    },
+    "checker": {
+      "started_epoch": 1788669621.615222,
+      "ended_epoch": 1788669621.615926
+    },
+    "scorer": {
+      "started_epoch": 1788669621.615926,
+      "ended_epoch": 1788669621.653375
+    },
+    "terminal": {
+      "started_epoch": 1788669621.653375,
+      "ended_epoch": 1788669621.653375
+    }
+  },
+  "delivery_stage": "verify",
+  "delivery_stage_source": "cli-event",
+  "delivery_stage_timing": {
+    "requirements": {
+      "started_epoch": 1788667792.2465742,
+      "ended_epoch": 1788667961.641769
+    },
+    "model": {
+      "started_epoch": 1788667961.641769,
+      "ended_epoch": 1788668361.756097
+    },
+    "apply": {
+      "started_epoch": 1788668361.756097,
+      "ended_epoch": 1788669474.437354
+    },
+    "verify": {
+      "started_epoch": 1788669474.437354,
+      "ended_epoch": 1788669621.286072
+    }
+  },
+  "delivery_stage_timing_source": "evaluator-events",
+  "delivery_stage_timing_status": "valid",
+  "wall_elapsed_seconds": 1829.407,
+  "domainry_cli": {
+    "invocations_total": 5,
+    "completed_total": 5,
+    "failed_total": 1,
+    "retries_total": 0,
+    "latest": {
+      "subcommand": "verify",
+      "status": "failed",
+      "exit_code": 1,
+      "output_state": "failed",
+      "observed_epoch": 1788669621.286072
+    }
+  },
+  "diagnostic_cli": {
+    "invocations_total": 0,
+    "completed_total": 0,
+    "failed_total": 0,
+    "retries_total": 0,
+    "latest": null,
+    "first_failure": null
+  },
+  "agent": {
+    "last_activity_epoch": 1788669621.286072,
+    "last_activity_status": "observed",
+    "total_tokens": null,
+    "total_tokens_status": "unavailable",
+    "token_usage": {
+      "input_tokens": null,
+      "cached_input_tokens": null,
+      "non_cached_input_tokens": null,
+      "output_tokens": null,
+      "reasoning_output_tokens": null,
+      "budget_tokens": null,
+      "budget_basis": "provider_cumulative_input_plus_output",
+      "cached_input_included_in_input": true,
+      "reasoning_output_included_in_output": true,
+      "observability_status": "unavailable"
+    }
+  },
+  "scoring_first_failure": {
+    "family": "verify",
+    "exit_code": 1,
+    "output_state": "failed"
+  },
+  "diagnostic_first_failure": null,
+  "first_failure": {
+    "failure_kind": "scoring",
+    "family": "verify",
+    "exit_code": 1,
+    "output_state": "failed"
+  },
+  "first_failure_seal_triggered": true,
+  "checker_allowed": false,
+  "checker_decision_reason": "environment_invalid",
+  "scorecard": {
+    "available": true,
+    "pass_at_1": false,
+    "run_outcome_pass": false
+  },
+  "updated_epoch": 1788669621.653375
+}

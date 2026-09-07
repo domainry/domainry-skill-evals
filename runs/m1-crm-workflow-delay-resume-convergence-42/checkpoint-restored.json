@@ -1,0 +1,41 @@
+{
+  "contract_version": "domainry-eval-checkpoint-v1",
+  "source_run_id": "m1-crm-scheduler-run-route-resume-convergence-41",
+  "checkpoint_kind": "v5_archive_req14_due_continuation_active_resume_boundary_v7",
+  "measurement_class": "checkpoint_convergence_not_baseline",
+  "baseline_eligibility": false,
+  "manifest_sha256": "f3d3e8c9d403a0d405a54937f30d15ee0baf4dbf85ba736eb0d76a8dc6eafd67",
+  "archive_sha256": "4aec796c2809fddc88d9d18172029bc4e991140277b4cbcc23c76522cc17ecd9",
+  "manifest_only_boundary_migration": true,
+  "resume_boundary": {
+    "stage": "model",
+    "next_node": "Restore the exact v5 archive, but replace only logical Feature40, its necessary project Handler closure, and BF06. Preserve all accepted non-Req14 work. Re-author Req14 as lead status_changed_at plus Handler-calculated next_followup_at; lead.advance sets/clears due on contacted entry/exit; an enabled Workflow listens for next_followup_at field change and uses a legal Graph V2 with non-empty unique node/edge IDs and valid endpoints: trigger -> contract.condition{type=field_equals,field=status,value=contacted} true branch -> node.contract.timer -> per-record due Action, with no false-branch route to the timer. The timer consumes source_field only and the due Action reloads state, emits the reminder/notification, and advances next_followup_at. Declare reminder composite uniqueness over exactly lead relation plus local reminder date. Remove every Req14 Scheduler target and every standalone scheduled lead/follow-up scan; remove evaluation_time from all production Actions and Workflows. Run only the compatibility plan/review/apply/finalize needed for this slice. Add the exact Handler focused tests and actual Runtime-package record-timer integration tests required by the evaluator, then execute focused checks and one managed initial/restart verify. Never restore the rejected item-28 tail.",
+    "rule": "The reused archive is authority for accepted non-Req14 source only. For Req14, this v7 boundary and the current benchmark/checker are authoritative over every restored PRD, TODO, packet, model, source, BF06, and v5 resume statement. BF06 must combine: ordinary lead.advance black-box proof of persisted seven-day next-workday-morning due and no immediate reminder; evaluator-executed project Handler tests with non-zero Handler coverage for calculation, set/clear, due continuation, daily dedupe and stale no-op; evaluator-executed Runtime record-timer tests for real short-duration persisted due, pre-due no-op, automatic resume and restart recovery; and manifest proof binding next_followup_at field change through the canonical contacted condition true branch and source-field-only timer to the per-record Action. Runtime tests run with a file-only hermetic GOPROXY chain (project delivery first, local module download cache fallback), readonly module mode and SDK tag; go list module identity must be external (not Main, Replace, or project-local), match the delivery binding, and execute non-zero Runtime record-timer statements. An evaluator-owned injected Go probe independently asserts exact zero-offset next_followup_at source-field due preservation and an enabled default worker. Continue the current convergence run started by the evaluator according to this restored-project boundary. This Agent must not start any nested evaluation run or a from-zero M1 baseline. A formal baseline starts later from zero only after the Plane/Runtime candidate is converged and must finish with zero errors.",
+    "prior_delivery_id": "sha256:000477f0e464666cbf57696e82c15ccc5482a2d5a65395c29cf5c2be3321e471"
+  },
+  "prohibited_repairs": [
+    "do not follow the restored v5 Scheduler or controlled evaluation_time resume instructions; this v7 manifest is authoritative over them",
+    "do not generate or invoke a tenant Scheduler definition or any standalone scheduled lead/follow-up full-table scan for Req14, even when no Scheduler definition targets it",
+    "do not expose evaluation_time in any production Action or Workflow and do not substitute updated_at for status_changed_at",
+    "do not add a CRM-only rearm, snooze, short-delay, or test Action to compress the seven-day business Workflow",
+    "do not mutate or backdate SQLite, override the global clock, manually resume a timer, or invent an internal timer_id in BF06 evidence",
+    "do not require or invent a new Runtime proof API; use the evaluator-executed actual Runtime package integration tests",
+    "do not modify Domainry Plane, Runtime, Scheduler, SDK, or another foundation repository from this checkpoint",
+    "do not redo accepted non-Req14 requirements, model, Handler, business-flow, export, identity, organization, approval, or report work",
+    "do not treat this checkpoint or its successor convergence as baseline evidence"
+  ],
+  "failure_boundary": null,
+  "restored_file_count": 1387,
+  "ignored_appledouble_member_count": 0,
+  "ignored_git_member_count": 0,
+  "ignored_runtime_state_member_count": 0,
+  "ignored_sqlite_member_count": 0,
+  "ignored_agent_session_member_count": 0,
+  "ignored_lock_member_count": 0,
+  "ignored_evaluator_temporary_source_member_count": 0,
+  "git_history_restored": false,
+  "runtime_state_restored": false,
+  "sqlite_restored": false,
+  "agent_session_restored": false,
+  "locks_restored": false
+}

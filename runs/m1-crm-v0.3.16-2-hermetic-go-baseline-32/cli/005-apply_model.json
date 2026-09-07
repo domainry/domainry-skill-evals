@@ -1,0 +1,42 @@
+{
+  "family": "apply_model",
+  "command": "/bin/zsh -lc '/private/tmp/domainry-m1-v0316-2-baseline-32/codex-home/skills/domainry-builder-v1/bin/domainry-cli apply model --json --project /private/tmp/domainry-m1-v0316-2-baseline-32/project --go-module-path example.com/domainry-m1-crm/backend --service http://127.0.0.1:8283'",
+  "exit_code": 0,
+  "output": {
+    "contract_version": "domainry-model-apply-v3",
+    "evolution_audit_path": ".domainry/builder/audits/project-delivery-561c62a6abedb2c6caf6eadcaf35ea0f3d693cbbaac7604dae7f9f69bbd72dec.json",
+    "evolution_audit_sha256": "561c62a6abedb2c6caf6eadcaf35ea0f3d693cbbaac7604dae7f9f69bbd72dec",
+    "materialization_state": "not_materialized",
+    "next_command": "\"$DOMAINRY_CLI\" apply model '--json' '--project' '/private/tmp/domainry-m1-v0316-2-baseline-32/project' '--go-module-path' 'example.com/domainry-m1-crm/backend' '--service' 'http://127.0.0.1:8283' '--evolution-audit-sha256' '561c62a6abedb2c6caf6eadcaf35ea0f3d693cbbaac7604dae7f9f69bbd72dec' '--evolution-reason' '<reviewed reason for this exact audit>'",
+    "next_command_args": [
+      "apply",
+      "model",
+      "--json",
+      "--project",
+      "/private/tmp/domainry-m1-v0316-2-baseline-32/project",
+      "--go-module-path",
+      "example.com/domainry-m1-crm/backend",
+      "--service",
+      "http://127.0.0.1:8283",
+      "--evolution-audit-sha256",
+      "561c62a6abedb2c6caf6eadcaf35ea0f3d693cbbaac7604dae7f9f69bbd72dec",
+      "--evolution-reason",
+      "<reviewed reason for this exact audit>"
+    ],
+    "receipt": ".domainry/builder/model-apply.json",
+    "state": "evolution_review_required"
+  },
+  "raw_output": "[domainry] apply model: load and preflight model done (1.157s)\n[domainry] apply model: synchronize Blueprint Ledger...\n[domainry] apply model: synchronize Blueprint Ledger done (129ms)\n[domainry] apply model: validate compiled Blueprint...\n[domainry] apply model: validate compiled Blueprint done (667ms)\n[domainry] apply model: publish immutable project delivery...\n[domainry] apply model: publish immutable project delivery done (850ms)\n[domainry] apply model: fetch signed delivery artifacts...\n[domainry] apply model: fetch signed delivery artifacts done (194ms)\n[domainry] apply model: materialize backend and resolve Go dependencies...\n[domainry] apply model: materialize backend and resolve Go dependencies done (34ms)\n{\"contract_version\":\"domainry-model-apply-v3\",\"evolution_audit_path\":\".domainry/builder/audits/project-delivery-561c62a6abedb2c6caf6eadcaf35ea0f3d693cbbaac7604dae7f9f69bbd72dec.json\",\"evolution_audit_sha256\":\"561c62a6abedb2c6caf6eadcaf35ea0f3d693cbbaac7604dae7f9f69bbd72dec\",\"materialization_state\":\"not_materialized\",\"next_command\":\"\\\"$DOMAINRY_CLI\\\" apply model '--json' '--project' '/private/tmp/domainry-m1-v0316-2-baseline-32/project' '--go-module-path' 'example.com/domainry-m1-crm/backend' '--service' 'http://127.0.0.1:8283' '--evolution-audit-sha256' '561c62a6abedb2c6caf6eadcaf35ea0f3d693cbbaac7604dae7f9f69bbd72dec' '--evolution-reason' '\\u003creviewed reason for this exact audit\\u003e'\",\"next_command_args\":[\"apply\",\"model\",\"--json\",\"--project\",\"/private/tmp/domainry-m1-v0316-2-baseline-32/project\",\"--go-module-path\",\"example.com/domainry-m1-crm/backend\",\"--service\",\"http://127.0.0.1:8283\",\"--evolution-audit-sha256\",\"561c62a6abedb2c6caf6eadcaf35ea0f3d693cbbaac7604dae7f9f69bbd72dec\",\"--evolution-reason\",\"\\u003creviewed reason for this exact audit\\u003e\"],\"receipt\":\".domainry/builder/model-apply.json\",\"state\":\"evolution_review_required\"}\n",
+  "stdout": null,
+  "stderr": null,
+  "output_streams_status": "aggregated_only",
+  "event_item_id": "item_62",
+  "event_line": 121,
+  "observed_started_epoch": 1788706852.617882,
+  "observed_completed_epoch": 1788706855.786027,
+  "observed_started_event_line": 120,
+  "observed_completed_event_line": 121,
+  "duration_seconds": 3.168,
+  "timing_source": "agent-event-observations.jsonl",
+  "capture_file": "cli/005-apply_model.json"
+}

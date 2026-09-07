@@ -1,0 +1,21 @@
+[
+  {
+    "stage": "model_plan",
+    "owner": null,
+    "note": "evaluator terminal state: environment_invalid_candidate_drift",
+    "terminal_state": "environment_invalid_candidate_drift",
+    "detail": {
+      "candidate_errors": [
+        {
+          "copy": "installed",
+          "error": "candidate identity fingerprint changed"
+        },
+        {
+          "copy": "isolated",
+          "error": "candidate identity fingerprint changed"
+        }
+      ]
+    },
+    "attribution_status": "pending"
+  }
+]

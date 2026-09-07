@@ -1,0 +1,110 @@
+{
+  "contract_version": "domainry-eval-stage-timing-v1",
+  "boundary_rule": "evaluator-cli-transition-v1",
+  "stage_order": [
+    "discovery",
+    "plan",
+    "apply",
+    "finalize",
+    "verify"
+  ],
+  "status": "partial",
+  "stages": {
+    "discovery": {
+      "started_epoch": 1788705850.905121,
+      "ended_epoch": 1788706072.524631,
+      "seconds": 221.62,
+      "status": "observed",
+      "start_provenance": {
+        "source": "lifecycle.json",
+        "field": "started_epoch",
+        "boundary_reason": "agent_lifecycle_started"
+      },
+      "end_provenance": {
+        "source": "agent-event-observations.jsonl",
+        "capture_file": "cli/001-model_capability.json",
+        "family": "model_capability",
+        "event": "completed",
+        "event_item_id": "item_11",
+        "event_line": 23,
+        "boundary_reason": "discovery_capability_completed"
+      }
+    },
+    "plan": {
+      "started_epoch": 1788706072.524631,
+      "ended_epoch": 1788706567.1388412,
+      "seconds": 494.614,
+      "status": "observed",
+      "start_provenance": {
+        "source": "agent-event-observations.jsonl",
+        "capture_file": "cli/001-model_capability.json",
+        "family": "model_capability",
+        "event": "completed",
+        "event_item_id": "item_11",
+        "event_line": 23,
+        "boundary_reason": "discovery_capability_completed"
+      },
+      "end_provenance": {
+        "source": "agent-event-observations.jsonl",
+        "capture_file": "cli/003-apply_model.json",
+        "family": "apply_model",
+        "event": "started",
+        "event_item_id": "item_42",
+        "event_line": 82,
+        "boundary_reason": "next_stage_cli_started"
+      }
+    },
+    "apply": {
+      "started_epoch": 1788706567.1388412,
+      "ended_epoch": 1788706931.463901,
+      "seconds": 364.325,
+      "status": "observed",
+      "start_provenance": {
+        "source": "agent-event-observations.jsonl",
+        "capture_file": "cli/003-apply_model.json",
+        "family": "apply_model",
+        "event": "started",
+        "event_item_id": "item_42",
+        "event_line": 82,
+        "boundary_reason": "stage_cli_started"
+      },
+      "end_provenance": {
+        "source": "agent-event-observations.jsonl",
+        "capture_file": "cli/006-apply_model.json",
+        "family": "apply_model",
+        "event": "completed",
+        "event_item_id": "item_67",
+        "event_line": 131,
+        "boundary_reason": "terminal_stage_cli_completed"
+      }
+    },
+    "finalize": {
+      "started_epoch": null,
+      "ended_epoch": null,
+      "seconds": null,
+      "status": "unknown",
+      "start_provenance": null,
+      "end_provenance": null
+    },
+    "verify": {
+      "started_epoch": null,
+      "ended_epoch": null,
+      "seconds": null,
+      "status": "unknown",
+      "start_provenance": null,
+      "end_provenance": null
+    }
+  },
+  "critical_path": {
+    "observed_seconds": 1080.559,
+    "unknown_stages": [
+      "finalize",
+      "verify"
+    ],
+    "hotspot": {
+      "stage": "plan",
+      "seconds": 494.614
+    }
+  },
+  "diagnostic_intervals": []
+}

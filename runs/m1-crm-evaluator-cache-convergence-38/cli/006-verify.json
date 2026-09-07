@@ -1,0 +1,85 @@
+{
+  "family": "verify",
+  "command": "/bin/zsh -lc '/private/tmp/domainry-m1-evaluator-cache-convergence-38/codex-home/skills/domainry-builder-v1/bin/domainry-cli verify --json --project /private/tmp/domainry-m1-evaluator-cache-convergence-38/project --address 127.0.0.1:19286'",
+  "exit_code": 1,
+  "output": {
+    "contract_version": "domainry-project-verify-v2",
+    "error": "verify initial Runtime business flows: managed business-flow tests failed for initial: exit status 1: === RUN   TestBF01LeadLifecycleAndOwnership\n    crm_helpers_test.go:100: provision department status=409 body={\"code\":\"auth.authorization_stale\",\"contract_version\":\"runtime-authoring-v1\",\"error\":\"auth.authorization_stale\",\"message\":\"auth.authorization_stale\",\"message_key\":\"auth.authorization_stale\",\"params\":null,\"request_id\":\"bf-34ec28d468301788\"}\n--- FAIL: TestBF01LeadLifecycleAndOwnership (0.33s)\n=== RUN   TestBF02DirectConversionIdempotencyAndCustomerImmutability\n    crm_helpers_test.go:100: provision department status=409 body={\"code\":\"auth.authorization_stale\",\"contract_version\":\"runtime-authoring-v1\",\"error\":\"auth.authorization_stale\",\"message\":\"auth.authorization_stale\",\"message_key\":\"auth.authorization_stale\",\"params\":null,\"request_id\":\"bf-ad3b8dea6773aab5\"}\n--- FAIL: TestBF02DirectConversionIdempotencyAndCustomerImmutability (0.15s)\n=== RUN   TestBF03ApprovalAcceptedTransactionAndNotification\n    crm_helpers_test.go:100: provision department status=409 body={\"code\":\"auth.authorization_stale\",\"contract_version\":\"runtime-authoring-v1\",\"error\":\"auth.authorization_stale\",\"message\":\"auth.authorization_stale\",\"message_key\":\"auth.authorization_stale\",\"params\":null,\"request_id\":\"bf-8a1ef27d4fb561c0\"}\n--- FAIL: TestBF03ApprovalAcceptedTransactionAndNotification (0.15s)\n=== RUN   TestBF04ApprovalRejectedReasonNotificationAndNoCustomer\n    crm_helpers_test.go:100: provision department status=409 body={\"code\":\"auth.authorization_stale\",\"contract_version\":\"runtime-authoring-v1\",\"error\":\"auth.authorization_stale\",\"message\":\"auth.authorization_stale\",\"message_key\":\"auth.authorization_stale\",\"params\":null,\"request_id\":\"bf-683706bb92e282c3\"}\n--- FAIL: TestBF04ApprovalRejectedReasonNotificationAndNoCustomer (0.14s)\n=== RUN   TestBF05DepartmentScopePaginationAndRoleNavigation\n    crm_helpers_test.go:100: provision department status=409 body={\"code\":\"auth.authorization_stale\",\"contract_version\":\"runtime-authoring-v1\",\"error\":\"auth.authorization_stale\",\"message\":\"auth.authorization_stale\",\"message_key\":\"auth.authorization_stale\",\"params\":null,\"request_id\":\"bf-75adeb9101fab51b\"}\n--- FAIL: TestBF05DepartmentScopePaginationAndRoleNavigation (0.14s)\n=== RUN   TestBF06WeekdayOverdueReminderDedupAndRestart\n    crm_helpers_test.go:100: provision department status=409 body={\"code\":\"auth.authorization_stale\",\"contract_version\":\"runtime-authoring-v1\",\"error\":\"auth.authorization_stale\",\"message\":\"auth.authorization_stale\",\"message_key\":\"auth.authorization_stale\",\"params\":null,\"request_id\":\"bf-8119ed80f541f37e\"}\n--- FAIL: TestBF06WeekdayOverdueReminderDedupAndRestart (0.14s)\n=== RUN   TestBF07FunnelAggregationAndSalesDenial\n    crm_helpers_test.go:100: provision department status=409 body={\"code\":\"auth.authorization_stale\",\"contract_version\":\"runtime-authoring-v1\",\"error\":\"auth.authorization_stale\",\"message\":\"auth.authorization_stale\",\"message_key\":\"auth.authorization_stale\",\"params\":null,\"request_id\":\"bf-634cb17ce760fad0\"}\n--- FAIL: TestBF07FunnelAggregationAndSalesDenial (0.15s)\n=== RUN   TestBF08GovernedCSVExportAuditOwnershipAndDownload\n    crm_helpers_test.go:100: provision department status=409 body={\"code\":\"auth.authorization_stale\",\"contract_version\":\"runtime-authoring-v1\",\"error\":\"auth.authorization_stale\",\"message\":\"auth.authorization_stale\",\"message_key\":\"auth.authorization_stale\",\"params\":null,\"request_id\":\"bf-1e61fabffebda4ba\"}\n--- FAIL: TestBF08GovernedCSVExportAuditOwnershipAndDownload (0.15s)\nFAIL",
+    "state": "failed",
+    "telemetry": {
+      "contract_version": "domainry-verify-telemetry-v1",
+      "elapsed_ms": 109759,
+      "cache": {
+        "signed_runtime_package": false,
+        "verification_receipt": false
+      },
+      "cache_misses": {
+        "signed_runtime_package": "current V6 package verification is stale: verification receipt is missing",
+        "verification_receipt": "verification receipt is missing"
+      },
+      "stages": [
+        {
+          "name": "prepare isolated initial Workspace authority",
+          "status": "done",
+          "elapsed_ms": 0,
+          "owner": "domainry-runtime"
+        },
+        {
+          "name": "validate reusable verification and signed Runtime package",
+          "status": "done",
+          "elapsed_ms": 0,
+          "owner": "domainry-runtime"
+        },
+        {
+          "name": "run structural checks and complete backend tests",
+          "status": "done",
+          "elapsed_ms": 54442,
+          "owner": "domainry-builder"
+        },
+        {
+          "name": "build and sign exact Runtime package",
+          "status": "done",
+          "elapsed_ms": 48052,
+          "owner": "domainry-runtime"
+        },
+        {
+          "name": "compile managed Runtime business-flow tests",
+          "status": "done",
+          "elapsed_ms": 1088,
+          "owner": "domainry-runtime"
+        },
+        {
+          "name": "start initial managed Runtime",
+          "status": "done",
+          "elapsed_ms": 2913,
+          "owner": "domainry-runtime"
+        },
+        {
+          "name": "run initial Runtime business flows",
+          "status": "failed",
+          "elapsed_ms": 1756,
+          "owner": "project.business_flow_tests"
+        }
+      ],
+      "first_failure": {
+        "name": "run initial Runtime business flows",
+        "status": "failed",
+        "elapsed_ms": 1756,
+        "owner": "project.business_flow_tests"
+      }
+    }
+  },
+  "raw_output": "[domainry] verify: run structural checks and complete backend tests done (54.442s)\r\n[domainry] verify: build and sign exact Runtime package...\r\n[domainry] verify: build and sign exact Runtime package done (48.052s)\r\n[domainry] verify: compile managed Runtime business-flow tests...\r\n[domainry] verify: compile managed Runtime business-flow tests done (1.088s)\r\n[domainry] verify: start initial managed Runtime...\r\n[domainry] verify: start initial managed Runtime done (2.913s)\r\n[domainry] verify: run initial Runtime business flows...\r\n[domainry] verify: run initial Runtime business flows failed (1.756s)\r\n{\"contract_version\":\"domainry-project-verify-v2\",\"error\":\"verify initial Runtime business flows: managed business-flow tests failed for initial: exit status 1: === RUN   TestBF01LeadLifecycleAndOwnership\\n    crm_helpers_test.go:100: provision department status=409 body={\\\"code\\\":\\\"auth.authorization_stale\\\",\\\"contract_version\\\":\\\"runtime-authoring-v1\\\",\\\"error\\\":\\\"auth.authorization_stale\\\",\\\"message\\\":\\\"auth.authorization_stale\\\",\\\"message_key\\\":\\\"auth.authorization_stale\\\",\\\"params\\\":null,\\\"request_id\\\":\\\"bf-34ec28d468301788\\\"}\\n--- FAIL: TestBF01LeadLifecycleAndOwnership (0.33s)\\n=== RUN   TestBF02DirectConversionIdempotencyAndCustomerImmutability\\n    crm_helpers_test.go:100: provision department status=409 body={\\\"code\\\":\\\"auth.authorization_stale\\\",\\\"contract_version\\\":\\\"runtime-authoring-v1\\\",\\\"error\\\":\\\"auth.authorization_stale\\\",\\\"message\\\":\\\"auth.authorization_stale\\\",\\\"message_key\\\":\\\"auth.authorization_stale\\\",\\\"params\\\":null,\\\"request_id\\\":\\\"bf-ad3b8dea6773aab5\\\"}\\n--- FAIL: TestBF02DirectConversionIdempotencyAndCustomerImmutability (0.15s)\\n=== RUN   TestBF03ApprovalAcceptedTransactionAndNotification\\n    crm_helpers_test.go:100: provision department status=409 body={\\\"code\\\":\\\"auth.authorization_stale\\\",\\\"contract_version\\\":\\\"runtime-authoring-v1\\\",\\\"error\\\":\\\"auth.authorization_stale\\\",\\\"message\\\":\\\"auth.authorization_stale\\\",\\\"message_key\\\":\\\"auth.authorization_stale\\\",\\\"params\\\":null,\\\"request_id\\\":\\\"bf-8a1ef27d4fb561c0\\\"}\\n--- FAIL: TestBF03ApprovalAcceptedTransactionAndNotification (0.15s)\\n=== RUN   TestBF04ApprovalRejectedReasonNotificationAndNoCustomer\\n    crm_helpers_test.go:100: provision department status=409 body={\\\"code\\\":\\\"auth.authorization_stale\\\",\\\"contract_version\\\":\\\"runtime-authoring-v1\\\",\\\"error\\\":\\\"auth.authorization_stale\\\",\\\"message\\\":\\\"auth.authorization_stale\\\",\\\"message_key\\\":\\\"auth.authorization_stale\\\",\\\"params\\\":null,\\\"request_id\\\":\\\"bf-683706bb92e282c3\\\"}\\n--- FAIL: TestBF04ApprovalRejectedReasonNotificationAndNoCustomer (0.14s)\\n=== RUN   TestBF05DepartmentScopePaginationAndRoleNavigation\\n    crm_helpers_test.go:100: provision department status=409 body={\\\"code\\\":\\\"auth.authorization_stale\\\",\\\"contract_version\\\":\\\"runtime-authoring-v1\\\",\\\"error\\\":\\\"auth.authorization_stale\\\",\\\"message\\\":\\\"auth.authorization_stale\\\",\\\"message_key\\\":\\\"auth.authorization_stale\\\",\\\"params\\\":null,\\\"request_id\\\":\\\"bf-75adeb9101fab51b\\\"}\\n--- FAIL: TestBF05DepartmentScopePaginationAndRoleNavigation (0.14s)\\n=== RUN   TestBF06WeekdayOverdueReminderDedupAndRestart\\n    crm_helpers_test.go:100: provision department status=409 body={\\\"code\\\":\\\"auth.authorization_stale\\\",\\\"contract_version\\\":\\\"runtime-authoring-v1\\\",\\\"error\\\":\\\"auth.authorization_stale\\\",\\\"message\\\":\\\"auth.authorization_stale\\\",\\\"message_key\\\":\\\"auth.authorization_stale\\\",\\\"params\\\":null,\\\"request_id\\\":\\\"bf-8119ed80f541f37e\\\"}\\n--- FAIL: TestBF06WeekdayOverdueReminderDedupAndRestart (0.14s)\\n=== RUN   TestBF07FunnelAggregationAndSalesDenial\\n    crm_helpers_test.go:100: provision department status=409 body={\\\"code\\\":\\\"auth.authorization_stale\\\",\\\"contract_version\\\":\\\"runtime-authoring-v1\\\",\\\"error\\\":\\\"auth.authorization_stale\\\",\\\"message\\\":\\\"auth.authorization_stale\\\",\\\"message_key\\\":\\\"auth.authorization_stale\\\",\\\"params\\\":null,\\\"request_id\\\":\\\"bf-634cb17ce760fad0\\\"}\\n--- FAIL: TestBF07FunnelAggregationAndSalesDenial (0.15s)\\n=== RUN   TestBF08GovernedCSVExportAuditOwnershipAndDownload\\n    crm_helpers_test.go:100: provision department status=409 body={\\\"code\\\":\\\"auth.authorization_stale\\\",\\\"contract_version\\\":\\\"runtime-authoring-v1\\\",\\\"error\\\":\\\"auth.authorization_stale\\\",\\\"message\\\":\\\"auth.authorization_stale\\\",\\\"message_key\\\":\\\"auth.authorization_stale\\\",\\\"params\\\":null,\\\"request_id\\\":\\\"bf-1e61fabffebda4ba\\\"}\\n--- FAIL: TestBF08GovernedCSVExportAuditOwnershipAndDownload (0.15s)\\nFAIL\",\"state\":\"failed\",\"telemetry\":{\"contract_version\":\"domainry-verify-telemetry-v1\",\"elapsed_ms\":109759,\"cache\":{\"signed_runtime_package\":false,\"verification_receipt\":false},\"cache_misses\":{\"signed_runtime_package\":\"current V6 package verification is stale: verification receipt is missing\",\"verification_receipt\":\"verification receipt is missing\"},\"stages\":[{\"name\":\"prepare isolated initial Workspace authority\",\"status\":\"done\",\"elapsed_ms\":0,\"owner\":\"domainry-runtime\"},{\"name\":\"validate reusable verification and signed Runtime package\",\"status\":\"done\",\"elapsed_ms\":0,\"owner\":\"domainry-runtime\"},{\"name\":\"run structural checks and complete backend tests\",\"status\":\"done\",\"elapsed_ms\":54442,\"owner\":\"domainry-builder\"},{\"name\":\"build and sign exact Runtime package\",\"status\":\"done\",\"elapsed_ms\":48052,\"owner\":\"domainry-runtime\"},{\"name\":\"compile managed Runtime business-flow tests\",\"status\":\"done\",\"elapsed_ms\":1088,\"owner\":\"domainry-runtime\"},{\"name\":\"start initial managed Runtime\",\"status\":\"done\",\"elapsed_ms\":2913,\"owner\":\"domainry-runtime\"},{\"name\":\"run initial Runtime business flows\",\"status\":\"failed\",\"elapsed_ms\":1756,\"owner\":\"project.business_flow_tests\"}],\"first_failure\":{\"name\":\"run initial Runtime business flows\",\"status\":\"failed\",\"elapsed_ms\":1756,\"owner\":\"project.business_flow_tests\"}}}\r\nerror: verify initial Runtime business flows: managed business-flow tests failed for initial: exit status 1: === RUN   TestBF01LeadLifecycleAndOwnership\r\n    crm_helpers_test.go:100: provision department status=409 body={\"code\":\"auth.authorization_stale\",\"contract_version\":\"runtime-authoring-v1\",\"error\":\"auth.authorization_stale\",\"message\":\"auth.authorization_stale\",\"message_key\":\"auth.authorization_stale\",\"params\":null,\"request_id\":\"bf-34ec28d468301788\"}\r\n--- FAIL: TestBF01LeadLifecycleAndOwnership (0.33s)\r\n=== RUN   TestBF02DirectConversionIdempotencyAndCustomerImmutability\r\n    crm_helpers_test.go:100: provision department status=409 body={\"code\":\"auth.authorization_stale\",\"contract_version\":\"runtime-authoring-v1\",\"error\":\"auth.authorization_stale\",\"message\":\"auth.authorization_stale\",\"message_key\":\"auth.authorization_stale\",\"params\":null,\"request_id\":\"bf-ad3b8dea6773aab5\"}\r\n--- FAIL: TestBF02DirectConversionIdempotencyAndCustomerImmutability (0.15s)\r\n=== RUN   TestBF03ApprovalAcceptedTransactionAndNotification\r\n    crm_helpers_test.go:100: provision department status=409 body={\"code\":\"auth.authorization_stale\",\"contract_version\":\"runtime-authoring-v1\",\"error\":\"auth.authorization_stale\",\"message\":\"auth.authorization_stale\",\"message_key\":\"auth.authorization_stale\",\"params\":null,\"request_id\":\"bf-8a1ef27d4fb561c0\"}\r\n--- FAIL: TestBF03ApprovalAcceptedTransactionAndNotification (0.15s)\r\n=== RUN   TestBF04ApprovalRejectedReasonNotificationAndNoCustomer\r\n    crm_helpers_test.go:100: provision department status=409 body={\"code\":\"auth.authorization_stale\",\"contract_version\":\"runtime-authoring-v1\",\"error\":\"auth.authorization_stale\",\"message\":\"auth.authorization_stale\",\"message_key\":\"auth.authorization_stale\",\"params\":null,\"request_id\":\"bf-683706bb92e282c3\"}\r\n--- FAIL: TestBF04ApprovalRejectedReasonNotificationAndNoCustomer (0.14s)\r\n=== RUN   TestBF05DepartmentScopePaginationAndRoleNavigation\r\n    crm_helpers_test.go:100: provision department status=409 body={\"code\":\"auth.authorization_stale\",\"contract_version\":\"runtime-authoring-v1\",\"error\":\"auth.authorization_stale\",\"message\":\"auth.authorization_stale\",\"message_key\":\"auth.authorization_stale\",\"params\":null,\"request_id\":\"bf-75adeb9101fab51b\"}\r\n--- FAIL: TestBF05DepartmentScopePaginationAndRoleNavigation (0.14s)\r\n=== RUN   TestBF06WeekdayOverdueReminderDedupAndRestart\r\n    crm_helpers_test.go:100: provision department status=409 body={\"code\":\"auth.authorization_stale\",\"contract_version\":\"runtime-authoring-v1\",\"error\":\"auth.authorization_stale\",\"message\":\"auth.authorization_stale\",\"message_key\":\"auth.authorization_stale\",\"params\":null,\"request_id\":\"bf-8119ed80f541f37e\"}\r\n--- FAIL: TestBF06WeekdayOverdueReminderDedupAndRestart (0.14s)\r\n=== RUN   TestBF07FunnelAggregationAndSalesDenial\r\n    crm_helpers_test.go:100: provision department status=409 body={\"code\":\"auth.authorization_stale\",\"contract_version\":\"runtime-authoring-v1\",\"error\":\"auth.authorization_stale\",\"message\":\"auth.authorization_stale\",\"message_key\":\"auth.authorization_stale\",\"params\":null,\"request_id\":\"bf-634cb17ce760fad0\"}\r\n--- FAIL: TestBF07FunnelAggregationAndSalesDenial (0.15s)\r\n=== RUN   TestBF08GovernedCSVExportAuditOwnershipAndDownload\r\n    crm_helpers_test.go:100: provision department status=409 body={\"code\":\"auth.authorization_stale\",\"contract_version\":\"runtime-authoring-v1\",\"error\":\"auth.authorization_stale\",\"message\":\"auth.authorization_stale\",\"message_key\":\"auth.authorization_stale\",\"params\":null,\"request_id\":\"bf-1e61fabffebda4ba\"}\r\n--- FAIL: TestBF08GovernedCSVExportAuditOwnershipAndDownload (0.15s)\r\nFAIL\r\n",
+  "stdout": null,
+  "stderr": null,
+  "output_streams_status": "aggregated_only",
+  "event_item_id": "item_67",
+  "event_line": 126,
+  "observed_started_epoch": 1788722083.094568,
+  "observed_completed_epoch": 1788722192.84604,
+  "observed_started_event_line": 124,
+  "observed_completed_event_line": 126,
+  "duration_seconds": 109.751,
+  "timing_source": "agent-event-observations.jsonl",
+  "capture_file": "cli/006-verify.json"
+}

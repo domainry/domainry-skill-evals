@@ -1,0 +1,178 @@
+{
+  "scorer_schema": "domainry-builder-eval-v3",
+  "benchmark": "m1-crm",
+  "candidate_id": "v0.3.17-4-workflow-delay-closure-20260907+6226601888ff",
+  "skill_version": "v0.3.17-4-workflow-delay-closure-20260907",
+  "run_id": "m1-crm-workflow-delay-resume-convergence-42",
+  "run_kind": "convergence",
+  "parent_run_id": "m1-crm-scheduler-run-route-resume-convergence-41",
+  "terminal_state": "delivery_incomplete",
+  "measurement_complete": false,
+  "environment_valid": true,
+  "pass_at_1_eligible": false,
+  "pass_at_1": null,
+  "run_outcome_pass": false,
+  "A_source": {
+    "A1": "not_measurable",
+    "A2": "not_measurable",
+    "A3": "not_measurable",
+    "A4": "not_measurable",
+    "A5": "not_measurable",
+    "A6": "cli-capture"
+  },
+  "A1_plan_first_pass": null,
+  "A1_plan_error_count": null,
+  "A2_apply_first_pass": null,
+  "A3_finalize_first_pass": null,
+  "A4_verify_first_pass": null,
+  "A5_acceptance_first_pass": null,
+  "A6_rework_rounds": 0,
+  "A7_false_done": false,
+  "A7_oracle_done_mismatch": false,
+  "A7_false_done_classification": "no_oracle_done_mismatch",
+  "B1_golden_hit_rate": null,
+  "B1_hit_detail": {},
+  "B2_silent_downgrade_count": 0,
+  "B3_platform_reuse_rate": null,
+  "C1_wall_clock_seconds": 386.72648882865906,
+  "C2_total_tokens": null,
+  "C2_usage_breakdown": {
+    "input_tokens": null,
+    "cached_input_tokens": null,
+    "non_cached_input_tokens": null,
+    "output_tokens": null,
+    "reasoning_output_tokens": null,
+    "budget_tokens": null,
+    "budget_basis": "provider_cumulative_input_plus_output",
+    "cached_input_included_in_input": true,
+    "reasoning_output_included_in_output": true,
+    "observability_status": "unavailable"
+  },
+  "C3_reading_token_ratio": null,
+  "C4_cli_invocations": 1,
+  "C4_cli_retries": 0,
+  "C4_diagnostic_cli": {
+    "invocations": 0,
+    "failures": 0,
+    "first_failure": null,
+    "included_in_scoring_invocations": false,
+    "included_in_retry_budget": false
+  },
+  "C5_stage_seconds": {
+    "requirements": null,
+    "model": null,
+    "apply": null,
+    "verify": null
+  },
+  "C5_stage_seconds_source": "evaluator-events",
+  "C5_stage_seconds_status": "unavailable",
+  "C5_stage_timing": {
+    "contract_version": "domainry-eval-stage-timing-v1",
+    "boundary_rule": "evaluator-cli-transition-v1",
+    "stage_order": [
+      "discovery",
+      "plan",
+      "apply",
+      "finalize",
+      "verify"
+    ],
+    "status": "unavailable",
+    "stages": {
+      "discovery": {
+        "started_epoch": null,
+        "ended_epoch": null,
+        "seconds": null,
+        "status": "unknown",
+        "start_provenance": null,
+        "end_provenance": null
+      },
+      "plan": {
+        "started_epoch": null,
+        "ended_epoch": null,
+        "seconds": null,
+        "status": "unknown",
+        "start_provenance": null,
+        "end_provenance": null
+      },
+      "apply": {
+        "started_epoch": null,
+        "ended_epoch": null,
+        "seconds": null,
+        "status": "unknown",
+        "start_provenance": null,
+        "end_provenance": null
+      },
+      "finalize": {
+        "started_epoch": null,
+        "ended_epoch": null,
+        "seconds": null,
+        "status": "unknown",
+        "start_provenance": null,
+        "end_provenance": null
+      },
+      "verify": {
+        "started_epoch": null,
+        "ended_epoch": null,
+        "seconds": null,
+        "status": "unknown",
+        "start_provenance": null,
+        "end_provenance": null
+      }
+    },
+    "critical_path": {
+      "observed_seconds": 0,
+      "unknown_stages": [
+        "discovery",
+        "plan",
+        "apply",
+        "finalize",
+        "verify"
+      ],
+      "hotspot": null
+    },
+    "diagnostic_intervals": []
+  },
+  "C5_project_stage_report": {
+    "source": "agent-stages.json",
+    "status": "invalid_out_of_bounds",
+    "stage_seconds": {
+      "requirements": null,
+      "model": null,
+      "apply": null,
+      "verify": null
+    },
+    "comparison": {
+      "requirements": {
+        "evaluator_seconds": null,
+        "reported_seconds": null,
+        "delta_seconds": null,
+        "status": "unknown"
+      },
+      "model": {
+        "evaluator_seconds": null,
+        "reported_seconds": null,
+        "delta_seconds": null,
+        "status": "unknown"
+      },
+      "apply": {
+        "evaluator_seconds": null,
+        "reported_seconds": null,
+        "delta_seconds": null,
+        "status": "unknown"
+      },
+      "verify": {
+        "evaluator_seconds": null,
+        "reported_seconds": null,
+        "delta_seconds": null,
+        "status": "unknown"
+      }
+    }
+  },
+  "D2_human_interventions": 0,
+  "failure_attribution": {
+    "agent": 1
+  },
+  "diagnostic_failure_attribution": null,
+  "scoring_first_failure": null,
+  "diagnostic_first_failure": null
+}

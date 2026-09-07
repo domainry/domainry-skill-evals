@@ -1,0 +1,189 @@
+{
+  "contract_version": "domainry-eval-progress-v1",
+  "run_id": "m1-crm-canonical-unique-resume-convergence-43",
+  "run_kind": "convergence",
+  "status": "terminal",
+  "lifecycle_phase": "terminal",
+  "lifecycle_state": "convergence_first_scoring_failure",
+  "lifecycle_phase_timing": {
+    "agent": {
+      "started_epoch": 1788755256.084332,
+      "ended_epoch": 1788755522.599057
+    },
+    "checker": {
+      "started_epoch": 1788755522.983069,
+      "ended_epoch": 1788755530.198169
+    },
+    "scorer": {
+      "started_epoch": 1788755530.198169,
+      "ended_epoch": 1788755530.2391438
+    },
+    "terminal": {
+      "started_epoch": 1788755530.2391438,
+      "ended_epoch": 1788755530.2391438
+    }
+  },
+  "delivery_stage": "apply",
+  "delivery_stage_source": "cli-event",
+  "delivery_stage_timing": {
+    "requirements": {
+      "started_epoch": 1788755256.084332,
+      "ended_epoch": 1788755305.276593
+    },
+    "model": {
+      "started_epoch": 1788755305.276593,
+      "ended_epoch": 1788755519.978812
+    },
+    "apply": {
+      "started_epoch": null,
+      "ended_epoch": null
+    },
+    "verify": {
+      "started_epoch": null,
+      "ended_epoch": null
+    }
+  },
+  "delivery_stage_timing_source": "evaluator-events",
+  "delivery_stage_timing_status": "partial",
+  "wall_elapsed_seconds": 274.155,
+  "domainry_cli": {
+    "invocations_total": 3,
+    "completed_total": 3,
+    "failed_total": 1,
+    "retries_total": 0,
+    "latest": {
+      "subcommand": "apply_model",
+      "status": "failed",
+      "exit_code": 1,
+      "output_state": null,
+      "observed_epoch": 1788755522.550455
+    }
+  },
+  "diagnostic_cli": {
+    "invocations_total": 0,
+    "completed_total": 0,
+    "failed_total": 0,
+    "retries_total": 0,
+    "latest": null,
+    "first_failure": null
+  },
+  "agent": {
+    "last_activity_epoch": 1788755522.550455,
+    "last_activity_status": "observed",
+    "total_tokens": null,
+    "total_tokens_status": "unavailable",
+    "token_usage": {
+      "input_tokens": null,
+      "cached_input_tokens": null,
+      "non_cached_input_tokens": null,
+      "output_tokens": null,
+      "reasoning_output_tokens": null,
+      "budget_tokens": null,
+      "budget_basis": "provider_cumulative_input_plus_output",
+      "cached_input_included_in_input": true,
+      "reasoning_output_included_in_output": true,
+      "observability_status": "unavailable"
+    },
+    "command_invocations_total": 17,
+    "command_completions_total": 17,
+    "command_failures_total": 1
+  },
+  "scoring_first_failure": {
+    "family": "apply_model",
+    "exit_code": 1,
+    "output_state": null
+  },
+  "diagnostic_first_failure": null,
+  "command_first_failure": null,
+  "first_failure": {
+    "failure_kind": "scoring",
+    "family": "apply_model",
+    "exit_code": 1,
+    "output_state": null
+  },
+  "first_failure_seal_triggered": true,
+  "failure_checkpoint_policy": {
+    "checkpoint_on_first_failure": true,
+    "agent_failure_action": "stop_then_checkpoint",
+    "checkpoint_baseline_eligibility": false
+  },
+  "failure_checkpoint": {
+    "status": "sealed",
+    "terminal_state": "convergence_first_scoring_failure",
+    "baseline_eligibility": false,
+    "stage": "complete",
+    "agent_process_group": {
+      "status": "confirmed_stopped",
+      "process_group_id": 45996,
+      "confirmed_epoch": 1788755522.5985432,
+      "live_member_count": 0
+    },
+    "directory": "/Users/tiger/Projects/domainry-skill-evals/runs/m1-crm-canonical-unique-resume-convergence-43/failure-checkpoint-1788755522983494000",
+    "manifest_path": "/Users/tiger/Projects/domainry-skill-evals/runs/m1-crm-canonical-unique-resume-convergence-43/failure-checkpoint-1788755522983494000/checkpoint.json",
+    "archive_path": "/Users/tiger/Projects/domainry-skill-evals/runs/m1-crm-canonical-unique-resume-convergence-43/failure-checkpoint-1788755522983494000/checkpoint-project.tar.gz",
+    "identity": {
+      "contract_version": "domainry-eval-checkpoint-v1",
+      "source_run_id": "m1-crm-canonical-unique-resume-convergence-43",
+      "checkpoint_kind": "automatic_failure_source_snapshot",
+      "measurement_class": "checkpoint_convergence_not_baseline",
+      "baseline_eligibility": false,
+      "manifest_sha256": "345838979c49f009f9a5731b17116637b1739e228ba0b311035dcb283996e173",
+      "archive_sha256": "bd3f4617f2c583ee5372b18365b909f4aa0b983067769d7795c415ca09511113",
+      "manifest_only_boundary_migration": false,
+      "resume_boundary": {
+        "stage": "failure_review",
+        "next_node": "Diagnose this checkpoint's failure_boundary and select the affected retry stage",
+        "rule": "This source snapshot is not accepted. Attribute the saved failure before repairing; route foundation defects to the owning project and resume after its fix. Revalidate delivery/runtime identities before reuse. Do not inherit a previously executed resume boundary or restart completed source authoring blindly."
+      },
+      "prohibited_repairs": [
+        "do not follow the restored Scheduler or controlled evaluation_time resume instructions; this v8 manifest is authoritative",
+        "do not create or invoke any tenant Scheduler definition or standalone scheduled lead/follow-up scan for Req14",
+        "do not expose evaluation_time in production or substitute updated_at for status_changed_at",
+        "do not add CRM-only rearm, snooze, short-delay or test Actions",
+        "do not mutate or backdate SQLite, override the global clock, manually resume timers, or invent internal timer IDs",
+        "do not invent a new Runtime proof API; use actual externally bound Runtime package tests",
+        "do not modify any foundation repository or dispatch another task from the measured project",
+        "do not redo retained non-Req14 business code or weaken BF01-BF08/restart checks",
+        "do not label this checkpoint or successor convergence as baseline evidence"
+      ],
+      "failure_boundary": {
+        "terminal_state": "convergence_first_scoring_failure",
+        "first_failure": {
+          "failure_kind": "scoring",
+          "family": "apply_model",
+          "exit_code": 1,
+          "output_state": null
+        },
+        "termination": {
+          "family": "apply_model",
+          "exit_code": 1,
+          "output_state": null
+        },
+        "agent_exit_code": 0,
+        "checker_exit_code": null,
+        "latest_cli": {
+          "subcommand": "apply_model",
+          "status": "failed",
+          "exit_code": 1,
+          "output_state": null,
+          "observed_epoch": 1788755522.550455
+        },
+        "latest_diagnostic": null,
+        "attribution_status": "pending"
+      }
+    },
+    "archived_file_count": 1388,
+    "excluded_counts": {
+      "git": 1,
+      "runtime_state": 1
+    }
+  },
+  "checker_allowed": false,
+  "checker_decision_reason": "convergence_first_failure_before_verify",
+  "scorecard": {
+    "available": true,
+    "pass_at_1": null,
+    "run_outcome_pass": false
+  },
+  "updated_epoch": 1788755530.2391438
+}

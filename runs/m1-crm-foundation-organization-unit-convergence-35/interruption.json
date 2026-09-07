@@ -1,0 +1,30 @@
+{
+  "contract_version": "domainry-eval-interruption-v1",
+  "run_id": "m1-crm-foundation-organization-unit-convergence-35",
+  "recorded_at": "2026-09-06T18:03:29Z",
+  "measurement_complete": false,
+  "baseline_eligibility": false,
+  "driver_exit_code": 130,
+  "interruption_reason": "evaluator_checkpoint_resume_boundary_not_injected_into_agent_prompt",
+  "last_failure": {
+    "agent_event_item_id": "item_8",
+    "family": "verify",
+    "exit_code": 1,
+    "output_state": "failed",
+    "owner": "domainry-runtime",
+    "error": "verify initial Runtime start: managed Runtime process failed: Runtime state identity differs from current project"
+  },
+  "checkpoint_reuse": {
+    "manifest": "../m1-crm-v0.3.16-3-audit-identity-convergence-34-checkpoint-foundation-organization-unit-gap/checkpoint.json",
+    "archive": "../m1-crm-v0.3.16-3-audit-identity-convergence-34-checkpoint-foundation-organization-unit-gap/checkpoint-project.tar.gz",
+    "archive_sha256": "6aab8c8c3f5c8b02a8360eb4853c8c7ab61e429adc96cf4066810e0a6923cb94",
+    "unchanged": true,
+    "reason": "No compatibility migration was performed; the immutable pre-workaround checkpoint remains the correct resume boundary."
+  },
+  "process_cleanup": {
+    "matching_agent_or_runtime_processes_after_interrupt": 0,
+    "verified": true
+  },
+  "next_run_id": "m1-crm-foundation-organization-unit-convergence-36",
+  "note": "The driver was interrupted before it could seal terminal lifecycle artifacts. This directory is diagnostic evidence only and must not be scored or resumed."
+}

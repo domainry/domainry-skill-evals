@@ -51,9 +51,9 @@
 12. 总监全量可见。
 13. 所有状态变化与转化审批留审计。
 
-### 跟进提醒（定时）
+### 跟进提醒（到期续接）
 
-14. 每天早上（工作日）由**定时任务**扫描：`contacted` 状态超过 7 天未变化的线索，给负责人发站内提醒（每条线索每天最多提醒一次）。
+14. 线索进入 `contacted` 时必须持久化独立的 `status_changed_at` 与 `next_followup_at`；业务 Handler 根据部署时区和工作日日历，把 `next_followup_at` 计算为距该次状态变化超过 7 天后的首个工作日早晨。Workflow 监听 `next_followup_at` 的字段变化；其合法 Graph V2 必须以非空唯一 node/edge ID 和有效端点连接 `trigger → contract.condition{type=field_equals,field=status,value=contacted}` 的 `true` 分支 → one-shot timer → Action，`false` 分支不得到达 timer。timer 用 `source_field=next_followup_at` 消费这个已经算好的精确时间，不得在 timer 内再次用 offset/business calendar 重算。Runtime 全局持久化 `record_timer` worker 到期后恢复流程；业务 Action 重读当前状态并幂等写提醒，若仍为 `contacted`，再由 Handler 把 `next_followup_at` 推进到下一工作日早晨，从而触发新的 one-shot timer。进入/离开 `contacted` 的业务 Action 分别设置/清空 `next_followup_at`；旧 timer 在状态退出后到点必须无副作用。提醒对象必须用显式 composite unique `(lead, local reminder date)` 保证每条线索每个本地日期最多一条，任意无关 unique 字段或把 recipient 加入该唯一键均不能替代。不得生成指向本 follow-up Workflow/Action 的租户 Scheduler definition；即使没有 Scheduler definition，任何指向 lead/本提醒 Action 的 scheduled Workflow 全表扫描也直接失败。所有生产 Action 和 Workflow 均不得出现 `evaluation_time`，也不得用通用 `updated_at` 代替 `status_changed_at`；无关业务 Scheduler 仍可存在。
 
 ### 报表与导出
 
@@ -79,6 +79,14 @@
 - `BF03`：大额线索发起审批并由总监通过；线索转化与客户创建同事务，发起人收到通知。
 - `BF04`：大额审批拒绝；线索回到 qualified、拒绝原因与通知可读，且不创建客户。
 - `BF05`：两个部门销售的同部门可见/跨部门不可见、总监全量可见、有界分页和角色菜单差异。
-- `BF06`：工作日逾期跟进提醒，包含单日去重及重启后结果保持。
+- `BF06`：工作日 one-shot 到期续接提醒；验证 `status_changed_at`/`next_followup_at` 持久化、到点前不执行、Runtime 在精确 due 后恢复并推进下一工作日 due、重放与同日本地日期去重、Runtime 重启恢复，以及状态退出后旧 timer 无副作用。
 - `BF07`：总监漏斗报表的状态计数与金额合计正确，销售访问被拒绝。
 - `BF08`：总监受控 CSV 导出完成、审计、requester 专属可见与下载；销售发起导出被拒绝。
+
+`BF06` 采用公开的组合验收合同：业务流通过普通 `lead.advance` 黑盒证明进入 contacted 后两个时间字段真实持久化、`next_followup_at` 严格晚于 7 天且为下一工作日早晨、没有立即提醒，并在 restart 阶段读取同一 lead/时间字段。`backend/actions/crm` 必须提供并通过 `TestM1Req14DueCalculation`、`TestM1Req14EnterContactedPersistsDue`、`TestM1Req14ExitContactedClearsDue`、`TestM1Req14DueActionIdempotentContinuation`、`TestM1Req14ExitedStateNoop`；evaluator 要求这些测试产生非零项目 Handler 覆盖，空测试不能通过。这些项目 Handler 测试可注入 clock，但生产输入不得包含 `evaluation_time`。`backend/tests/recordtimer` 必须提供并通过 `TestM1Req14RuntimeRecordTimerExactDue` 与 `TestM1Req14RuntimeRecordTimerRestartRecovery`，直接执行实际 Domainry Runtime record-timer 代码，以真实 now+短 duration 独立证明持久 due、到点前 no-op、全局 worker 自动 resume 和到期前重启恢复。evaluator 使用 project delivery 优先、local module download cache 后备的 file-only hermetic `GOPROXY`、`GOFLAGS=-mod=readonly` 和必要 SDK build tag，执行 `go list -m -json github.com/domainry/domainry-runtime`，拒绝 Main module、任何 Replace 或落入 project tree 的本地冒充，并要求解析版本/校验和与 delivery binding 一致以及 Runtime record-timer 非零覆盖；空测试或 blank import 不构成证书。不得为此新增 CRM rearm/snooze/短延时 Action，也不得在业务流自报内部 timer ID。
+
+evaluator 还会临时注入并独立哈希自己的 Go probe，直接调用外部 Runtime 的公开 record-timer policy，断言 `next_followup_at` source field 在零 offset 下保留精确 due，且默认全局 worker 已启用；项目不能提供或替换该 probe。
+
+BF06 结构证据在 initial 使用 `lead.contacted.due.persisted`、`lead.contacted.no_immediate_reminder`、`handler.followup_due.focused_tests`、`runtime.record_timer.integration_tests`，restart 使用 `lead.contacted.due.restart_durable` 及相同两个 test-suite operation；两阶段的 lead ID 与两个时间字段必须相同。test-suite observation 只声明公开 suite ID/required cases 并要求 evaluator certificate，实际测试由 evaluator 独立执行和哈希，不由业务流伪造结果。
+
+其中 persisted observation 包含 `record_id,status,status_changed_at_persisted,next_followup_at_persisted,status_changed_at,next_followup_at,local_next_followup_at,calculation_owner=project_handler,business_calendar_key`；no-immediate 包含 `record_id,next_followup_at,observed_at,reminder_count_before=0,reminder_count_after=0`；restart-durable 包含 `record_id,status,status_changed_at,next_followup_at,read_after_restart=true,reminder_count=0`。这三条还必须声明 `real_clock=true,evaluation_time_supplied=false,direct_database_write=false,scheduler_invoked=false`。Handler/timer suite ID 分别为 `m1_req14_handler`/`m1_req14_runtime_record_timer`，并携带完整 `required_cases` 与 `evaluator_certificate_required=true`。

@@ -1,0 +1,4 @@
+2026-09-05T23:44:24.583354Z ERROR codex_core::tools::router: error=apply_patch verification failed: Failed to find expected lines in /private/tmp/domainry-m1-v41-plan-coverage-baseline-23/project/backend/model/50-lead-reporting.json:
+                "lead.status": {"read": true, "write": false, "export": true},
+                "lead.owner": {"read": true, "write": false, "export": true},
+                "lead.department": {"read": true, "write": false, "export": true}

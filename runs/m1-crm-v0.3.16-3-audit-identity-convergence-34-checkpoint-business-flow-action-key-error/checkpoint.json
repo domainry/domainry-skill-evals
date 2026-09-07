@@ -1,0 +1,33 @@
+{
+  "contract_version": "domainry-eval-checkpoint-v1",
+  "source_run_id": "m1-crm-v0.3.16-3-audit-identity-convergence-34",
+  "checkpoint_kind": "post_business_flow_action_key_fix_after_runtime_verify_error",
+  "measurement_class": "checkpoint_convergence_not_baseline",
+  "baseline_eligibility": false,
+  "archive": {
+    "path": "checkpoint-project.tar.gz",
+    "sha256": "4988ff112a3998cb4b197fffe62ba275b081db7d87880ff0cba8ade200779698"
+  },
+  "candidate": {
+    "candidate_id": "v0.3.16-3-m1-audit-identity-20260906+554bd6a0a04e",
+    "skill_tree_sha256": "554bd6a0a04e590aa9c1ecb5cab5c7b0ee1304e618e101bc85d56166a592d78c",
+    "cli_binary_sha256": "d8c6da6938262183720ddf81d9cfa39ee5a65be69ff06a1e40c3ac2e69467af4"
+  },
+  "invalidating_error": {
+    "agent_session_id": "01a07776-958c-7ad1-abee-933790c10a55",
+    "agent_event_item_id": "item_65",
+    "event_line": 126,
+    "command_sha256": "51ba30faf689db6cddf45ae0dcb73ac765c0d6ef7f90ddf39e1f3e971c2a46d2",
+    "exit_code": 1,
+    "classification": "project_business_flow_tests_used_unpublished_action_keys",
+    "owner": "project.business_flow_tests",
+    "domainry_foundation_defect": false,
+    "diagnostic": "All BF01-BF08 tests called the department provisioning Action through a shortened key and Runtime correctly denied it with auth.permission_denied; the published key is sales_department_registry.provision_department."
+  },
+  "resume_boundary": {
+    "stage": "apply",
+    "next_node": "validate the corrected published Action keys, rerun focused tests, then regenerate finalization and resume managed Runtime verify",
+    "prior_delivery_id": "sha256:7301cf925a3461e9ad3f95b77b9a8be0cfca07481bc28d5da1beb3d98441385e",
+    "rule": "Telemetry assigns the first failure to project.business_flow_tests; do not route this project test defect into Domainry foundation code."
+  }
+}

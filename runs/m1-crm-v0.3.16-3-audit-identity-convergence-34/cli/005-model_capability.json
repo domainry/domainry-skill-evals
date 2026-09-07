@@ -1,0 +1,627 @@
+{
+  "family": "model_capability",
+  "command": "/bin/zsh -lc '/private/tmp/domainry-m1-v0316-3-audit-convergence-34/codex-home/skills/domainry-builder-v1/bin/domainry-cli model capability --json --project /private/tmp/domainry-m1-v0316-3-audit-convergence-34/project --reading-profile handler-repair --topics organization-delivery,records,domain-truth'",
+  "exit_code": 0,
+  "output": {
+    "contract_version": "domainry-model-authoring-reading-plan-v3",
+    "profile": "handler-repair",
+    "topics": [
+      "domain-truth",
+      "organization-delivery",
+      "records"
+    ],
+    "read_order": [
+      {
+        "path": "references/project-mutation.md",
+        "purpose": "project mutation and CAS boundary"
+      },
+      {
+        "path": "references/ownership-and-extensions.md",
+        "purpose": "project-owned implementation boundary"
+      },
+      {
+        "path": "references/capabilities/behavior-owner-decision.md",
+        "purpose": "behavior owner decision contract"
+      },
+      {
+        "path": "references/evidence-levels.md",
+        "purpose": "pre-finalize business-flow evidence semantics"
+      },
+      {
+        "path": "references/verification.md",
+        "purpose": "pre-finalize managed Runtime and evidence marker contract"
+      },
+      {
+        "path": "references/domain-truth-and-settlement.md",
+        "purpose": "calculation, snapshot, correction, and source-of-truth decisions"
+      },
+      {
+        "path": "references/capabilities/organization-delivery.md",
+        "purpose": "Runtime-selected target Organization, store provision, and bounded catalog contract"
+      },
+      {
+        "path": "references/capabilities/organization-unit.md",
+        "purpose": "Organization hierarchy and scope ownership"
+      },
+      {
+        "path": "references/capabilities/actions-and-transactions.md",
+        "purpose": "Action UoW and mutation ownership"
+      },
+      {
+        "path": "references/capabilities/permissions-and-data-scope.md",
+        "purpose": "target Organization and Action authorization closure"
+      },
+      {
+        "path": "references/capabilities/records-fields-and-relations.md",
+        "purpose": "record, field, relation, and default semantics"
+      },
+      {
+        "path": "references/capabilities/crud-and-state-machine.md",
+        "purpose": "CRUD and guarded lifecycle ownership"
+      },
+      {
+        "path": "templates/ledger-record-lifecycle/pattern.json",
+        "purpose": "record lifecycle composition inventory"
+      },
+      {
+        "path": "templates/ledger-transaction-handler/pattern.json",
+        "purpose": "transaction Handler composition inventory"
+      }
+    ],
+    "capability_keys": [
+      "identity.roles",
+      "records.authoring",
+      "schema.authoring"
+    ],
+    "capability_contracts": [
+      {
+        "category": {
+          "key": "identity.roles",
+          "name": "Identity roles",
+          "description": "Configure roles, permission grants, and user-role assignments."
+        },
+        "validations": [
+          {
+            "kind": "identity.role",
+            "description": "Validate one complete project role definition and its embedded permission/data/field policy."
+          }
+        ]
+      },
+      {
+        "category": {
+          "key": "records.authoring",
+          "name": "Action authoring",
+          "description": "Author Runtime Action metadata while project-owned handlers retain business behavior."
+        },
+        "contracts": [
+          {
+            "kind": "runtime.authoring_capability",
+            "key": "action.definition",
+            "lifecycle": "versioned_metadata",
+            "schema": {
+              "additionalProperties": false,
+              "properties": {
+                "assurance_policy": {
+                  "additionalProperties": false,
+                  "else": {
+                    "properties": {
+                      "approval_hash_field": {
+                        "pattern": "^\\s*$",
+                        "type": "string"
+                      },
+                      "approval_version_field": {
+                        "pattern": "^\\s*$",
+                        "type": "string"
+                      }
+                    }
+                  },
+                  "if": {
+                    "properties": {
+                      "required_methods": {
+                        "contains": {
+                          "const": "workflow_approval"
+                        }
+                      }
+                    },
+                    "required": [
+                      "required_methods"
+                    ]
+                  },
+                  "properties": {
+                    "approval_hash_field": {
+                      "type": "string"
+                    },
+                    "approval_version_field": {
+                      "type": "string"
+                    },
+                    "maker_field": {
+                      "type": "string"
+                    },
+                    "recent_reauth_max_age_seconds": {
+                      "type": "integer"
+                    },
+                    "required_methods": {
+                      "items": {
+                        "enum": [
+                          "normal_login",
+                          "recent_reauth",
+                          "otp",
+                          "maker_checker",
+                          "workflow_approval"
+                        ],
+                        "type": "string"
+                      },
+                      "type": "array"
+                    }
+                  },
+                  "required": [
+                    "required_methods"
+                  ],
+                  "then": {
+                    "properties": {
+                      "approval_hash_field": {
+                        "pattern": "\\S",
+                        "type": "string"
+                      },
+                      "approval_version_field": {
+                        "pattern": "\\S",
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "approval_version_field",
+                      "approval_hash_field"
+                    ]
+                  },
+                  "type": "object"
+                },
+                "concurrency_field": {
+                  "type": "string"
+                },
+                "defaults": {
+                  "type": "object"
+                },
+                "kind": {
+                  "enum": [
+                    "bulk_operation",
+                    "conditional_update",
+                    "object_create",
+                    "object_operation",
+                    "record_delete",
+                    "record_operation",
+                    "record_restore",
+                    "record_update",
+                    "transition_state"
+                  ],
+                  "type": "string"
+                },
+                "label": {
+                  "type": "string"
+                },
+                "object_key": {
+                  "type": "string"
+                },
+                "optimistic_concurrency": {
+                  "default": false,
+                  "type": "boolean"
+                },
+                "payload_fields": {
+                  "items": {
+                    "additionalProperties": false,
+                    "properties": {
+                      "default": {},
+                      "key": {
+                        "type": "string"
+                      },
+                      "name": {
+                        "type": "string"
+                      },
+                      "options": {
+                        "items": {
+                          "type": "string"
+                        },
+                        "type": "array"
+                      },
+                      "required": {
+                        "type": "boolean"
+                      },
+                      "type": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "key",
+                      "type"
+                    ],
+                    "type": "object"
+                  },
+                  "type": "array"
+                },
+                "preconditions": {
+                  "items": {
+                    "type": "string"
+                  },
+                  "type": "array"
+                },
+                "risk_level": {
+                  "enum": [
+                    "low",
+                    "medium",
+                    "high",
+                    "critical"
+                  ],
+                  "type": "string"
+                },
+                "store_organization_mutation": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "operations": {
+                      "items": {
+                        "enum": [
+                          "rename",
+                          "disable"
+                        ],
+                        "type": "string"
+                      },
+                      "type": "array"
+                    }
+                  },
+                  "required": [
+                    "operations"
+                  ],
+                  "type": "object"
+                },
+                "target_organization": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "input": {
+                      "type": "string"
+                    },
+                    "source": {
+                      "enum": [
+                        "explicit",
+                        "explicit_or_sole_authorized_store",
+                        "record_owner",
+                        "provisioned_store"
+                      ],
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "source"
+                  ],
+                  "type": "object"
+                }
+              },
+              "required": [
+                "kind",
+                "label",
+                "object_key"
+              ],
+              "type": "object"
+            },
+            "references": [
+              {
+                "input_json_pointer": "/payload/object_key",
+                "kind": "object_key"
+              },
+              {
+                "input_json_pointer": "/payload/assurance_policy/approval_version_field",
+                "kind": "field_key",
+                "scope_from": "/payload/object_key"
+              },
+              {
+                "input_json_pointer": "/payload/assurance_policy/approval_hash_field",
+                "kind": "field_key",
+                "scope_from": "/payload/object_key"
+              },
+              {
+                "input_json_pointer": "/payload/assurance_policy/maker_field",
+                "kind": "field_key",
+                "scope_from": "/payload/object_key"
+              }
+            ]
+          },
+          {
+            "kind": "plane.model_rule",
+            "key": "action.field_source",
+            "schema": {
+              "$schema": "https://json-schema.org/draft/2020-12/schema",
+              "additionalProperties": {
+                "type": "string"
+              },
+              "title": "Compact Action field DSL and Object-source reuse",
+              "type": "object",
+              "x-domainry-decision-table": [
+                {
+                  "author": "Standalone <type>[!] DSL without Object-only semicolon modifiers.",
+                  "must_not": [
+                    "Copy max_length, unique, indexed, numeric bounds, or other Object-only modifiers from a conceptual or external entity.",
+                    "Add a fake project Object field only to satisfy source inference."
+                  ],
+                  "when": "The value is owned by the Action or by a Foundation capability and is not persisted in a project Object field."
+                },
+                {
+                  "author": "Use the exact same stable field key, type, and Object-only modifiers as that Object field.",
+                  "must_not": [
+                    "Bind by a differently named field, synonym, prefix, suffix, or Action verb.",
+                    "Copy only some of the Object field's modifiers."
+                  ],
+                  "when": "The Action field is the same persisted business datum as a field on the owning Object or an Object in handler.access."
+                }
+              ],
+              "x-domainry-identity-handler-delivery": {
+                "identity_owned_non_profile_inputs": {
+                  "example": {
+                    "display_name": "text!",
+                    "login_id": "email!",
+                    "manager": "user",
+                    "role_key": "select![employee|manager]"
+                  },
+                  "rule": "Use standalone DSL because Identity, not the business Profile Object, owns these values."
+                },
+                "invalid_without_exact_object_source": {
+                  "display_name": "text!;max_length=120"
+                },
+                "profile_bound_inputs": {
+                  "example": {
+                    "action_input": {
+                      "employee_no": "text!;unique"
+                    },
+                    "profile_object_fields": {
+                      "employee_no": "text!;unique"
+                    }
+                  },
+                  "rule": "Reuse Object-only modifiers only when the bound Profile Object has the exact same field key and compatible field contract."
+                }
+              },
+              "x-domainry-object-source-trigger": {
+                "compatibility": "The Object field type and every authored Object-only modifier must match; ambiguous or incompatible candidates fail closed.",
+                "lookup": "Owning Object plus Objects declared in handler.access, exact same field key only; owning Object wins over another accessible Object.",
+                "semicolon_modifiers": [
+                  "unique",
+                  "indexed",
+                  "localized",
+                  "cardinality",
+                  "on_delete",
+                  "inverse",
+                  "dictionary",
+                  "value_domain",
+                  "min_length",
+                  "max_length",
+                  "min",
+                  "max",
+                  "pattern",
+                  "precision",
+                  "scale",
+                  "currency",
+                  "rounding"
+                ],
+                "types": [
+                  "currency",
+                  "percent"
+                ]
+              },
+              "x-domainry-scope": "actions.<action_key>.input and actions.<action_key>.output"
+            }
+          }
+        ],
+        "validations": [
+          {
+            "kind": "action.definition",
+            "description": "Validate one project Action definition against its referenced object contract."
+          }
+        ]
+      },
+      {
+        "category": {
+          "key": "schema.authoring",
+          "name": "Schema authoring",
+          "description": "Author and validate complete project object fragments and inspect the embedded field, relation, and dictionary schemas owned by Runtime Application Schema."
+        },
+        "contracts": [
+          {
+            "kind": "runtime.authoring_capability",
+            "key": "schema.object",
+            "lifecycle": "versioned_metadata",
+            "schema": {
+              "additionalProperties": false,
+              "properties": {
+                "capabilities": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "create": {
+                      "default": true,
+                      "type": "boolean"
+                    },
+                    "delete": {
+                      "default": true,
+                      "type": "boolean"
+                    },
+                    "export": {
+                      "default": true,
+                      "type": "boolean"
+                    },
+                    "read": {
+                      "default": true,
+                      "type": "boolean"
+                    },
+                    "update": {
+                      "default": true,
+                      "type": "boolean"
+                    }
+                  },
+                  "type": "object"
+                },
+                "config": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "title_field": {
+                      "minLength": 1,
+                      "type": "string"
+                    },
+                    "write_policy": {
+                      "default": "direct_crud",
+                      "enum": [
+                        "direct_crud",
+                        "action_only"
+                      ],
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                },
+                "description": {
+                  "type": "string"
+                },
+                "export_assurance_policy": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "recent_reauth_max_age_seconds": {
+                      "maximum": 86400,
+                      "minimum": 1,
+                      "type": "integer"
+                    },
+                    "required_methods": {
+                      "items": {
+                        "enum": [
+                          "normal_login",
+                          "recent_reauth",
+                          "otp",
+                          "maker_checker",
+                          "workflow_approval"
+                        ],
+                        "type": "string"
+                      },
+                      "minItems": 1,
+                      "type": "array"
+                    }
+                  },
+                  "required": [
+                    "required_methods"
+                  ],
+                  "type": "object"
+                },
+                "fields": {
+                  "default": [],
+                  "items": {
+                    "additionalProperties": false,
+                    "type": "object"
+                  },
+                  "type": "array"
+                },
+                "ledger_policy": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "signature": {
+                      "default": "none",
+                      "enum": [
+                        "none",
+                        "hmac_sha256"
+                      ],
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                },
+                "lifecycle_policy": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "immutable_states": {
+                      "items": {
+                        "type": "string"
+                      },
+                      "type": "array"
+                    },
+                    "mode": {
+                      "enum": [
+                        "mutable",
+                        "soft_delete_only",
+                        "append_only",
+                        "immutable_after_state"
+                      ],
+                      "type": "string"
+                    },
+                    "state_field": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "mode"
+                  ],
+                  "type": "object"
+                },
+                "name": {
+                  "description": "Human-readable object name.",
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "ux": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "config": {
+                      "additionalProperties": false,
+                      "properties": {
+                        "identity_relation_field": {
+                          "minLength": 1,
+                          "type": "string"
+                        }
+                      },
+                      "type": "object"
+                    },
+                    "display": {
+                      "additionalProperties": false,
+                      "properties": {
+                        "title_field": {
+                          "minLength": 1,
+                          "type": "string"
+                        }
+                      },
+                      "type": "object"
+                    },
+                    "kind": {
+                      "enum": [
+                        "identity_profile_extension"
+                      ],
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              },
+              "required": [
+                "name"
+              ],
+              "type": "object"
+            }
+          }
+        ],
+        "validations": [
+          {
+            "kind": "schema.object",
+            "description": "Validate one complete project object definition, including its embedded fields and relations."
+          }
+        ]
+      }
+    ],
+    "instructions": [
+      "Resolve every path relative to SKILL_ROOT and read the listed files in order before authoring.",
+      "Do not open capability indexes, templates, or patterns not listed by this plan.",
+      "Consume capability_contracts from this response as the complete machine-contract closure for the selected scope; do not issue one model capability --key call per category.",
+      "The listed documents and inlined source-owned contracts remain authoritative; this plan removes discovery calls, not semantics or validation."
+    ]
+  },
+  "raw_output": "{\"contract_version\":\"domainry-model-authoring-reading-plan-v3\",\"profile\":\"handler-repair\",\"topics\":[\"domain-truth\",\"organization-delivery\",\"records\"],\"read_order\":[{\"path\":\"references/project-mutation.md\",\"purpose\":\"project mutation and CAS boundary\"},{\"path\":\"references/ownership-and-extensions.md\",\"purpose\":\"project-owned implementation boundary\"},{\"path\":\"references/capabilities/behavior-owner-decision.md\",\"purpose\":\"behavior owner decision contract\"},{\"path\":\"references/evidence-levels.md\",\"purpose\":\"pre-finalize business-flow evidence semantics\"},{\"path\":\"references/verification.md\",\"purpose\":\"pre-finalize managed Runtime and evidence marker contract\"},{\"path\":\"references/domain-truth-and-settlement.md\",\"purpose\":\"calculation, snapshot, correction, and source-of-truth decisions\"},{\"path\":\"references/capabilities/organization-delivery.md\",\"purpose\":\"Runtime-selected target Organization, store provision, and bounded catalog contract\"},{\"path\":\"references/capabilities/organization-unit.md\",\"purpose\":\"Organization hierarchy and scope ownership\"},{\"path\":\"references/capabilities/actions-and-transactions.md\",\"purpose\":\"Action UoW and mutation ownership\"},{\"path\":\"references/capabilities/permissions-and-data-scope.md\",\"purpose\":\"target Organization and Action authorization closure\"},{\"path\":\"references/capabilities/records-fields-and-relations.md\",\"purpose\":\"record, field, relation, and default semantics\"},{\"path\":\"references/capabilities/crud-and-state-machine.md\",\"purpose\":\"CRUD and guarded lifecycle ownership\"},{\"path\":\"templates/ledger-record-lifecycle/pattern.json\",\"purpose\":\"record lifecycle composition inventory\"},{\"path\":\"templates/ledger-transaction-handler/pattern.json\",\"purpose\":\"transaction Handler composition inventory\"}],\"capability_keys\":[\"identity.roles\",\"records.authoring\",\"schema.authoring\"],\"capability_contracts\":[{\"category\":{\"key\":\"identity.roles\",\"name\":\"Identity roles\",\"description\":\"Configure roles, permission grants, and user-role assignments.\"},\"validations\":[{\"kind\":\"identity.role\",\"description\":\"Validate one complete project role definition and its embedded permission/data/field policy.\"}]},{\"category\":{\"key\":\"records.authoring\",\"name\":\"Action authoring\",\"description\":\"Author Runtime Action metadata while project-owned handlers retain business behavior.\"},\"contracts\":[{\"kind\":\"runtime.authoring_capability\",\"key\":\"action.definition\",\"lifecycle\":\"versioned_metadata\",\"schema\":{\"additionalProperties\":false,\"properties\":{\"assurance_policy\":{\"additionalProperties\":false,\"else\":{\"properties\":{\"approval_hash_field\":{\"pattern\":\"^\\\\s*$\",\"type\":\"string\"},\"approval_version_field\":{\"pattern\":\"^\\\\s*$\",\"type\":\"string\"}}},\"if\":{\"properties\":{\"required_methods\":{\"contains\":{\"const\":\"workflow_approval\"}}},\"required\":[\"required_methods\"]},\"properties\":{\"approval_hash_field\":{\"type\":\"string\"},\"approval_version_field\":{\"type\":\"string\"},\"maker_field\":{\"type\":\"string\"},\"recent_reauth_max_age_seconds\":{\"type\":\"integer\"},\"required_methods\":{\"items\":{\"enum\":[\"normal_login\",\"recent_reauth\",\"otp\",\"maker_checker\",\"workflow_approval\"],\"type\":\"string\"},\"type\":\"array\"}},\"required\":[\"required_methods\"],\"then\":{\"properties\":{\"approval_hash_field\":{\"pattern\":\"\\\\S\",\"type\":\"string\"},\"approval_version_field\":{\"pattern\":\"\\\\S\",\"type\":\"string\"}},\"required\":[\"approval_version_field\",\"approval_hash_field\"]},\"type\":\"object\"},\"concurrency_field\":{\"type\":\"string\"},\"defaults\":{\"type\":\"object\"},\"kind\":{\"enum\":[\"bulk_operation\",\"conditional_update\",\"object_create\",\"object_operation\",\"record_delete\",\"record_operation\",\"record_restore\",\"record_update\",\"transition_state\"],\"type\":\"string\"},\"label\":{\"type\":\"string\"},\"object_key\":{\"type\":\"string\"},\"optimistic_concurrency\":{\"default\":false,\"type\":\"boolean\"},\"payload_fields\":{\"items\":{\"additionalProperties\":false,\"properties\":{\"default\":{},\"key\":{\"type\":\"string\"},\"name\":{\"type\":\"string\"},\"options\":{\"items\":{\"type\":\"string\"},\"type\":\"array\"},\"required\":{\"type\":\"boolean\"},\"type\":{\"type\":\"string\"}},\"required\":[\"key\",\"type\"],\"type\":\"object\"},\"type\":\"array\"},\"preconditions\":{\"items\":{\"type\":\"string\"},\"type\":\"array\"},\"risk_level\":{\"enum\":[\"low\",\"medium\",\"high\",\"critical\"],\"type\":\"string\"},\"store_organization_mutation\":{\"additionalProperties\":false,\"properties\":{\"operations\":{\"items\":{\"enum\":[\"rename\",\"disable\"],\"type\":\"string\"},\"type\":\"array\"}},\"required\":[\"operations\"],\"type\":\"object\"},\"target_organization\":{\"additionalProperties\":false,\"properties\":{\"input\":{\"type\":\"string\"},\"source\":{\"enum\":[\"explicit\",\"explicit_or_sole_authorized_store\",\"record_owner\",\"provisioned_store\"],\"type\":\"string\"}},\"required\":[\"source\"],\"type\":\"object\"}},\"required\":[\"kind\",\"label\",\"object_key\"],\"type\":\"object\"},\"references\":[{\"input_json_pointer\":\"/payload/object_key\",\"kind\":\"object_key\"},{\"input_json_pointer\":\"/payload/assurance_policy/approval_version_field\",\"kind\":\"field_key\",\"scope_from\":\"/payload/object_key\"},{\"input_json_pointer\":\"/payload/assurance_policy/approval_hash_field\",\"kind\":\"field_key\",\"scope_from\":\"/payload/object_key\"},{\"input_json_pointer\":\"/payload/assurance_policy/maker_field\",\"kind\":\"field_key\",\"scope_from\":\"/payload/object_key\"}]},{\"kind\":\"plane.model_rule\",\"key\":\"action.field_source\",\"schema\":{\"$schema\":\"https://json-schema.org/draft/2020-12/schema\",\"additionalProperties\":{\"type\":\"string\"},\"title\":\"Compact Action field DSL and Object-source reuse\",\"type\":\"object\",\"x-domainry-decision-table\":[{\"author\":\"Standalone \\u003ctype\\u003e[!] DSL without Object-only semicolon modifiers.\",\"must_not\":[\"Copy max_length, unique, indexed, numeric bounds, or other Object-only modifiers from a conceptual or external entity.\",\"Add a fake project Object field only to satisfy source inference.\"],\"when\":\"The value is owned by the Action or by a Foundation capability and is not persisted in a project Object field.\"},{\"author\":\"Use the exact same stable field key, type, and Object-only modifiers as that Object field.\",\"must_not\":[\"Bind by a differently named field, synonym, prefix, suffix, or Action verb.\",\"Copy only some of the Object field's modifiers.\"],\"when\":\"The Action field is the same persisted business datum as a field on the owning Object or an Object in handler.access.\"}],\"x-domainry-identity-handler-delivery\":{\"identity_owned_non_profile_inputs\":{\"example\":{\"display_name\":\"text!\",\"login_id\":\"email!\",\"manager\":\"user\",\"role_key\":\"select![employee|manager]\"},\"rule\":\"Use standalone DSL because Identity, not the business Profile Object, owns these values.\"},\"invalid_without_exact_object_source\":{\"display_name\":\"text!;max_length=120\"},\"profile_bound_inputs\":{\"example\":{\"action_input\":{\"employee_no\":\"text!;unique\"},\"profile_object_fields\":{\"employee_no\":\"text!;unique\"}},\"rule\":\"Reuse Object-only modifiers only when the bound Profile Object has the exact same field key and compatible field contract.\"}},\"x-domainry-object-source-trigger\":{\"compatibility\":\"The Object field type and every authored Object-only modifier must match; ambiguous or incompatible candidates fail closed.\",\"lookup\":\"Owning Object plus Objects declared in handler.access, exact same field key only; owning Object wins over another accessible Object.\",\"semicolon_modifiers\":[\"unique\",\"indexed\",\"localized\",\"cardinality\",\"on_delete\",\"inverse\",\"dictionary\",\"value_domain\",\"min_length\",\"max_length\",\"min\",\"max\",\"pattern\",\"precision\",\"scale\",\"currency\",\"rounding\"],\"types\":[\"currency\",\"percent\"]},\"x-domainry-scope\":\"actions.\\u003caction_key\\u003e.input and actions.\\u003caction_key\\u003e.output\"}}],\"validations\":[{\"kind\":\"action.definition\",\"description\":\"Validate one project Action definition against its referenced object contract.\"}]},{\"category\":{\"key\":\"schema.authoring\",\"name\":\"Schema authoring\",\"description\":\"Author and validate complete project object fragments and inspect the embedded field, relation, and dictionary schemas owned by Runtime Application Schema.\"},\"contracts\":[{\"kind\":\"runtime.authoring_capability\",\"key\":\"schema.object\",\"lifecycle\":\"versioned_metadata\",\"schema\":{\"additionalProperties\":false,\"properties\":{\"capabilities\":{\"additionalProperties\":false,\"properties\":{\"create\":{\"default\":true,\"type\":\"boolean\"},\"delete\":{\"default\":true,\"type\":\"boolean\"},\"export\":{\"default\":true,\"type\":\"boolean\"},\"read\":{\"default\":true,\"type\":\"boolean\"},\"update\":{\"default\":true,\"type\":\"boolean\"}},\"type\":\"object\"},\"config\":{\"additionalProperties\":false,\"properties\":{\"title_field\":{\"minLength\":1,\"type\":\"string\"},\"write_policy\":{\"default\":\"direct_crud\",\"enum\":[\"direct_crud\",\"action_only\"],\"type\":\"string\"}},\"type\":\"object\"},\"description\":{\"type\":\"string\"},\"export_assurance_policy\":{\"additionalProperties\":false,\"properties\":{\"recent_reauth_max_age_seconds\":{\"maximum\":86400,\"minimum\":1,\"type\":\"integer\"},\"required_methods\":{\"items\":{\"enum\":[\"normal_login\",\"recent_reauth\",\"otp\",\"maker_checker\",\"workflow_approval\"],\"type\":\"string\"},\"minItems\":1,\"type\":\"array\"}},\"required\":[\"required_methods\"],\"type\":\"object\"},\"fields\":{\"default\":[],\"items\":{\"additionalProperties\":false,\"type\":\"object\"},\"type\":\"array\"},\"ledger_policy\":{\"additionalProperties\":false,\"properties\":{\"signature\":{\"default\":\"none\",\"enum\":[\"none\",\"hmac_sha256\"],\"type\":\"string\"}},\"type\":\"object\"},\"lifecycle_policy\":{\"additionalProperties\":false,\"properties\":{\"immutable_states\":{\"items\":{\"type\":\"string\"},\"type\":\"array\"},\"mode\":{\"enum\":[\"mutable\",\"soft_delete_only\",\"append_only\",\"immutable_after_state\"],\"type\":\"string\"},\"state_field\":{\"type\":\"string\"}},\"required\":[\"mode\"],\"type\":\"object\"},\"name\":{\"description\":\"Human-readable object name.\",\"minLength\":1,\"type\":\"string\"},\"ux\":{\"additionalProperties\":false,\"properties\":{\"config\":{\"additionalProperties\":false,\"properties\":{\"identity_relation_field\":{\"minLength\":1,\"type\":\"string\"}},\"type\":\"object\"},\"display\":{\"additionalProperties\":false,\"properties\":{\"title_field\":{\"minLength\":1,\"type\":\"string\"}},\"type\":\"object\"},\"kind\":{\"enum\":[\"identity_profile_extension\"],\"type\":\"string\"}},\"type\":\"object\"}},\"required\":[\"name\"],\"type\":\"object\"}}],\"validations\":[{\"kind\":\"schema.object\",\"description\":\"Validate one complete project object definition, including its embedded fields and relations.\"}]}],\"instructions\":[\"Resolve every path relative to SKILL_ROOT and read the listed files in order before authoring.\",\"Do not open capability indexes, templates, or patterns not listed by this plan.\",\"Consume capability_contracts from this response as the complete machine-contract closure for the selected scope; do not issue one model capability --key call per category.\",\"The listed documents and inlined source-owned contracts remain authoritative; this plan removes discovery calls, not semantics or validation.\"]}\n",
+  "stdout": null,
+  "stderr": null,
+  "output_streams_status": "aggregated_only",
+  "event_item_id": "item_77",
+  "event_line": 148,
+  "observed_started_epoch": 1788712042.8613172,
+  "observed_completed_epoch": 1788712043.123619,
+  "observed_started_event_line": 147,
+  "observed_completed_event_line": 148,
+  "duration_seconds": 0.262,
+  "timing_source": "agent-event-observations.jsonl",
+  "capture_file": "cli/005-model_capability.json"
+}

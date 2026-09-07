@@ -1,0 +1,379 @@
+{
+  "scorer_schema": "domainry-builder-eval-v3",
+  "benchmark": "m1-crm",
+  "candidate_id": "v0.3.6-39-m1-offline-closure-20260906+98a892895842",
+  "skill_version": "v0.3.6-39-m1-offline-closure-20260906",
+  "run_id": "m1-crm-v0.3.6-39-m1-offline-closure-20260906-98a892895842-baseline-21",
+  "run_kind": "baseline",
+  "parent_run_id": null,
+  "terminal_state": "baseline_first_scoring_failure",
+  "measurement_complete": false,
+  "environment_valid": true,
+  "pass_at_1_eligible": false,
+  "pass_at_1": false,
+  "run_outcome_pass": false,
+  "A_source": {
+    "A1": "cli-capture",
+    "A2": "cli-capture",
+    "A3": "cli-capture",
+    "A4": "cli-capture",
+    "A5": "not_measurable",
+    "A6": "cli-capture"
+  },
+  "A1_plan_first_pass": true,
+  "A1_plan_error_count": 0,
+  "A2_apply_first_pass": true,
+  "A3_finalize_first_pass": true,
+  "A4_verify_first_pass": false,
+  "A5_acceptance_first_pass": null,
+  "A6_rework_rounds": 0,
+  "A7_false_done": false,
+  "A7_oracle_done_mismatch": false,
+  "A7_false_done_classification": "no_oracle_done_mismatch",
+  "B1_golden_hit_rate": null,
+  "B1_hit_detail": {},
+  "B2_silent_downgrade_count": 0,
+  "B3_platform_reuse_rate": null,
+  "C1_wall_clock_seconds": 1820.7919688224792,
+  "C2_total_tokens": null,
+  "C2_usage_breakdown": {
+    "input_tokens": null,
+    "cached_input_tokens": null,
+    "non_cached_input_tokens": null,
+    "output_tokens": null,
+    "reasoning_output_tokens": null,
+    "budget_tokens": null,
+    "budget_basis": "provider_cumulative_input_plus_output",
+    "cached_input_included_in_input": true,
+    "reasoning_output_included_in_output": true,
+    "observability_status": "unavailable"
+  },
+  "C3_reading_token_ratio": null,
+  "C4_cli_invocations": 6,
+  "C4_cli_retries": 0,
+  "C4_diagnostic_cli": {
+    "invocations": 3,
+    "failures": 1,
+    "first_failure": {
+      "failure_kind": "diagnostic",
+      "family": "verify_fixture",
+      "exit_code": 1,
+      "output_state": null,
+      "output": "error: project compiler-bound Runtime acceptance fixture: Runtime acceptance fixture \"bf06_overdue_contacted\" department owner organization index is invalid",
+      "raw_output": "error: project compiler-bound Runtime acceptance fixture: Runtime acceptance fixture \"bf06_overdue_contacted\" department owner organization index is invalid\n",
+      "stdout": null,
+      "stderr": null,
+      "output_streams_status": "aggregated_only",
+      "event_item_id": "item_56",
+      "event_line": 109,
+      "observed_started_epoch": 1788633285.289133,
+      "observed_completed_epoch": 1788633285.289763,
+      "duration_seconds": 0.001,
+      "capture_file": "cli/004-verify_fixture.json",
+      "scoring_effect": "none"
+    },
+    "included_in_scoring_invocations": false,
+    "included_in_retry_budget": false
+  },
+  "C5_stage_seconds": {
+    "requirements": 212.125,
+    "model": 370.254,
+    "apply": 1167.367,
+    "verify": 67.992
+  },
+  "C5_stage_seconds_source": "evaluator-events",
+  "C5_stage_seconds_status": "valid",
+  "C5_stage_timing": {
+    "contract_version": "domainry-eval-stage-timing-v1",
+    "boundary_rule": "evaluator-cli-transition-v1",
+    "stage_order": [
+      "discovery",
+      "plan",
+      "apply",
+      "finalize",
+      "verify"
+    ],
+    "status": "valid",
+    "stages": {
+      "discovery": {
+        "started_epoch": 1788631895.6994681,
+        "ended_epoch": 1788632107.824312,
+        "seconds": 212.125,
+        "status": "observed",
+        "start_provenance": {
+          "source": "lifecycle.json",
+          "field": "started_epoch",
+          "boundary_reason": "agent_lifecycle_started"
+        },
+        "end_provenance": {
+          "source": "agent-event-observations.jsonl",
+          "capture_file": "cli/001-model_capability.json",
+          "family": "model_capability",
+          "event": "completed",
+          "event_item_id": "item_9",
+          "event_line": 20,
+          "boundary_reason": "discovery_capability_completed"
+        }
+      },
+      "plan": {
+        "started_epoch": 1788632107.824312,
+        "ended_epoch": 1788632478.078639,
+        "seconds": 370.254,
+        "status": "observed",
+        "start_provenance": {
+          "source": "agent-event-observations.jsonl",
+          "capture_file": "cli/001-model_capability.json",
+          "family": "model_capability",
+          "event": "completed",
+          "event_item_id": "item_9",
+          "event_line": 20,
+          "boundary_reason": "discovery_capability_completed"
+        },
+        "end_provenance": {
+          "source": "agent-event-observations.jsonl",
+          "capture_file": "cli/003-apply_model.json",
+          "family": "apply_model",
+          "event": "started",
+          "event_item_id": "item_27",
+          "event_line": 53,
+          "boundary_reason": "next_stage_cli_started"
+        }
+      },
+      "apply": {
+        "started_epoch": 1788632478.078639,
+        "ended_epoch": 1788633332.402161,
+        "seconds": 854.324,
+        "status": "observed",
+        "start_provenance": {
+          "source": "agent-event-observations.jsonl",
+          "capture_file": "cli/003-apply_model.json",
+          "family": "apply_model",
+          "event": "started",
+          "event_item_id": "item_27",
+          "event_line": 53,
+          "boundary_reason": "stage_cli_started"
+        },
+        "end_provenance": {
+          "source": "agent-event-observations.jsonl",
+          "capture_file": "cli/006-apply_finalize.json",
+          "family": "apply_finalize",
+          "event": "started",
+          "event_item_id": "item_63",
+          "event_line": 120,
+          "boundary_reason": "next_stage_cli_started"
+        }
+      },
+      "finalize": {
+        "started_epoch": 1788633332.402161,
+        "ended_epoch": 1788633645.444937,
+        "seconds": 313.043,
+        "status": "observed",
+        "start_provenance": {
+          "source": "agent-event-observations.jsonl",
+          "capture_file": "cli/006-apply_finalize.json",
+          "family": "apply_finalize",
+          "event": "started",
+          "event_item_id": "item_63",
+          "event_line": 120,
+          "boundary_reason": "stage_cli_started"
+        },
+        "end_provenance": {
+          "source": "agent-event-observations.jsonl",
+          "capture_file": "cli/009-verify.json",
+          "family": "verify",
+          "event": "started",
+          "event_item_id": "item_79",
+          "event_line": 149,
+          "boundary_reason": "next_stage_cli_started"
+        }
+      },
+      "verify": {
+        "started_epoch": 1788633645.444937,
+        "ended_epoch": 1788633713.4373372,
+        "seconds": 67.992,
+        "status": "observed",
+        "start_provenance": {
+          "source": "agent-event-observations.jsonl",
+          "capture_file": "cli/009-verify.json",
+          "family": "verify",
+          "event": "started",
+          "event_item_id": "item_79",
+          "event_line": 149,
+          "boundary_reason": "stage_cli_started"
+        },
+        "end_provenance": {
+          "source": "agent-event-observations.jsonl",
+          "capture_file": "cli/009-verify.json",
+          "family": "verify",
+          "event": "completed",
+          "event_item_id": "item_79",
+          "event_line": 150,
+          "boundary_reason": "terminal_stage_cli_completed"
+        }
+      }
+    },
+    "critical_path": {
+      "observed_seconds": 1817.738,
+      "unknown_stages": [],
+      "hotspot": {
+        "stage": "apply",
+        "seconds": 854.324
+      }
+    },
+    "diagnostic_intervals": [
+      {
+        "family": "verify_fixture",
+        "started_epoch": 1788633285.289133,
+        "ended_epoch": 1788633285.289763,
+        "seconds": 0.001,
+        "status": "observed",
+        "failed": true,
+        "exit_code": 1,
+        "start_provenance": {
+          "source": "agent-event-observations.jsonl",
+          "capture_file": "cli/004-verify_fixture.json",
+          "family": "verify_fixture",
+          "event": "started",
+          "event_item_id": "item_56",
+          "event_line": 108,
+          "boundary_reason": "diagnostic_cli_started"
+        },
+        "end_provenance": {
+          "source": "agent-event-observations.jsonl",
+          "capture_file": "cli/004-verify_fixture.json",
+          "family": "verify_fixture",
+          "event": "completed",
+          "event_item_id": "item_56",
+          "event_line": 109,
+          "boundary_reason": "diagnostic_cli_completed"
+        },
+        "scoring_effect": "none",
+        "display_stage": "pre_verify_diagnostic"
+      },
+      {
+        "family": "verify_fixture",
+        "started_epoch": 1788633304.284657,
+        "ended_epoch": 1788633304.285283,
+        "seconds": 0.001,
+        "status": "observed",
+        "failed": false,
+        "exit_code": 0,
+        "start_provenance": {
+          "source": "agent-event-observations.jsonl",
+          "capture_file": "cli/005-verify_fixture.json",
+          "family": "verify_fixture",
+          "event": "started",
+          "event_item_id": "item_59",
+          "event_line": 113,
+          "boundary_reason": "diagnostic_cli_started"
+        },
+        "end_provenance": {
+          "source": "agent-event-observations.jsonl",
+          "capture_file": "cli/005-verify_fixture.json",
+          "family": "verify_fixture",
+          "event": "completed",
+          "event_item_id": "item_59",
+          "event_line": 114,
+          "boundary_reason": "diagnostic_cli_completed"
+        },
+        "scoring_effect": "none",
+        "display_stage": "pre_verify_diagnostic"
+      },
+      {
+        "family": "verify_fixture",
+        "started_epoch": 1788633542.59433,
+        "ended_epoch": 1788633542.637873,
+        "seconds": 0.044,
+        "status": "observed",
+        "failed": false,
+        "exit_code": 0,
+        "start_provenance": {
+          "source": "agent-event-observations.jsonl",
+          "capture_file": "cli/007-verify_fixture.json",
+          "family": "verify_fixture",
+          "event": "started",
+          "event_item_id": "item_71",
+          "event_line": 134,
+          "boundary_reason": "diagnostic_cli_started"
+        },
+        "end_provenance": {
+          "source": "agent-event-observations.jsonl",
+          "capture_file": "cli/007-verify_fixture.json",
+          "family": "verify_fixture",
+          "event": "completed",
+          "event_item_id": "item_71",
+          "event_line": 135,
+          "boundary_reason": "diagnostic_cli_completed"
+        },
+        "scoring_effect": "none",
+        "display_stage": "pre_verify_diagnostic"
+      }
+    ]
+  },
+  "C5_project_stage_report": {
+    "source": "agent-stages.json",
+    "status": "valid",
+    "stage_seconds": {
+      "requirements": 158,
+      "model": 368,
+      "apply": 1148,
+      "verify": null
+    },
+    "comparison": {
+      "requirements": {
+        "evaluator_seconds": 212.125,
+        "reported_seconds": 158,
+        "delta_seconds": -54.125,
+        "status": "comparable"
+      },
+      "model": {
+        "evaluator_seconds": 370.254,
+        "reported_seconds": 368,
+        "delta_seconds": -2.254,
+        "status": "comparable"
+      },
+      "apply": {
+        "evaluator_seconds": 1167.367,
+        "reported_seconds": 1148,
+        "delta_seconds": -19.367,
+        "status": "comparable"
+      },
+      "verify": {
+        "evaluator_seconds": 67.992,
+        "reported_seconds": null,
+        "delta_seconds": null,
+        "status": "unknown"
+      }
+    }
+  },
+  "D2_human_interventions": 0,
+  "failure_attribution": {
+    "domainry-builder": 1
+  },
+  "diagnostic_failure_attribution": {
+    "domainry-cli": 1
+  },
+  "scoring_first_failure": {
+    "family": "verify",
+    "exit_code": 1,
+    "output_state": "failed"
+  },
+  "diagnostic_first_failure": {
+    "failure_kind": "diagnostic",
+    "family": "verify_fixture",
+    "exit_code": 1,
+    "output_state": null,
+    "output": "error: project compiler-bound Runtime acceptance fixture: Runtime acceptance fixture \"bf06_overdue_contacted\" department owner organization index is invalid",
+    "raw_output": "error: project compiler-bound Runtime acceptance fixture: Runtime acceptance fixture \"bf06_overdue_contacted\" department owner organization index is invalid\n",
+    "stdout": null,
+    "stderr": null,
+    "output_streams_status": "aggregated_only",
+    "event_item_id": "item_56",
+    "event_line": 109,
+    "observed_started_epoch": 1788633285.289133,
+    "observed_completed_epoch": 1788633285.289763,
+    "duration_seconds": 0.001,
+    "capture_file": "cli/004-verify_fixture.json",
+    "scoring_effect": "none"
+  }
+}

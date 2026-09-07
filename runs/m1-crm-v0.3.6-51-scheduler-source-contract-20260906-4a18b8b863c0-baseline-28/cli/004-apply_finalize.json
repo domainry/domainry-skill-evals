@@ -1,0 +1,37 @@
+{
+  "family": "apply_finalize",
+  "command": "/bin/zsh -lc '/private/tmp/domainry-m1-v51-scheduler-source-contract-baseline-28/codex-home/skills/domainry-builder-v1/bin/domainry-cli apply finalize --json --project /private/tmp/domainry-m1-v51-scheduler-source-contract-baseline-28/project'",
+  "exit_code": 1,
+  "output": {
+    "contract_version": "domainry-project-check-v1",
+    "state": "invalid",
+    "project_root": "/private/tmp/domainry-m1-v51-scheduler-source-contract-baseline-28/project",
+    "scope": "actions",
+    "summary": "project actions source violates static policy",
+    "issue_count": 1,
+    "diagnostics": [
+      {
+        "code": "project.source_call_result_discarded",
+        "message": "call result or error is discarded",
+        "path": "backend/actions/crm/helpers.go",
+        "line": 37,
+        "column": 2,
+        "owner": "project-source",
+        "category": "actions"
+      }
+    ]
+  },
+  "raw_output": "[domainry] apply finalize: validate project-owned source failed (207ms)\n{\"contract_version\":\"domainry-project-check-v1\",\"state\":\"invalid\",\"project_root\":\"/private/tmp/domainry-m1-v51-scheduler-source-contract-baseline-28/project\",\"scope\":\"actions\",\"summary\":\"project actions source violates static policy\",\"issue_count\":1,\"diagnostics\":[{\"code\":\"project.source_call_result_discarded\",\"message\":\"call result or error is discarded\",\"path\":\"backend/actions/crm/helpers.go\",\"line\":37,\"column\":2,\"owner\":\"project-source\",\"category\":\"actions\"}]}\nerror: project check found 1 issue(s)\n",
+  "stdout": null,
+  "stderr": null,
+  "output_streams_status": "aggregated_only",
+  "event_item_id": "item_60",
+  "event_line": 113,
+  "observed_started_epoch": 1788680534.8430982,
+  "observed_completed_epoch": 1788680535.0292401,
+  "observed_started_event_line": 112,
+  "observed_completed_event_line": 113,
+  "duration_seconds": 0.186,
+  "timing_source": "agent-event-observations.jsonl",
+  "capture_file": "cli/004-apply_finalize.json"
+}

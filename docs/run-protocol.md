@@ -33,6 +33,11 @@ template/client/package hash 和 trust identity 等稳定字段；不保存认�
 Agent 传递该快照。结束后任何字段或健康状态漂移均为
 `environment_invalid_service_drift`，checker 不执行。
 
+启动前还必须按 CLI 使用的 SemVer 规则比较候选包版本与 `application_delivery` 版本。若服务版本
+更高，正常 CLI 会原子升级已安装 Skill，破坏冻结候选；driver 必须在创建 isolation 和启动 Agent
+之前以 `service.application_delivery_newer_than_candidate` fail-fast。该门禁属于 evaluator 隔离，
+不得通过删除或禁用产品的 CLI 自动更新能力来规避。
+
 ## run 目录
 
 ```
@@ -91,15 +96,53 @@ python3 harness/run_driver.py \
   --checker-command-json '["python3","{checker}","--project","{project}","--run-dir","{run_dir}","--database","{database}","--verify-result","{verify_result}","--flow-evidence","{flow_evidence}"]'
 ```
 
-`baseline` 不得带 parent；任一评分 family 首次失败后 driver 强制停止 Agent，不等待其自主
+`baseline` 不得带 parent；任一 Agent 命令非零退出，或任一 Domainry CLI 返回明确失败状态后，
+driver 强制停止 Agent，不等待其自主
 收敛。`convergence` 必须显式使用 `--mode convergence --parent-run-id <baseline-or-prior-run>`，
 允许在预算内重试，但 `pass_at_1_eligible=false`。主要终态：
+
+若失败点已封存 evaluator checkpoint，convergence 同时传入
+`--checkpoint-manifest <checkpoint.json> --checkpoint-archive <checkpoint-project.tar.gz>`。
+driver 校验 manifest contract、`baseline_eligibility=false`、source/parent 谱系和 archive SHA256，
+再把项目内容恢复到新初始化的 Git 工程；旧 `.git`、Agent session 和 SQLite 数据库一律不恢复。
+checkpoint manifest/archive 及其哈希进入 freeze manifest，并在 Agent 退出后复验。baseline 禁止使用
+checkpoint。这条路径只节省已完成的业务建模/生成工作，不改变 convergence 永不作为 pass@1 证据的规则。
+
+需要失败后暂停并交给底座 owner 修复时，显式添加 `--checkpoint-on-first-failure`。
+此选项默认关闭；开启后 convergence 与 baseline 都在首个非零 Agent 命令或明确的 Domainry
+失败状态（包含 `verify fixture` 诊断）处停止 Agent。driver 确认 Agent 整个进程组没有可写入的
+存活成员后，将当时源码保存到本 run 下新的 `failure-checkpoint-<unique>/checkpoint-project.tar.gz`
+及 `checkpoint.json`，绝不覆盖输入 checkpoint。Agent 终态失败、checker 失败以及其他未完成终态
+也会尝试封存；正常完成不生成失败 checkpoint。封存排除旧 Git、Runtime state、SQLite、Agent
+session、Domainry lock，以及 checker 中断后可能残留的 `backend/bf06evaluatorprobe-*` 评估专属临时
+源码，并跳过 symlink/特殊文件而不跟随。空项目或无法证明 Agent 已停止等情况
+不能伪造可恢复成功：`failure-checkpoint-result.json`、lifecycle 和 progress 会明确记录
+`status=failed`、失败阶段和错误类型，部分工件不能用于恢复。
+
+成功结果为 `failure_checkpoint.status=sealed`，包含 manifest/archive 路径与哈希，并通过原有
+`checkpoint_identity` 验证。manifest 固定 `source_run_id` 为当前 run、
+`baseline_eligibility=false`、`measurement_class=checkpoint_convergence_not_baseline`，记录输入
+checkpoint 谱系和新失败边界，项目状态为未验收且故障归因待判断。新的 resume boundary 要求先读
+本次失败、判断责任方与受影响阶段；不会沿用可能已经执行完的旧 `next_node`。修复后用新 run id、
+`--mode convergence --parent-run-id <失败的当前run-id>` 和新 manifest/archive 恢复。
+策略冻结在 freeze manifest，生成结果记录在 lifecycle/progress；此选项不改变评分分母、诊断
+非计分地位或 pass@1 规则。
+
+若封存 archive 内容仍有效、但旧 resume boundary 被后续权威需求/验收合同取代，可创建
+manifest-only 派生 checkpoint：`contract_version` 仍为 v1，`source_run_id` 保持 archive 的来源
+convergence，`parent_checkpoint` 固定父 manifest/archive SHA256，`archive` 继续指向并声明同一字节
+archive SHA256，且显式记录 `reused_parent_archive_byte_for_byte=true`。派生 manifest 只能重写权威
+resume/prohibited-repair 边界，不能声称 archive 内容已改变。driver 仍以显式传入的原 archive 做哈希、
+恢复与结束后漂移复验；必须有单元测试证明新 manifest 通过 `checkpoint_identity` 并实际注入 prompt。
 
 run 目录不得预置 freeze、候选身份或任何 measured-run 工件；isolation root 更不得预先存在。
 driver 建立并验证这两棵独立目录，拒绝复用或覆盖。
 
 - `completed` / `acceptance_failed`：测量边界完整，后者为完整但未通过；
 - `baseline_first_scoring_failure`：首个评分命令失败后已截断；
+- `baseline_first_command_failure`：首个辅助、诊断或其他非评分 Agent 命令失败后已截断；
+- `convergence_first_scoring_failure` / `convergence_first_command_failure`：启用自动 checkpoint 时
+  的 convergence 首败截断，measurement boundary 为 `convergence_first_failure_sealed`；
 - `budget_exhausted_wall_clock|tokens|cli_invocations|cli_retries`：预算截断；
 - `delivery_incomplete`：Agent 正常退出但显式报告 `not_done`，或完整评分交付前置条件未满足；
 - `agent_process_failed|invalid_agent_event_stream|acceptance_not_executed|scorer_failed`：运行器终态。
@@ -114,7 +157,7 @@ checker 仅在 Agent 最终结构化结果为 `done`，且 model plan、apply mo
 的最新 capture 均成功、verify 明确为 `verified_and_stopped`、checker 所需 verify/evidence 工件
 可解析时运行。`EVAL_RESULT={"state":"not_done"}` 永远不放行 checker；此时终态为
 `delivery_incomplete`，未发生的漏斗阶段和 A5 保持不可测，不伪装成 acceptance 失败。
-`baseline_first_scoring_failure` 额外记录 `environment_valid=true` 与
+`baseline_first_scoring_failure` 和 `baseline_first_command_failure` 额外记录 `environment_valid=true` 与
 `measurement_boundary=baseline_first_failure_sealed`，表示首败边界按设计完成封存，而不是环境
 不完整。若首败发生在 verify 之前且没有 verify capture，driver 不执行 checker，而是写入
 `checklist-results.json` 的 `status=not_executed`；此时验收首过率不可测，不得把缺少 Runtime
@@ -219,7 +262,10 @@ L1 在隔离目录进行，只执行 `model capability` / `model plan`，分钟�
 
 M1 不直接执行 `benchmarks/m1-crm/golden-probe.py` 中遗留的固定 Action、字段、身份和默认密码。driver 使用 `harness/run_m1_baseline.py --verify-result <captured-verify.json>`：它从最终签名 Runtime manifest 验证 M01-M19 的结构事实，要求项目 PRD 与测试源码同时覆盖需求中公开的 BF01-BF08，并验证当前 CLI 的初次启动与同 cohort 重启业务流均 passed、身份一致、最终 stopped。Identity 用户/组织、Runtime-owned owner 字段和场景 fixture 不要求出现在 Blueprint/manifest；它们由项目业务流通过正式测试路径证明。测试函数可在公开 BF ID 后自由命名，评估器不得依赖历史函数全名或把一个历史测试暗中映射到多个 BF。
 
-项目与 Runtime 数据库必须在 Agent 启动前均不存在；该不存在证明写入 run freeze manifest。任何失败后的修复都创建新的 convergence run 和新的 SQLite cohort，不删除数据库伪装成原始 pass@1。
+项目与 Runtime 数据库必须在 isolation 建立前均不存在；该不存在证明写入 run freeze manifest。
+无 checkpoint 时 Agent 启动前项目保持空白；checkpoint convergence 可由 driver 在冻结后恢复已封存项目内容，
+但仍使用新 Git metadata、新 Agent session 和新 SQLite cohort。任何失败后的修复都创建新的 convergence
+run 和新的 SQLite cohort，不删除数据库伪装成原始 pass@1。
 
 M1 新 run 使用 `domainry-m1-evaluator-result-v3`，并向 checker 提供
 `domainry-business-flow-evidence-v1`。该文档按 `initial` / `restart` 两阶段、BF01-BF08
@@ -236,7 +282,7 @@ checker 判为失败；checker 若改写或删除归档副本，run 以 `flow_ev
 {
   "id": "stable-step-id",
   "operation": "runtime operation family",
-  "source": "runtime.records|runtime.action|runtime.workflow|runtime.scheduler|runtime.report|runtime.data_exchange|runtime.identity|runtime.navigation|project_handler",
+  "source": "runtime.records|runtime.action|runtime.workflow|runtime.record_timer|runtime.scheduler|runtime.report|runtime.data_exchange|runtime.identity|runtime.navigation|project_handler",
   "status": "passed",
   "requirements": ["1", "5"],
   "observations": {}
@@ -261,10 +307,79 @@ BF08 的 observations 还必须用同一不透明 `job_id` 贯穿 prepare/owner/
 `access_denied=true`，以及 CSV 可解析、行数与 Report 一致、content hash 已核对。checker
 只比较这些行为事实和不透明 ID 的一致性，不读取历史资源 key。
 
+BF06 不再接受租户 Scheduler 扫描。结构门禁要求 lead 有独立 `status_changed_at` 与
+`next_followup_at` datetime 字段；Workflow 以合法 field-change trigger 监听
+`next_followup_at`，且合法 Graph V2 使用非空唯一 node/edge ID、有效 edge 端点，并有连通的
+`trigger → contract.condition{type=field_equals,field=status,value=contacted}` 的 `true` 分支
+`→ timer → action`；该 condition 的 `false` 分支不得到达 timer。真实
+`node.contract.timer` 必须包含非空 `timer_key`/`purpose`、
+`source_field=next_followup_at` 和 `timezone=Asia/Shanghai`。
+`next_followup_at` 是项目 Handler 已按 7 天规则、部署时区和工作日日历算好的精确工作日早晨，
+timer 不得再带 offset/calendar 重算。Action 必须指向该 lead；提醒对象必须有 lead relation、
+recipient、本地日期，并用恰好覆盖 lead relation 与本地日期字段的 composite unique 实现业务去重。
+编译后只认 Runtime ObjectSchema 的 `validations` 数组：`type=composite_unique`，`fields`
+恰好包含这两个不同字段。不得将并不存在的 `unique_constraints` / `constraints` 当作 Runtime 契约。
+无关字段上的 unique、任意两字段 unique，或把 recipient 加入唯一键，都不能证明“每 lead 每本地日期
+最多一条”。进入/离开 contacted 的业务 Action 负责设置/清空 due 字段，
+due Action 负责重读状态、写提醒和推进 due；这些写侧事实由 BF06 行为验证。存在指向该 follow-up
+Workflow/Action 的 Scheduler definition，或存在任何指向 lead/本提醒 Action 的 standalone
+scheduled Workflow（即使没有 Scheduler definition），M14 均 fail closed。evaluator 还全局扫描所有
+生产 Action/Workflow；任一处出现 `evaluation_time`，或用 `updated_at` 代替
+`status_changed_at`，M14 均失败；无关业务的 Scheduler 不影响本项事实。
+
+BF06 使用 A/B/C/D 组合证据，不压缩 7 天生产 Workflow，也不要求新 Runtime API：
+
+- A（生产黑盒）：用普通 `lead.advance` 把当前 lead 推进到 contacted，读取并证明
+  `status_changed_at` 与严格晚于七天、落在下一工作日早晨的 `next_followup_at` 已持久化，并证明
+  当下没有提醒；restart 阶段读取同一 lead/两个时间字段，仍处于到期前且没有提醒。
+- B（业务 Handler）：checker 在评分时亲自执行 `./actions/crm` 中以 `TestM1Req14` 命名的五个
+  focused tests，证明工作日计算、进入设置、退出清空、due Action 重读状态并写提醒/通知/唯一键、
+  同日重放、推进下一 due 和 stale no-op。evaluator-owned coverage 断言要求这些 case 实际执行非零
+  项目 Handler 语句，空测试失败。测试可向项目 Handler 注入 clock，但生产 Action/Workflow 输入绝无
+  `evaluation_time`。
+- C（Runtime timer）：checker 在评分时亲自执行 `./tests/recordtimer` 的两个独立集成测试；使用
+  project delivery 优先、本机只读 module download cache 后备的 file-only hermetic `GOPROXY`、
+  `GOFLAGS=-mod=readonly` 和必要 SDK build tag，执行
+  `go list -m -json github.com/domainry/domainry-runtime` 并校验 delivery binding，同时用
+  `go list -deps` 与 evaluator-owned coverage 断言证明测试真正执行外部 Runtime record-timer 代码。
+  checker 还临时注入、执行并哈希 evaluator-owned Go probe，直接以 Runtime 的公开 policy 断言
+  `next_followup_at` source field 在零 offset 下保持精确 due，且默认全局 worker 已启用；项目源码不能
+  提供或替换该 probe。
+  Main module、任何 Replace、落入 project tree 的模块、缺版本/校验和、空测试和 blank import 均失败。
+  该测试用真实 now+短 duration
+  验证 due 持久化、pre-due no-op、全局 worker 自动 resume，以及到期前重启后同 timer 恢复；它不
+  改动 CRM 的 7 天规则，也不新增 CRM rearm/snooze Action。
+- D（绑定）：manifest 结构事实把 A/B/C 绑定到生产链：`next_followup_at` field-change → contacted
+  condition → `node.contract.timer(source_field only)` → per-record Action。
+
+managed verify 的 BF06 只报告 A 的黑盒事实以及 B/C suite identity；不得自报 timer 表、内部
+timer ID 或不存在的 Runtime proof。checker 生成并归档
+`domainry-bf06-evaluator-certificates-v1`，内含实际命令退出码、精确测试集、测试输出 SHA-256、
+测试源码 SHA-256、B 的项目 Handler 覆盖，以及 C 的 Runtime dependency list、外部 module identity、
+delivery binding、hermetic Go 环境、record-timer 覆盖和 evaluator-owned probe 证书。缺包、漏测、
+失败、证书漂移、零覆盖、probe 漂移或本地冒充均 fail closed。
+
+BF06 的必需 operation/source 如下；同一 operation 重复出现会失败：
+
+| Phase | operation | source | observations |
+| --- | --- | --- | --- |
+| initial | `lead.contacted.due.persisted` | `runtime.action` | `record_id,status,status_changed_at_persisted,next_followup_at_persisted,status_changed_at,next_followup_at,local_next_followup_at,calculation_owner,business_calendar_key` |
+| initial | `lead.contacted.no_immediate_reminder` | `runtime.records` | `record_id,next_followup_at,observed_at,reminder_count_before,reminder_count_after` |
+| initial/restart | `handler.followup_due.focused_tests` | `project_handler` | `suite_id=m1_req14_handler,evaluator_certificate_required=true,required_cases` |
+| initial/restart | `runtime.record_timer.integration_tests` | `runtime.record_timer` | `suite_id=m1_req14_runtime_record_timer,evaluator_certificate_required=true,required_cases` |
+| restart | `lead.contacted.due.restart_durable` | `runtime.records` | `record_id,status,status_changed_at,next_followup_at,read_after_restart,reminder_count` |
+
+A 的三条 step 还必须记录 `real_clock=true`、`evaluation_time_supplied=false`、
+`direct_database_write=false`、`scheduler_invoked=false`。checker 比较 initial/restart 的
+`record_id`、`status_changed_at` 和 `next_followup_at`，验证 due 时间关系与工作日早晨，并要求两阶段
+都引用完整 B/C case set。评估侧不得改数据库、回拨全局时钟、手工 resume timer，或仅调用
+Scheduler 后把另一条 Action 的结果归因给 Scheduler。
+
 机器 schema 位于 `docs/schemas/freeze-manifest-v1.schema.json`、
 `docs/schemas/progress-v1.schema.json`、
 `docs/schemas/run-lifecycle-v1.schema.json`、
 `docs/schemas/business-flow-evidence-v1.schema.json`、
+`docs/schemas/bf06-evaluator-certificates-v1.schema.json`、
 `docs/schemas/m1-evaluator-result-v3.schema.json` 和
 `docs/schemas/scorecard-v3.schema.json`。
 
@@ -276,7 +391,10 @@ BF08 的 observations 还必须用同一不透明 `job_id` 贯穿 prepare/owner/
 
 ## 中断恢复纪律
 
-测量 run 不允许 resume/continue 既有 Agent session。API 中断、断网或进程退出后，原 run 按已有证据封存；后续工作必须建立新的 convergence run、新 isolation root、新 Git project、新 SQLite cohort 和新 Agent session，并通过 `parent_run_id` 保留谱系。不得复制旧 TODO、`.domainry`、数据库或项目实现。
+测量 run 不允许 resume/continue 既有 Agent session。API 中断、断网或进程退出后，原 run 按已有证据封存；
+后续工作必须建立新的 convergence run、新 isolation root、新 Git metadata、新 SQLite cohort 和新 Agent
+session，并通过 `parent_run_id` 保留谱系。只有 evaluator 明确冻结、校验并登记的 checkpoint archive 可以
+恢复项目实现与 `.domainry` 项目状态；旧 TODO、Agent 状态、Git 历史和数据库仍不得复制。
 
 ## 对比规则
 

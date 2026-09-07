@@ -1,0 +1,20 @@
+[
+  {
+    "failure_kind": "command",
+    "stage": "agent_command",
+    "owner": "agent",
+    "note": "Agent command failed under checkpoint-on-first-failure policy",
+    "terminal_state": "convergence_first_command_failure",
+    "attribution_status": "attributed",
+    "detail": {
+      "failure_kind": "command",
+      "family": null,
+      "exit_code": 1,
+      "output_state": null,
+      "command_sha256": "3b6066e7bb251f1d190dac52e8897a788eac545f6c9f715be73f7b87359a6160",
+      "event_item_id": "item_7",
+      "event_line": 17,
+      "observed_epoch": 1788755779.426924
+    }
+  }
+]

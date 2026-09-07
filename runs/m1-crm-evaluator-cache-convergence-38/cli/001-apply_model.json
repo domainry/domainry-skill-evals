@@ -1,0 +1,19 @@
+{
+  "family": "apply_model",
+  "command": "/bin/zsh -lc '/private/tmp/domainry-m1-evaluator-cache-convergence-38/codex-home/skills/domainry-builder-v1/bin/domainry-cli apply model --json --project /private/tmp/domainry-m1-evaluator-cache-convergence-38/project --go-module-path example.com/domainry-m1-crm/backend --service http://127.0.0.1:8283'",
+  "exit_code": 1,
+  "output": "[domainry] apply model: load and preflight model...\n[domainry] apply model: load and preflight model failed (1.145s)\nerror: model.preflight_missing: run model plan before apply",
+  "raw_output": "[domainry] apply model: load and preflight model...\n[domainry] apply model: load and preflight model failed (1.145s)\nerror: model.preflight_missing: run model plan before apply\n",
+  "stdout": null,
+  "stderr": null,
+  "output_streams_status": "aggregated_only",
+  "event_item_id": "item_5",
+  "event_line": 11,
+  "observed_started_epoch": 1788721336.57837,
+  "observed_completed_epoch": 1788721338.7168372,
+  "observed_started_event_line": 10,
+  "observed_completed_event_line": 11,
+  "duration_seconds": 2.138,
+  "timing_source": "agent-event-observations.jsonl",
+  "capture_file": "cli/001-apply_model.json"
+}

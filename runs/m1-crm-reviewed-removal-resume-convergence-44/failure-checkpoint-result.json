@@ -1,0 +1,71 @@
+{
+  "status": "sealed",
+  "terminal_state": "convergence_first_command_failure",
+  "baseline_eligibility": false,
+  "stage": "complete",
+  "agent_process_group": {
+    "status": "confirmed_stopped",
+    "process_group_id": 54184,
+    "confirmed_epoch": 1788755779.446451,
+    "live_member_count": 0
+  },
+  "directory": "/Users/tiger/Projects/domainry-skill-evals/runs/m1-crm-reviewed-removal-resume-convergence-44/failure-checkpoint-1788755779764260000",
+  "manifest_path": "/Users/tiger/Projects/domainry-skill-evals/runs/m1-crm-reviewed-removal-resume-convergence-44/failure-checkpoint-1788755779764260000/checkpoint.json",
+  "archive_path": "/Users/tiger/Projects/domainry-skill-evals/runs/m1-crm-reviewed-removal-resume-convergence-44/failure-checkpoint-1788755779764260000/checkpoint-project.tar.gz",
+  "identity": {
+    "contract_version": "domainry-eval-checkpoint-v1",
+    "source_run_id": "m1-crm-reviewed-removal-resume-convergence-44",
+    "checkpoint_kind": "automatic_failure_source_snapshot",
+    "measurement_class": "checkpoint_convergence_not_baseline",
+    "baseline_eligibility": false,
+    "manifest_sha256": "28413aa575437c38011d318dcbe92aed408332b0bc4e11d9cc192ef7e2433bcd",
+    "archive_sha256": "457fda2f5a3a56cead2e0aadd127149e5806a669b1ff69032d00591588e0a055",
+    "manifest_only_boundary_migration": false,
+    "resume_boundary": {
+      "stage": "failure_review",
+      "next_node": "Diagnose this checkpoint's failure_boundary and select the affected retry stage",
+      "rule": "This source snapshot is not accepted. Attribute the saved failure before repairing; route foundation defects to the owning project and resume after its fix. Revalidate delivery/runtime identities before reuse. Do not inherit a previously executed resume boundary or restart completed source authoring blindly."
+    },
+    "prohibited_repairs": [
+      "do not re-author the preflight-valid model or discard retained non-Req14 work",
+      "do not broaden the three reviewed Ledger deletions or bypass evolution audit review",
+      "do not restore a tenant Scheduler definition or scheduled lead/follow-up scan",
+      "do not expose production evaluation_time, backdate SQLite, override global time, or manually resume timers",
+      "do not add CRM-only test Actions or invent Runtime proof APIs",
+      "do not modify foundation repositories or dispatch other tasks from this measured project",
+      "do not weaken BF01-BF08/restart checks or call convergence a baseline"
+    ],
+    "failure_boundary": {
+      "terminal_state": "convergence_first_command_failure",
+      "first_failure": {
+        "failure_kind": "command",
+        "family": null,
+        "exit_code": 1,
+        "output_state": null,
+        "command_sha256": "3b6066e7bb251f1d190dac52e8897a788eac545f6c9f715be73f7b87359a6160",
+        "event_item_id": "item_7",
+        "event_line": 17,
+        "observed_epoch": 1788755779.426924
+      },
+      "termination": {
+        "failure_kind": "command",
+        "family": null,
+        "exit_code": 1,
+        "output_state": null,
+        "command_sha256": "3b6066e7bb251f1d190dac52e8897a788eac545f6c9f715be73f7b87359a6160",
+        "event_item_id": "item_7",
+        "event_line": 17,
+        "observed_epoch": 1788755779.426924
+      },
+      "agent_exit_code": 0,
+      "checker_exit_code": null,
+      "latest_cli": null,
+      "latest_diagnostic": null,
+      "attribution_status": "pending"
+    }
+  },
+  "archived_file_count": 1388,
+  "excluded_counts": {
+    "git": 1
+  }
+}

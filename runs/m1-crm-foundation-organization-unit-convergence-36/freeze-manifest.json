@@ -1,0 +1,188 @@
+{
+  "contract_version": "domainry-eval-freeze-manifest-v1",
+  "run_id": "m1-crm-foundation-organization-unit-convergence-36",
+  "benchmark": "m1-crm",
+  "run_kind": "convergence",
+  "parent_run_id": "m1-crm-v0.3.16-3-audit-identity-convergence-34",
+  "model": "gpt-5.6-sol",
+  "budgets": {
+    "wall_clock_seconds": 3600.0,
+    "total_tokens": 5000000,
+    "cli_invocations": 40,
+    "cli_retries": 20
+  },
+  "absence_proof": {
+    "checked_epoch": 1788717866.810972,
+    "isolation_root_absent": true,
+    "project_absent": true,
+    "codex_home_absent": true,
+    "agent_home_absent": true,
+    "sqlite_database_absent": true,
+    "sqlite_wal_absent": true,
+    "sqlite_shm_absent": true
+  },
+  "isolation": {
+    "root": "/private/tmp/domainry-m1-foundation-organization-unit-convergence-36",
+    "codex_home": "/private/tmp/domainry-m1-foundation-organization-unit-convergence-36/codex-home",
+    "agent_home": "/private/tmp/domainry-m1-foundation-organization-unit-convergence-36/home",
+    "temp": "/private/tmp/domainry-m1-foundation-organization-unit-convergence-36/tmp",
+    "project": "/private/tmp/domainry-m1-foundation-organization-unit-convergence-36/project",
+    "runtime": "/private/tmp/domainry-m1-foundation-organization-unit-convergence-36/runtime",
+    "database": "/private/tmp/domainry-m1-foundation-organization-unit-convergence-36/runtime/cohort.sqlite",
+    "candidate_copy": "/private/tmp/domainry-m1-foundation-organization-unit-convergence-36/codex-home/skills/domainry-builder-v1"
+  },
+  "candidate": {
+    "candidate_id": "v0.3.16-5-m1-org-unit-20260907+9aeea6610bf4",
+    "skill_name": "domainry-builder-v1",
+    "skill_version": "v0.3.16-5-m1-org-unit-20260907",
+    "skill_identity_sha256": "ebd64d96025aeabc3ec803e2cef1d6330e670533269edbfc0dda8172909aaceb",
+    "package_metadata_sha256": "c2bc7bff1cc1f226536b547de35d614e30bce888bc38c5af3cdb5f5c46360474",
+    "skill_tree_sha256": "9aeea6610bf41f8467d491049782b95c4e1b4e14a9ebab1963e64a304a0c7ed8",
+    "cli_binary_sha256": "d5c872905b2b8545418e3f19457681630b8d92c8ba868164706492f0aec710da",
+    "runtime_api_contract_version": "runtime-domain-api-v1",
+    "runtime_api_contract_hash": "4fe655cbfd4fa0bc0b0c04c89b86926fc6aceb059c9fccf5b09eec9b459330f7",
+    "apply_target_flag": "--service",
+    "apply_target_value": "http://127.0.0.1:8283"
+  },
+  "isolated_candidate": {
+    "candidate_id": "v0.3.16-5-m1-org-unit-20260907+9aeea6610bf4",
+    "skill_name": "domainry-builder-v1",
+    "skill_version": "v0.3.16-5-m1-org-unit-20260907",
+    "skill_identity_sha256": "ebd64d96025aeabc3ec803e2cef1d6330e670533269edbfc0dda8172909aaceb",
+    "package_metadata_sha256": "c2bc7bff1cc1f226536b547de35d614e30bce888bc38c5af3cdb5f5c46360474",
+    "skill_tree_sha256": "9aeea6610bf41f8467d491049782b95c4e1b4e14a9ebab1963e64a304a0c7ed8",
+    "cli_binary_sha256": "d5c872905b2b8545418e3f19457681630b8d92c8ba868164706492f0aec710da",
+    "runtime_api_contract_version": "runtime-domain-api-v1",
+    "runtime_api_contract_hash": "4fe655cbfd4fa0bc0b0c04c89b86926fc6aceb059c9fccf5b09eec9b459330f7",
+    "apply_target_flag": "--service",
+    "apply_target_value": "http://127.0.0.1:8283"
+  },
+  "service_identity": {
+    "target_kind": "service",
+    "healthy": true,
+    "http_status": 200,
+    "health_document_sha256": "c4c2f9b6f691fb2fd2555300a85dfe8cbd4dd24ade288d139a5b0d188c7c10d4",
+    "published_identity": {
+      "contract_version": "domainry-control-plane-health-v1",
+      "discovery": "/.well-known/domainry-plane",
+      "service_kind": "template-control-plane",
+      "version": "v0.3.16-5-m1-org-unit-20260907",
+      "checks": [
+        {
+          "detail": "v0.3.16-5-m1-org-unit-20260907",
+          "name": "application_delivery",
+          "status": "passed"
+        },
+        {
+          "detail": "domainry-frontend-product_v0.3.16-5-m1-org-unit-20260907.tar.gz sha256:6490913f05323e8b29ce96a2f31e5b7f4b5c5e8c3bafecdd2192f49b9b6b8d42",
+          "name": "frontend_product",
+          "status": "passed"
+        },
+        {
+          "detail": "github.com/domainry/domainry-identity@v0.999.0-domainry.9bb2190b4298fbd3",
+          "name": "identity_module",
+          "status": "passed"
+        },
+        {
+          "detail": "github.com/domainry/domainry-notification@v0.999.0-domainry.cea1cbbe680d85d8",
+          "name": "notification_module",
+          "status": "passed"
+        },
+        {
+          "detail": "github.com/domainry/domainry-notification-sdk@v0.999.0-domainry.c0a526a508a992fd",
+          "name": "notification_sdk",
+          "status": "passed"
+        },
+        {
+          "detail": "domainry-project-delivery-local-development",
+          "name": "project_delivery_signer",
+          "status": "passed"
+        },
+        {
+          "detail": "available",
+          "name": "project_delivery_store",
+          "status": "passed"
+        },
+        {
+          "detail": "local.domainry.project-delivery revision 1",
+          "name": "project_delivery_trust",
+          "status": "passed"
+        },
+        {
+          "detail": "domainry-project-template_v0.3.16-5-m1-org-unit-20260907.tar.gz sha256:9f42f06ff630bd4d7eec330ee1d70e57ca73af98918b4c5029d85d162be4af40",
+          "name": "project_template",
+          "status": "passed"
+        },
+        {
+          "detail": "domainry-runtime-client-sdk_v0.3.16-5-m1-org-unit-20260907.tar.gz sha256:7a86bfc5a252cf12d26ce518927bf76994c948b08a5a30da4b89ce3304b4b8ac",
+          "name": "runtime_client_sdk",
+          "status": "passed"
+        },
+        {
+          "detail": "runtime-domain-api-v1 + runtime-authoring-v1",
+          "name": "runtime_contract",
+          "status": "passed"
+        },
+        {
+          "detail": "github.com/domainry/domainry-runtime@v0.0.0-source-0ddbf36d1ab419cf",
+          "name": "runtime_module",
+          "status": "passed"
+        },
+        {
+          "detail": "1 platforms",
+          "name": "skill_packages",
+          "status": "passed"
+        }
+      ]
+    }
+  },
+  "checkpoint": {
+    "contract_version": "domainry-eval-checkpoint-v1",
+    "source_run_id": "m1-crm-v0.3.16-3-audit-identity-convergence-34",
+    "checkpoint_kind": "pre_semantic_workaround_foundation_organization_unit_delivery_gap",
+    "measurement_class": "checkpoint_convergence_not_baseline",
+    "baseline_eligibility": false,
+    "manifest_sha256": "804c2fa67ab6f368aaaa37672888664eb64f26c77169ce127af52f771d4b8e04",
+    "archive_sha256": "6aab8c8c3f5c8b02a8360eb4853c8c7ab61e429adc96cf4066810e0a6923cb94",
+    "resume_boundary": {
+      "stage": "model",
+      "next_node": "after a compatible Plane/Runtime/Identity candidate is installed, replace the invalid store-backed department model with the generic typed organization-unit delivery contract, then rerun only the affected plan/apply/finalize/verify closure",
+      "rule": "Restore this pre-workaround archive; never restore the later root-company/store semantic workaround.",
+      "prior_delivery_id": "sha256:7301cf925a3461e9ad3f95b77b9a8be0cfca07481bc28d5da1beb3d98441385e"
+    },
+    "prohibited_repairs": [
+      "do not increase store quota as a substitute for department delivery",
+      "do not label the Workspace root company or a store as a department",
+      "do not add CRM-specific foundation behavior or a business registry that copies the Identity organization tree"
+    ]
+  },
+  "hashes": {
+    "candidate_config_sha256": "67cbdfddf7124987f96a669ce0c49005e9517a5f12335909fc1aedc3e0ce65f4",
+    "requirements_sha256": "e59edec731f9ff2bcda8a6b928681b273be7873a22c3f9ea93c9bb27e6cea83e",
+    "rendered_driver_prompt_sha256": "b9e124a5f33fc218fd960f1820c2ee75a192993b1d57f5231676f512827e003f",
+    "checker_sha256": "7b75ecf646c7dfc07bb0c51b8730b6fef61d24f45ae77665695b4b1c58832f5f",
+    "scorer_sha256": "0e7fc7903e0f4e957d5860c3b7b8e4a5d07fc0d4b77f4faeb117a7db20d32109",
+    "frozen_checker_sha256": "7b75ecf646c7dfc07bb0c51b8730b6fef61d24f45ae77665695b4b1c58832f5f",
+    "frozen_scorer_sha256": "0e7fc7903e0f4e957d5860c3b7b8e4a5d07fc0d4b77f4faeb117a7db20d32109",
+    "driver_sha256": "bd1512ff0035935500c3198d5acb378875e0cf88a3487a424b005b6c29ef49fc",
+    "agent_command_sha256": "35a6e26632c6a1ffd90135372680e41a1501e379b50cbfd0017d60e6a3976ef1",
+    "checker_command_sha256": "03bb0f85ec953b1bc3b317616e76fe65950acc8de966d5aac01491f1b9229d75"
+  },
+  "agent_context": {
+    "fresh_session_required": true,
+    "resume_forbidden": true,
+    "codex_home_contents_during_agent": [
+      "auth.json",
+      "skills/domainry-builder-v1"
+    ],
+    "ephemeral_auth_staged": true,
+    "auth_retention": "remove_immediately_after_agent",
+    "environment_policy": "minimal-isolated-v1",
+    "prompt_inputs": [
+      "requirements",
+      "evaluator-owned measured-run policy"
+    ],
+    "evaluator_assets_exposed": false,
+    "checkpoint_project_restored": true
+  }
+}

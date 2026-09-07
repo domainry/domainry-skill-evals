@@ -1,0 +1,23 @@
+{
+  "benchmark": "m1-crm",
+  "candidate_id": "v0.3.6-40-m1-verification-contracts-20260906+62ea2db57826",
+  "skill_version": "v0.3.6-40-m1-verification-contracts-20260906",
+  "model": "gpt-5.6-sol",
+  "run_id": "m1-crm-v0.3.6-40-m1-verification-contracts-20260906-62ea2db57826-baseline-22",
+  "run_kind": "baseline",
+  "parent_run_id": null,
+  "terminal_state": "baseline_first_scoring_failure",
+  "measurement_complete": false,
+  "environment_valid": true,
+  "agent_declared_done": false,
+  "agent_result_state": null,
+  "human_interventions": 0,
+  "started_epoch": 1788645671.896804,
+  "agent_ended_epoch": 1788646260.200952,
+  "ended_epoch": 1788646260.470159,
+  "project_path": "/private/tmp/domainry-m1-v40-verification-contracts-baseline-22/project",
+  "isolation_root": "/private/tmp/domainry-m1-v40-verification-contracts-baseline-22",
+  "codex_home": "/private/tmp/domainry-m1-v40-verification-contracts-baseline-22/codex-home",
+  "database_path": "/private/tmp/domainry-m1-v40-verification-contracts-baseline-22/runtime/cohort.sqlite",
+  "agent_session_id": "01a07397-0e10-7281-b2fa-95ec6cba776a"
+}

@@ -1,0 +1,56 @@
+{
+  "contract_version": "domainry-eval-checkpoint-v1",
+  "checkpoint_kind": "convergence43_reviewed_ledger_removals_apply_resume_v9",
+  "measurement_class": "checkpoint_convergence_not_baseline",
+  "baseline_eligibility": false,
+  "source_run_id": "m1-crm-canonical-unique-resume-convergence-43",
+  "project_acceptance_status": "unaccepted_failure_snapshot",
+  "parent_checkpoint": {
+    "checkpoint_id": "m1-crm-canonical-unique-resume-convergence-43/failure-checkpoint-1788755522983494000",
+    "manifest_sha256": "345838979c49f009f9a5731b17116637b1739e228ba0b311035dcb283996e173",
+    "archive_sha256": "bd3f4617f2c583ee5372b18365b909f4aa0b983067769d7795c415ca09511113"
+  },
+  "archive": {
+    "path": "failure-checkpoint-1788755522983494000/checkpoint-project.tar.gz",
+    "sha256": "bd3f4617f2c583ee5372b18365b909f4aa0b983067769d7795c415ca09511113"
+  },
+  "archive_policy": {
+    "manifest_only_boundary_migration": true,
+    "reused_parent_archive_byte_for_byte": true
+  },
+  "failure_boundary": {
+    "terminal_state": "convergence_first_scoring_failure",
+    "first_failure": {"failure_kind": "scoring", "family": "apply_model", "exit_code": 1, "output_state": null},
+    "attribution_status": "confirmed",
+    "owner": "builder.skill.apply_invocation",
+    "runtime_defect": false,
+    "code": "model.destructive_blocked",
+    "details": "The model plan passed with zero diagnostics. The first apply omitted --allow-destructive for three explicitly requested obsolete Req14 Ledger resources. The guard correctly rejected deletion before publication/materialization. The Skill apply entry now explains the reviewed-deletion flag; no protection was removed.",
+    "model_identity": "f85e9a96e79f474c8ed1a083f4c51145f6b33ab88d29662072acede34e12facc",
+    "model_preflight_sha256": "476c16d1fcc25c2dbaec18d7d7f07e3b9109941dcc20f9ecabde92e5a87091e6"
+  },
+  "reviewed_deletions": [
+    "crm/resource/actions.lead.scan_stale_contacted",
+    "crm/resource/scheduled_jobs.weekday_stale_lead_followup",
+    "crm/resource/workflows.stale_lead_followup"
+  ],
+  "resume_boundary": {
+    "stage": "apply",
+    "next_node": "Restore this convergence-43 archive and retain its already-valid Req14 replacement model. Do not re-author that model or reconstruct earlier business code. Refresh model plan if required for the current candidate, verify its deletion set is exactly the obsolete scan Action lead.scan_stale_contacted, Scheduler weekday_stale_lead_followup and Workflow stale_lead_followup, and use apply model with --allow-destructive for these explicitly authorized removals. The prior plan had 2 creates, 6 necessary updates, 3 deletes and 31 unchanged resources. Preserve separate evolution audit review: verify file bytes/size and canonical semantic SHA, then execute its exact next_command with a meaningful reason. Only after implementation_ready/applied consume the new packet and implement lead.advance set/clear semantics, lead.continue_followup_due and paired tests, replacing the old scan source/test and BF06. Preserve all other project work. Finish focused Handler/runtime timer tests, whole-project checks, apply finalize and managed initial/restart verify.",
+    "rule": "This v9 boundary supersedes the older instruction to redo Feature40 modeling. The model is preflight-valid but source implementation and acceptance are incomplete. The user already authorized replacing the old Scheduler path, including these three removals; do not ask for that confirmation again or broaden the deletion set. Runtime must continue the same Workflow through its global Record Timer worker. Preserve independent status_changed_at, exact Handler-calculated next_followup_at strictly more than seven days later at the next workday morning, field_changed -> contacted true condition -> source-field timer -> per-record Action, composite_unique over precisely lead and local date, stale/exit no-op, daily dedupe, and next-due advance. Keep the five Handler cases, two actual external Runtime timer cases, evaluator-owned source-field/default-worker probe, graph binding and initial/restart black-box evidence. No production evaluation_time or fake time compression. Continue only this evaluator-started convergence; no nested evaluation or task dispatch. Do not modify foundation repositories from the measured project.",
+    "prior_delivery_id": "sha256:000477f0e464666cbf57696e82c15ccc5482a2d5a65395c29cf5c2be3321e471"
+  },
+  "blocking_condition": {
+    "classification": "resolved_apply_flag_omission",
+    "domainry_foundation_gap": false,
+    "prohibited_repairs": [
+      "do not re-author the preflight-valid model or discard retained non-Req14 work",
+      "do not broaden the three reviewed Ledger deletions or bypass evolution audit review",
+      "do not restore a tenant Scheduler definition or scheduled lead/follow-up scan",
+      "do not expose production evaluation_time, backdate SQLite, override global time, or manually resume timers",
+      "do not add CRM-only test Actions or invent Runtime proof APIs",
+      "do not modify foundation repositories or dispatch other tasks from this measured project",
+      "do not weaken BF01-BF08/restart checks or call convergence a baseline"
+    ]
+  }
+}

@@ -1,0 +1,58 @@
+{
+  "status": "sealed",
+  "terminal_state": "delivery_incomplete",
+  "baseline_eligibility": false,
+  "stage": "complete",
+  "agent_process_group": {
+    "status": "confirmed_stopped",
+    "process_group_id": 56107,
+    "confirmed_epoch": 1788756049.5619268,
+    "live_member_count": 0
+  },
+  "directory": "/Users/tiger/Projects/domainry-skill-evals/runs/m1-crm-structured-plan-resume-convergence-45/failure-checkpoint-1788756049926689000",
+  "manifest_path": "/Users/tiger/Projects/domainry-skill-evals/runs/m1-crm-structured-plan-resume-convergence-45/failure-checkpoint-1788756049926689000/checkpoint.json",
+  "archive_path": "/Users/tiger/Projects/domainry-skill-evals/runs/m1-crm-structured-plan-resume-convergence-45/failure-checkpoint-1788756049926689000/checkpoint-project.tar.gz",
+  "identity": {
+    "contract_version": "domainry-eval-checkpoint-v1",
+    "source_run_id": "m1-crm-structured-plan-resume-convergence-45",
+    "checkpoint_kind": "automatic_failure_source_snapshot",
+    "measurement_class": "checkpoint_convergence_not_baseline",
+    "baseline_eligibility": false,
+    "manifest_sha256": "f3269c0f70ef76c537bdb9712a3c05d186ce14dab188f671208a7449927a07d4",
+    "archive_sha256": "0d78dda4bf815942f93463997150f8e7755194b9256d8ea9cc05817c3f3e04a2",
+    "manifest_only_boundary_migration": false,
+    "resume_boundary": {
+      "stage": "failure_review",
+      "next_node": "Diagnose this checkpoint's failure_boundary and select the affected retry stage",
+      "rule": "This source snapshot is not accepted. Attribute the saved failure before repairing; route foundation defects to the owning project and resume after its fix. Revalidate delivery/runtime identities before reuse. Do not inherit a previously executed resume boundary or restart completed source authoring blindly."
+    },
+    "prohibited_repairs": [
+      "do not re-author the valid model or discard retained non-Req14 work",
+      "do not broaden the three authorized deletions or bypass evolution review",
+      "do not weaken the Workflow-only Req14 or BF01-BF08/restart acceptance",
+      "do not modify foundations, dispatch tasks, or call this convergence a baseline"
+    ],
+    "failure_boundary": {
+      "terminal_state": "delivery_incomplete",
+      "first_failure": null,
+      "termination": null,
+      "agent_exit_code": 0,
+      "checker_exit_code": null,
+      "latest_cli": {
+        "subcommand": "apply_model",
+        "status": "in_progress",
+        "exit_code": null,
+        "output_state": null,
+        "observed_epoch": 1788755999.937957
+      },
+      "latest_diagnostic": null,
+      "attribution_status": "pending"
+    }
+  },
+  "archived_file_count": 1529,
+  "excluded_counts": {
+    "git": 1,
+    "lock": 1,
+    "runtime_state": 1
+  }
+}

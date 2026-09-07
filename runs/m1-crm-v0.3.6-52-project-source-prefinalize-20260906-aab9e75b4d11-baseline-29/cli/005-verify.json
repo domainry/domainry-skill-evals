@@ -1,0 +1,60 @@
+{
+  "family": "verify",
+  "command": "/bin/zsh -lc '/private/tmp/domainry-m1-v52-project-source-prefinalize-baseline-29/codex-home/skills/domainry-builder-v1/bin/domainry-cli verify --json --project /private/tmp/domainry-m1-v52-project-source-prefinalize-baseline-29/project --address 127.0.0.1:19286'",
+  "exit_code": 1,
+  "output": {
+    "contract_version": "domainry-project-verify-v2",
+    "error": "verification failed: go_test(failed),go_vet(failed); inspect .domainry/builder/receipts/verification-failed.json",
+    "state": "failed",
+    "telemetry": {
+      "contract_version": "domainry-verify-telemetry-v1",
+      "elapsed_ms": 71388,
+      "cache": {
+        "signed_runtime_package": false,
+        "verification_receipt": false
+      },
+      "cache_misses": {
+        "verification_receipt": "verification receipt is missing"
+      },
+      "stages": [
+        {
+          "name": "prepare isolated initial Workspace authority",
+          "status": "done",
+          "elapsed_ms": 0,
+          "owner": "domainry-runtime"
+        },
+        {
+          "name": "validate reusable verification and signed Runtime package",
+          "status": "done",
+          "elapsed_ms": 0,
+          "owner": "domainry-runtime"
+        },
+        {
+          "name": "run structural checks and complete backend tests",
+          "status": "failed",
+          "elapsed_ms": 71388,
+          "owner": "domainry-builder"
+        }
+      ],
+      "first_failure": {
+        "name": "run structural checks and complete backend tests",
+        "status": "failed",
+        "elapsed_ms": 71388,
+        "owner": "domainry-builder"
+      }
+    }
+  },
+  "raw_output": "[domainry] verify: run structural checks and complete backend tests failed (1m11.388s)\n{\"contract_version\":\"domainry-project-verify-v2\",\"error\":\"verification failed: go_test(failed),go_vet(failed); inspect .domainry/builder/receipts/verification-failed.json\",\"state\":\"failed\",\"telemetry\":{\"contract_version\":\"domainry-verify-telemetry-v1\",\"elapsed_ms\":71388,\"cache\":{\"signed_runtime_package\":false,\"verification_receipt\":false},\"cache_misses\":{\"verification_receipt\":\"verification receipt is missing\"},\"stages\":[{\"name\":\"prepare isolated initial Workspace authority\",\"status\":\"done\",\"elapsed_ms\":0,\"owner\":\"domainry-runtime\"},{\"name\":\"validate reusable verification and signed Runtime package\",\"status\":\"done\",\"elapsed_ms\":0,\"owner\":\"domainry-runtime\"},{\"name\":\"run structural checks and complete backend tests\",\"status\":\"failed\",\"elapsed_ms\":71388,\"owner\":\"domainry-builder\"}],\"first_failure\":{\"name\":\"run structural checks and complete backend tests\",\"status\":\"failed\",\"elapsed_ms\":71388,\"owner\":\"domainry-builder\"}}}\nerror: verification failed: go_test(failed),go_vet(failed); inspect .domainry/builder/receipts/verification-failed.json\n",
+  "stdout": null,
+  "stderr": null,
+  "output_streams_status": "aggregated_only",
+  "event_item_id": "item_123",
+  "event_line": 235,
+  "observed_started_epoch": 1788684083.447059,
+  "observed_completed_epoch": 1788684154.808074,
+  "observed_started_event_line": 234,
+  "observed_completed_event_line": 235,
+  "duration_seconds": 71.361,
+  "timing_source": "agent-event-observations.jsonl",
+  "capture_file": "cli/005-verify.json"
+}

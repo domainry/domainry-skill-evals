@@ -1,0 +1,104 @@
+[
+  {
+    "stage": "authoring_contract",
+    "owner": "domainry-plane-authoring",
+    "note": "Role \"crm_acceptance_admin\" is materialized as a managed verification actor for mandatory in-app notifications, but it lacks exact executable route grant \"notification.inbox.list;all\" for GET /notification/inbox.",
+    "terminal_state": "baseline_first_scoring_failure",
+    "attribution_status": "attributed",
+    "diagnostic": {
+      "code": "compose.notification_role_missing_inbox_permission",
+      "message": "Role \"crm_acceptance_admin\" is materialized as a managed verification actor for mandatory in-app notifications, but it lacks exact executable route grant \"notification.inbox.list;all\" for GET /notification/inbox.",
+      "path": "backend/model/01-crm-identity-org.json#/modules/crm/features/crm_identity_org/roles/crm_acceptance_admin/permissions",
+      "file": "backend/model/01-crm-identity-org.json",
+      "json_pointer": "/modules/crm/features/crm_identity_org/roles/crm_acceptance_admin/permissions",
+      "line": 93,
+      "column": 13,
+      "constraint": "compose.notification.inbox_entry_grant",
+      "repair_hint": "grant_permission the value at the reported file/JSON Pointer and rerun model plan",
+      "owner": "domainry-plane-authoring",
+      "stage": "authoring_contract",
+      "ledger_item": "crm/resource/roles.crm_acceptance_admin",
+      "ledger_path": "backend/model/01-crm-identity-org.json",
+      "repair_facts": {
+        "artifact_path": ".domainry/builder/disposable/model-preflight-result.json",
+        "artifact_relative_to": "--project",
+        "data_scope": "all",
+        "grant": "notification.inbox.list;all",
+        "operation": "grant_permission",
+        "permission_key": "notification.inbox.list",
+        "related_path": "/notification_event_types",
+        "role_key": "crm_acceptance_admin",
+        "rule_id": "compose.notification.inbox_entry_grant"
+      }
+    },
+    "detail": {
+      "code": "compose.notification_role_missing_inbox_permission",
+      "message": "Role \"crm_acceptance_admin\" is materialized as a managed verification actor for mandatory in-app notifications, but it lacks exact executable route grant \"notification.inbox.list;all\" for GET /notification/inbox.",
+      "path": "backend/model/01-crm-identity-org.json#/modules/crm/features/crm_identity_org/roles/crm_acceptance_admin/permissions",
+      "file": "backend/model/01-crm-identity-org.json",
+      "json_pointer": "/modules/crm/features/crm_identity_org/roles/crm_acceptance_admin/permissions",
+      "line": 93,
+      "column": 13,
+      "constraint": "compose.notification.inbox_entry_grant",
+      "repair_hint": "grant_permission the value at the reported file/JSON Pointer and rerun model plan",
+      "owner": "domainry-plane-authoring",
+      "stage": "authoring_contract",
+      "ledger_item": "crm/resource/roles.crm_acceptance_admin",
+      "ledger_path": "backend/model/01-crm-identity-org.json",
+      "repair_facts": {
+        "artifact_path": ".domainry/builder/disposable/model-preflight-result.json",
+        "artifact_relative_to": "--project",
+        "data_scope": "all",
+        "grant": "notification.inbox.list;all",
+        "operation": "grant_permission",
+        "permission_key": "notification.inbox.list",
+        "related_path": "/notification_event_types",
+        "role_key": "crm_acceptance_admin",
+        "rule_id": "compose.notification.inbox_entry_grant"
+      }
+    }
+  },
+  {
+    "stage": "runtime_manifest",
+    "owner": "domainry-plane-compiler",
+    "note": "domain blueprint has unmapped source intent: $.actions[10].handler.identity_handler_delivery.initial_credential_output_field, $.actions[10].handler.identity_handler_delivery.operations[0], $.actions[10].handler.identity_handler_delivery.operations[1], $.actions[10].handler.identity_handler_delivery.profile_bindings[0].binding_key, $.actions[10].handler.identity_handler_delivery.profile_bindings[0].object_key",
+    "terminal_state": "baseline_first_scoring_failure",
+    "attribution_status": "attributed",
+    "diagnostic": {
+      "code": "ledger.runtime_manifest_invalid",
+      "message": "domain blueprint has unmapped source intent: $.actions[10].handler.identity_handler_delivery.initial_credential_output_field, $.actions[10].handler.identity_handler_delivery.operations[0], $.actions[10].handler.identity_handler_delivery.operations[1], $.actions[10].handler.identity_handler_delivery.profile_bindings[0].binding_key, $.actions[10].handler.identity_handler_delivery.profile_bindings[0].object_key",
+      "file": "backend/model/00-project.json",
+      "line": 1,
+      "column": 1,
+      "constraint": "ledger.runtime_manifest_invalid",
+      "repair_hint": "repair the reported constraint at the file/JSON Pointer and rerun model plan",
+      "owner": "domainry-plane-compiler",
+      "stage": "runtime_manifest",
+      "ledger_item": "project/project/project",
+      "ledger_path": "backend/model/00-project.json",
+      "repair_facts": {
+        "artifact_path": ".domainry/builder/disposable/model-preflight-result.json",
+        "artifact_relative_to": "--project",
+        "compile_before_publish": true
+      }
+    },
+    "detail": {
+      "code": "ledger.runtime_manifest_invalid",
+      "message": "domain blueprint has unmapped source intent: $.actions[10].handler.identity_handler_delivery.initial_credential_output_field, $.actions[10].handler.identity_handler_delivery.operations[0], $.actions[10].handler.identity_handler_delivery.operations[1], $.actions[10].handler.identity_handler_delivery.profile_bindings[0].binding_key, $.actions[10].handler.identity_handler_delivery.profile_bindings[0].object_key",
+      "file": "backend/model/00-project.json",
+      "line": 1,
+      "column": 1,
+      "constraint": "ledger.runtime_manifest_invalid",
+      "repair_hint": "repair the reported constraint at the file/JSON Pointer and rerun model plan",
+      "owner": "domainry-plane-compiler",
+      "stage": "runtime_manifest",
+      "ledger_item": "project/project/project",
+      "ledger_path": "backend/model/00-project.json",
+      "repair_facts": {
+        "artifact_path": ".domainry/builder/disposable/model-preflight-result.json",
+        "artifact_relative_to": "--project",
+        "compile_before_publish": true
+      }
+    }
+  }
+]

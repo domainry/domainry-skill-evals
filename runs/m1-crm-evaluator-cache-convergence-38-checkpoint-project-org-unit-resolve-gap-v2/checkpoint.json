@@ -1,0 +1,91 @@
+{
+  "contract_version": "domainry-eval-checkpoint-v1",
+  "source_run_id": "m1-crm-evaluator-cache-convergence-38",
+  "checkpoint_kind": "post_verify_project_organization_unit_resolve_gap_retry_after_rejected_convergence_39",
+  "measurement_class": "checkpoint_convergence_not_baseline",
+  "baseline_eligibility": false,
+  "archive": {
+    "path": "checkpoint-project.tar.gz",
+    "sha256": "ddb854750cff2f232b3d65e99f400b7ca704d9a4a422f217de4d945ece381111"
+  },
+  "archive_policy": {
+    "git_history_included": false,
+    "runtime_state_included": false,
+    "sqlite_included": false,
+    "lock_files_included": false,
+    "agent_sessions_included": false,
+    "appledouble_included": false
+  },
+  "retry_history": {
+    "rejected_run_id": "m1-crm-project-org-unit-resolve-convergence-39",
+    "agent_session_id": "01a07838-d872-74a3-bf24-9556c5140407",
+    "reason": "The retry correctly restored deliver_identity semantics but incorrectly treated the archived source form of provision_department as accepted even though generated context, generated bindings, Handler source, tests, and the checkpoint all prove the accepted Action is create-only. Its reviewed apply was terminated and its isolation must not be reused.",
+    "completed_scoring_cli": {
+      "model_capability": 1,
+      "model_plan": 1,
+      "apply_model_review_required": 1
+    },
+    "reviewed_apply_completed": false,
+    "stopped_project_reusable": false
+  },
+  "candidate": {
+    "candidate_id": "v0.3.16-6-m1-evolution-action-20260907+9b42936cb7ec",
+    "skill_tree_sha256": "9b42936cb7ecf332f61e607dcfb9dd5221abeea23bb5df805a895ebe3d20ac85",
+    "cli_binary_sha256": "1f8a551179fb635de07f16b6ef14c81572f11d70479b5d4c2c33ee88da1e0454"
+  },
+  "invalidating_error": {
+    "agent_session_id": "01a07819-09f0-7351-8a2e-0df792925a6f",
+    "agent_event_item_id": "item_105",
+    "event_line": 194,
+    "exit_code": 1,
+    "classification": "project_action_missing_generic_organization_unit_resolve_capability",
+    "owner": "project.business_model_and_handler",
+    "domainry_foundation_defect": false,
+    "diagnostic": "Managed Runtime verification failed in every BF at sales_person_profile.deliver_identity with HTTP 403 backend.identity.store_organization_projection_denied. The Action has an explicit department target but its generated descriptor has OrganizationUnitDelivery=nil, so Runtime correctly takes the default store projection branch. Widening the Role scope from org_child to all was independently disproved by an identical third verify failure."
+  },
+  "captured_progress": {
+    "stage": "model",
+    "last_materialized_delivery_id": "sha256:34b9a96a419db10d6ca99c4048aa70c4276eeb9ee33453c60fd1c870acd26026",
+    "last_finalization_receipt_sha256": "808ea7af1628166b8dff4e10e3193aebc380868a0b80c7b52c5f38cca7cb81a3",
+    "valid_repairs_retained": [
+      "business-flow actor setup refreshes the admin login after Identity authorization-revision mutations and retries authorization_stale once with the same idempotency key",
+      "project-owned provision_department remains the required typed generic OrganizationUnit create route and must not be replaced with a business department registry"
+    ],
+    "rejected_unmaterialized_proposal": "The archived backend/model currently contains an unmaterialized proposal that combines first-user Identity delivery into provision_department and changes deliver_identity to record_owner. The proposal reached evolution_review_required only; its reviewed apply was interrupted and must not be resumed or approved.",
+    "pending": [
+      "restore the original two-Action business design and add generic department resolution to deliver_identity",
+      "regenerate the exact typed capability and update only the affected Handler/test closure",
+      "repair remaining BF HTTP contracts against published Runtime schemas before the next managed verify",
+      "finalize, run the full tree, and pass initial plus restart managed Runtime evidence"
+    ],
+    "measurement_reuse": "none; only project source, model, and delivery-working-state files are retained, while Git, Agent sessions, managed Runtime state, SQLite, locks, and measured-run evidence are excluded"
+  },
+  "blocking_condition": {
+    "classification": "project_business_model_and_business_flow_contract_gaps",
+    "domainry_foundation_gap": false,
+    "owners": [
+      "project.business_model",
+      "project.action_handler",
+      "project.business_flow_tests"
+    ],
+    "details": [
+      "For an explicit non-store target, the published Runtime contract switches away from StoreOrganizationDelivery only when the Action declares handler.organization_unit_delivery resolve for the exact node type and the Handler invokes that generated resolver before TargetOrganization.Resolve.",
+      "The accepted provision_department contract is proven by backend/generated/context/sales_person_profile_provision_department.json and its existing Handler/tests: input is exactly code, name, sort_order; output is exactly organization_id; target_organization.source is delivered_organization_unit; handler contains only create organization_unit_delivery for department with parent_source workspace_company. login_id, display_name, acceptance_code, role_key, manager, identity_user_id, sales_person_profile_id, initial_credential, and identity_handler_delivery must all be removed from this Action before model plan.",
+      "Read-only contract audit also found that the current workflow helper omits the required payload wrapper and exact workflow run permission, the manual approval workflow run_as service would lose the sales initiator identity, approval_mode=any creates an open task while the helper filters pending, the scheduled workflow is not a valid manual run endpoint, BF08 uses the export-control key where the report source object key is required, and BF08 incorrectly reuses an initial-phase export audit/idempotency identity after download has advanced that audit to downloaded."
+    ],
+    "prohibited_repairs": [
+      "do not change Plane, Runtime, Identity, the installed Builder candidate, or evaluator code for this project-owned failure",
+      "do not widen sales_person_profile.deliver_identity from org_child to all; restore the accepted org_child scope",
+      "do not combine first-user delivery into provision_department or convert deliver_identity to record_owner",
+      "do not create a CRM department registry, substitute a store Organization, or increase store quota",
+      "do not use run_as service for the manual large-lead approval workflow when the initiating sales user must remain the trusted requester and notification recipient",
+      "do not restore Git history, Agent sessions, managed Runtime databases, SQLite, locks, or stale measured-run evidence"
+    ]
+  },
+  "resume_boundary": {
+    "stage": "model",
+    "next_node": "Restore this project from the validated convergence-38 archive; do not use convergence-39 isolation and do not approve either archived evolution. Before model plan, replace sales_person_profile.provision_department in backend/model/10-organization-identity.json with the exact accepted create-only contract already proven by backend/generated/context/sales_person_profile_provision_department.json and its Handler/tests: kind=object_operation; input exactly code:text!, name:text!, sort_order:integer!; output exactly organization_id:text!; target_organization.source=delivered_organization_unit; handler.organization_unit_delivery operations=[create], node_types=[department], parent_source=workspace_company; no Identity inputs, Identity outputs, manager, role_key, identity_handler_delivery, or first-user delivery. Independently restore deliver_identity as object_operation with explicit target_organization_id, restore its sales_director grant to org_child, and add deliver_identity.handler.organization_unit_delivery with operations=[resolve], node_types=[department], no parent_source. Assert both Action shapes against generated context before invoking model plan. Run a fresh model plan/apply review. Consume the newly generated exact symbols and implement DeliverIdentity in this order: OrganizationUnits.Resolve(ctx, typed department request), verify its non-empty ID, TargetOrganization.Resolve(), verify the IDs match, then Identity.CreateWithSalesPersonProfile; retain the returned User.OrganizationID equality check. Preserve the valid authorization-stale login refresh. Before the next managed verify, use only published packet/Runtime contracts to fix the proven project BF defects: wrap workflow inputs under payload with record_id flat inside it; declare idempotency_keys=[record_id] for the manual large-lead workflow; add the exact workflow.large_lead_conversion.run permission to sales_rep; remove that manual workflow's service run_as and grant its node Actions to the human roles that execute them; query approval_mode=any tasks as open; do not invoke a scheduled workflow through the manual run route; use a real Scheduler-owned invocation against a genuinely stale fixture, or another published route that honestly proves the scheduler contract without granting a system-only Action to a human; remove scheduled trigger object_key if the Handler itself performs the global bounded scan; change lead_detail export prepare source object to lead; and on restart reuse and inspect the durable prior export job rather than re-preparing an audit already advanced to downloaded. Then run focused tests, project check, BF compile, apply finalize, full tree, and one managed verify through initial plus restart evidence.",
+    "prior_delivery_id": "sha256:34b9a96a419db10d6ca99c4048aa70c4276eeb9ee33453c60fd1c870acd26026",
+    "rule": "Do not redo accepted requirements or unrelated model/Handler work. Generated context plus the existing project Handler/tests are authoritative for the accepted create-only provision_department shape; the archived model source, TODO, and evolution_review_required receipts contain rejected proposals and are not authority. The existing identity 403 is project-owned, while the independently confirmed workflow HTTP Idempotency-Key propagation defect is being repaired in a separate domainry-runtime task and must not be worked around in foundation code here. Build project corrections from generated types and published Runtime APIs; do not invent payloads, permissions, target semantics, clock seams, scheduler routes, or human grants to system-only Actions."
+  }
+}

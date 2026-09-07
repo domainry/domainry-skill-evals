@@ -1,0 +1,32 @@
+{
+  "benchmark": "m1-crm",
+  "candidate_id": "v0.3.16-3-m1-audit-identity-20260906+554bd6a0a04e",
+  "skill_version": "v0.3.16-3-m1-audit-identity-20260906",
+  "model": "gpt-5.6-sol",
+  "run_id": "m1-crm-v0.3.16-3-audit-identity-convergence-34",
+  "run_kind": "convergence",
+  "parent_run_id": "m1-crm-v0.3.16-2-hermetic-go-baseline-32",
+  "checkpoint": {
+    "contract_version": "domainry-eval-checkpoint-v1",
+    "source_run_id": "m1-crm-v0.3.16-2-hermetic-go-baseline-32",
+    "checkpoint_kind": "post_reapply_evolution_audit_identity_probe_error",
+    "measurement_class": "checkpoint_convergence_not_baseline",
+    "baseline_eligibility": false,
+    "manifest_sha256": "f3c937c38d99950e81bac213c1de5d36018e427cb97af5a0d71d955123ea3125",
+    "archive_sha256": "b32909d18c690b29d4e6758e9f7058776050b2e115ff630c42ff2d3c9ffe4ab9"
+  },
+  "terminal_state": "delivery_incomplete",
+  "measurement_complete": false,
+  "environment_valid": true,
+  "agent_declared_done": false,
+  "agent_result_state": null,
+  "human_interventions": 0,
+  "started_epoch": 1788710652.8925471,
+  "agent_ended_epoch": 1788712417.577615,
+  "ended_epoch": 1788712417.849617,
+  "project_path": "/private/tmp/domainry-m1-v0316-3-audit-convergence-34/project",
+  "isolation_root": "/private/tmp/domainry-m1-v0316-3-audit-convergence-34",
+  "codex_home": "/private/tmp/domainry-m1-v0316-3-audit-convergence-34/codex-home",
+  "database_path": "/private/tmp/domainry-m1-v0316-3-audit-convergence-34/runtime/cohort.sqlite",
+  "agent_session_id": "01a07776-958c-7ad1-abee-933790c10a55"
+}

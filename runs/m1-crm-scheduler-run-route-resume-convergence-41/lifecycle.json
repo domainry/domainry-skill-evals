@@ -1,0 +1,75 @@
+{
+  "contract_version": "domainry-eval-run-lifecycle-v1",
+  "run_id": "m1-crm-scheduler-run-route-resume-convergence-41",
+  "run_kind": "convergence",
+  "parent_run_id": "m1-crm-project-org-unit-resolve-convergence-40",
+  "state": "agent_running",
+  "measurement_complete": false,
+  "environment_valid": true,
+  "measurement_boundary": "running",
+  "started_epoch": 1788738955.4234738,
+  "ended_epoch": null,
+  "budgets": {
+    "wall_clock_seconds": 3600.0,
+    "total_tokens": 10000000,
+    "cli_invocations": 40,
+    "cli_retries": 20
+  },
+  "usage": {},
+  "termination": null,
+  "first_failure": null,
+  "scoring_first_failure": null,
+  "diagnostic_first_failure": null,
+  "command_first_failure": null,
+  "first_scoring_failure": null,
+  "diagnostic_cli": {
+    "invocations_total": 0,
+    "completed_total": 0,
+    "failed_total": 0,
+    "retries_total": 0,
+    "latest": null,
+    "first_failure": null
+  },
+  "checkpoint": {
+    "contract_version": "domainry-eval-checkpoint-v1",
+    "source_run_id": "m1-crm-project-org-unit-resolve-convergence-40",
+    "checkpoint_kind": "post_apply_foundation_scheduler_published_run_route_gap_v4",
+    "measurement_class": "checkpoint_convergence_not_baseline",
+    "baseline_eligibility": false,
+    "manifest_sha256": "2031b14e838678080853bcf02725bfd2c21f9f3dbd7201622e451d9371e71d9e",
+    "archive_sha256": "6c8ce635d7fed2544f6755385ae227d74e9be2c00514c716b092768b148ec67a",
+    "resume_boundary": {
+      "stage": "apply",
+      "next_node": "Restore this exact convergence-40 project checkpoint only after the Scheduler foundation gap has a published, authorized black-box definition-run route. Preserve the candidate-7 accepted model, generated bindings, typed OrganizationUnits.Resolve then TargetOrganization.Resolve and Identity delivery Handler closure, trusted workflow.initiating_user_id requester attribution under crm_workflow_service run_as, payload-wrapped manual Workflow request, open approval-task query, report object key lead, and exact durable BF08 caller-operation replay. Do not redo those repairs or treat item_30/item_49 as product defects. Read and verify the new candidate's content-addressed implementation/verification packet before editing BF06; consume only its exact Scheduler-owned method, path, headers, body, response, permission, and scope. Replace the deliberate BF06 t.Fatal with a real Scheduler invocation using a stable Idempotency-Key and operation reason, a genuinely stale fixture, weekday semantics, notification evidence, denial/scope evidence, deduplication, and restart persistence. Then rerun focused Action tests, project check, business-flow compile, reviewed apply finalize, full backend tree, and exactly one managed verify over initial plus restart on one database/binary/delivery cohort. Require verified_and_stopped and checker eligibility before claiming completion.",
+      "rule": "The archived project and candidate-7 packet are authority for retained project work, but they are not authority for a Scheduler route that the packet did not publish. The Scheduler gap is foundation-owned and must be resolved outside this project checkpoint. On resume, never guess a route, widen human permissions, use the manual Workflow endpoint for a scheduled definition, modify any foundation repository, or weaken BF06/BF08/restart evidence. The source run ended only because observed provider tokens exceeded its convergence budget; its two command errors were corrected auxiliary-shell mistakes, all five Domainry CLI invocations completed successfully, and no checker/managed verify result exists.",
+      "prior_delivery_id": "sha256:1870f602d78cb8c104373fc1627b27213cdf3990b2bc8e24b846614c919f9919"
+    },
+    "prohibited_repairs": [
+      "do not invent or guess an unpublished /scheduler route",
+      "do not invoke stale_lead_followup through the manual Workflow route",
+      "do not grant lead.scan_stale_contacted or any internal scheduled-workflow Action to a human Role",
+      "do not alter Plane, Builder, Runtime, Scheduler, SDKs, evaluator code, or other foundation code from this project checkpoint",
+      "do not discard the accepted candidate-7 project model, generated types, Handler repairs, Workflow repairs, Report replay repairs, or successful focused checks",
+      "do not finalize or claim verify completion until the Scheduler-owned black-box route is present and BF06 exercises it",
+      "do not restore Git history, managed Runtime/cache state, databases, SQLite, Agent sessions, locks, temporary files, or measured-run evidence"
+    ]
+  },
+  "checkpoint_restore": {
+    "archive_sha256": "6c8ce635d7fed2544f6755385ae227d74e9be2c00514c716b092768b148ec67a",
+    "restored_file_count": 1299,
+    "ignored_appledouble_member_count": 0,
+    "ignored_git_member_count": 0,
+    "ignored_runtime_state_member_count": 0,
+    "ignored_sqlite_member_count": 0,
+    "ignored_agent_session_member_count": 0,
+    "ignored_lock_member_count": 0,
+    "git_history_restored": false,
+    "runtime_state_restored": false,
+    "sqlite_restored": false,
+    "agent_session_restored": false,
+    "locks_restored": false
+  },
+  "freeze_manifest_sha256": "02206c62295b95cfe6cac9c1a4de728b40da42d988faf83aa417d3a25d00b02b",
+  "ephemeral_auth_staged": true,
+  "auth_cleanup_status": "pending"
+}

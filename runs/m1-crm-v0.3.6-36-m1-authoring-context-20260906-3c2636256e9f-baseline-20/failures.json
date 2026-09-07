@@ -1,0 +1,13 @@
+[
+  {
+    "stage": "driver",
+    "owner": null,
+    "note": "evaluator terminal state: budget_exhausted_tokens",
+    "terminal_state": "budget_exhausted_tokens",
+    "detail": {
+      "observed": 5673474,
+      "limit": 5000000
+    },
+    "attribution_status": "pending"
+  }
+]

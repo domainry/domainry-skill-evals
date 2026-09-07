@@ -1,0 +1,25 @@
+{
+  "family": "apply_model",
+  "command": "/bin/zsh -lc '/private/tmp/domainry-m1-v43-action-field-source-baseline-25/codex-home/skills/domainry-builder-v1/bin/domainry-cli apply model --json --project /private/tmp/domainry-m1-v43-action-field-source-baseline-25/project --go-module-path example.com/domainry-m1-crm/backend --service http://127.0.0.1:8283'",
+  "exit_code": 1,
+  "output": {
+    "contract_version": "domainry-model-apply-v3",
+    "evolution_audit_path": ".domainry/builder/audits/project-delivery-f119a6707239052da66b4415e5218019af041e63c9e870a056a6f8d7b2efbacd.json",
+    "evolution_audit_sha256": "f119a6707239052da66b4415e5218019af041e63c9e870a056a6f8d7b2efbacd",
+    "receipt": ".domainry/builder/model-apply.json",
+    "state": "evolution_review_required"
+  },
+  "raw_output": "[domainry] apply model: load and preflight model...\n[domainry] apply model: load and preflight model done (1.613s)\n[domainry] apply model: synchronize Blueprint Ledger...\n[domainry] apply model: synchronize Blueprint Ledger done (216ms)\n[domainry] apply model: validate compiled Blueprint...\n[domainry] apply model: validate compiled Blueprint done (3.475s)\n[domainry] apply model: publish immutable project delivery...\n[domainry] apply model: publish immutable project delivery done (5.236s)\n[domainry] apply model: fetch signed delivery artifacts...\n[domainry] apply model: fetch signed delivery artifacts done (465ms)\n[domainry] apply model: materialize backend and resolve Go dependencies...\n[domainry] apply model: materialize backend and resolve Go dependencies done (31ms)\n{\"contract_version\":\"domainry-model-apply-v3\",\"evolution_audit_path\":\".domainry/builder/audits/project-delivery-f119a6707239052da66b4415e5218019af041e63c9e870a056a6f8d7b2efbacd.json\",\"evolution_audit_sha256\":\"f119a6707239052da66b4415e5218019af041e63c9e870a056a6f8d7b2efbacd\",\"receipt\":\".domainry/builder/model-apply.json\",\"state\":\"evolution_review_required\"}\nerror: existing Builder project requires reviewed evolution; inspect .domainry/builder/audits/project-delivery-f119a6707239052da66b4415e5218019af041e63c9e870a056a6f8d7b2efbacd.json and rerun apply model with --evolution-audit-sha256 f119a6707239052da66b4415e5218019af041e63c9e870a056a6f8d7b2efbacd --evolution-reason <reason>\n",
+  "stdout": null,
+  "stderr": null,
+  "output_streams_status": "aggregated_only",
+  "event_item_id": "item_87",
+  "event_line": 167,
+  "observed_started_epoch": 1788662022.278783,
+  "observed_completed_epoch": 1788662033.539101,
+  "observed_started_event_line": 166,
+  "observed_completed_event_line": 167,
+  "duration_seconds": 11.26,
+  "timing_source": "agent-event-observations.jsonl",
+  "capture_file": "cli/005-apply_model.json"
+}

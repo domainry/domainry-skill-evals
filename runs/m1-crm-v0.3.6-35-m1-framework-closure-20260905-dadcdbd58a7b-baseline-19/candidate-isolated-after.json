@@ -1,0 +1,19 @@
+{
+  "candidate_id": "v0.3.6-35-m1-framework-closure-20260905+dadcdbd58a7b",
+  "skill_name": "domainry-builder-v1",
+  "skill_root": "/private/tmp/domainry-m1-v35-framework-closure-baseline-19/codex-home/skills/domainry-builder-v1",
+  "cli": "/private/tmp/domainry-m1-v35-framework-closure-baseline-19/codex-home/skills/domainry-builder-v1/bin/domainry-cli",
+  "skill_version": "v0.3.6-35-m1-framework-closure-20260905",
+  "skill_identity_sha256": "ebd64d96025aeabc3ec803e2cef1d6330e670533269edbfc0dda8172909aaceb",
+  "package_metadata_sha256": "7e1212a70c2c19561555b6bd69652b6b5ce410521ec16d1bd9a9e3337b6b5325",
+  "skill_tree_sha256": "dadcdbd58a7b72a4435a2bcea942c87ee115f9d508bce191de56c7c745fd90bd",
+  "cli_binary_sha256": "650152d99695609aaafab5411aff298ccda8abe04d17e132ef1653628d32a656",
+  "runtime_api_contract_version": "runtime-domain-api-v1",
+  "runtime_api_contract_hash": "4fe655cbfd4fa0bc0b0c04c89b86926fc6aceb059c9fccf5b09eec9b459330f7",
+  "apply_target_flag": "--service",
+  "apply_target_value": "http://127.0.0.1:8283",
+  "apply_target_args": [
+    "--service",
+    "http://127.0.0.1:8283"
+  ]
+}

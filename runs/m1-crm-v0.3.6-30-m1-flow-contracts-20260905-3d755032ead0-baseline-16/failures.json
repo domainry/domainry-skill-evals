@@ -1,0 +1,325 @@
+[
+  {
+    "stage": "authoring_contract",
+    "owner": "domainry-plane-authoring",
+    "note": "backend.report.object_sql_parse_failed",
+    "terminal_state": "baseline_first_scoring_failure",
+    "attribution_status": "attributed",
+    "diagnostic": {
+      "code": "backend.report.object_sql_parse_failed",
+      "message": "backend.report.object_sql_parse_failed",
+      "path": "backend/reports/lead_detail_export.sql",
+      "file": "backend/reports/lead_detail_export.sql",
+      "line": 8,
+      "column": 10,
+      "constraint": "report.runtime_contract",
+      "actual": "lead",
+      "allowed_values": [
+        "`lead`"
+      ],
+      "repair_hint": "quote model-derived SQL identifiers with backticks; replace FROM/JOIN lead with FROM/JOIN `lead` and rerun model plan",
+      "owner": "domainry-plane-authoring",
+      "stage": "authoring_contract",
+      "ledger_item": "crm/resource/reports.lead_detail_export",
+      "ledger_path": "backend/model/50-reporting.json",
+      "repair_facts": {
+        "actual": "lead",
+        "allowed_values": [
+          "`lead`"
+        ],
+        "artifact_path": ".domainry/builder/disposable/model-preflight-result.json",
+        "artifact_relative_to": "--project",
+        "operation": "replace",
+        "parameters": {
+          "field": "object_sql_v1.sql",
+          "reason": "syntax error at position 286 near 'lead'"
+        },
+        "repair_hint": "quote model-derived SQL identifiers with backticks; replace FROM/JOIN lead with FROM/JOIN `lead` and rerun model plan",
+        "rule_id": "report.runtime_contract",
+        "source_file": "backend/reports/lead_detail_export.sql",
+        "source_model_file": "backend/model/50-reporting.json",
+        "source_model_json_pointer": "/modules/crm/features/crm_funnel_reporting/reports/lead_detail_export/object_sql_v1/sql"
+      }
+    },
+    "detail": {
+      "code": "backend.report.object_sql_parse_failed",
+      "message": "backend.report.object_sql_parse_failed",
+      "path": "backend/reports/lead_detail_export.sql",
+      "file": "backend/reports/lead_detail_export.sql",
+      "line": 8,
+      "column": 10,
+      "constraint": "report.runtime_contract",
+      "actual": "lead",
+      "allowed_values": [
+        "`lead`"
+      ],
+      "repair_hint": "quote model-derived SQL identifiers with backticks; replace FROM/JOIN lead with FROM/JOIN `lead` and rerun model plan",
+      "owner": "domainry-plane-authoring",
+      "stage": "authoring_contract",
+      "ledger_item": "crm/resource/reports.lead_detail_export",
+      "ledger_path": "backend/model/50-reporting.json",
+      "repair_facts": {
+        "actual": "lead",
+        "allowed_values": [
+          "`lead`"
+        ],
+        "artifact_path": ".domainry/builder/disposable/model-preflight-result.json",
+        "artifact_relative_to": "--project",
+        "operation": "replace",
+        "parameters": {
+          "field": "object_sql_v1.sql",
+          "reason": "syntax error at position 286 near 'lead'"
+        },
+        "repair_hint": "quote model-derived SQL identifiers with backticks; replace FROM/JOIN lead with FROM/JOIN `lead` and rerun model plan",
+        "rule_id": "report.runtime_contract",
+        "source_file": "backend/reports/lead_detail_export.sql",
+        "source_model_file": "backend/model/50-reporting.json",
+        "source_model_json_pointer": "/modules/crm/features/crm_funnel_reporting/reports/lead_detail_export/object_sql_v1/sql"
+      }
+    }
+  },
+  {
+    "stage": "authoring_contract",
+    "owner": "domainry-plane-authoring",
+    "note": "backend.report.object_sql_parse_failed",
+    "terminal_state": "baseline_first_scoring_failure",
+    "attribution_status": "attributed",
+    "diagnostic": {
+      "code": "backend.report.object_sql_parse_failed",
+      "message": "backend.report.object_sql_parse_failed",
+      "path": "backend/reports/lead_funnel.sql",
+      "file": "backend/reports/lead_funnel.sql",
+      "line": 4,
+      "column": 10,
+      "constraint": "report.runtime_contract",
+      "actual": "lead",
+      "allowed_values": [
+        "`lead`"
+      ],
+      "repair_hint": "quote model-derived SQL identifiers with backticks; replace FROM/JOIN lead with FROM/JOIN `lead` and rerun model plan",
+      "owner": "domainry-plane-authoring",
+      "stage": "authoring_contract",
+      "ledger_item": "crm/resource/reports.lead_funnel",
+      "ledger_path": "backend/model/50-reporting.json",
+      "repair_facts": {
+        "actual": "lead",
+        "allowed_values": [
+          "`lead`"
+        ],
+        "artifact_path": ".domainry/builder/disposable/model-preflight-result.json",
+        "artifact_relative_to": "--project",
+        "operation": "replace",
+        "parameters": {
+          "field": "object_sql_v1.sql",
+          "reason": "syntax error at position 126 near 'lead'"
+        },
+        "repair_hint": "quote model-derived SQL identifiers with backticks; replace FROM/JOIN lead with FROM/JOIN `lead` and rerun model plan",
+        "rule_id": "report.runtime_contract",
+        "source_file": "backend/reports/lead_funnel.sql",
+        "source_model_file": "backend/model/50-reporting.json",
+        "source_model_json_pointer": "/modules/crm/features/crm_funnel_reporting/reports/lead_funnel/object_sql_v1/sql"
+      }
+    },
+    "detail": {
+      "code": "backend.report.object_sql_parse_failed",
+      "message": "backend.report.object_sql_parse_failed",
+      "path": "backend/reports/lead_funnel.sql",
+      "file": "backend/reports/lead_funnel.sql",
+      "line": 4,
+      "column": 10,
+      "constraint": "report.runtime_contract",
+      "actual": "lead",
+      "allowed_values": [
+        "`lead`"
+      ],
+      "repair_hint": "quote model-derived SQL identifiers with backticks; replace FROM/JOIN lead with FROM/JOIN `lead` and rerun model plan",
+      "owner": "domainry-plane-authoring",
+      "stage": "authoring_contract",
+      "ledger_item": "crm/resource/reports.lead_funnel",
+      "ledger_path": "backend/model/50-reporting.json",
+      "repair_facts": {
+        "actual": "lead",
+        "allowed_values": [
+          "`lead`"
+        ],
+        "artifact_path": ".domainry/builder/disposable/model-preflight-result.json",
+        "artifact_relative_to": "--project",
+        "operation": "replace",
+        "parameters": {
+          "field": "object_sql_v1.sql",
+          "reason": "syntax error at position 126 near 'lead'"
+        },
+        "repair_hint": "quote model-derived SQL identifiers with backticks; replace FROM/JOIN lead with FROM/JOIN `lead` and rerun model plan",
+        "rule_id": "report.runtime_contract",
+        "source_file": "backend/reports/lead_funnel.sql",
+        "source_model_file": "backend/model/50-reporting.json",
+        "source_model_json_pointer": "/modules/crm/features/crm_funnel_reporting/reports/lead_funnel/object_sql_v1/sql"
+      }
+    }
+  },
+  {
+    "stage": "capability_assembly",
+    "owner": "report",
+    "note": "backend.report.object_sql_parse_failed at object_sql_v1.sql",
+    "terminal_state": "baseline_first_scoring_failure",
+    "attribution_status": "attributed",
+    "diagnostic": {
+      "code": "report.definition.object_sql_invalid",
+      "message": "backend.report.object_sql_parse_failed at object_sql_v1.sql",
+      "path": "backend/reports/lead_detail_export.sql",
+      "file": "backend/reports/lead_detail_export.sql",
+      "line": 8,
+      "column": 10,
+      "constraint": "report.definition.object_sql_invalid",
+      "repair_hint": "repair the reported constraint at the file/JSON Pointer and rerun model plan",
+      "owner": "report",
+      "stage": "capability_assembly",
+      "repair_facts": {
+        "artifact_path": ".domainry/builder/disposable/model-preflight-result.json",
+        "artifact_relative_to": "--project",
+        "candidate_item": "crm/resource/reports.lead_detail_export",
+        "candidate_json_pointer": "/emits/0",
+        "cause_code": "backend.report.object_sql_parse_failed",
+        "cause_path": "object_sql_v1.sql",
+        "owner_field_path": "$.candidate.value.object_sql_v1.sql",
+        "reason": "syntax error at position 286 near 'lead'",
+        "severity": "error",
+        "source_file": "backend/reports/lead_detail_export.sql",
+        "source_json_pointer": "/modules/crm/features/crm_funnel_reporting/reports/lead_detail_export/object_sql_v1/sql",
+        "source_model_file": "backend/model/50-reporting.json",
+        "source_model_json_pointer": "/modules/crm/features/crm_funnel_reporting/reports/lead_detail_export/object_sql_v1/sql"
+      }
+    },
+    "detail": {
+      "code": "report.definition.object_sql_invalid",
+      "message": "backend.report.object_sql_parse_failed at object_sql_v1.sql",
+      "path": "backend/reports/lead_detail_export.sql",
+      "file": "backend/reports/lead_detail_export.sql",
+      "line": 8,
+      "column": 10,
+      "constraint": "report.definition.object_sql_invalid",
+      "repair_hint": "repair the reported constraint at the file/JSON Pointer and rerun model plan",
+      "owner": "report",
+      "stage": "capability_assembly",
+      "repair_facts": {
+        "artifact_path": ".domainry/builder/disposable/model-preflight-result.json",
+        "artifact_relative_to": "--project",
+        "candidate_item": "crm/resource/reports.lead_detail_export",
+        "candidate_json_pointer": "/emits/0",
+        "cause_code": "backend.report.object_sql_parse_failed",
+        "cause_path": "object_sql_v1.sql",
+        "owner_field_path": "$.candidate.value.object_sql_v1.sql",
+        "reason": "syntax error at position 286 near 'lead'",
+        "severity": "error",
+        "source_file": "backend/reports/lead_detail_export.sql",
+        "source_json_pointer": "/modules/crm/features/crm_funnel_reporting/reports/lead_detail_export/object_sql_v1/sql",
+        "source_model_file": "backend/model/50-reporting.json",
+        "source_model_json_pointer": "/modules/crm/features/crm_funnel_reporting/reports/lead_detail_export/object_sql_v1/sql"
+      }
+    }
+  },
+  {
+    "stage": "capability_assembly",
+    "owner": "report",
+    "note": "backend.report.object_sql_parse_failed at object_sql_v1.sql",
+    "terminal_state": "baseline_first_scoring_failure",
+    "attribution_status": "attributed",
+    "diagnostic": {
+      "code": "report.definition.object_sql_invalid",
+      "message": "backend.report.object_sql_parse_failed at object_sql_v1.sql",
+      "path": "backend/reports/lead_funnel.sql",
+      "file": "backend/reports/lead_funnel.sql",
+      "line": 4,
+      "column": 10,
+      "constraint": "report.definition.object_sql_invalid",
+      "repair_hint": "repair the reported constraint at the file/JSON Pointer and rerun model plan",
+      "owner": "report",
+      "stage": "capability_assembly",
+      "repair_facts": {
+        "artifact_path": ".domainry/builder/disposable/model-preflight-result.json",
+        "artifact_relative_to": "--project",
+        "candidate_item": "crm/resource/reports.lead_funnel",
+        "candidate_json_pointer": "/emits/0",
+        "cause_code": "backend.report.object_sql_parse_failed",
+        "cause_path": "object_sql_v1.sql",
+        "owner_field_path": "$.candidate.value.object_sql_v1.sql",
+        "reason": "syntax error at position 126 near 'lead'",
+        "severity": "error",
+        "source_file": "backend/reports/lead_funnel.sql",
+        "source_json_pointer": "/modules/crm/features/crm_funnel_reporting/reports/lead_funnel/object_sql_v1/sql",
+        "source_model_file": "backend/model/50-reporting.json",
+        "source_model_json_pointer": "/modules/crm/features/crm_funnel_reporting/reports/lead_funnel/object_sql_v1/sql"
+      }
+    },
+    "detail": {
+      "code": "report.definition.object_sql_invalid",
+      "message": "backend.report.object_sql_parse_failed at object_sql_v1.sql",
+      "path": "backend/reports/lead_funnel.sql",
+      "file": "backend/reports/lead_funnel.sql",
+      "line": 4,
+      "column": 10,
+      "constraint": "report.definition.object_sql_invalid",
+      "repair_hint": "repair the reported constraint at the file/JSON Pointer and rerun model plan",
+      "owner": "report",
+      "stage": "capability_assembly",
+      "repair_facts": {
+        "artifact_path": ".domainry/builder/disposable/model-preflight-result.json",
+        "artifact_relative_to": "--project",
+        "candidate_item": "crm/resource/reports.lead_funnel",
+        "candidate_json_pointer": "/emits/0",
+        "cause_code": "backend.report.object_sql_parse_failed",
+        "cause_path": "object_sql_v1.sql",
+        "owner_field_path": "$.candidate.value.object_sql_v1.sql",
+        "reason": "syntax error at position 126 near 'lead'",
+        "severity": "error",
+        "source_file": "backend/reports/lead_funnel.sql",
+        "source_json_pointer": "/modules/crm/features/crm_funnel_reporting/reports/lead_funnel/object_sql_v1/sql",
+        "source_model_file": "backend/model/50-reporting.json",
+        "source_model_json_pointer": "/modules/crm/features/crm_funnel_reporting/reports/lead_funnel/object_sql_v1/sql"
+      }
+    }
+  },
+  {
+    "stage": "runtime_manifest",
+    "owner": "domainry-plane-compiler",
+    "note": "compile report definitions from project JSON metadata: report \"lead_detail_export\" object_sql_v1: backend.report.object_sql_parse_failed at object_sql_v1.sql",
+    "terminal_state": "baseline_first_scoring_failure",
+    "attribution_status": "attributed",
+    "diagnostic": {
+      "code": "ledger.runtime_manifest_invalid",
+      "message": "compile report definitions from project JSON metadata: report \"lead_detail_export\" object_sql_v1: backend.report.object_sql_parse_failed at object_sql_v1.sql",
+      "file": "backend/model/00-project.json",
+      "line": 1,
+      "column": 1,
+      "constraint": "ledger.runtime_manifest_invalid",
+      "repair_hint": "repair the reported constraint at the file/JSON Pointer and rerun model plan",
+      "owner": "domainry-plane-compiler",
+      "stage": "runtime_manifest",
+      "ledger_item": "project/project/project",
+      "ledger_path": "backend/model/00-project.json",
+      "repair_facts": {
+        "artifact_path": ".domainry/builder/disposable/model-preflight-result.json",
+        "artifact_relative_to": "--project",
+        "compile_before_publish": true
+      }
+    },
+    "detail": {
+      "code": "ledger.runtime_manifest_invalid",
+      "message": "compile report definitions from project JSON metadata: report \"lead_detail_export\" object_sql_v1: backend.report.object_sql_parse_failed at object_sql_v1.sql",
+      "file": "backend/model/00-project.json",
+      "line": 1,
+      "column": 1,
+      "constraint": "ledger.runtime_manifest_invalid",
+      "repair_hint": "repair the reported constraint at the file/JSON Pointer and rerun model plan",
+      "owner": "domainry-plane-compiler",
+      "stage": "runtime_manifest",
+      "ledger_item": "project/project/project",
+      "ledger_path": "backend/model/00-project.json",
+      "repair_facts": {
+        "artifact_path": ".domainry/builder/disposable/model-preflight-result.json",
+        "artifact_relative_to": "--project",
+        "compile_before_publish": true
+      }
+    }
+  }
+]

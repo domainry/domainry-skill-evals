@@ -1,0 +1,19 @@
+[
+  {
+    "stage": "apply",
+    "owner": "agent",
+    "note": "Agent exited before delivery prerequisites completed",
+    "terminal_state": "delivery_incomplete",
+    "detail": {
+      "agent_result_state": null,
+      "latest_scoring_family": "apply_model",
+      "missing_prerequisites": [
+        "agent_result:missing",
+        "apply_model:unexpected_success_state",
+        "verify:failed",
+        "flow_evidence:missing_invalid_or_unparseable"
+      ]
+    },
+    "attribution_status": "attributed"
+  }
+]

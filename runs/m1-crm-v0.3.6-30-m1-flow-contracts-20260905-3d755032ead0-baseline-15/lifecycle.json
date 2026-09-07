@@ -1,0 +1,57 @@
+{
+  "contract_version": "domainry-eval-run-lifecycle-v1",
+  "run_id": "m1-crm-v0.3.6-30-m1-flow-contracts-20260905-3d755032ead0-baseline-15",
+  "run_kind": "baseline",
+  "parent_run_id": null,
+  "state": "environment_invalid_service_drift",
+  "measurement_complete": false,
+  "environment_valid": false,
+  "measurement_boundary": "interrupted_or_invalid",
+  "started_epoch": 1788609073.7633731,
+  "ended_epoch": 1788609286.24596,
+  "budgets": {
+    "wall_clock_seconds": 3600.0,
+    "total_tokens": 5000000,
+    "cli_invocations": 40,
+    "cli_retries": 0
+  },
+  "usage": {
+    "wall_clock_seconds": 212.483,
+    "total_tokens": 159296,
+    "cli_invocations_started": 0,
+    "cli_invocations_captured": 0,
+    "cli_retries_started": 0
+  },
+  "termination": {
+    "reason": "Application Delivery service became unavailable or identity incomplete"
+  },
+  "freeze_manifest_sha256": "a91616d3d17a550b3d10812bb7301d30999482ef2c1e41c5a5a634a6c8d732bf",
+  "ephemeral_auth_staged": true,
+  "auth_cleanup_status": "removed",
+  "first_scoring_failure": null,
+  "agent_result_state": "not_done",
+  "agent_exit_code": 0,
+  "checker_exit_code": null,
+  "checker_gate": {
+    "ready": false,
+    "reason": "agent_declared_not_done",
+    "missing": [
+      "agent_result:not_done",
+      "model_plan:missing",
+      "apply_model:missing",
+      "apply_finalize:missing",
+      "verify:missing",
+      "verify_artifact:missing_or_unparseable",
+      "flow_evidence:missing_invalid_or_unparseable"
+    ]
+  },
+  "agent_ended_epoch": 1788609285.999091,
+  "agent_session_id": "01a07168-9b53-7102-8255-86cc61ec7617",
+  "business_flow_evidence_source": "missing",
+  "business_flow_evidence_contract_valid": null,
+  "business_flow_evidence_sha256": null,
+  "business_flow_evidence_error": null,
+  "service_identity_before_sha256": "68cedf0fe324968046745c419e2df3185ba4d2c6feaed7d54106f560ba2bfa62",
+  "service_identity_after_sha256": "45ac580a44f692d14f8477f8b21100c4dbf19577aded7228df1ec90dfc89bf42",
+  "scorer_exit_code": 0
+}

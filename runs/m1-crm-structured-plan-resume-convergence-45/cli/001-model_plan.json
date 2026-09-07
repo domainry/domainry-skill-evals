@@ -1,0 +1,52 @@
+{
+  "family": "model_plan",
+  "command": "/bin/zsh -lc '/private/tmp/domainry-m1-structured-plan-resume-convergence-45/codex-home/skills/domainry-builder-v1/bin/domainry-cli model plan --json --project /private/tmp/domainry-m1-structured-plan-resume-convergence-45/project'",
+  "exit_code": 0,
+  "output": {
+    "artifact": ".domainry/builder/disposable/model-preflight-result.json",
+    "artifact_relative_to": "--project",
+    "contract_version": "domainry-model-preflight-envelope-v1",
+    "create_items": [
+      "crm/resource/actions.lead.continue_followup_due",
+      "crm/resource/workflows.contacted_lead_followup"
+    ],
+    "creates": 2,
+    "delete_items": [
+      "crm/resource/actions.lead.scan_stale_contacted",
+      "crm/resource/scheduled_jobs.weekday_stale_lead_followup",
+      "crm/resource/workflows.stale_lead_followup"
+    ],
+    "deletes": 3,
+    "diagnostics": [],
+    "files": 6,
+    "identity": "f85e9a96e79f474c8ed1a083f4c51145f6b33ab88d29662072acede34e12facc",
+    "issue_count": 0,
+    "items": 39,
+    "sha256": "476c16d1fcc25c2dbaec18d7d7f07e3b9109941dcc20f9ecabde92e5a87091e6",
+    "sql_files": 2,
+    "state": "valid",
+    "unchanged": 31,
+    "update_items": [
+      "crm/object_relation/followup_reminder",
+      "crm/object_relation/lead",
+      "crm/requirement/crm_followup_reminder",
+      "crm/requirement/crm_lead_management",
+      "crm/resource/roles.crm_workflow_service",
+      "crm/resource/roles.sales_director"
+    ],
+    "updates": 6
+  },
+  "raw_output": "{\"artifact\":\".domainry/builder/disposable/model-preflight-result.json\",\"artifact_relative_to\":\"--project\",\"contract_version\":\"domainry-model-preflight-envelope-v1\",\"create_items\":[\"crm/resource/actions.lead.continue_followup_due\",\"crm/resource/workflows.contacted_lead_followup\"],\"creates\":2,\"delete_items\":[\"crm/resource/actions.lead.scan_stale_contacted\",\"crm/resource/scheduled_jobs.weekday_stale_lead_followup\",\"crm/resource/workflows.stale_lead_followup\"],\"deletes\":3,\"diagnostics\":[],\"files\":6,\"identity\":\"f85e9a96e79f474c8ed1a083f4c51145f6b33ab88d29662072acede34e12facc\",\"issue_count\":0,\"items\":39,\"sha256\":\"476c16d1fcc25c2dbaec18d7d7f07e3b9109941dcc20f9ecabde92e5a87091e6\",\"sql_files\":2,\"state\":\"valid\",\"unchanged\":31,\"update_items\":[\"crm/object_relation/followup_reminder\",\"crm/object_relation/lead\",\"crm/requirement/crm_followup_reminder\",\"crm/requirement/crm_lead_management\",\"crm/resource/roles.crm_workflow_service\",\"crm/resource/roles.sales_director\"],\"updates\":6}\n",
+  "stdout": null,
+  "stderr": null,
+  "output_streams_status": "aggregated_only",
+  "event_item_id": "item_2",
+  "event_line": 7,
+  "observed_started_epoch": 1788755932.691176,
+  "observed_completed_epoch": 1788755937.10188,
+  "observed_started_event_line": 6,
+  "observed_completed_event_line": 7,
+  "duration_seconds": 4.411,
+  "timing_source": "agent-event-observations.jsonl",
+  "capture_file": "cli/001-model_plan.json"
+}

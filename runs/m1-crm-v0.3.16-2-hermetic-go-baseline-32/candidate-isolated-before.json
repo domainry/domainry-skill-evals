@@ -1,0 +1,19 @@
+{
+  "candidate_id": "v0.3.16-2-m1-hermetic-go-20260906+bba6de26cd84",
+  "skill_name": "domainry-builder-v1",
+  "skill_root": "/private/tmp/domainry-m1-v0316-2-baseline-32/codex-home/skills/domainry-builder-v1",
+  "cli": "/private/tmp/domainry-m1-v0316-2-baseline-32/codex-home/skills/domainry-builder-v1/bin/domainry-cli",
+  "skill_version": "v0.3.16-2-m1-hermetic-go-20260906",
+  "skill_identity_sha256": "ebd64d96025aeabc3ec803e2cef1d6330e670533269edbfc0dda8172909aaceb",
+  "package_metadata_sha256": "6523fcabaae1b7f00b85b4aeb6d95cedd79b3075649e920529f4ce32e2946d0d",
+  "skill_tree_sha256": "bba6de26cd84e14ebb68a8a9cff6cbff5201742fa9e3f83a35e028e6502b05e1",
+  "cli_binary_sha256": "7da3109f49128090af146367304cf1e8e6a728c4c66c1e08b0f830a161d5e3b7",
+  "runtime_api_contract_version": "runtime-domain-api-v1",
+  "runtime_api_contract_hash": "4fe655cbfd4fa0bc0b0c04c89b86926fc6aceb059c9fccf5b09eec9b459330f7",
+  "apply_target_flag": "--service",
+  "apply_target_value": "http://127.0.0.1:8283",
+  "apply_target_args": [
+    "--service",
+    "http://127.0.0.1:8283"
+  ]
+}

@@ -1,0 +1,40 @@
+{
+  "family": "model_plan",
+  "command": "/bin/zsh -lc '/private/tmp/domainry-m1-v43-action-field-source-baseline-25/codex-home/skills/domainry-builder-v1/bin/domainry-cli model plan --json --project /private/tmp/domainry-m1-v43-action-field-source-baseline-25/project'",
+  "exit_code": 0,
+  "output": {
+    "artifact": ".domainry/builder/disposable/model-preflight-result.json",
+    "artifact_relative_to": "--project",
+    "contract_version": "domainry-model-preflight-envelope-v1",
+    "create_items": [],
+    "creates": 0,
+    "delete_items": [],
+    "deletes": 0,
+    "diagnostics": [],
+    "files": 7,
+    "identity": "52c6cdb7445f8a0ccdd627a92766640aaee667a5e608b56577365c3c13d77b2e",
+    "issue_count": 0,
+    "items": 43,
+    "sha256": "bb6447da4d0b9df14700e10a754261f3a45731e725522338d20ca068013fd002",
+    "sql_files": 2,
+    "state": "valid",
+    "unchanged": 42,
+    "update_items": [
+      "crm/resource/actions.lead.dispatch_overdue_reminders"
+    ],
+    "updates": 1
+  },
+  "raw_output": "{\"artifact\":\".domainry/builder/disposable/model-preflight-result.json\",\"artifact_relative_to\":\"--project\",\"contract_version\":\"domainry-model-preflight-envelope-v1\",\"create_items\":[],\"creates\":0,\"delete_items\":[],\"deletes\":0,\"diagnostics\":[],\"files\":7,\"identity\":\"52c6cdb7445f8a0ccdd627a92766640aaee667a5e608b56577365c3c13d77b2e\",\"issue_count\":0,\"items\":43,\"sha256\":\"bb6447da4d0b9df14700e10a754261f3a45731e725522338d20ca068013fd002\",\"sql_files\":2,\"state\":\"valid\",\"unchanged\":42,\"update_items\":[\"crm/resource/actions.lead.dispatch_overdue_reminders\"],\"updates\":1}\n",
+  "stdout": null,
+  "stderr": null,
+  "output_streams_status": "aggregated_only",
+  "event_item_id": "item_86",
+  "event_line": 165,
+  "observed_started_epoch": 1788662015.274913,
+  "observed_completed_epoch": 1788662017.082877,
+  "observed_started_event_line": 164,
+  "observed_completed_event_line": 165,
+  "duration_seconds": 1.808,
+  "timing_source": "agent-event-observations.jsonl",
+  "capture_file": "cli/004-model_plan.json"
+}

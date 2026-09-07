@@ -1,0 +1,23 @@
+{
+  "benchmark": "m1-crm",
+  "candidate_id": "v0.3.6-48-m1-source-finalizer-sync-5fff4459-20260906+21af50a0236b",
+  "skill_version": "v0.3.6-48-m1-source-finalizer-sync-5fff4459-20260906",
+  "model": "gpt-5.6-sol",
+  "run_id": "m1-crm-v0.3.6-48-m1-source-finalizer-sync-5fff4459-20260906-21af50a0236b-baseline-27",
+  "run_kind": "baseline",
+  "parent_run_id": null,
+  "terminal_state": "baseline_first_scoring_failure",
+  "measurement_complete": false,
+  "environment_valid": true,
+  "agent_declared_done": false,
+  "agent_result_state": null,
+  "human_interventions": 0,
+  "started_epoch": 1788676194.34346,
+  "agent_ended_epoch": 1788676818.922942,
+  "ended_epoch": 1788676819.213873,
+  "project_path": "/private/tmp/domainry-m1-v48-source-finalizer-sync-baseline-27/project",
+  "isolation_root": "/private/tmp/domainry-m1-v48-source-finalizer-sync-baseline-27",
+  "codex_home": "/private/tmp/domainry-m1-v48-source-finalizer-sync-baseline-27/codex-home",
+  "database_path": "/private/tmp/domainry-m1-v48-source-finalizer-sync-baseline-27/runtime/cohort.sqlite",
+  "agent_session_id": "01a07568-cf30-7d73-8b33-1dfd07825cf3"
+}

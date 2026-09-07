@@ -1,0 +1,35 @@
+{
+  "contract_version": "domainry-eval-checkpoint-v1",
+  "source_run_id": "m1-crm-evaluator-cache-convergence-38",
+  "checkpoint_kind": "post_verify_project_organization_unit_resolve_gap",
+  "measurement_class": "checkpoint_convergence_not_baseline",
+  "baseline_eligibility": false,
+  "manifest_sha256": "65aab33c278c4ba9b12986676ba90a1d7c87ee2d4942a4d76f83e758dbd96a0b",
+  "archive_sha256": "ddb854750cff2f232b3d65e99f400b7ca704d9a4a422f217de4d945ece381111",
+  "resume_boundary": {
+    "stage": "model",
+    "next_node": "Restore this project and reject the archived unmaterialized item_118 evolution. In backend/model/10-organization-identity.json restore provision_department to the existing create-only department Action, restore deliver_identity as object_operation with explicit target_organization_id, restore its sales_director grant to org_child, and add deliver_identity.handler.organization_unit_delivery with operations=[resolve], node_types=[department], and no parent_source. Run a fresh model plan/apply review. Consume the newly generated exact symbols and implement DeliverIdentity in this order: OrganizationUnits.Resolve(ctx, typed department request), verify its non-empty ID, TargetOrganization.Resolve(), verify the IDs match, then Identity.CreateWithSalesPersonProfile; retain the result OrganizationID equality check. Preserve the valid authorization-stale login refresh. Before the next managed verify, use only published packet/Runtime contracts to fix the already proven project BF defects: workflow run request requires a payload wrapper and an exact workflow.<key>.run permission; the manual large-lead workflow must preserve the sales initiator rather than run_as service; approval_mode=any tasks must be queried as open rather than pending; the scheduled workflow cannot be invoked through a manual-only workflow run route; the lead_detail export prepare URL must use source object key lead rather than export-control key lead_detail_export; and initial/restart BF08 must use phase-distinct audit/idempotency identities because download advances the audit to downloaded. Then run focused tests, project check, BF compile, apply finalize, full tree, and one managed verify through initial plus restart evidence.",
+    "rule": "Do not redo accepted requirements or unrelated model/Handler work. The Runtime and Identity behavior is fail-closed and correct for the declared descriptor; all listed changes belong to the M1 project model, project Handler, or project-owned business-flow harness. The archived TODO and evolution_review_required receipt are evidence at capture time, not authority to approve the rejected proposal. Build every correction from the current candidate's generated types and published Runtime API; do not infer payloads, permissions, target semantics, or scheduler routes.",
+    "prior_delivery_id": "sha256:34b9a96a419db10d6ca99c4048aa70c4276eeb9ee33453c60fd1c870acd26026"
+  },
+  "prohibited_repairs": [
+    "do not change Plane, Runtime, Identity, the installed Builder candidate, or evaluator code for this project-owned failure",
+    "do not widen sales_person_profile.deliver_identity from org_child to all; restore the accepted org_child scope",
+    "do not combine first-user delivery into provision_department or convert deliver_identity to record_owner",
+    "do not create a CRM department registry, substitute a store Organization, or increase store quota",
+    "do not use run_as service for the manual large-lead approval workflow when the initiating sales user must remain the trusted requester and notification recipient",
+    "do not restore Git history, Agent sessions, managed Runtime databases, SQLite, locks, or stale measured-run evidence"
+  ],
+  "restored_file_count": 1288,
+  "ignored_appledouble_member_count": 0,
+  "ignored_git_member_count": 0,
+  "ignored_runtime_state_member_count": 0,
+  "ignored_sqlite_member_count": 0,
+  "ignored_agent_session_member_count": 0,
+  "ignored_lock_member_count": 0,
+  "git_history_restored": false,
+  "runtime_state_restored": false,
+  "sqlite_restored": false,
+  "agent_session_restored": false,
+  "locks_restored": false
+}

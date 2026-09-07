@@ -1,0 +1,19 @@
+{
+  "candidate_id": "v0.3.6-40-m1-verification-contracts-20260906+62ea2db57826",
+  "skill_name": "domainry-builder-v1",
+  "skill_root": "/Users/tiger/.codex/skills/domainry-builder-v1",
+  "cli": "/Users/tiger/.codex/skills/domainry-builder-v1/bin/domainry-cli",
+  "skill_version": "v0.3.6-40-m1-verification-contracts-20260906",
+  "skill_identity_sha256": "ebd64d96025aeabc3ec803e2cef1d6330e670533269edbfc0dda8172909aaceb",
+  "package_metadata_sha256": "0ef29bd86b8042e69d618d11e6d4811a5ff8fa7f0c1448f9c9e0a02dbef36cb5",
+  "skill_tree_sha256": "62ea2db5782610058fc33bd0a8784f1eb372180f46aeea9485fb12e5b9f637f7",
+  "cli_binary_sha256": "dafd04a4e94a02650314f0158af4728cbc3c3ee8168b857fd6c42f97aba315bd",
+  "runtime_api_contract_version": "runtime-domain-api-v1",
+  "runtime_api_contract_hash": "4fe655cbfd4fa0bc0b0c04c89b86926fc6aceb059c9fccf5b09eec9b459330f7",
+  "apply_target_flag": "--service",
+  "apply_target_value": "http://127.0.0.1:8283",
+  "apply_target_args": [
+    "--service",
+    "http://127.0.0.1:8283"
+  ]
+}

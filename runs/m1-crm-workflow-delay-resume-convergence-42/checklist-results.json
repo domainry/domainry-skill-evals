@@ -1,0 +1,7 @@
+{
+  "contract_version": "domainry-evaluator-checklist-unavailable-v1",
+  "pass": false,
+  "status": "not_executed",
+  "reason": "delivery prerequisites incomplete; evaluator checker not executed: agent_result:missing, model_plan:missing, apply_model:missing, apply_finalize:missing, verify:missing, verify_artifact:missing_or_unparseable, flow_evidence:missing_invalid_or_unparseable",
+  "results": []
+}

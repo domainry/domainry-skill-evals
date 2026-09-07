@@ -1,0 +1,13 @@
+{
+  "contract_version": "domainry-eval-checkpoint-v1",
+  "source_run_id": "m1-crm-v0.3.16-2-hermetic-go-baseline-32",
+  "checkpoint_kind": "post_reapply_evolution_audit_identity_probe_error",
+  "measurement_class": "checkpoint_convergence_not_baseline",
+  "baseline_eligibility": false,
+  "manifest_sha256": "f3c937c38d99950e81bac213c1de5d36018e427cb97af5a0d71d955123ea3125",
+  "archive_sha256": "b32909d18c690b29d4e6758e9f7058776050b2e115ff630c42ff2d3c9ffe4ab9",
+  "restored_file_count": 520,
+  "ignored_appledouble_member_count": 651,
+  "git_history_restored": false,
+  "sqlite_restored": false
+}

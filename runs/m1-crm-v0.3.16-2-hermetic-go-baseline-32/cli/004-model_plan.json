@@ -1,0 +1,42 @@
+{
+  "family": "model_plan",
+  "command": "/bin/zsh -lc '/private/tmp/domainry-m1-v0316-2-baseline-32/codex-home/skills/domainry-builder-v1/bin/domainry-cli model plan --json --project /private/tmp/domainry-m1-v0316-2-baseline-32/project'",
+  "exit_code": 0,
+  "output": {
+    "artifact": ".domainry/builder/disposable/model-preflight-result.json",
+    "artifact_relative_to": "--project",
+    "contract_version": "domainry-model-preflight-envelope-v1",
+    "create_items": [],
+    "creates": 0,
+    "delete_items": [],
+    "deletes": 0,
+    "diagnostics": [],
+    "files": 6,
+    "identity": "2867a1377c9e6a9a611ca5ba931abe83da809731bd9cb5fb21e79eda612f2858",
+    "issue_count": 0,
+    "items": 41,
+    "sha256": "cf2bbfe69f6e2c9a8a71db24c4044d8f72d80c9e147b151359a6461e975eaf8a",
+    "sql_files": 2,
+    "state": "valid",
+    "unchanged": 38,
+    "update_items": [
+      "crm/resource/actions.lead.register",
+      "crm/resource/actions.sales_department_registry.provision_department",
+      "crm/resource/actions.sales_person_profile.deliver_identity"
+    ],
+    "updates": 3
+  },
+  "raw_output": "{\"artifact\":\".domainry/builder/disposable/model-preflight-result.json\",\"artifact_relative_to\":\"--project\",\"contract_version\":\"domainry-model-preflight-envelope-v1\",\"create_items\":[],\"creates\":0,\"delete_items\":[],\"deletes\":0,\"diagnostics\":[],\"files\":6,\"identity\":\"2867a1377c9e6a9a611ca5ba931abe83da809731bd9cb5fb21e79eda612f2858\",\"issue_count\":0,\"items\":41,\"sha256\":\"cf2bbfe69f6e2c9a8a71db24c4044d8f72d80c9e147b151359a6461e975eaf8a\",\"sql_files\":2,\"state\":\"valid\",\"unchanged\":38,\"update_items\":[\"crm/resource/actions.lead.register\",\"crm/resource/actions.sales_department_registry.provision_department\",\"crm/resource/actions.sales_person_profile.deliver_identity\"],\"updates\":3}\n",
+  "stdout": null,
+  "stderr": null,
+  "output_streams_status": "aggregated_only",
+  "event_item_id": "item_61",
+  "event_line": 119,
+  "observed_started_epoch": 1788706846.491581,
+  "observed_completed_epoch": 1788706847.692584,
+  "observed_started_event_line": 118,
+  "observed_completed_event_line": 119,
+  "duration_seconds": 1.201,
+  "timing_source": "agent-event-observations.jsonl",
+  "capture_file": "cli/004-model_plan.json"
+}

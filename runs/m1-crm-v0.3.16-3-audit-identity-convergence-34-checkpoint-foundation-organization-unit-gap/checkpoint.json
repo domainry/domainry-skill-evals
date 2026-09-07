@@ -1,0 +1,47 @@
+{
+  "contract_version": "domainry-eval-checkpoint-v1",
+  "source_run_id": "m1-crm-v0.3.16-3-audit-identity-convergence-34",
+  "checkpoint_kind": "pre_semantic_workaround_foundation_organization_unit_delivery_gap",
+  "measurement_class": "checkpoint_convergence_not_baseline",
+  "baseline_eligibility": false,
+  "archive": {
+    "path": "checkpoint-project.tar.gz",
+    "sha256": "6aab8c8c3f5c8b02a8360eb4853c8c7ab61e429adc96cf4066810e0a6923cb94"
+  },
+  "candidate": {
+    "candidate_id": "v0.3.16-3-m1-audit-identity-20260906+554bd6a0a04e",
+    "skill_tree_sha256": "554bd6a0a04e590aa9c1ecb5cab5c7b0ee1304e618e101bc85d56166a592d78c",
+    "cli_binary_sha256": "d8c6da6938262183720ddf81d9cfa39ee5a65be69ff06a1e40c3ac2e69467af4"
+  },
+  "invalidating_error": {
+    "agent_session_id": "01a07776-958c-7ad1-abee-933790c10a55",
+    "agent_event_item_id": "item_73",
+    "event_line": 141,
+    "command_sha256": "51ba30faf689db6cddf45ae0dcb73ac765c0d6ef7f90ddf39e1f3e971c2a46d2",
+    "exit_code": 1,
+    "classification": "project_business_model_used_store_for_department",
+    "owner": "agent",
+    "domainry_foundation_defect": false,
+    "diagnostic": "The immediate 409 is caused by the project modeling a required department as provisioned_store; Runtime correctly enforced the active-store quota."
+  },
+  "blocking_condition": {
+    "classification": "foundation_organization_unit_delivery_capability_gap",
+    "domainry_foundation_gap": true,
+    "owners": ["domainry-plane", "domainry-runtime", "domainry-identity"],
+    "details": [
+      "The closed project Action surface has no typed non-store OrganizationUnitDelivery for a real department node.",
+      "Plane managed verification bootstraps a first store while fixing max_stores=1, making the published provisioned_store success path unreachable in a fresh cohort."
+    ],
+    "prohibited_repairs": [
+      "do not increase store quota as a substitute for department delivery",
+      "do not label the Workspace root company or a store as a department",
+      "do not add CRM-specific foundation behavior or a business registry that copies the Identity organization tree"
+    ]
+  },
+  "resume_boundary": {
+    "stage": "model",
+    "next_node": "after a compatible Plane/Runtime/Identity candidate is installed, replace the invalid store-backed department model with the generic typed organization-unit delivery contract, then rerun only the affected plan/apply/finalize/verify closure",
+    "prior_delivery_id": "sha256:7301cf925a3461e9ad3f95b77b9a8be0cfca07481bc28d5da1beb3d98441385e",
+    "rule": "Restore this pre-workaround archive; never restore the later root-company/store semantic workaround."
+  }
+}

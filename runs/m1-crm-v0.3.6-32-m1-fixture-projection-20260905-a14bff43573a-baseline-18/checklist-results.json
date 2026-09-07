@@ -1,0 +1,7 @@
+{
+  "contract_version": "domainry-evaluator-checklist-unavailable-v1",
+  "pass": false,
+  "status": "not_executed",
+  "reason": "baseline sealed at failed verify; checker not executed",
+  "results": []
+}

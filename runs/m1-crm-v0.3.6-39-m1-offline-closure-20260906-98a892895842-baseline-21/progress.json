@@ -1,0 +1,161 @@
+{
+  "contract_version": "domainry-eval-progress-v1",
+  "run_id": "m1-crm-v0.3.6-39-m1-offline-closure-20260906-98a892895842-baseline-21",
+  "run_kind": "baseline",
+  "status": "terminal",
+  "lifecycle_phase": "terminal",
+  "lifecycle_state": "baseline_first_scoring_failure",
+  "lifecycle_phase_timing": {
+    "agent": {
+      "started_epoch": 1788631895.6994681,
+      "ended_epoch": 1788633713.4882472
+    },
+    "checker": {
+      "started_epoch": 1788633716.4798331,
+      "ended_epoch": 1788633716.5013251
+    },
+    "scorer": {
+      "started_epoch": 1788633716.5013251,
+      "ended_epoch": 1788633716.5983622
+    },
+    "terminal": {
+      "started_epoch": 1788633716.5983622,
+      "ended_epoch": 1788633716.5983622
+    }
+  },
+  "delivery_stage": "verify",
+  "delivery_stage_source": "cli-event",
+  "delivery_stage_timing": {
+    "requirements": {
+      "started_epoch": 1788631895.6994681,
+      "ended_epoch": 1788632107.824312
+    },
+    "model": {
+      "started_epoch": 1788632107.824312,
+      "ended_epoch": 1788632478.078639
+    },
+    "apply": {
+      "started_epoch": 1788632478.078639,
+      "ended_epoch": 1788633645.444937
+    },
+    "verify": {
+      "started_epoch": 1788633645.444937,
+      "ended_epoch": 1788633713.4373372
+    }
+  },
+  "delivery_stage_timing_source": "evaluator-events",
+  "delivery_stage_timing_status": "valid",
+  "wall_elapsed_seconds": 1820.899,
+  "domainry_cli": {
+    "invocations_total": 6,
+    "completed_total": 6,
+    "failed_total": 1,
+    "retries_total": 0,
+    "latest": {
+      "subcommand": "verify",
+      "status": "failed",
+      "exit_code": 1,
+      "output_state": "failed",
+      "observed_epoch": 1788633713.4373372
+    }
+  },
+  "diagnostic_cli": {
+    "invocations_total": 3,
+    "completed_total": 3,
+    "failed_total": 1,
+    "retries_total": 2,
+    "latest": {
+      "subcommand": "verify_fixture",
+      "status": "passed",
+      "exit_code": 0,
+      "output_state": null,
+      "observed_epoch": 1788633542.637873
+    },
+    "first_failure": {
+      "failure_kind": "diagnostic",
+      "family": "verify_fixture",
+      "exit_code": 1,
+      "output_state": null,
+      "output": "error: project compiler-bound Runtime acceptance fixture: Runtime acceptance fixture \"bf06_overdue_contacted\" department owner organization index is invalid",
+      "raw_output": "error: project compiler-bound Runtime acceptance fixture: Runtime acceptance fixture \"bf06_overdue_contacted\" department owner organization index is invalid\n",
+      "stdout": null,
+      "stderr": null,
+      "output_streams_status": "aggregated_only",
+      "event_item_id": "item_56",
+      "event_line": 109,
+      "observed_started_epoch": 1788633285.289133,
+      "observed_completed_epoch": 1788633285.289763,
+      "duration_seconds": 0.001,
+      "capture_file": "cli/004-verify_fixture.json",
+      "scoring_effect": "none"
+    }
+  },
+  "agent": {
+    "last_activity_epoch": 1788633713.4373372,
+    "last_activity_status": "observed",
+    "total_tokens": null,
+    "total_tokens_status": "unavailable",
+    "token_usage": {
+      "input_tokens": null,
+      "cached_input_tokens": null,
+      "non_cached_input_tokens": null,
+      "output_tokens": null,
+      "reasoning_output_tokens": null,
+      "budget_tokens": null,
+      "budget_basis": "provider_cumulative_input_plus_output",
+      "cached_input_included_in_input": true,
+      "reasoning_output_included_in_output": true,
+      "observability_status": "unavailable"
+    }
+  },
+  "scoring_first_failure": {
+    "family": "verify",
+    "exit_code": 1,
+    "output_state": "failed"
+  },
+  "diagnostic_first_failure": {
+    "failure_kind": "diagnostic",
+    "family": "verify_fixture",
+    "exit_code": 1,
+    "output_state": null,
+    "output": "error: project compiler-bound Runtime acceptance fixture: Runtime acceptance fixture \"bf06_overdue_contacted\" department owner organization index is invalid",
+    "raw_output": "error: project compiler-bound Runtime acceptance fixture: Runtime acceptance fixture \"bf06_overdue_contacted\" department owner organization index is invalid\n",
+    "stdout": null,
+    "stderr": null,
+    "output_streams_status": "aggregated_only",
+    "event_item_id": "item_56",
+    "event_line": 109,
+    "observed_started_epoch": 1788633285.289133,
+    "observed_completed_epoch": 1788633285.289763,
+    "duration_seconds": 0.001,
+    "capture_file": "cli/004-verify_fixture.json",
+    "scoring_effect": "none"
+  },
+  "first_failure": {
+    "failure_kind": "diagnostic",
+    "family": "verify_fixture",
+    "exit_code": 1,
+    "output_state": null,
+    "output": "error: project compiler-bound Runtime acceptance fixture: Runtime acceptance fixture \"bf06_overdue_contacted\" department owner organization index is invalid",
+    "raw_output": "error: project compiler-bound Runtime acceptance fixture: Runtime acceptance fixture \"bf06_overdue_contacted\" department owner organization index is invalid\n",
+    "stdout": null,
+    "stderr": null,
+    "output_streams_status": "aggregated_only",
+    "event_item_id": "item_56",
+    "event_line": 109,
+    "observed_started_epoch": 1788633285.289133,
+    "observed_completed_epoch": 1788633285.289763,
+    "duration_seconds": 0.001,
+    "capture_file": "cli/004-verify_fixture.json",
+    "scoring_effect": "none"
+  },
+  "first_failure_seal_triggered": true,
+  "checker_allowed": false,
+  "checker_decision_reason": "baseline_first_failure_verify_failed",
+  "scorecard": {
+    "available": true,
+    "pass_at_1": false,
+    "run_outcome_pass": false
+  },
+  "updated_epoch": 1788633716.5983622
+}

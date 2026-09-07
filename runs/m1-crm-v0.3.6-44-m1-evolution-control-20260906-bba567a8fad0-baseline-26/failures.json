@@ -1,0 +1,12 @@
+[
+  {
+    "stage": "verify",
+    "owner": null,
+    "note": "evaluator terminal state: environment_invalid_service_drift",
+    "terminal_state": "environment_invalid_service_drift",
+    "detail": {
+      "reason": "Application Delivery service identity changed during the run"
+    },
+    "attribution_status": "pending"
+  }
+]

@@ -1,7 +1,7 @@
 {
   "benchmark": "m1-crm",
   "version": 1,
-  "note": "M 级金标准,agent 不可见。新增覆盖:workflow 审批、事务性跨对象创建、金额精确值、部门数据域、scheduler、报表导出通道。",
+  "note": "M 级金标准,agent 不可见。新增覆盖:workflow 审批、事务性跨对象创建、金额精确值、部门数据域、record-timer 到期续接、报表导出通道。",
   "features": [
     {"id": "M01", "priority": "P0", "req": "1",  "feature": "线索对象字段完整(金额 exact-decimal、来源 select 4 值)", "probe": "schema:金额为精确小数类型非浮点;来源枚举;公司名必填", "expected_mechanism": "metadata_object"},
     {"id": "M02", "priority": "P0", "req": "2",  "feature": "五态状态机与终态", "probe": "合法链全通;converted/lost 上任何转换被拒;qualified→lost 可行", "expected_mechanism": "metadata_state_machine"},
@@ -16,7 +16,7 @@
     {"id": "M11", "priority": "P0", "req": "11", "feature": "部门级 RLS(同部门可见/跨部门不可见)", "probe": "华东销售可见同部门同事线索、不可见华北线索;更新仅限自己名下", "expected_mechanism": "metadata_department_scope"},
     {"id": "M12", "priority": "P0", "req": "12", "feature": "总监全量可见", "probe": "总监列表含两部门全部种子", "expected_mechanism": "metadata_data_scope"},
     {"id": "M13", "priority": "P1", "req": "13", "feature": "状态与审批审计", "probe": "转换与审批动作在审计表留痕含操作者", "expected_mechanism": "platform_audit"},
-    {"id": "M14", "priority": "P1", "req": "14", "feature": "超时跟进定时提醒", "probe": "存在 scheduler 定义(工作日 cron);触发一次后逾期线索负责人收到提醒且同日去重", "expected_mechanism": "metadata_scheduler"},
+    {"id": "M14", "priority": "P1", "req": "14", "feature": "事件驱动 one-shot 跟进提醒与到期续接", "probe": "contacted Action 持久化 status_changed_at 与 Handler 计算的精确 next_followup_at；合法 Graph V2 以唯一非空 ID/有效端点连接 trigger→field_equals(status,contacted) true 分支→source_field timer→per-record Action，false 分支不可达 timer；Action 重读状态、以显式 composite unique(lead,local_date)幂等写提醒并推进下一工作日 due；重启恢复且退出 contacted 后旧 timer no-op；不存在 timer 内二次 offset/calendar、指向 due 的 Scheduler definition、standalone scheduled lead 扫描或任一生产 Action/Workflow 的 evaluation_time；BF06 要求项目 Handler 非零覆盖，并绑定 hermetic delivery Runtime module identity、record-timer 非零覆盖与 evaluator-owned source-field probe", "expected_mechanism": "workflow_record_timer_plus_action"},
     {"id": "M15", "priority": "P0", "req": "15", "feature": "漏斗报表(计数+金额合计)+ 权限", "probe": "总监取数与 DB 一致(含金额合计精确);销售被拒", "expected_mechanism": "metadata_report"},
     {"id": "M16", "priority": "P0", "req": "16", "feature": "受控 CSV 导出", "probe": "总监经受控导出通道得到 CSV(权限过滤、审计);销售导出被拒", "expected_mechanism": "platform_export_governance"},
     {"id": "M17", "priority": "P0", "req": "17", "feature": "列表有界分页", "probe": "page_size 语义 + 截断", "expected_mechanism": "platform_pagination"},

@@ -1,0 +1,12 @@
+[
+  {
+    "stage": "driver",
+    "owner": null,
+    "note": "evaluator terminal state: environment_invalid_service_drift",
+    "terminal_state": "environment_invalid_service_drift",
+    "detail": {
+      "reason": "Application Delivery service became unavailable or identity incomplete"
+    },
+    "attribution_status": "pending"
+  }
+]

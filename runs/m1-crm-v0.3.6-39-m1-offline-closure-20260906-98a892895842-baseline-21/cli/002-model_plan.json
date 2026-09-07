@@ -1,0 +1,177 @@
+{
+  "family": "model_plan",
+  "command": "/bin/zsh -lc '/private/tmp/domainry-m1-v39-offline-closure-baseline-21/codex-home/skills/domainry-builder-v1/bin/domainry-cli model plan --json --project /private/tmp/domainry-m1-v39-offline-closure-baseline-21/project'",
+  "exit_code": 0,
+  "output": {
+    "acceptance_fixture": {
+      "contract_version": "domainry-managed-runtime-acceptance-fixture-projection-v2",
+      "runtime_manifest_sha256": "d4e1827c57e5663a358562801a8098fcf47a39b641f137fc93a362cc7903ac8a",
+      "organization_count": 2,
+      "actor_count": 3,
+      "startup_fixture_path": "",
+      "startup_fixture_count": 0,
+      "eligible_role_keys": [
+        "sales_director",
+        "sales_rep"
+      ],
+      "roles": [
+        {
+          "role_key": "sales_director",
+          "placement": "global_manager",
+          "actor_count": 1,
+          "business_permissions": [
+            "customer.read;all",
+            "lead.approve_conversion;all",
+            "lead.export;all",
+            "lead.read;all",
+            "lead.reject_conversion;all",
+            "lead_conversion.read;all",
+            "lead_export_audit.create;owner",
+            "lead_export_audit.read;owner",
+            "lead_export_audit.update;owner",
+            "lead_export_download.create;owner",
+            "lead_export_download.read;owner"
+          ]
+        },
+        {
+          "role_key": "sales_rep",
+          "placement": "department",
+          "actor_count": 2,
+          "business_permissions": [
+            "customer.read;owner",
+            "lead.contact;owner",
+            "lead.convert_direct;owner",
+            "lead.edit;owner",
+            "lead.lose;owner",
+            "lead.qualify;owner",
+            "lead.read;org",
+            "lead.register;owner",
+            "lead_conversion.read;owner"
+          ]
+        }
+      ],
+      "role_eligibility": [
+        {
+          "role_key": "crm_scheduler",
+          "audience": "service",
+          "assignment_mode": "system_managed",
+          "provision_to_workspaces": false,
+          "business_permissions": [
+            "lead.send_overdue_reminders;all"
+          ],
+          "state": "system_managed",
+          "reason": "System-managed roles cannot be assigned to human workspace logins.",
+          "remediation": "Keep this role system-managed; add a separate human role when business-flow verification needs an actor."
+        },
+        {
+          "role_key": "sales_director",
+          "audience": "any",
+          "assignment_mode": "manual",
+          "provision_to_workspaces": true,
+          "business_permissions": [
+            "customer.read;all",
+            "lead.approve_conversion;all",
+            "lead.export;all",
+            "lead.read;all",
+            "lead.reject_conversion;all",
+            "lead_conversion.read;all",
+            "lead_export_audit.create;owner",
+            "lead_export_audit.read;owner",
+            "lead_export_audit.update;owner",
+            "lead_export_download.create;owner",
+            "lead_export_download.read;owner"
+          ],
+          "state": "eligible",
+          "reason": "Human workspace role with compiler-bound Object permissions."
+        },
+        {
+          "role_key": "sales_rep",
+          "audience": "any",
+          "assignment_mode": "manual",
+          "provision_to_workspaces": true,
+          "business_permissions": [
+            "customer.read;owner",
+            "lead.contact;owner",
+            "lead.convert_direct;owner",
+            "lead.edit;owner",
+            "lead.lose;owner",
+            "lead.qualify;owner",
+            "lead.read;org",
+            "lead.register;owner",
+            "lead_conversion.read;owner"
+          ],
+          "state": "eligible",
+          "reason": "Human workspace role with compiler-bound Object permissions."
+        }
+      ]
+    },
+    "artifact": ".domainry/builder/disposable/model-preflight-result.json",
+    "artifact_relative_to": "--project",
+    "contract_version": "domainry-model-preflight-envelope-v1",
+    "create_items": [
+      "crm/object_relation/customer",
+      "crm/object_relation/lead",
+      "crm/object_relation/lead_conversion",
+      "crm/object_relation/lead_export_audit",
+      "crm/object_relation/lead_export_download",
+      "crm/requirement/crm_workspace",
+      "crm/requirement/followup_reminders",
+      "crm/requirement/funnel_reporting",
+      "crm/requirement/lead_conversion",
+      "crm/requirement/lead_management",
+      "crm/requirement/lead_visibility",
+      "crm/resource/actions.lead.approve_conversion",
+      "crm/resource/actions.lead.contact",
+      "crm/resource/actions.lead.convert_direct",
+      "crm/resource/actions.lead.edit",
+      "crm/resource/actions.lead.lose",
+      "crm/resource/actions.lead.qualify",
+      "crm/resource/actions.lead.register",
+      "crm/resource/actions.lead.reject_conversion",
+      "crm/resource/actions.lead.send_overdue_reminders",
+      "crm/resource/entrypoints.director_all_leads",
+      "crm/resource/entrypoints.sales_my_leads",
+      "crm/resource/notification_event_types.lead.followup_overdue",
+      "crm/resource/notification_event_types.lead_conversion.approved",
+      "crm/resource/notification_event_types.lead_conversion.rejected",
+      "crm/resource/report_export_controls.lead_detail_csv",
+      "crm/resource/reports.lead_detail_export",
+      "crm/resource/reports.lead_funnel",
+      "crm/resource/roles.crm_scheduler",
+      "crm/resource/roles.sales_director",
+      "crm/resource/roles.sales_rep",
+      "crm/resource/scheduled_jobs.weekday_overdue_followup",
+      "crm/resource/state_machines.lead_lifecycle",
+      "crm/resource/workflows.large_lead_conversion_approval",
+      "crm/resource/workflows.overdue_followup_reminder",
+      "project/project/project"
+    ],
+    "creates": 36,
+    "delete_items": [],
+    "deletes": 0,
+    "diagnostics": [],
+    "files": 7,
+    "identity": "ba5ae6f5cabfbbd1bd1357078eb74a6436b5502777996b1852cbe26ee2e3a659",
+    "issue_count": 0,
+    "items": 36,
+    "sha256": "266c05ec7b6828236d7c7638058422bdf6dc70df1728b070ca875b9eef95201e",
+    "sql_files": 2,
+    "state": "valid",
+    "unchanged": 0,
+    "update_items": [],
+    "updates": 0
+  },
+  "raw_output": "{\"acceptance_fixture\":{\"contract_version\":\"domainry-managed-runtime-acceptance-fixture-projection-v2\",\"runtime_manifest_sha256\":\"d4e1827c57e5663a358562801a8098fcf47a39b641f137fc93a362cc7903ac8a\",\"organization_count\":2,\"actor_count\":3,\"startup_fixture_path\":\"\",\"startup_fixture_count\":0,\"eligible_role_keys\":[\"sales_director\",\"sales_rep\"],\"roles\":[{\"role_key\":\"sales_director\",\"placement\":\"global_manager\",\"actor_count\":1,\"business_permissions\":[\"customer.read;all\",\"lead.approve_conversion;all\",\"lead.export;all\",\"lead.read;all\",\"lead.reject_conversion;all\",\"lead_conversion.read;all\",\"lead_export_audit.create;owner\",\"lead_export_audit.read;owner\",\"lead_export_audit.update;owner\",\"lead_export_download.create;owner\",\"lead_export_download.read;owner\"]},{\"role_key\":\"sales_rep\",\"placement\":\"department\",\"actor_count\":2,\"business_permissions\":[\"customer.read;owner\",\"lead.contact;owner\",\"lead.convert_direct;owner\",\"lead.edit;owner\",\"lead.lose;owner\",\"lead.qualify;owner\",\"lead.read;org\",\"lead.register;owner\",\"lead_conversion.read;owner\"]}],\"role_eligibility\":[{\"role_key\":\"crm_scheduler\",\"audience\":\"service\",\"assignment_mode\":\"system_managed\",\"provision_to_workspaces\":false,\"business_permissions\":[\"lead.send_overdue_reminders;all\"],\"state\":\"system_managed\",\"reason\":\"System-managed roles cannot be assigned to human workspace logins.\",\"remediation\":\"Keep this role system-managed; add a separate human role when business-flow verification needs an actor.\"},{\"role_key\":\"sales_director\",\"audience\":\"any\",\"assignment_mode\":\"manual\",\"provision_to_workspaces\":true,\"business_permissions\":[\"customer.read;all\",\"lead.approve_conversion;all\",\"lead.export;all\",\"lead.read;all\",\"lead.reject_conversion;all\",\"lead_conversion.read;all\",\"lead_export_audit.create;owner\",\"lead_export_audit.read;owner\",\"lead_export_audit.update;owner\",\"lead_export_download.create;owner\",\"lead_export_download.read;owner\"],\"state\":\"eligible\",\"reason\":\"Human workspace role with compiler-bound Object permissions.\"},{\"role_key\":\"sales_rep\",\"audience\":\"any\",\"assignment_mode\":\"manual\",\"provision_to_workspaces\":true,\"business_permissions\":[\"customer.read;owner\",\"lead.contact;owner\",\"lead.convert_direct;owner\",\"lead.edit;owner\",\"lead.lose;owner\",\"lead.qualify;owner\",\"lead.read;org\",\"lead.register;owner\",\"lead_conversion.read;owner\"],\"state\":\"eligible\",\"reason\":\"Human workspace role with compiler-bound Object permissions.\"}]},\"artifact\":\".domainry/builder/disposable/model-preflight-result.json\",\"artifact_relative_to\":\"--project\",\"contract_version\":\"domainry-model-preflight-envelope-v1\",\"create_items\":[\"crm/object_relation/customer\",\"crm/object_relation/lead\",\"crm/object_relation/lead_conversion\",\"crm/object_relation/lead_export_audit\",\"crm/object_relation/lead_export_download\",\"crm/requirement/crm_workspace\",\"crm/requirement/followup_reminders\",\"crm/requirement/funnel_reporting\",\"crm/requirement/lead_conversion\",\"crm/requirement/lead_management\",\"crm/requirement/lead_visibility\",\"crm/resource/actions.lead.approve_conversion\",\"crm/resource/actions.lead.contact\",\"crm/resource/actions.lead.convert_direct\",\"crm/resource/actions.lead.edit\",\"crm/resource/actions.lead.lose\",\"crm/resource/actions.lead.qualify\",\"crm/resource/actions.lead.register\",\"crm/resource/actions.lead.reject_conversion\",\"crm/resource/actions.lead.send_overdue_reminders\",\"crm/resource/entrypoints.director_all_leads\",\"crm/resource/entrypoints.sales_my_leads\",\"crm/resource/notification_event_types.lead.followup_overdue\",\"crm/resource/notification_event_types.lead_conversion.approved\",\"crm/resource/notification_event_types.lead_conversion.rejected\",\"crm/resource/report_export_controls.lead_detail_csv\",\"crm/resource/reports.lead_detail_export\",\"crm/resource/reports.lead_funnel\",\"crm/resource/roles.crm_scheduler\",\"crm/resource/roles.sales_director\",\"crm/resource/roles.sales_rep\",\"crm/resource/scheduled_jobs.weekday_overdue_followup\",\"crm/resource/state_machines.lead_lifecycle\",\"crm/resource/workflows.large_lead_conversion_approval\",\"crm/resource/workflows.overdue_followup_reminder\",\"project/project/project\"],\"creates\":36,\"delete_items\":[],\"deletes\":0,\"diagnostics\":[],\"files\":7,\"identity\":\"ba5ae6f5cabfbbd1bd1357078eb74a6436b5502777996b1852cbe26ee2e3a659\",\"issue_count\":0,\"items\":36,\"sha256\":\"266c05ec7b6828236d7c7638058422bdf6dc70df1728b070ca875b9eef95201e\",\"sql_files\":2,\"state\":\"valid\",\"unchanged\":0,\"update_items\":[],\"updates\":0}\n",
+  "stdout": null,
+  "stderr": null,
+  "output_streams_status": "aggregated_only",
+  "event_item_id": "item_23",
+  "event_line": 47,
+  "observed_started_epoch": 1788632448.991246,
+  "observed_completed_epoch": 1788632450.132305,
+  "observed_started_event_line": 46,
+  "observed_completed_event_line": 47,
+  "duration_seconds": 1.141,
+  "timing_source": "agent-event-observations.jsonl",
+  "capture_file": "cli/002-model_plan.json"
+}

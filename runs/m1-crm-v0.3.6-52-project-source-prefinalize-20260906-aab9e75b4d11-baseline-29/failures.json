@@ -1,0 +1,62 @@
+[
+  {
+    "stage": "run structural checks and complete backend tests",
+    "name": "run structural checks and complete backend tests",
+    "owner": "domainry-builder",
+    "elapsed_ms": 71388,
+    "note": "verification failed: go_test(failed),go_vet(failed); inspect .domainry/builder/receipts/verification-failed.json",
+    "terminal_state": "baseline_first_scoring_failure",
+    "attribution_status": "attributed",
+    "output_state": "failed",
+    "output_error": "verification failed: go_test(failed),go_vet(failed); inspect .domainry/builder/receipts/verification-failed.json",
+    "first_failure": {
+      "name": "run structural checks and complete backend tests",
+      "status": "failed",
+      "elapsed_ms": 71388,
+      "owner": "domainry-builder"
+    },
+    "telemetry": {
+      "contract_version": "domainry-verify-telemetry-v1",
+      "elapsed_ms": 71388,
+      "cache": {
+        "signed_runtime_package": false,
+        "verification_receipt": false
+      },
+      "cache_misses": {
+        "verification_receipt": "verification receipt is missing"
+      },
+      "stages": [
+        {
+          "name": "prepare isolated initial Workspace authority",
+          "status": "done",
+          "elapsed_ms": 0,
+          "owner": "domainry-runtime"
+        },
+        {
+          "name": "validate reusable verification and signed Runtime package",
+          "status": "done",
+          "elapsed_ms": 0,
+          "owner": "domainry-runtime"
+        },
+        {
+          "name": "run structural checks and complete backend tests",
+          "status": "failed",
+          "elapsed_ms": 71388,
+          "owner": "domainry-builder"
+        }
+      ],
+      "first_failure": {
+        "name": "run structural checks and complete backend tests",
+        "status": "failed",
+        "elapsed_ms": 71388,
+        "owner": "domainry-builder"
+      }
+    },
+    "detail": {
+      "name": "run structural checks and complete backend tests",
+      "status": "failed",
+      "elapsed_ms": 71388,
+      "owner": "domainry-builder"
+    }
+  }
+]

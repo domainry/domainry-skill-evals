@@ -1,0 +1,321 @@
+[
+  {
+    "stage": "authoring_contract",
+    "owner": "domainry-plane-authoring",
+    "note": "A system-managed role cannot be provisioned as a tenant login role.",
+    "terminal_state": "baseline_first_scoring_failure",
+    "attribution_status": "attributed",
+    "diagnostic": {
+      "code": "governance.workspace_role_assignment_mode_invalid",
+      "message": "A system-managed role cannot be provisioned as a tenant login role.",
+      "path": "backend/model/10-crm-identity-org.json#/modules/crm/features/crm_identity_org/roles/crm_scheduler/provision_to_workspaces",
+      "file": "backend/model/10-crm-identity-org.json",
+      "json_pointer": "/modules/crm/features/crm_identity_org/roles/crm_scheduler/provision_to_workspaces",
+      "line": 100,
+      "column": 15,
+      "constraint": "governance.workspace_role.tenant_login_assignment",
+      "allowed_values": [
+        "manual",
+        "requestable"
+      ],
+      "repair_hint": "replace the value at the reported file/JSON Pointer and rerun model plan",
+      "owner": "domainry-plane-authoring",
+      "stage": "authoring_contract",
+      "ledger_item": "crm/resource/roles.crm_scheduler",
+      "ledger_path": "backend/model/10-crm-identity-org.json",
+      "repair_facts": {
+        "allowed_values": [
+          "manual",
+          "requestable"
+        ],
+        "artifact_path": ".domainry/builder/disposable/model-preflight-result.json",
+        "artifact_relative_to": "--project",
+        "field": "assignment_mode",
+        "operation": "replace",
+        "related_path": "/roles/1/assignment_mode",
+        "rule_id": "governance.workspace_role.tenant_login_assignment"
+      }
+    },
+    "detail": {
+      "code": "governance.workspace_role_assignment_mode_invalid",
+      "message": "A system-managed role cannot be provisioned as a tenant login role.",
+      "path": "backend/model/10-crm-identity-org.json#/modules/crm/features/crm_identity_org/roles/crm_scheduler/provision_to_workspaces",
+      "file": "backend/model/10-crm-identity-org.json",
+      "json_pointer": "/modules/crm/features/crm_identity_org/roles/crm_scheduler/provision_to_workspaces",
+      "line": 100,
+      "column": 15,
+      "constraint": "governance.workspace_role.tenant_login_assignment",
+      "allowed_values": [
+        "manual",
+        "requestable"
+      ],
+      "repair_hint": "replace the value at the reported file/JSON Pointer and rerun model plan",
+      "owner": "domainry-plane-authoring",
+      "stage": "authoring_contract",
+      "ledger_item": "crm/resource/roles.crm_scheduler",
+      "ledger_path": "backend/model/10-crm-identity-org.json",
+      "repair_facts": {
+        "allowed_values": [
+          "manual",
+          "requestable"
+        ],
+        "artifact_path": ".domainry/builder/disposable/model-preflight-result.json",
+        "artifact_relative_to": "--project",
+        "field": "assignment_mode",
+        "operation": "replace",
+        "related_path": "/roles/1/assignment_mode",
+        "rule_id": "governance.workspace_role.tenant_login_assignment"
+      }
+    }
+  },
+  {
+    "stage": "authoring_contract",
+    "owner": "domainry-plane-authoring",
+    "note": "A role provisioned to tenant workspaces must use any or user audience.",
+    "terminal_state": "baseline_first_scoring_failure",
+    "attribution_status": "attributed",
+    "diagnostic": {
+      "code": "governance.workspace_role_audience_invalid",
+      "message": "A role provisioned to tenant workspaces must use any or user audience.",
+      "path": "backend/model/10-crm-identity-org.json#/modules/crm/features/crm_identity_org/roles/crm_scheduler/provision_to_workspaces",
+      "file": "backend/model/10-crm-identity-org.json",
+      "json_pointer": "/modules/crm/features/crm_identity_org/roles/crm_scheduler/provision_to_workspaces",
+      "line": 100,
+      "column": 15,
+      "constraint": "governance.workspace_role.tenant_login_audience",
+      "allowed_values": [
+        "any",
+        "user"
+      ],
+      "repair_hint": "replace the value at the reported file/JSON Pointer and rerun model plan",
+      "owner": "domainry-plane-authoring",
+      "stage": "authoring_contract",
+      "ledger_item": "crm/resource/roles.crm_scheduler",
+      "ledger_path": "backend/model/10-crm-identity-org.json",
+      "repair_facts": {
+        "allowed_values": [
+          "any",
+          "user"
+        ],
+        "artifact_path": ".domainry/builder/disposable/model-preflight-result.json",
+        "artifact_relative_to": "--project",
+        "field": "audience",
+        "operation": "replace",
+        "related_path": "/roles/1/audience",
+        "rule_id": "governance.workspace_role.tenant_login_audience"
+      }
+    },
+    "detail": {
+      "code": "governance.workspace_role_audience_invalid",
+      "message": "A role provisioned to tenant workspaces must use any or user audience.",
+      "path": "backend/model/10-crm-identity-org.json#/modules/crm/features/crm_identity_org/roles/crm_scheduler/provision_to_workspaces",
+      "file": "backend/model/10-crm-identity-org.json",
+      "json_pointer": "/modules/crm/features/crm_identity_org/roles/crm_scheduler/provision_to_workspaces",
+      "line": 100,
+      "column": 15,
+      "constraint": "governance.workspace_role.tenant_login_audience",
+      "allowed_values": [
+        "any",
+        "user"
+      ],
+      "repair_hint": "replace the value at the reported file/JSON Pointer and rerun model plan",
+      "owner": "domainry-plane-authoring",
+      "stage": "authoring_contract",
+      "ledger_item": "crm/resource/roles.crm_scheduler",
+      "ledger_path": "backend/model/10-crm-identity-org.json",
+      "repair_facts": {
+        "allowed_values": [
+          "any",
+          "user"
+        ],
+        "artifact_path": ".domainry/builder/disposable/model-preflight-result.json",
+        "artifact_relative_to": "--project",
+        "field": "audience",
+        "operation": "replace",
+        "related_path": "/roles/1/audience",
+        "rule_id": "governance.workspace_role.tenant_login_audience"
+      }
+    }
+  },
+  {
+    "stage": "authoring_contract",
+    "owner": "domainry-plane-authoring",
+    "note": "A system-managed role cannot be provisioned as a tenant login role.",
+    "terminal_state": "baseline_first_scoring_failure",
+    "attribution_status": "attributed",
+    "diagnostic": {
+      "code": "governance.workspace_role_assignment_mode_invalid",
+      "message": "A system-managed role cannot be provisioned as a tenant login role.",
+      "path": "backend/model/10-crm-identity-org.json#/modules/crm/features/crm_identity_org/roles/crm_workflow/provision_to_workspaces",
+      "file": "backend/model/10-crm-identity-org.json",
+      "json_pointer": "/modules/crm/features/crm_identity_org/roles/crm_workflow/provision_to_workspaces",
+      "line": 94,
+      "column": 15,
+      "constraint": "governance.workspace_role.tenant_login_assignment",
+      "allowed_values": [
+        "manual",
+        "requestable"
+      ],
+      "repair_hint": "replace the value at the reported file/JSON Pointer and rerun model plan",
+      "owner": "domainry-plane-authoring",
+      "stage": "authoring_contract",
+      "ledger_item": "crm/resource/roles.crm_workflow",
+      "ledger_path": "backend/model/10-crm-identity-org.json",
+      "repair_facts": {
+        "allowed_values": [
+          "manual",
+          "requestable"
+        ],
+        "artifact_path": ".domainry/builder/disposable/model-preflight-result.json",
+        "artifact_relative_to": "--project",
+        "field": "assignment_mode",
+        "operation": "replace",
+        "related_path": "/roles/2/assignment_mode",
+        "rule_id": "governance.workspace_role.tenant_login_assignment"
+      }
+    },
+    "detail": {
+      "code": "governance.workspace_role_assignment_mode_invalid",
+      "message": "A system-managed role cannot be provisioned as a tenant login role.",
+      "path": "backend/model/10-crm-identity-org.json#/modules/crm/features/crm_identity_org/roles/crm_workflow/provision_to_workspaces",
+      "file": "backend/model/10-crm-identity-org.json",
+      "json_pointer": "/modules/crm/features/crm_identity_org/roles/crm_workflow/provision_to_workspaces",
+      "line": 94,
+      "column": 15,
+      "constraint": "governance.workspace_role.tenant_login_assignment",
+      "allowed_values": [
+        "manual",
+        "requestable"
+      ],
+      "repair_hint": "replace the value at the reported file/JSON Pointer and rerun model plan",
+      "owner": "domainry-plane-authoring",
+      "stage": "authoring_contract",
+      "ledger_item": "crm/resource/roles.crm_workflow",
+      "ledger_path": "backend/model/10-crm-identity-org.json",
+      "repair_facts": {
+        "allowed_values": [
+          "manual",
+          "requestable"
+        ],
+        "artifact_path": ".domainry/builder/disposable/model-preflight-result.json",
+        "artifact_relative_to": "--project",
+        "field": "assignment_mode",
+        "operation": "replace",
+        "related_path": "/roles/2/assignment_mode",
+        "rule_id": "governance.workspace_role.tenant_login_assignment"
+      }
+    }
+  },
+  {
+    "stage": "authoring_contract",
+    "owner": "domainry-plane-authoring",
+    "note": "A role provisioned to tenant workspaces must use any or user audience.",
+    "terminal_state": "baseline_first_scoring_failure",
+    "attribution_status": "attributed",
+    "diagnostic": {
+      "code": "governance.workspace_role_audience_invalid",
+      "message": "A role provisioned to tenant workspaces must use any or user audience.",
+      "path": "backend/model/10-crm-identity-org.json#/modules/crm/features/crm_identity_org/roles/crm_workflow/provision_to_workspaces",
+      "file": "backend/model/10-crm-identity-org.json",
+      "json_pointer": "/modules/crm/features/crm_identity_org/roles/crm_workflow/provision_to_workspaces",
+      "line": 94,
+      "column": 15,
+      "constraint": "governance.workspace_role.tenant_login_audience",
+      "allowed_values": [
+        "any",
+        "user"
+      ],
+      "repair_hint": "replace the value at the reported file/JSON Pointer and rerun model plan",
+      "owner": "domainry-plane-authoring",
+      "stage": "authoring_contract",
+      "ledger_item": "crm/resource/roles.crm_workflow",
+      "ledger_path": "backend/model/10-crm-identity-org.json",
+      "repair_facts": {
+        "allowed_values": [
+          "any",
+          "user"
+        ],
+        "artifact_path": ".domainry/builder/disposable/model-preflight-result.json",
+        "artifact_relative_to": "--project",
+        "field": "audience",
+        "operation": "replace",
+        "related_path": "/roles/2/audience",
+        "rule_id": "governance.workspace_role.tenant_login_audience"
+      }
+    },
+    "detail": {
+      "code": "governance.workspace_role_audience_invalid",
+      "message": "A role provisioned to tenant workspaces must use any or user audience.",
+      "path": "backend/model/10-crm-identity-org.json#/modules/crm/features/crm_identity_org/roles/crm_workflow/provision_to_workspaces",
+      "file": "backend/model/10-crm-identity-org.json",
+      "json_pointer": "/modules/crm/features/crm_identity_org/roles/crm_workflow/provision_to_workspaces",
+      "line": 94,
+      "column": 15,
+      "constraint": "governance.workspace_role.tenant_login_audience",
+      "allowed_values": [
+        "any",
+        "user"
+      ],
+      "repair_hint": "replace the value at the reported file/JSON Pointer and rerun model plan",
+      "owner": "domainry-plane-authoring",
+      "stage": "authoring_contract",
+      "ledger_item": "crm/resource/roles.crm_workflow",
+      "ledger_path": "backend/model/10-crm-identity-org.json",
+      "repair_facts": {
+        "allowed_values": [
+          "any",
+          "user"
+        ],
+        "artifact_path": ".domainry/builder/disposable/model-preflight-result.json",
+        "artifact_relative_to": "--project",
+        "field": "audience",
+        "operation": "replace",
+        "related_path": "/roles/2/audience",
+        "rule_id": "governance.workspace_role.tenant_login_audience"
+      }
+    }
+  },
+  {
+    "stage": "runtime_manifest",
+    "owner": "domainry-plane-compiler",
+    "note": "compiled Runtime manifest is invalid: roles[1].provision_to_workspaces: Workspace login roles must use any, user, or business_profile audience; roles[1].provision_to_workspaces: system-managed roles cannot be provisioned as tenant login roles; roles[2].provision_to_workspaces: Workspace login roles must use any, user, or business_profile audience; roles[2].provision_to_workspaces: system-managed roles cannot be provisioned as tenant login roles",
+    "terminal_state": "baseline_first_scoring_failure",
+    "attribution_status": "attributed",
+    "diagnostic": {
+      "code": "ledger.runtime_manifest_invalid",
+      "message": "compiled Runtime manifest is invalid: roles[1].provision_to_workspaces: Workspace login roles must use any, user, or business_profile audience; roles[1].provision_to_workspaces: system-managed roles cannot be provisioned as tenant login roles; roles[2].provision_to_workspaces: Workspace login roles must use any, user, or business_profile audience; roles[2].provision_to_workspaces: system-managed roles cannot be provisioned as tenant login roles",
+      "file": "backend/model/00-project.json",
+      "line": 1,
+      "column": 1,
+      "constraint": "ledger.runtime_manifest_invalid",
+      "repair_hint": "repair the reported constraint at the file/JSON Pointer and rerun model plan",
+      "owner": "domainry-plane-compiler",
+      "stage": "runtime_manifest",
+      "ledger_item": "project/project/project",
+      "ledger_path": "backend/model/00-project.json",
+      "repair_facts": {
+        "artifact_path": ".domainry/builder/disposable/model-preflight-result.json",
+        "artifact_relative_to": "--project",
+        "compile_before_publish": true
+      }
+    },
+    "detail": {
+      "code": "ledger.runtime_manifest_invalid",
+      "message": "compiled Runtime manifest is invalid: roles[1].provision_to_workspaces: Workspace login roles must use any, user, or business_profile audience; roles[1].provision_to_workspaces: system-managed roles cannot be provisioned as tenant login roles; roles[2].provision_to_workspaces: Workspace login roles must use any, user, or business_profile audience; roles[2].provision_to_workspaces: system-managed roles cannot be provisioned as tenant login roles",
+      "file": "backend/model/00-project.json",
+      "line": 1,
+      "column": 1,
+      "constraint": "ledger.runtime_manifest_invalid",
+      "repair_hint": "repair the reported constraint at the file/JSON Pointer and rerun model plan",
+      "owner": "domainry-plane-compiler",
+      "stage": "runtime_manifest",
+      "ledger_item": "project/project/project",
+      "ledger_path": "backend/model/00-project.json",
+      "repair_facts": {
+        "artifact_path": ".domainry/builder/disposable/model-preflight-result.json",
+        "artifact_relative_to": "--project",
+        "compile_before_publish": true
+      }
+    }
+  }
+]

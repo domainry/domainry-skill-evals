@@ -1,0 +1,191 @@
+{
+  "contract_version": "domainry-eval-freeze-manifest-v1",
+  "run_id": "m1-crm-project-org-unit-resolve-convergence-39",
+  "benchmark": "m1-crm",
+  "run_kind": "convergence",
+  "parent_run_id": "m1-crm-evaluator-cache-convergence-38",
+  "model": "gpt-5.6-sol",
+  "budgets": {
+    "wall_clock_seconds": 3600.0,
+    "total_tokens": 5000000,
+    "cli_invocations": 40,
+    "cli_retries": 20
+  },
+  "absence_proof": {
+    "checked_epoch": 1788723382.798083,
+    "isolation_root_absent": true,
+    "project_absent": true,
+    "codex_home_absent": true,
+    "agent_home_absent": true,
+    "sqlite_database_absent": true,
+    "sqlite_wal_absent": true,
+    "sqlite_shm_absent": true
+  },
+  "isolation": {
+    "root": "/private/tmp/domainry-m1-project-org-unit-resolve-convergence-39",
+    "codex_home": "/private/tmp/domainry-m1-project-org-unit-resolve-convergence-39/codex-home",
+    "agent_home": "/private/tmp/domainry-m1-project-org-unit-resolve-convergence-39/home",
+    "temp": "/private/tmp/domainry-m1-project-org-unit-resolve-convergence-39/tmp",
+    "project": "/private/tmp/domainry-m1-project-org-unit-resolve-convergence-39/project",
+    "runtime": "/private/tmp/domainry-m1-project-org-unit-resolve-convergence-39/runtime",
+    "database": "/private/tmp/domainry-m1-project-org-unit-resolve-convergence-39/runtime/cohort.sqlite",
+    "candidate_copy": "/private/tmp/domainry-m1-project-org-unit-resolve-convergence-39/codex-home/skills/domainry-builder-v1"
+  },
+  "candidate": {
+    "candidate_id": "v0.3.16-6-m1-evolution-action-20260907+9b42936cb7ec",
+    "skill_name": "domainry-builder-v1",
+    "skill_version": "v0.3.16-6-m1-evolution-action-20260907",
+    "skill_identity_sha256": "ebd64d96025aeabc3ec803e2cef1d6330e670533269edbfc0dda8172909aaceb",
+    "package_metadata_sha256": "328ee6248549a4ae3f33c30dc54a570450df30943035a9b287fc6072a017b060",
+    "skill_tree_sha256": "9b42936cb7ecf332f61e607dcfb9dd5221abeea23bb5df805a895ebe3d20ac85",
+    "cli_binary_sha256": "1f8a551179fb635de07f16b6ef14c81572f11d70479b5d4c2c33ee88da1e0454",
+    "runtime_api_contract_version": "runtime-domain-api-v1",
+    "runtime_api_contract_hash": "4fe655cbfd4fa0bc0b0c04c89b86926fc6aceb059c9fccf5b09eec9b459330f7",
+    "apply_target_flag": "--service",
+    "apply_target_value": "http://127.0.0.1:8283"
+  },
+  "isolated_candidate": {
+    "candidate_id": "v0.3.16-6-m1-evolution-action-20260907+9b42936cb7ec",
+    "skill_name": "domainry-builder-v1",
+    "skill_version": "v0.3.16-6-m1-evolution-action-20260907",
+    "skill_identity_sha256": "ebd64d96025aeabc3ec803e2cef1d6330e670533269edbfc0dda8172909aaceb",
+    "package_metadata_sha256": "328ee6248549a4ae3f33c30dc54a570450df30943035a9b287fc6072a017b060",
+    "skill_tree_sha256": "9b42936cb7ecf332f61e607dcfb9dd5221abeea23bb5df805a895ebe3d20ac85",
+    "cli_binary_sha256": "1f8a551179fb635de07f16b6ef14c81572f11d70479b5d4c2c33ee88da1e0454",
+    "runtime_api_contract_version": "runtime-domain-api-v1",
+    "runtime_api_contract_hash": "4fe655cbfd4fa0bc0b0c04c89b86926fc6aceb059c9fccf5b09eec9b459330f7",
+    "apply_target_flag": "--service",
+    "apply_target_value": "http://127.0.0.1:8283"
+  },
+  "service_identity": {
+    "target_kind": "service",
+    "healthy": true,
+    "http_status": 200,
+    "health_document_sha256": "7d5a33e943382c572d0095fd4e52e84af0bdc1650f7b097a93d478cb38e9eb2d",
+    "published_identity": {
+      "contract_version": "domainry-control-plane-health-v1",
+      "discovery": "/.well-known/domainry-plane",
+      "service_kind": "template-control-plane",
+      "version": "v0.3.16-6-m1-evolution-action-20260907",
+      "checks": [
+        {
+          "detail": "v0.3.16-6-m1-evolution-action-20260907",
+          "name": "application_delivery",
+          "status": "passed"
+        },
+        {
+          "detail": "domainry-frontend-product_v0.3.16-6-m1-evolution-action-20260907.tar.gz sha256:6490913f05323e8b29ce96a2f31e5b7f4b5c5e8c3bafecdd2192f49b9b6b8d42",
+          "name": "frontend_product",
+          "status": "passed"
+        },
+        {
+          "detail": "github.com/domainry/domainry-identity@v0.999.0-domainry.9bb2190b4298fbd3",
+          "name": "identity_module",
+          "status": "passed"
+        },
+        {
+          "detail": "github.com/domainry/domainry-notification@v0.999.0-domainry.cea1cbbe680d85d8",
+          "name": "notification_module",
+          "status": "passed"
+        },
+        {
+          "detail": "github.com/domainry/domainry-notification-sdk@v0.999.0-domainry.c0a526a508a992fd",
+          "name": "notification_sdk",
+          "status": "passed"
+        },
+        {
+          "detail": "domainry-project-delivery-local-development",
+          "name": "project_delivery_signer",
+          "status": "passed"
+        },
+        {
+          "detail": "available",
+          "name": "project_delivery_store",
+          "status": "passed"
+        },
+        {
+          "detail": "local.domainry.project-delivery revision 1",
+          "name": "project_delivery_trust",
+          "status": "passed"
+        },
+        {
+          "detail": "domainry-project-template_v0.3.16-6-m1-evolution-action-20260907.tar.gz sha256:9f42f06ff630bd4d7eec330ee1d70e57ca73af98918b4c5029d85d162be4af40",
+          "name": "project_template",
+          "status": "passed"
+        },
+        {
+          "detail": "domainry-runtime-client-sdk_v0.3.16-6-m1-evolution-action-20260907.tar.gz sha256:7a86bfc5a252cf12d26ce518927bf76994c948b08a5a30da4b89ce3304b4b8ac",
+          "name": "runtime_client_sdk",
+          "status": "passed"
+        },
+        {
+          "detail": "runtime-domain-api-v1 + runtime-authoring-v1",
+          "name": "runtime_contract",
+          "status": "passed"
+        },
+        {
+          "detail": "github.com/domainry/domainry-runtime@v0.0.0-source-0ddbf36d1ab419cf",
+          "name": "runtime_module",
+          "status": "passed"
+        },
+        {
+          "detail": "1 platforms",
+          "name": "skill_packages",
+          "status": "passed"
+        }
+      ]
+    }
+  },
+  "checkpoint": {
+    "contract_version": "domainry-eval-checkpoint-v1",
+    "source_run_id": "m1-crm-evaluator-cache-convergence-38",
+    "checkpoint_kind": "post_verify_project_organization_unit_resolve_gap",
+    "measurement_class": "checkpoint_convergence_not_baseline",
+    "baseline_eligibility": false,
+    "manifest_sha256": "65aab33c278c4ba9b12986676ba90a1d7c87ee2d4942a4d76f83e758dbd96a0b",
+    "archive_sha256": "ddb854750cff2f232b3d65e99f400b7ca704d9a4a422f217de4d945ece381111",
+    "resume_boundary": {
+      "stage": "model",
+      "next_node": "Restore this project and reject the archived unmaterialized item_118 evolution. In backend/model/10-organization-identity.json restore provision_department to the existing create-only department Action, restore deliver_identity as object_operation with explicit target_organization_id, restore its sales_director grant to org_child, and add deliver_identity.handler.organization_unit_delivery with operations=[resolve], node_types=[department], and no parent_source. Run a fresh model plan/apply review. Consume the newly generated exact symbols and implement DeliverIdentity in this order: OrganizationUnits.Resolve(ctx, typed department request), verify its non-empty ID, TargetOrganization.Resolve(), verify the IDs match, then Identity.CreateWithSalesPersonProfile; retain the result OrganizationID equality check. Preserve the valid authorization-stale login refresh. Before the next managed verify, use only published packet/Runtime contracts to fix the already proven project BF defects: workflow run request requires a payload wrapper and an exact workflow.<key>.run permission; the manual large-lead workflow must preserve the sales initiator rather than run_as service; approval_mode=any tasks must be queried as open rather than pending; the scheduled workflow cannot be invoked through a manual-only workflow run route; the lead_detail export prepare URL must use source object key lead rather than export-control key lead_detail_export; and initial/restart BF08 must use phase-distinct audit/idempotency identities because download advances the audit to downloaded. Then run focused tests, project check, BF compile, apply finalize, full tree, and one managed verify through initial plus restart evidence.",
+      "rule": "Do not redo accepted requirements or unrelated model/Handler work. The Runtime and Identity behavior is fail-closed and correct for the declared descriptor; all listed changes belong to the M1 project model, project Handler, or project-owned business-flow harness. The archived TODO and evolution_review_required receipt are evidence at capture time, not authority to approve the rejected proposal. Build every correction from the current candidate's generated types and published Runtime API; do not infer payloads, permissions, target semantics, or scheduler routes.",
+      "prior_delivery_id": "sha256:34b9a96a419db10d6ca99c4048aa70c4276eeb9ee33453c60fd1c870acd26026"
+    },
+    "prohibited_repairs": [
+      "do not change Plane, Runtime, Identity, the installed Builder candidate, or evaluator code for this project-owned failure",
+      "do not widen sales_person_profile.deliver_identity from org_child to all; restore the accepted org_child scope",
+      "do not combine first-user delivery into provision_department or convert deliver_identity to record_owner",
+      "do not create a CRM department registry, substitute a store Organization, or increase store quota",
+      "do not use run_as service for the manual large-lead approval workflow when the initiating sales user must remain the trusted requester and notification recipient",
+      "do not restore Git history, Agent sessions, managed Runtime databases, SQLite, locks, or stale measured-run evidence"
+    ]
+  },
+  "hashes": {
+    "candidate_config_sha256": "67cbdfddf7124987f96a669ce0c49005e9517a5f12335909fc1aedc3e0ce65f4",
+    "requirements_sha256": "e59edec731f9ff2bcda8a6b928681b273be7873a22c3f9ea93c9bb27e6cea83e",
+    "rendered_driver_prompt_sha256": "b42a166aebcc979d43f65b95d88fca3bdfc6317f64600a6b9fe9bbadb4e7a8b4",
+    "checker_sha256": "7b75ecf646c7dfc07bb0c51b8730b6fef61d24f45ae77665695b4b1c58832f5f",
+    "scorer_sha256": "0e7fc7903e0f4e957d5860c3b7b8e4a5d07fc0d4b77f4faeb117a7db20d32109",
+    "frozen_checker_sha256": "7b75ecf646c7dfc07bb0c51b8730b6fef61d24f45ae77665695b4b1c58832f5f",
+    "frozen_scorer_sha256": "0e7fc7903e0f4e957d5860c3b7b8e4a5d07fc0d4b77f4faeb117a7db20d32109",
+    "driver_sha256": "072409e514aea1c18332b1053f6a9107c2459e3ae9a89a307876d67f3e8d4057",
+    "agent_command_sha256": "35a6e26632c6a1ffd90135372680e41a1501e379b50cbfd0017d60e6a3976ef1",
+    "checker_command_sha256": "03bb0f85ec953b1bc3b317616e76fe65950acc8de966d5aac01491f1b9229d75"
+  },
+  "agent_context": {
+    "fresh_session_required": true,
+    "resume_forbidden": true,
+    "codex_home_contents_during_agent": [
+      "auth.json",
+      "skills/domainry-builder-v1"
+    ],
+    "ephemeral_auth_staged": true,
+    "auth_retention": "remove_immediately_after_agent",
+    "environment_policy": "minimal-isolated-v1",
+    "prompt_inputs": [
+      "requirements",
+      "evaluator-owned measured-run policy"
+    ],
+    "evaluator_assets_exposed": false,
+    "checkpoint_project_restored": true
+  }
+}

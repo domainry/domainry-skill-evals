@@ -1,0 +1,272 @@
+{
+  "family": "apply_model",
+  "command": "/bin/zsh -lc '/private/tmp/domainry-m1-v39-offline-closure-baseline-21/codex-home/skills/domainry-builder-v1/bin/domainry-cli apply model --json --project /private/tmp/domainry-m1-v39-offline-closure-baseline-21/project --go-module-path example.com/domainry-m1-crm/backend --service http://127.0.0.1:8283'",
+  "exit_code": 0,
+  "output": {
+    "acceptance_fixture": {
+      "contract_version": "domainry-managed-runtime-acceptance-fixture-projection-v2",
+      "runtime_manifest_sha256": "d4e1827c57e5663a358562801a8098fcf47a39b641f137fc93a362cc7903ac8a",
+      "organization_count": 2,
+      "actor_count": 3,
+      "startup_fixture_path": "",
+      "startup_fixture_count": 0,
+      "eligible_role_keys": [
+        "sales_director",
+        "sales_rep"
+      ],
+      "roles": [
+        {
+          "role_key": "sales_director",
+          "placement": "global_manager",
+          "actor_count": 1,
+          "business_permissions": [
+            "customer.read;all",
+            "lead.approve_conversion;all",
+            "lead.export;all",
+            "lead.read;all",
+            "lead.reject_conversion;all",
+            "lead_conversion.read;all",
+            "lead_export_audit.create;owner",
+            "lead_export_audit.read;owner",
+            "lead_export_audit.update;owner",
+            "lead_export_download.create;owner",
+            "lead_export_download.read;owner"
+          ]
+        },
+        {
+          "role_key": "sales_rep",
+          "placement": "department",
+          "actor_count": 2,
+          "business_permissions": [
+            "customer.read;owner",
+            "lead.contact;owner",
+            "lead.convert_direct;owner",
+            "lead.edit;owner",
+            "lead.lose;owner",
+            "lead.qualify;owner",
+            "lead.read;org",
+            "lead.register;owner",
+            "lead_conversion.read;owner"
+          ]
+        }
+      ],
+      "role_eligibility": [
+        {
+          "role_key": "crm_scheduler",
+          "audience": "service",
+          "assignment_mode": "system_managed",
+          "provision_to_workspaces": false,
+          "business_permissions": [
+            "lead.send_overdue_reminders;all"
+          ],
+          "state": "system_managed",
+          "reason": "System-managed roles cannot be assigned to human workspace logins.",
+          "remediation": "Keep this role system-managed; add a separate human role when business-flow verification needs an actor."
+        },
+        {
+          "role_key": "sales_director",
+          "audience": "any",
+          "assignment_mode": "manual",
+          "provision_to_workspaces": true,
+          "business_permissions": [
+            "customer.read;all",
+            "lead.approve_conversion;all",
+            "lead.export;all",
+            "lead.read;all",
+            "lead.reject_conversion;all",
+            "lead_conversion.read;all",
+            "lead_export_audit.create;owner",
+            "lead_export_audit.read;owner",
+            "lead_export_audit.update;owner",
+            "lead_export_download.create;owner",
+            "lead_export_download.read;owner"
+          ],
+          "state": "eligible",
+          "reason": "Human workspace role with compiler-bound Object permissions."
+        },
+        {
+          "role_key": "sales_rep",
+          "audience": "any",
+          "assignment_mode": "manual",
+          "provision_to_workspaces": true,
+          "business_permissions": [
+            "customer.read;owner",
+            "lead.contact;owner",
+            "lead.convert_direct;owner",
+            "lead.edit;owner",
+            "lead.lose;owner",
+            "lead.qualify;owner",
+            "lead.read;org",
+            "lead.register;owner",
+            "lead_conversion.read;owner"
+          ],
+          "state": "eligible",
+          "reason": "Human workspace role with compiler-bound Object permissions."
+        }
+      ]
+    },
+    "contract_version": "domainry-model-apply-v3",
+    "created_source_files": 0,
+    "implementation_packet": {
+      "contract_version": "domainry-action-implementation-packet-v9",
+      "path": ".domainry/builder/source/implementation-packets/b1c41402218af97c3001531fd89f0f92d486dbf18b82bdd3873a281440449576.json",
+      "file_sha256": "b1c41402218af97c3001531fd89f0f92d486dbf18b82bdd3873a281440449576",
+      "bytes": 8066,
+      "actions": [
+        {
+          "action_key": "lead.approve_conversion",
+          "path": ".domainry/builder/source/implementation-packets/actions/dcf59d15b9ca6270f79a11fe1a2bffb01eef59564ce9a8d9ab88c91aa16dc215.json",
+          "sha256": "dcf59d15b9ca6270f79a11fe1a2bffb01eef59564ce9a8d9ab88c91aa16dc215",
+          "bytes": 5609
+        },
+        {
+          "action_key": "lead.contact",
+          "path": ".domainry/builder/source/implementation-packets/actions/3a777605ebf06949857cf74d1b163a42e36d83ea3608e56fbe0f26ea94adf356.json",
+          "sha256": "3a777605ebf06949857cf74d1b163a42e36d83ea3608e56fbe0f26ea94adf356",
+          "bytes": 4120
+        },
+        {
+          "action_key": "lead.convert_direct",
+          "path": ".domainry/builder/source/implementation-packets/actions/bba69d533cc6a4c507f0ffcd4d37d634d7b222dc695ee49c628784df30626de6.json",
+          "sha256": "bba69d533cc6a4c507f0ffcd4d37d634d7b222dc695ee49c628784df30626de6",
+          "bytes": 5355
+        },
+        {
+          "action_key": "lead.edit",
+          "path": ".domainry/builder/source/implementation-packets/actions/6d61f877fb4dc7392aa8b6aac29638b8be8a62bffc8aa6c4b5ad557531dc4d66.json",
+          "sha256": "6d61f877fb4dc7392aa8b6aac29638b8be8a62bffc8aa6c4b5ad557531dc4d66",
+          "bytes": 4789
+        },
+        {
+          "action_key": "lead.lose",
+          "path": ".domainry/builder/source/implementation-packets/actions/1c7f2000724813dbf7ebb7fc51b27fc93df215395c6968405aba29ed88cbb791.json",
+          "sha256": "1c7f2000724813dbf7ebb7fc51b27fc93df215395c6968405aba29ed88cbb791",
+          "bytes": 4069
+        },
+        {
+          "action_key": "lead.qualify",
+          "path": ".domainry/builder/source/implementation-packets/actions/503bc87052c8935d3c0e2e4d4bb5ad1755ce517e0470e33a184792fb396e0cf8.json",
+          "sha256": "503bc87052c8935d3c0e2e4d4bb5ad1755ce517e0470e33a184792fb396e0cf8",
+          "bytes": 4120
+        },
+        {
+          "action_key": "lead.register",
+          "path": ".domainry/builder/source/implementation-packets/actions/1c815896cb887739a582eeea61564a442ea7a564d9a176e122a967ce07391760.json",
+          "sha256": "1c815896cb887739a582eeea61564a442ea7a564d9a176e122a967ce07391760",
+          "bytes": 4988
+        },
+        {
+          "action_key": "lead.reject_conversion",
+          "path": ".domainry/builder/source/implementation-packets/actions/6752fb2524bb462a58e4fe44264f36357405ed7d12aba4c5dd72449ec9622bda.json",
+          "sha256": "6752fb2524bb462a58e4fe44264f36357405ed7d12aba4c5dd72449ec9622bda",
+          "bytes": 5738
+        },
+        {
+          "action_key": "lead.send_overdue_reminders",
+          "path": ".domainry/builder/source/implementation-packets/actions/0243b8896c89bf8c91aaaf2bf94c8b36a8877ed6886b23d7916f61dbd324a211.json",
+          "sha256": "0243b8896c89bf8c91aaaf2bf94c8b36a8877ed6886b23d7916f61dbd324a211",
+          "bytes": 4430
+        }
+      ],
+      "summary": {
+        "action_count": 9,
+        "working_directory": "backend",
+        "focused_packages": [
+          "./actions/crm"
+        ],
+        "shared_constraints": [
+          "Read this index once, then read each listed Action context by exact path; do not rediscover context from generated trees.",
+          "Edit only project-owned Action source and paired tests; never edit generated source, manifests, receipts, caches, or managed Runtime state.",
+          "Read verification.path during apply, copy verification.harness_template into project-owned business-flow tests, and read only the hash-checked shards listed by verification.minimum_read_plan before apply finalize.",
+          "Use the delivery build constraint and the project-local-plus-public hybrid GOPROXY exactly as shown."
+        ],
+        "stage_boundary": {
+          "before_finalize": "Complete all Handler, paired test, and required backend/tests/businessflow source; run focused and business_flow_compile. Do not run the full tree because generated composition may intentionally be incomplete.",
+          "finalize": "After all project-owned source and pre-finalize tests are complete, run apply finalize exactly once.",
+          "after_finalize": "Project-owned source is frozen. Run the full backend tree and verify without source edits. Any source change starts a new repair iteration and requires focused tests plus apply finalize again before verify."
+        },
+        "test_commands": {
+          "focused": "cd \"$PROJECT_ROOT/backend\" && GOPROXY=\"file://$PROJECT_ROOT/.domainry/builder/contracts/go-module-proxy,https://proxy.golang.org\" go test -count=1 -tags \"domainry_domain_sdk_1bf242c8765be745580f841dfed97c7629183e78866720aaab7515d3105ab891\" ./actions/crm",
+          "business_flow_compile": "\"$DOMAINRY_CLI\" verify fixture --json --project \"$PROJECT_ROOT\" >/dev/null && if [ -d \"$PROJECT_ROOT/backend/tests/businessflow\" ]; then cd \"$PROJECT_ROOT/backend\" && GOPROXY=\"file://$PROJECT_ROOT/.domainry/builder/contracts/go-module-proxy,https://proxy.golang.org\" go test -count=1 -tags \"domainry_domain_sdk_1bf242c8765be745580f841dfed97c7629183e78866720aaab7515d3105ab891\" ./tests/businessflow; fi",
+          "finalize": "\"$DOMAINRY_CLI\" apply finalize --json --project \"$PROJECT_ROOT\"",
+          "full_tree": "cd \"$PROJECT_ROOT/backend\" && GOPROXY=\"file://$PROJECT_ROOT/.domainry/builder/contracts/go-module-proxy,https://proxy.golang.org\" go test -count=1 -tags \"domainry_domain_sdk_1bf242c8765be745580f841dfed97c7629183e78866720aaab7515d3105ab891\" ./..."
+        }
+      },
+      "verification": {
+        "path": ".domainry/builder/source/implementation-packets/verification/437a31ec538ca948ef43cb6c3f6f1fd6d3aaca600e07fbfad4eedf438d0ace34.json",
+        "sha256": "437a31ec538ca948ef43cb6c3f6f1fd6d3aaca600e07fbfad4eedf438d0ace34",
+        "bytes": 23299,
+        "route_shards": {
+          "module.data_exchange.downloadDataExchangeJob": {
+            "path": ".domainry/builder/source/implementation-packets/verification/routes/163f82f054b86108d52081f9f72938d360274d2b19eae1807a503ac886fa6c00.json",
+            "sha256": "163f82f054b86108d52081f9f72938d360274d2b19eae1807a503ac886fa6c00",
+            "bytes": 1334
+          },
+          "module.data_exchange.getDataExchangeJob": {
+            "path": ".domainry/builder/source/implementation-packets/verification/routes/1880bdca27cbde7046a3aff1f0952cb27c41f0fbee3b719196e313bb1b497319.json",
+            "sha256": "1880bdca27cbde7046a3aff1f0952cb27c41f0fbee3b719196e313bb1b497319",
+            "bytes": 1275
+          },
+          "module.notification.getNotificationInbox": {
+            "path": ".domainry/builder/source/implementation-packets/verification/routes/449783f814e6260c61c111e2f49117c15cb269c98bb875503aa526d192148e24.json",
+            "sha256": "449783f814e6260c61c111e2f49117c15cb269c98bb875503aa526d192148e24",
+            "bytes": 4064
+          },
+          "module.report.prepareReportExport": {
+            "path": ".domainry/builder/source/implementation-packets/verification/routes/ae707621bc67ff354e324113f7b045eada8d9b87ec4f07e6002f31b969b10543.json",
+            "sha256": "ae707621bc67ff354e324113f7b045eada8d9b87ec4f07e6002f31b969b10543",
+            "bytes": 7294
+          },
+          "module.report.queryReportObjectSQL": {
+            "path": ".domainry/builder/source/implementation-packets/verification/routes/d679f675eb24372c545949f9281bacb9bdb91ac0823fbf7f173479b55c5bc7ca.json",
+            "sha256": "d679f675eb24372c545949f9281bacb9bdb91ac0823fbf7f173479b55c5bc7ca",
+            "bytes": 3086
+          },
+          "runtime.audit": {
+            "path": ".domainry/builder/source/implementation-packets/verification/routes/46fb5e8f01496d35c1e26732fdd7efb52556835c070130afe84c1ef8317fb95b.json",
+            "sha256": "46fb5e8f01496d35c1e26732fdd7efb52556835c070130afe84c1ef8317fb95b",
+            "bytes": 366
+          },
+          "runtime.notification": {
+            "path": ".domainry/builder/source/implementation-packets/verification/routes/42241784bd387a7c4ae0318771b7b64c5c66366bbe1e9961938f08af74c2d848.json",
+            "sha256": "42241784bd387a7c4ae0318771b7b64c5c66366bbe1e9961938f08af74c2d848",
+            "bytes": 955
+          },
+          "runtime.records": {
+            "path": ".domainry/builder/source/implementation-packets/verification/routes/d69d34dfb41e7fc2f71b3c3cbc9193e5d3f84910893cafb4b2ca3bf71e6c2b22.json",
+            "sha256": "d69d34dfb41e7fc2f71b3c3cbc9193e5d3f84910893cafb4b2ca3bf71e6c2b22",
+            "bytes": 2946
+          },
+          "runtime.workflow": {
+            "path": ".domainry/builder/source/implementation-packets/verification/routes/7f55cfeeb17ef772bf8dfe7d4b990f744b5f6ada9c44fcc4f74e4e4c0c6ca87f.json",
+            "sha256": "7f55cfeeb17ef772bf8dfe7d4b990f744b5f6ada9c44fcc4f74e4e4c0c6ca87f",
+            "bytes": 3473
+          }
+        },
+        "harness_template": {
+          "path": ".domainry/builder/source/implementation-packets/verification/harness/4e136652189e6a4037a05eda58316b2ea166f60c2f56e2ad373ec7379f50d804.go.txt",
+          "sha256": "4e136652189e6a4037a05eda58316b2ea166f60c2f56e2ad373ec7379f50d804",
+          "bytes": 10894
+        }
+      },
+      "delivery_id": "sha256:fc4d9c6c62ed2749125c41fc7d6209ee7b45e41be7f3448405b6a09f40063b4a",
+      "materialization_receipt_sha256": "8a18ff93a9818547b5e8fbf1f24bf84b818f2cef91f4f42f7d58d86713c91650",
+      "materialization_file_sha256": "e8b02be2e7e06cee72194d084111128f3430aa2401eccfcf206f6fab4ab85ddd"
+    },
+    "receipt": ".domainry/builder/model-apply.json",
+    "state": "implementation_ready"
+  },
+  "raw_output": "[domainry] apply model: load and preflight model done (1.111s)\n[domainry] apply model: synchronize Blueprint Ledger...\n[domainry] apply model: synchronize Blueprint Ledger done (281ms)\n[domainry] apply model: validate compiled Blueprint...\n[domainry] apply model: validate compiled Blueprint done (480ms)\n[domainry] apply model: publish immutable project delivery...\n[domainry] apply model: publish immutable project delivery done (570ms)\n[domainry] apply model: fetch signed delivery artifacts...\n[domainry] apply model: fetch signed delivery artifacts done (272ms)\n[domainry] apply model: materialize backend and resolve Go dependencies...\n[domainry] apply model: materialize backend and resolve Go dependencies done (31.915s)\n[domainry] apply model: prepare project implementation packet...\n[domainry] apply model: prepare project implementation packet done (500ms)\n{\"acceptance_fixture\":{\"contract_version\":\"domainry-managed-runtime-acceptance-fixture-projection-v2\",\"runtime_manifest_sha256\":\"d4e1827c57e5663a358562801a8098fcf47a39b641f137fc93a362cc7903ac8a\",\"organization_count\":2,\"actor_count\":3,\"startup_fixture_path\":\"\",\"startup_fixture_count\":0,\"eligible_role_keys\":[\"sales_director\",\"sales_rep\"],\"roles\":[{\"role_key\":\"sales_director\",\"placement\":\"global_manager\",\"actor_count\":1,\"business_permissions\":[\"customer.read;all\",\"lead.approve_conversion;all\",\"lead.export;all\",\"lead.read;all\",\"lead.reject_conversion;all\",\"lead_conversion.read;all\",\"lead_export_audit.create;owner\",\"lead_export_audit.read;owner\",\"lead_export_audit.update;owner\",\"lead_export_download.create;owner\",\"lead_export_download.read;owner\"]},{\"role_key\":\"sales_rep\",\"placement\":\"department\",\"actor_count\":2,\"business_permissions\":[\"customer.read;owner\",\"lead.contact;owner\",\"lead.convert_direct;owner\",\"lead.edit;owner\",\"lead.lose;owner\",\"lead.qualify;owner\",\"lead.read;org\",\"lead.register;owner\",\"lead_conversion.read;owner\"]}],\"role_eligibility\":[{\"role_key\":\"crm_scheduler\",\"audience\":\"service\",\"assignment_mode\":\"system_managed\",\"provision_to_workspaces\":false,\"business_permissions\":[\"lead.send_overdue_reminders;all\"],\"state\":\"system_managed\",\"reason\":\"System-managed roles cannot be assigned to human workspace logins.\",\"remediation\":\"Keep this role system-managed; add a separate human role when business-flow verification needs an actor.\"},{\"role_key\":\"sales_director\",\"audience\":\"any\",\"assignment_mode\":\"manual\",\"provision_to_workspaces\":true,\"business_permissions\":[\"customer.read;all\",\"lead.approve_conversion;all\",\"lead.export;all\",\"lead.read;all\",\"lead.reject_conversion;all\",\"lead_conversion.read;all\",\"lead_export_audit.create;owner\",\"lead_export_audit.read;owner\",\"lead_export_audit.update;owner\",\"lead_export_download.create;owner\",\"lead_export_download.read;owner\"],\"state\":\"eligible\",\"reason\":\"Human workspace role with compiler-bound Object permissions.\"},{\"role_key\":\"sales_rep\",\"audience\":\"any\",\"assignment_mode\":\"manual\",\"provision_to_workspaces\":true,\"business_permissions\":[\"customer.read;owner\",\"lead.contact;owner\",\"lead.convert_direct;owner\",\"lead.edit;owner\",\"lead.lose;owner\",\"lead.qualify;owner\",\"lead.read;org\",\"lead.register;owner\",\"lead_conversion.read;owner\"],\"state\":\"eligible\",\"reason\":\"Human workspace role with compiler-bound Object permissions.\"}]},\"contract_version\":\"domainry-model-apply-v3\",\"created_source_files\":0,\"implementation_packet\":{\"contract_version\":\"domainry-action-implementation-packet-v9\",\"path\":\".domainry/builder/source/implementation-packets/b1c41402218af97c3001531fd89f0f92d486dbf18b82bdd3873a281440449576.json\",\"file_sha256\":\"b1c41402218af97c3001531fd89f0f92d486dbf18b82bdd3873a281440449576\",\"bytes\":8066,\"actions\":[{\"action_key\":\"lead.approve_conversion\",\"path\":\".domainry/builder/source/implementation-packets/actions/dcf59d15b9ca6270f79a11fe1a2bffb01eef59564ce9a8d9ab88c91aa16dc215.json\",\"sha256\":\"dcf59d15b9ca6270f79a11fe1a2bffb01eef59564ce9a8d9ab88c91aa16dc215\",\"bytes\":5609},{\"action_key\":\"lead.contact\",\"path\":\".domainry/builder/source/implementation-packets/actions/3a777605ebf06949857cf74d1b163a42e36d83ea3608e56fbe0f26ea94adf356.json\",\"sha256\":\"3a777605ebf06949857cf74d1b163a42e36d83ea3608e56fbe0f26ea94adf356\",\"bytes\":4120},{\"action_key\":\"lead.convert_direct\",\"path\":\".domainry/builder/source/implementation-packets/actions/bba69d533cc6a4c507f0ffcd4d37d634d7b222dc695ee49c628784df30626de6.json\",\"sha256\":\"bba69d533cc6a4c507f0ffcd4d37d634d7b222dc695ee49c628784df30626de6\",\"bytes\":5355},{\"action_key\":\"lead.edit\",\"path\":\".domainry/builder/source/implementation-packets/actions/6d61f877fb4dc7392aa8b6aac29638b8be8a62bffc8aa6c4b5ad557531dc4d66.json\",\"sha256\":\"6d61f877fb4dc7392aa8b6aac29638b8be8a62bffc8aa6c4b5ad557531dc4d66\",\"bytes\":4789},{\"action_key\":\"lead.lose\",\"path\":\".domainry/builder/source/implementation-packets/actions/1c7f2000724813dbf7ebb7fc51b27fc93df215395c6968405aba29ed88cbb791.json\",\"sha256\":\"1c7f2000724813dbf7ebb7fc51b27fc93df215395c6968405aba29ed88cbb791\",\"bytes\":4069},{\"action_key\":\"lead.qualify\",\"path\":\".domainry/builder/source/implementation-packets/actions/503bc87052c8935d3c0e2e4d4bb5ad1755ce517e0470e33a184792fb396e0cf8.json\",\"sha256\":\"503bc87052c8935d3c0e2e4d4bb5ad1755ce517e0470e33a184792fb396e0cf8\",\"bytes\":4120},{\"action_key\":\"lead.register\",\"path\":\".domainry/builder/source/implementation-packets/actions/1c815896cb887739a582eeea61564a442ea7a564d9a176e122a967ce07391760.json\",\"sha256\":\"1c815896cb887739a582eeea61564a442ea7a564d9a176e122a967ce07391760\",\"bytes\":4988},{\"action_key\":\"lead.reject_conversion\",\"path\":\".domainry/builder/source/implementation-packets/actions/6752fb2524bb462a58e4fe44264f36357405ed7d12aba4c5dd72449ec9622bda.json\",\"sha256\":\"6752fb2524bb462a58e4fe44264f36357405ed7d12aba4c5dd72449ec9622bda\",\"bytes\":5738},{\"action_key\":\"lead.send_overdue_reminders\",\"path\":\".domainry/builder/source/implementation-packets/actions/0243b8896c89bf8c91aaaf2bf94c8b36a8877ed6886b23d7916f61dbd324a211.json\",\"sha256\":\"0243b8896c89bf8c91aaaf2bf94c8b36a8877ed6886b23d7916f61dbd324a211\",\"bytes\":4430}],\"summary\":{\"action_count\":9,\"working_directory\":\"backend\",\"focused_packages\":[\"./actions/crm\"],\"shared_constraints\":[\"Read this index once, then read each listed Action context by exact path; do not rediscover context from generated trees.\",\"Edit only project-owned Action source and paired tests; never edit generated source, manifests, receipts, caches, or managed Runtime state.\",\"Read verification.path during apply, copy verification.harness_template into project-owned business-flow tests, and read only the hash-checked shards listed by verification.minimum_read_plan before apply finalize.\",\"Use the delivery build constraint and the project-local-plus-public hybrid GOPROXY exactly as shown.\"],\"stage_boundary\":{\"before_finalize\":\"Complete all Handler, paired test, and required backend/tests/businessflow source; run focused and business_flow_compile. Do not run the full tree because generated composition may intentionally be incomplete.\",\"finalize\":\"After all project-owned source and pre-finalize tests are complete, run apply finalize exactly once.\",\"after_finalize\":\"Project-owned source is frozen. Run the full backend tree and verify without source edits. Any source change starts a new repair iteration and requires focused tests plus apply finalize again before verify.\"},\"test_commands\":{\"focused\":\"cd \\\"$PROJECT_ROOT/backend\\\" \\u0026\\u0026 GOPROXY=\\\"file://$PROJECT_ROOT/.domainry/builder/contracts/go-module-proxy,https://proxy.golang.org\\\" go test -count=1 -tags \\\"domainry_domain_sdk_1bf242c8765be745580f841dfed97c7629183e78866720aaab7515d3105ab891\\\" ./actions/crm\",\"business_flow_compile\":\"\\\"$DOMAINRY_CLI\\\" verify fixture --json --project \\\"$PROJECT_ROOT\\\" \\u003e/dev/null \\u0026\\u0026 if [ -d \\\"$PROJECT_ROOT/backend/tests/businessflow\\\" ]; then cd \\\"$PROJECT_ROOT/backend\\\" \\u0026\\u0026 GOPROXY=\\\"file://$PROJECT_ROOT/.domainry/builder/contracts/go-module-proxy,https://proxy.golang.org\\\" go test -count=1 -tags \\\"domainry_domain_sdk_1bf242c8765be745580f841dfed97c7629183e78866720aaab7515d3105ab891\\\" ./tests/businessflow; fi\",\"finalize\":\"\\\"$DOMAINRY_CLI\\\" apply finalize --json --project \\\"$PROJECT_ROOT\\\"\",\"full_tree\":\"cd \\\"$PROJECT_ROOT/backend\\\" \\u0026\\u0026 GOPROXY=\\\"file://$PROJECT_ROOT/.domainry/builder/contracts/go-module-proxy,https://proxy.golang.org\\\" go test -count=1 -tags \\\"domainry_domain_sdk_1bf242c8765be745580f841dfed97c7629183e78866720aaab7515d3105ab891\\\" ./...\"}},\"verification\":{\"path\":\".domainry/builder/source/implementation-packets/verification/437a31ec538ca948ef43cb6c3f6f1fd6d3aaca600e07fbfad4eedf438d0ace34.json\",\"sha256\":\"437a31ec538ca948ef43cb6c3f6f1fd6d3aaca600e07fbfad4eedf438d0ace34\",\"bytes\":23299,\"route_shards\":{\"module.data_exchange.downloadDataExchangeJob\":{\"path\":\".domainry/builder/source/implementation-packets/verification/routes/163f82f054b86108d52081f9f72938d360274d2b19eae1807a503ac886fa6c00.json\",\"sha256\":\"163f82f054b86108d52081f9f72938d360274d2b19eae1807a503ac886fa6c00\",\"bytes\":1334},\"module.data_exchange.getDataExchangeJob\":{\"path\":\".domainry/builder/source/implementation-packets/verification/routes/1880bdca27cbde7046a3aff1f0952cb27c41f0fbee3b719196e313bb1b497319.json\",\"sha256\":\"1880bdca27cbde7046a3aff1f0952cb27c41f0fbee3b719196e313bb1b497319\",\"bytes\":1275},\"module.notification.getNotificationInbox\":{\"path\":\".domainry/builder/source/implementation-packets/verification/routes/449783f814e6260c61c111e2f49117c15cb269c98bb875503aa526d192148e24.json\",\"sha256\":\"449783f814e6260c61c111e2f49117c15cb269c98bb875503aa526d192148e24\",\"bytes\":4064},\"module.report.prepareReportExport\":{\"path\":\".domainry/builder/source/implementation-packets/verification/routes/ae707621bc67ff354e324113f7b045eada8d9b87ec4f07e6002f31b969b10543.json\",\"sha256\":\"ae707621bc67ff354e324113f7b045eada8d9b87ec4f07e6002f31b969b10543\",\"bytes\":7294},\"module.report.queryReportObjectSQL\":{\"path\":\".domainry/builder/source/implementation-packets/verification/routes/d679f675eb24372c545949f9281bacb9bdb91ac0823fbf7f173479b55c5bc7ca.json\",\"sha256\":\"d679f675eb24372c545949f9281bacb9bdb91ac0823fbf7f173479b55c5bc7ca\",\"bytes\":3086},\"runtime.audit\":{\"path\":\".domainry/builder/source/implementation-packets/verification/routes/46fb5e8f01496d35c1e26732fdd7efb52556835c070130afe84c1ef8317fb95b.json\",\"sha256\":\"46fb5e8f01496d35c1e26732fdd7efb52556835c070130afe84c1ef8317fb95b\",\"bytes\":366},\"runtime.notification\":{\"path\":\".domainry/builder/source/implementation-packets/verification/routes/42241784bd387a7c4ae0318771b7b64c5c66366bbe1e9961938f08af74c2d848.json\",\"sha256\":\"42241784bd387a7c4ae0318771b7b64c5c66366bbe1e9961938f08af74c2d848\",\"bytes\":955},\"runtime.records\":{\"path\":\".domainry/builder/source/implementation-packets/verification/routes/d69d34dfb41e7fc2f71b3c3cbc9193e5d3f84910893cafb4b2ca3bf71e6c2b22.json\",\"sha256\":\"d69d34dfb41e7fc2f71b3c3cbc9193e5d3f84910893cafb4b2ca3bf71e6c2b22\",\"bytes\":2946},\"runtime.workflow\":{\"path\":\".domainry/builder/source/implementation-packets/verification/routes/7f55cfeeb17ef772bf8dfe7d4b990f744b5f6ada9c44fcc4f74e4e4c0c6ca87f.json\",\"sha256\":\"7f55cfeeb17ef772bf8dfe7d4b990f744b5f6ada9c44fcc4f74e4e4c0c6ca87f\",\"bytes\":3473}},\"harness_template\":{\"path\":\".domainry/builder/source/implementation-packets/verification/harness/4e136652189e6a4037a05eda58316b2ea166f60c2f56e2ad373ec7379f50d804.go.txt\",\"sha256\":\"4e136652189e6a4037a05eda58316b2ea166f60c2f56e2ad373ec7379f50d804\",\"bytes\":10894}},\"delivery_id\":\"sha256:fc4d9c6c62ed2749125c41fc7d6209ee7b45e41be7f3448405b6a09f40063b4a\",\"materialization_receipt_sha256\":\"8a18ff93a9818547b5e8fbf1f24bf84b818f2cef91f4f42f7d58d86713c91650\",\"materialization_file_sha256\":\"e8b02be2e7e06cee72194d084111128f3430aa2401eccfcf206f6fab4ab85ddd\"},\"receipt\":\".domainry/builder/model-apply.json\",\"state\":\"implementation_ready\"}\n",
+  "stdout": null,
+  "stderr": null,
+  "output_streams_status": "aggregated_only",
+  "event_item_id": "item_27",
+  "event_line": 54,
+  "observed_started_epoch": 1788632478.078639,
+  "observed_completed_epoch": 1788632513.163558,
+  "observed_started_event_line": 53,
+  "observed_completed_event_line": 54,
+  "duration_seconds": 35.085,
+  "timing_source": "agent-event-observations.jsonl",
+  "capture_file": "cli/003-apply_model.json"
+}

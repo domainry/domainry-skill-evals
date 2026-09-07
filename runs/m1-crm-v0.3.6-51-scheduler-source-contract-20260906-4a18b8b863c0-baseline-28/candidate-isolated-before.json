@@ -1,0 +1,19 @@
+{
+  "candidate_id": "v0.3.6-51-scheduler-source-contract-20260906+4a18b8b863c0",
+  "skill_name": "domainry-builder-v1",
+  "skill_root": "/private/tmp/domainry-m1-v51-scheduler-source-contract-baseline-28/codex-home/skills/domainry-builder-v1",
+  "cli": "/private/tmp/domainry-m1-v51-scheduler-source-contract-baseline-28/codex-home/skills/domainry-builder-v1/bin/domainry-cli",
+  "skill_version": "v0.3.6-51-scheduler-source-contract-20260906",
+  "skill_identity_sha256": "ebd64d96025aeabc3ec803e2cef1d6330e670533269edbfc0dda8172909aaceb",
+  "package_metadata_sha256": "776494d5e892bb0d2218d808a35b9be51f4be9f2bf5f1e65a647fcc22b15b4b5",
+  "skill_tree_sha256": "4a18b8b863c0ed24c9a9085c32723a3ca58824f8be813eb8a1dbfa02460da9d4",
+  "cli_binary_sha256": "2f0ee9d11a077cd0a4d18469fd2de1f80317aaefc1f692c80cf8bfee7366f961",
+  "runtime_api_contract_version": "runtime-domain-api-v1",
+  "runtime_api_contract_hash": "4fe655cbfd4fa0bc0b0c04c89b86926fc6aceb059c9fccf5b09eec9b459330f7",
+  "apply_target_flag": "--service",
+  "apply_target_value": "http://127.0.0.1:8283",
+  "apply_target_args": [
+    "--service",
+    "http://127.0.0.1:8283"
+  ]
+}

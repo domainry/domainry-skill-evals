@@ -1,0 +1,189 @@
+{
+  "family": "apply_model",
+  "command": "/bin/zsh -lc '/private/tmp/domainry-m1-v44-evolution-control-baseline-26/codex-home/skills/domainry-builder-v1/bin/domainry-cli apply model --json --project /private/tmp/domainry-m1-v44-evolution-control-baseline-26/project --go-module-path example.com/domainry-m1-crm/backend --service http://127.0.0.1:8283'",
+  "exit_code": 0,
+  "output": {
+    "contract_version": "domainry-model-apply-v3",
+    "created_source_files": 0,
+    "implementation_packet": {
+      "contract_version": "domainry-action-implementation-packet-v11",
+      "path": ".domainry/builder/source/implementation-packets/9b1ec2171772fb4115acf90773800a929ec366eddce8f5b99fcac9d210f8a37e.json",
+      "file_sha256": "9b1ec2171772fb4115acf90773800a929ec366eddce8f5b99fcac9d210f8a37e",
+      "bytes": 9299,
+      "actions": [
+        {
+          "action_key": "conversion_request.approve",
+          "path": ".domainry/builder/source/implementation-packets/actions/7f0141243f8718878161f559664a9887eaccfe6181f391eb09444c51723e075c.json",
+          "sha256": "7f0141243f8718878161f559664a9887eaccfe6181f391eb09444c51723e075c",
+          "bytes": 6208
+        },
+        {
+          "action_key": "conversion_request.reject",
+          "path": ".domainry/builder/source/implementation-packets/actions/42c39f59525b42393af69b09ecc7d5ef58d03df48ce4f7ea1196664ffaf7e0e3.json",
+          "sha256": "42c39f59525b42393af69b09ecc7d5ef58d03df48ce4f7ea1196664ffaf7e0e3",
+          "bytes": 6318
+        },
+        {
+          "action_key": "lead.begin_approval",
+          "path": ".domainry/builder/source/implementation-packets/actions/8df6d1378d1a4de034d0e5ecfd2ceeb2742afec940de2dbabd301b2c761c08f2.json",
+          "sha256": "8df6d1378d1a4de034d0e5ecfd2ceeb2742afec940de2dbabd301b2c761c08f2",
+          "bytes": 5375
+        },
+        {
+          "action_key": "lead.convert_direct",
+          "path": ".domainry/builder/source/implementation-packets/actions/668a25f1fa2e507840cec7ac9e3bd9611e3eed459aa3e4380effa4a249566a9f.json",
+          "sha256": "668a25f1fa2e507840cec7ac9e3bd9611e3eed459aa3e4380effa4a249566a9f",
+          "bytes": 5350
+        },
+        {
+          "action_key": "lead.mark_contacted",
+          "path": ".domainry/builder/source/implementation-packets/actions/26f7b8e7d4c0fd321f99dbd9713a0928dc952c83948b1b375d7e5258a62d6b2e.json",
+          "sha256": "26f7b8e7d4c0fd321f99dbd9713a0928dc952c83948b1b375d7e5258a62d6b2e",
+          "bytes": 4821
+        },
+        {
+          "action_key": "lead.mark_lost",
+          "path": ".domainry/builder/source/implementation-packets/actions/5879055ee797fdf16f48559eaaed4a03dba8ab1d6c17f6537da924e30637f3ef.json",
+          "sha256": "5879055ee797fdf16f48559eaaed4a03dba8ab1d6c17f6537da924e30637f3ef",
+          "bytes": 4889
+        },
+        {
+          "action_key": "lead.mark_qualified",
+          "path": ".domainry/builder/source/implementation-packets/actions/aa18c857ea8054e9445199848980103b097f2b0400ae0a6d045cdc4a7cef6fcd.json",
+          "sha256": "aa18c857ea8054e9445199848980103b097f2b0400ae0a6d045cdc4a7cef6fcd",
+          "bytes": 4821
+        },
+        {
+          "action_key": "lead.register",
+          "path": ".domainry/builder/source/implementation-packets/actions/9e3a54519492f86c844fab6b0f8d072a7f634addae252ec0db9043bcd1e643fe.json",
+          "sha256": "9e3a54519492f86c844fab6b0f8d072a7f634addae252ec0db9043bcd1e643fe",
+          "bytes": 5581
+        },
+        {
+          "action_key": "lead.send_overdue_reminders",
+          "path": ".domainry/builder/source/implementation-packets/actions/02e83edb3bb4c416b32804292b73fe341f5a350f40dc0e534793aa49a261a5f6.json",
+          "sha256": "02e83edb3bb4c416b32804292b73fe341f5a350f40dc0e534793aa49a261a5f6",
+          "bytes": 5244
+        },
+        {
+          "action_key": "lead.update_details",
+          "path": ".domainry/builder/source/implementation-packets/actions/52b304d840398d7c447124e9f851b8ce27b517e66ec4856c87de1ffee22d82ef.json",
+          "sha256": "52b304d840398d7c447124e9f851b8ce27b517e66ec4856c87de1ffee22d82ef",
+          "bytes": 5555
+        },
+        {
+          "action_key": "sales_department_profile.provision_department",
+          "path": ".domainry/builder/source/implementation-packets/actions/97b6112918f6424bdcc162b5dd49c2a1a4c229976b34a8f30db810bed3396e34.json",
+          "sha256": "97b6112918f6424bdcc162b5dd49c2a1a4c229976b34a8f30db810bed3396e34",
+          "bytes": 5199
+        },
+        {
+          "action_key": "sales_profile.deliver_identity",
+          "path": ".domainry/builder/source/implementation-packets/actions/4b05f271b1a60f5e30edd9a4eecc319b2c52660c10440384eb662fe3ecccb982.json",
+          "sha256": "4b05f271b1a60f5e30edd9a4eecc319b2c52660c10440384eb662fe3ecccb982",
+          "bytes": 5109
+        }
+      ],
+      "summary": {
+        "action_count": 12,
+        "working_directory": "backend",
+        "focused_packages": [
+          "./actions/crm"
+        ],
+        "shared_constraints": [
+          "Read this index once, then read each listed Action context by exact path; do not rediscover context from generated trees.",
+          "Edit only project-owned Action source and paired tests; never edit generated source, manifests, receipts, caches, or managed Runtime state.",
+          "Read verification.path during apply, copy verification.harness_template into project-owned business-flow tests, and read only the hash-checked shards listed by verification.minimum_read_plan before apply finalize.",
+          "Use the delivery build constraint and the project-local-plus-public hybrid GOPROXY exactly as shown."
+        ],
+        "stage_boundary": {
+          "post_apply_repair": "If implementation or black-box test design proves the authored Action surface cannot establish a required state, repair the Blueprint, run model plan, then apply model. state=evolution_review_required with exit 0 is a non-terminal review control state, not materialization success: inspect the exact audit path/SHA and rerun next_command with a non-empty reviewed reason. Continue implementation only after state=implementation_ready or state=applied.",
+          "before_finalize": "Complete all Handler, paired test, and required backend/tests/businessflow source; run focused and business_flow_compile. Do not run the full tree because generated composition may intentionally be incomplete.",
+          "finalize": "After all project-owned source and pre-finalize tests are complete, run apply finalize exactly once.",
+          "after_finalize": "Project-owned source is frozen. Run the full backend tree and verify without source edits. Any source change starts a new repair iteration and requires focused tests plus apply finalize again before verify."
+        },
+        "test_commands": {
+          "focused": "cd \"$PROJECT_ROOT/backend\" && GOPROXY=\"file://$PROJECT_ROOT/.domainry/builder/contracts/go-module-proxy,https://proxy.golang.org\" go test -count=1 -tags \"domainry_domain_sdk_bad13896c0478f74f0438a8827e217971dd6f1ce48b2f5bb9f992307ed7b20f9\" ./actions/crm",
+          "business_flow_compile": "if [ -d \"$PROJECT_ROOT/backend/tests/businessflow\" ]; then cd \"$PROJECT_ROOT/backend\" && GOPROXY=\"file://$PROJECT_ROOT/.domainry/builder/contracts/go-module-proxy,https://proxy.golang.org\" go test -count=1 -tags \"domainry_domain_sdk_bad13896c0478f74f0438a8827e217971dd6f1ce48b2f5bb9f992307ed7b20f9\" ./tests/businessflow; fi",
+          "finalize": "\"$DOMAINRY_CLI\" apply finalize --json --project \"$PROJECT_ROOT\"",
+          "full_tree": "cd \"$PROJECT_ROOT/backend\" && GOPROXY=\"file://$PROJECT_ROOT/.domainry/builder/contracts/go-module-proxy,https://proxy.golang.org\" go test -count=1 -tags \"domainry_domain_sdk_bad13896c0478f74f0438a8827e217971dd6f1ce48b2f5bb9f992307ed7b20f9\" ./..."
+        }
+      },
+      "verification": {
+        "path": ".domainry/builder/source/implementation-packets/verification/4b331ad1e486a3a7963e710d1f08b86b06f04355094dcdd82708e62405e8da82.json",
+        "sha256": "4b331ad1e486a3a7963e710d1f08b86b06f04355094dcdd82708e62405e8da82",
+        "bytes": 23181,
+        "route_shards": {
+          "module.data_exchange.downloadDataExchangeJob": {
+            "path": ".domainry/builder/source/implementation-packets/verification/routes/163f82f054b86108d52081f9f72938d360274d2b19eae1807a503ac886fa6c00.json",
+            "sha256": "163f82f054b86108d52081f9f72938d360274d2b19eae1807a503ac886fa6c00",
+            "bytes": 1334
+          },
+          "module.data_exchange.getDataExchangeJob": {
+            "path": ".domainry/builder/source/implementation-packets/verification/routes/1880bdca27cbde7046a3aff1f0952cb27c41f0fbee3b719196e313bb1b497319.json",
+            "sha256": "1880bdca27cbde7046a3aff1f0952cb27c41f0fbee3b719196e313bb1b497319",
+            "bytes": 1275
+          },
+          "module.notification.getNotificationInbox": {
+            "path": ".domainry/builder/source/implementation-packets/verification/routes/449783f814e6260c61c111e2f49117c15cb269c98bb875503aa526d192148e24.json",
+            "sha256": "449783f814e6260c61c111e2f49117c15cb269c98bb875503aa526d192148e24",
+            "bytes": 4064
+          },
+          "module.report.prepareReportExport": {
+            "path": ".domainry/builder/source/implementation-packets/verification/routes/ae707621bc67ff354e324113f7b045eada8d9b87ec4f07e6002f31b969b10543.json",
+            "sha256": "ae707621bc67ff354e324113f7b045eada8d9b87ec4f07e6002f31b969b10543",
+            "bytes": 7294
+          },
+          "module.report.queryReportObjectSQL": {
+            "path": ".domainry/builder/source/implementation-packets/verification/routes/d679f675eb24372c545949f9281bacb9bdb91ac0823fbf7f173479b55c5bc7ca.json",
+            "sha256": "d679f675eb24372c545949f9281bacb9bdb91ac0823fbf7f173479b55c5bc7ca",
+            "bytes": 3086
+          },
+          "runtime.audit": {
+            "path": ".domainry/builder/source/implementation-packets/verification/routes/46fb5e8f01496d35c1e26732fdd7efb52556835c070130afe84c1ef8317fb95b.json",
+            "sha256": "46fb5e8f01496d35c1e26732fdd7efb52556835c070130afe84c1ef8317fb95b",
+            "bytes": 366
+          },
+          "runtime.notification": {
+            "path": ".domainry/builder/source/implementation-packets/verification/routes/42241784bd387a7c4ae0318771b7b64c5c66366bbe1e9961938f08af74c2d848.json",
+            "sha256": "42241784bd387a7c4ae0318771b7b64c5c66366bbe1e9961938f08af74c2d848",
+            "bytes": 955
+          },
+          "runtime.records": {
+            "path": ".domainry/builder/source/implementation-packets/verification/routes/d69d34dfb41e7fc2f71b3c3cbc9193e5d3f84910893cafb4b2ca3bf71e6c2b22.json",
+            "sha256": "d69d34dfb41e7fc2f71b3c3cbc9193e5d3f84910893cafb4b2ca3bf71e6c2b22",
+            "bytes": 2946
+          },
+          "runtime.workflow": {
+            "path": ".domainry/builder/source/implementation-packets/verification/routes/7f55cfeeb17ef772bf8dfe7d4b990f744b5f6ada9c44fcc4f74e4e4c0c6ca87f.json",
+            "sha256": "7f55cfeeb17ef772bf8dfe7d4b990f744b5f6ada9c44fcc4f74e4e4c0c6ca87f",
+            "bytes": 3473
+          }
+        },
+        "harness_template": {
+          "path": ".domainry/builder/source/implementation-packets/verification/harness/ff9b667a59524b092eead6c45d46dbdde1838237b6453ac8b638208eabb81a4a.go.txt",
+          "sha256": "ff9b667a59524b092eead6c45d46dbdde1838237b6453ac8b638208eabb81a4a",
+          "bytes": 8126
+        }
+      },
+      "delivery_id": "sha256:e7a7a1d45df191280db046d79debd9ccb6a7468999e78409a25993b0a648ab6a",
+      "materialization_receipt_sha256": "cb7f8513951d5de7f3aaf51150dd08523c0042ed60bb97493112228a6cbd2196",
+      "materialization_file_sha256": "43d8df91ebf395eda61420c280f501070280b2c63fec62d10bb73a0bfd5e7bdb"
+    },
+    "receipt": ".domainry/builder/model-apply.json",
+    "state": "implementation_ready"
+  },
+  "raw_output": "[domainry] apply model: load and preflight model...\n[domainry] apply model: load and preflight model done (1.283s)\n[domainry] apply model: synchronize Blueprint Ledger...\n[domainry] apply model: synchronize Blueprint Ledger done (365ms)\n[domainry] apply model: validate compiled Blueprint...\n[domainry] apply model: validate compiled Blueprint done (596ms)\n[domainry] apply model: publish immutable project delivery...\n[domainry] apply model: publish immutable project delivery done (839ms)\n[domainry] apply model: fetch signed delivery artifacts...\n[domainry] apply model: fetch signed delivery artifacts done (438ms)\n[domainry] apply model: materialize backend and resolve Go dependencies...\n[domainry] apply model: materialize backend and resolve Go dependencies done (31.177s)\n[domainry] apply model: prepare project implementation packet...\n[domainry] apply model: prepare project implementation packet done (584ms)\n{\"contract_version\":\"domainry-model-apply-v3\",\"created_source_files\":0,\"implementation_packet\":{\"contract_version\":\"domainry-action-implementation-packet-v11\",\"path\":\".domainry/builder/source/implementation-packets/9b1ec2171772fb4115acf90773800a929ec366eddce8f5b99fcac9d210f8a37e.json\",\"file_sha256\":\"9b1ec2171772fb4115acf90773800a929ec366eddce8f5b99fcac9d210f8a37e\",\"bytes\":9299,\"actions\":[{\"action_key\":\"conversion_request.approve\",\"path\":\".domainry/builder/source/implementation-packets/actions/7f0141243f8718878161f559664a9887eaccfe6181f391eb09444c51723e075c.json\",\"sha256\":\"7f0141243f8718878161f559664a9887eaccfe6181f391eb09444c51723e075c\",\"bytes\":6208},{\"action_key\":\"conversion_request.reject\",\"path\":\".domainry/builder/source/implementation-packets/actions/42c39f59525b42393af69b09ecc7d5ef58d03df48ce4f7ea1196664ffaf7e0e3.json\",\"sha256\":\"42c39f59525b42393af69b09ecc7d5ef58d03df48ce4f7ea1196664ffaf7e0e3\",\"bytes\":6318},{\"action_key\":\"lead.begin_approval\",\"path\":\".domainry/builder/source/implementation-packets/actions/8df6d1378d1a4de034d0e5ecfd2ceeb2742afec940de2dbabd301b2c761c08f2.json\",\"sha256\":\"8df6d1378d1a4de034d0e5ecfd2ceeb2742afec940de2dbabd301b2c761c08f2\",\"bytes\":5375},{\"action_key\":\"lead.convert_direct\",\"path\":\".domainry/builder/source/implementation-packets/actions/668a25f1fa2e507840cec7ac9e3bd9611e3eed459aa3e4380effa4a249566a9f.json\",\"sha256\":\"668a25f1fa2e507840cec7ac9e3bd9611e3eed459aa3e4380effa4a249566a9f\",\"bytes\":5350},{\"action_key\":\"lead.mark_contacted\",\"path\":\".domainry/builder/source/implementation-packets/actions/26f7b8e7d4c0fd321f99dbd9713a0928dc952c83948b1b375d7e5258a62d6b2e.json\",\"sha256\":\"26f7b8e7d4c0fd321f99dbd9713a0928dc952c83948b1b375d7e5258a62d6b2e\",\"bytes\":4821},{\"action_key\":\"lead.mark_lost\",\"path\":\".domainry/builder/source/implementation-packets/actions/5879055ee797fdf16f48559eaaed4a03dba8ab1d6c17f6537da924e30637f3ef.json\",\"sha256\":\"5879055ee797fdf16f48559eaaed4a03dba8ab1d6c17f6537da924e30637f3ef\",\"bytes\":4889},{\"action_key\":\"lead.mark_qualified\",\"path\":\".domainry/builder/source/implementation-packets/actions/aa18c857ea8054e9445199848980103b097f2b0400ae0a6d045cdc4a7cef6fcd.json\",\"sha256\":\"aa18c857ea8054e9445199848980103b097f2b0400ae0a6d045cdc4a7cef6fcd\",\"bytes\":4821},{\"action_key\":\"lead.register\",\"path\":\".domainry/builder/source/implementation-packets/actions/9e3a54519492f86c844fab6b0f8d072a7f634addae252ec0db9043bcd1e643fe.json\",\"sha256\":\"9e3a54519492f86c844fab6b0f8d072a7f634addae252ec0db9043bcd1e643fe\",\"bytes\":5581},{\"action_key\":\"lead.send_overdue_reminders\",\"path\":\".domainry/builder/source/implementation-packets/actions/02e83edb3bb4c416b32804292b73fe341f5a350f40dc0e534793aa49a261a5f6.json\",\"sha256\":\"02e83edb3bb4c416b32804292b73fe341f5a350f40dc0e534793aa49a261a5f6\",\"bytes\":5244},{\"action_key\":\"lead.update_details\",\"path\":\".domainry/builder/source/implementation-packets/actions/52b304d840398d7c447124e9f851b8ce27b517e66ec4856c87de1ffee22d82ef.json\",\"sha256\":\"52b304d840398d7c447124e9f851b8ce27b517e66ec4856c87de1ffee22d82ef\",\"bytes\":5555},{\"action_key\":\"sales_department_profile.provision_department\",\"path\":\".domainry/builder/source/implementation-packets/actions/97b6112918f6424bdcc162b5dd49c2a1a4c229976b34a8f30db810bed3396e34.json\",\"sha256\":\"97b6112918f6424bdcc162b5dd49c2a1a4c229976b34a8f30db810bed3396e34\",\"bytes\":5199},{\"action_key\":\"sales_profile.deliver_identity\",\"path\":\".domainry/builder/source/implementation-packets/actions/4b05f271b1a60f5e30edd9a4eecc319b2c52660c10440384eb662fe3ecccb982.json\",\"sha256\":\"4b05f271b1a60f5e30edd9a4eecc319b2c52660c10440384eb662fe3ecccb982\",\"bytes\":5109}],\"summary\":{\"action_count\":12,\"working_directory\":\"backend\",\"focused_packages\":[\"./actions/crm\"],\"shared_constraints\":[\"Read this index once, then read each listed Action context by exact path; do not rediscover context from generated trees.\",\"Edit only project-owned Action source and paired tests; never edit generated source, manifests, receipts, caches, or managed Runtime state.\",\"Read verification.path during apply, copy verification.harness_template into project-owned business-flow tests, and read only the hash-checked shards listed by verification.minimum_read_plan before apply finalize.\",\"Use the delivery build constraint and the project-local-plus-public hybrid GOPROXY exactly as shown.\"],\"stage_boundary\":{\"post_apply_repair\":\"If implementation or black-box test design proves the authored Action surface cannot establish a required state, repair the Blueprint, run model plan, then apply model. state=evolution_review_required with exit 0 is a non-terminal review control state, not materialization success: inspect the exact audit path/SHA and rerun next_command with a non-empty reviewed reason. Continue implementation only after state=implementation_ready or state=applied.\",\"before_finalize\":\"Complete all Handler, paired test, and required backend/tests/businessflow source; run focused and business_flow_compile. Do not run the full tree because generated composition may intentionally be incomplete.\",\"finalize\":\"After all project-owned source and pre-finalize tests are complete, run apply finalize exactly once.\",\"after_finalize\":\"Project-owned source is frozen. Run the full backend tree and verify without source edits. Any source change starts a new repair iteration and requires focused tests plus apply finalize again before verify.\"},\"test_commands\":{\"focused\":\"cd \\\"$PROJECT_ROOT/backend\\\" \\u0026\\u0026 GOPROXY=\\\"file://$PROJECT_ROOT/.domainry/builder/contracts/go-module-proxy,https://proxy.golang.org\\\" go test -count=1 -tags \\\"domainry_domain_sdk_bad13896c0478f74f0438a8827e217971dd6f1ce48b2f5bb9f992307ed7b20f9\\\" ./actions/crm\",\"business_flow_compile\":\"if [ -d \\\"$PROJECT_ROOT/backend/tests/businessflow\\\" ]; then cd \\\"$PROJECT_ROOT/backend\\\" \\u0026\\u0026 GOPROXY=\\\"file://$PROJECT_ROOT/.domainry/builder/contracts/go-module-proxy,https://proxy.golang.org\\\" go test -count=1 -tags \\\"domainry_domain_sdk_bad13896c0478f74f0438a8827e217971dd6f1ce48b2f5bb9f992307ed7b20f9\\\" ./tests/businessflow; fi\",\"finalize\":\"\\\"$DOMAINRY_CLI\\\" apply finalize --json --project \\\"$PROJECT_ROOT\\\"\",\"full_tree\":\"cd \\\"$PROJECT_ROOT/backend\\\" \\u0026\\u0026 GOPROXY=\\\"file://$PROJECT_ROOT/.domainry/builder/contracts/go-module-proxy,https://proxy.golang.org\\\" go test -count=1 -tags \\\"domainry_domain_sdk_bad13896c0478f74f0438a8827e217971dd6f1ce48b2f5bb9f992307ed7b20f9\\\" ./...\"}},\"verification\":{\"path\":\".domainry/builder/source/implementation-packets/verification/4b331ad1e486a3a7963e710d1f08b86b06f04355094dcdd82708e62405e8da82.json\",\"sha256\":\"4b331ad1e486a3a7963e710d1f08b86b06f04355094dcdd82708e62405e8da82\",\"bytes\":23181,\"route_shards\":{\"module.data_exchange.downloadDataExchangeJob\":{\"path\":\".domainry/builder/source/implementation-packets/verification/routes/163f82f054b86108d52081f9f72938d360274d2b19eae1807a503ac886fa6c00.json\",\"sha256\":\"163f82f054b86108d52081f9f72938d360274d2b19eae1807a503ac886fa6c00\",\"bytes\":1334},\"module.data_exchange.getDataExchangeJob\":{\"path\":\".domainry/builder/source/implementation-packets/verification/routes/1880bdca27cbde7046a3aff1f0952cb27c41f0fbee3b719196e313bb1b497319.json\",\"sha256\":\"1880bdca27cbde7046a3aff1f0952cb27c41f0fbee3b719196e313bb1b497319\",\"bytes\":1275},\"module.notification.getNotificationInbox\":{\"path\":\".domainry/builder/source/implementation-packets/verification/routes/449783f814e6260c61c111e2f49117c15cb269c98bb875503aa526d192148e24.json\",\"sha256\":\"449783f814e6260c61c111e2f49117c15cb269c98bb875503aa526d192148e24\",\"bytes\":4064},\"module.report.prepareReportExport\":{\"path\":\".domainry/builder/source/implementation-packets/verification/routes/ae707621bc67ff354e324113f7b045eada8d9b87ec4f07e6002f31b969b10543.json\",\"sha256\":\"ae707621bc67ff354e324113f7b045eada8d9b87ec4f07e6002f31b969b10543\",\"bytes\":7294},\"module.report.queryReportObjectSQL\":{\"path\":\".domainry/builder/source/implementation-packets/verification/routes/d679f675eb24372c545949f9281bacb9bdb91ac0823fbf7f173479b55c5bc7ca.json\",\"sha256\":\"d679f675eb24372c545949f9281bacb9bdb91ac0823fbf7f173479b55c5bc7ca\",\"bytes\":3086},\"runtime.audit\":{\"path\":\".domainry/builder/source/implementation-packets/verification/routes/46fb5e8f01496d35c1e26732fdd7efb52556835c070130afe84c1ef8317fb95b.json\",\"sha256\":\"46fb5e8f01496d35c1e26732fdd7efb52556835c070130afe84c1ef8317fb95b\",\"bytes\":366},\"runtime.notification\":{\"path\":\".domainry/builder/source/implementation-packets/verification/routes/42241784bd387a7c4ae0318771b7b64c5c66366bbe1e9961938f08af74c2d848.json\",\"sha256\":\"42241784bd387a7c4ae0318771b7b64c5c66366bbe1e9961938f08af74c2d848\",\"bytes\":955},\"runtime.records\":{\"path\":\".domainry/builder/source/implementation-packets/verification/routes/d69d34dfb41e7fc2f71b3c3cbc9193e5d3f84910893cafb4b2ca3bf71e6c2b22.json\",\"sha256\":\"d69d34dfb41e7fc2f71b3c3cbc9193e5d3f84910893cafb4b2ca3bf71e6c2b22\",\"bytes\":2946},\"runtime.workflow\":{\"path\":\".domainry/builder/source/implementation-packets/verification/routes/7f55cfeeb17ef772bf8dfe7d4b990f744b5f6ada9c44fcc4f74e4e4c0c6ca87f.json\",\"sha256\":\"7f55cfeeb17ef772bf8dfe7d4b990f744b5f6ada9c44fcc4f74e4e4c0c6ca87f\",\"bytes\":3473}},\"harness_template\":{\"path\":\".domainry/builder/source/implementation-packets/verification/harness/ff9b667a59524b092eead6c45d46dbdde1838237b6453ac8b638208eabb81a4a.go.txt\",\"sha256\":\"ff9b667a59524b092eead6c45d46dbdde1838237b6453ac8b638208eabb81a4a\",\"bytes\":8126}},\"delivery_id\":\"sha256:e7a7a1d45df191280db046d79debd9ccb6a7468999e78409a25993b0a648ab6a\",\"materialization_receipt_sha256\":\"cb7f8513951d5de7f3aaf51150dd08523c0042ed60bb97493112228a6cbd2196\",\"materialization_file_sha256\":\"43d8df91ebf395eda61420c280f501070280b2c63fec62d10bb73a0bfd5e7bdb\"},\"receipt\":\".domainry/builder/model-apply.json\",\"state\":\"implementation_ready\"}\n",
+  "stdout": null,
+  "stderr": null,
+  "output_streams_status": "aggregated_only",
+  "event_item_id": "item_34",
+  "event_line": 67,
+  "observed_started_epoch": 1788668361.756097,
+  "observed_completed_epoch": 1788668397.096558,
+  "observed_started_event_line": 65,
+  "observed_completed_event_line": 67,
+  "duration_seconds": 35.34,
+  "timing_source": "agent-event-observations.jsonl",
+  "capture_file": "cli/003-apply_model.json"
+}

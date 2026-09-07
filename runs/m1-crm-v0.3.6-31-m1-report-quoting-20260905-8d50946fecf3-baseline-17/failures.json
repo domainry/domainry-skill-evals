@@ -1,0 +1,81 @@
+[
+  {
+    "stage": "run initial Runtime business flows",
+    "name": "run initial Runtime business flows",
+    "owner": "project.business_flow_tests",
+    "elapsed_ms": 395,
+    "note": "verify initial Runtime business flows: managed business-flow tests failed for initial: exit status 1: === RUN   TestBF01LeadCreateIdempotencyOwnerMutationAndDenial\n    crm_businessflow_test.go:272: fixture lacks required actors/organizations: actors=2 orgs=2\n--- FAIL: TestBF01LeadCreateIdempotencyOwnerMutationAndDenial (0.00s)\n=== RUN   TestBF02SmallLeadDirectConversionImmutableCustomer\n    crm_businessflow_test.go:311: fixture lacks required actors/organizations: actors=2 orgs=2\n--- FAIL: TestBF02SmallLeadDirectConversionImmutableCustomer (0.00s)\n=== RUN   TestBF03LargeApprovalWorkflowAtomicConversionAndNotification\n    crm_businessflow_test.go:375: fixture lacks required actors/organizations: actors=2 orgs=2\n--- FAIL: TestBF03LargeApprovalWorkflowAtomicConversionAndNotification (0.00s)\n=== RUN   TestBF04LargeApprovalRejectionReasonAndNotification\n    crm_businessflow_test.go:408: fixture lacks required actors/organizations: actors=2 orgs=2\n--- FAIL: TestBF04LargeApprovalRejectionReasonAndNotification (0.00s)\n=== RUN   TestBF05DepartmentScopePaginationAndRoleNavigation\n    crm_businessflow_test.go:436: fixture lacks required actors/organizations: actors=2 orgs=2\n--- FAIL: TestBF05DepartmentScopePaginationAndRoleNavigation (0.00s)\n=== RUN   TestBF06WeekdayOverdueReminderDailyDedupAndRestart\n    crm_businessflow_test.go:473: fixture lacks required actors/organizations: actors=2 orgs=2\n--- FAIL: TestBF06WeekdayOverdueReminderDailyDedupAndRestart (0.00s)\n=== RUN   TestBF07DirectorFunnelReportAndSalesDenial\n    crm_businessflow_test.go:518: fixture lacks required actors/organizations: actors=2 orgs=2\n--- FAIL: TestBF07DirectorFunnelReportAndSalesDenial (0.00s)\n=== RUN   TestBF08GovernedCSVExportAuditRequesterIsolationAndDownload\n    crm_businessflow_test.go:581: fixture lacks required actors/organizations: actors=2 orgs=2\n--- FAIL: TestBF08GovernedCSVExportAuditRequesterIsolationAndDownload (0.00s)\nFAIL",
+    "terminal_state": "baseline_first_scoring_failure",
+    "attribution_status": "attributed",
+    "output_state": "failed",
+    "output_error": "verify initial Runtime business flows: managed business-flow tests failed for initial: exit status 1: === RUN   TestBF01LeadCreateIdempotencyOwnerMutationAndDenial\n    crm_businessflow_test.go:272: fixture lacks required actors/organizations: actors=2 orgs=2\n--- FAIL: TestBF01LeadCreateIdempotencyOwnerMutationAndDenial (0.00s)\n=== RUN   TestBF02SmallLeadDirectConversionImmutableCustomer\n    crm_businessflow_test.go:311: fixture lacks required actors/organizations: actors=2 orgs=2\n--- FAIL: TestBF02SmallLeadDirectConversionImmutableCustomer (0.00s)\n=== RUN   TestBF03LargeApprovalWorkflowAtomicConversionAndNotification\n    crm_businessflow_test.go:375: fixture lacks required actors/organizations: actors=2 orgs=2\n--- FAIL: TestBF03LargeApprovalWorkflowAtomicConversionAndNotification (0.00s)\n=== RUN   TestBF04LargeApprovalRejectionReasonAndNotification\n    crm_businessflow_test.go:408: fixture lacks required actors/organizations: actors=2 orgs=2\n--- FAIL: TestBF04LargeApprovalRejectionReasonAndNotification (0.00s)\n=== RUN   TestBF05DepartmentScopePaginationAndRoleNavigation\n    crm_businessflow_test.go:436: fixture lacks required actors/organizations: actors=2 orgs=2\n--- FAIL: TestBF05DepartmentScopePaginationAndRoleNavigation (0.00s)\n=== RUN   TestBF06WeekdayOverdueReminderDailyDedupAndRestart\n    crm_businessflow_test.go:473: fixture lacks required actors/organizations: actors=2 orgs=2\n--- FAIL: TestBF06WeekdayOverdueReminderDailyDedupAndRestart (0.00s)\n=== RUN   TestBF07DirectorFunnelReportAndSalesDenial\n    crm_businessflow_test.go:518: fixture lacks required actors/organizations: actors=2 orgs=2\n--- FAIL: TestBF07DirectorFunnelReportAndSalesDenial (0.00s)\n=== RUN   TestBF08GovernedCSVExportAuditRequesterIsolationAndDownload\n    crm_businessflow_test.go:581: fixture lacks required actors/organizations: actors=2 orgs=2\n--- FAIL: TestBF08GovernedCSVExportAuditRequesterIsolationAndDownload (0.00s)\nFAIL",
+    "first_failure": {
+      "name": "run initial Runtime business flows",
+      "status": "failed",
+      "elapsed_ms": 395,
+      "owner": "project.business_flow_tests"
+    },
+    "telemetry": {
+      "contract_version": "domainry-verify-telemetry-v1",
+      "elapsed_ms": 122885,
+      "cache": {
+        "signed_runtime_package": false,
+        "verification_receipt": false
+      },
+      "cache_misses": {
+        "signed_runtime_package": "current V6 package receipt is missing: lstat /private/tmp/domainry-m1-v31-report-quoting-baseline-17/project/.domainry/builder/receipts/package.json: no such file or directory",
+        "verification_receipt": "verification receipt is missing"
+      },
+      "stages": [
+        {
+          "name": "validate reusable verification and signed Runtime package",
+          "status": "done",
+          "elapsed_ms": 0,
+          "owner": "domainry-runtime"
+        },
+        {
+          "name": "run structural checks and complete backend tests",
+          "status": "done",
+          "elapsed_ms": 69522,
+          "owner": "domainry-builder"
+        },
+        {
+          "name": "build and sign exact Runtime package",
+          "status": "done",
+          "elapsed_ms": 47793,
+          "owner": "domainry-runtime"
+        },
+        {
+          "name": "compile managed Runtime business-flow tests",
+          "status": "done",
+          "elapsed_ms": 1029,
+          "owner": "domainry-runtime"
+        },
+        {
+          "name": "start initial managed Runtime",
+          "status": "done",
+          "elapsed_ms": 2736,
+          "owner": "domainry-runtime"
+        },
+        {
+          "name": "run initial Runtime business flows",
+          "status": "failed",
+          "elapsed_ms": 395,
+          "owner": "project.business_flow_tests"
+        }
+      ],
+      "first_failure": {
+        "name": "run initial Runtime business flows",
+        "status": "failed",
+        "elapsed_ms": 395,
+        "owner": "project.business_flow_tests"
+      }
+    },
+    "detail": {
+      "name": "run initial Runtime business flows",
+      "status": "failed",
+      "elapsed_ms": 395,
+      "owner": "project.business_flow_tests"
+    }
+  }
+]

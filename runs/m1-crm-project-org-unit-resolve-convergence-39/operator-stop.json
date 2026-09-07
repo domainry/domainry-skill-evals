@@ -1,0 +1,22 @@
+{
+  "contract_version": "domainry-eval-operator-stop-v1",
+  "run_id": "m1-crm-project-org-unit-resolve-convergence-39",
+  "stopped_epoch": 1788723604.0,
+  "terminal_state": "operator_stopped_misaligned_business_repair",
+  "measurement_complete": false,
+  "baseline_eligibility": false,
+  "agent_session_id": "01a07838-d872-74a3-bf24-9556c5140407",
+  "last_started_item_id": "item_21",
+  "reason": "The Agent restored deliver_identity but retained the archived, unmaterialized proposal that incorrectly combines department creation with first-user Identity delivery in provision_department. The reviewed apply was terminated before it could continue materializing business semantics that contradict the checkpoint boundary.",
+  "process_cleanup": {
+    "driver_interrupted": true,
+    "orphan_apply_process_group_terminated": 88197,
+    "matching_isolation_processes_after_cleanup": 0,
+    "ephemeral_auth_file_present_after_cleanup": false
+  },
+  "safe_resume": {
+    "archive_source_run_id": "m1-crm-evaluator-cache-convergence-38",
+    "reuse_stopped_project": false,
+    "instruction": "Restore the previously validated convergence-38 archive, not this partially materialized isolation. Replace provision_department in the model with the exact already-generated create-only contract before planning any evolution."
+  }
+}

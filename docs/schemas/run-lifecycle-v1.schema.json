@@ -17,7 +17,8 @@
     "state": {
       "enum": [
         "agent_running", "completed", "acceptance_failed", "delivery_incomplete",
-        "baseline_first_scoring_failure", "budget_exhausted_wall_clock",
+        "baseline_first_scoring_failure", "baseline_first_command_failure", "budget_exhausted_wall_clock",
+        "convergence_first_scoring_failure", "convergence_first_command_failure",
         "budget_exhausted_tokens", "budget_exhausted_cli_invocations",
         "budget_exhausted_cli_retries", "invalid_agent_event_stream",
         "agent_process_failed", "acceptance_not_executed", "scorer_failed",
@@ -30,7 +31,7 @@
     "measurement_complete": {"type": "boolean"},
     "environment_valid": {"type": "boolean"},
     "measurement_boundary": {
-      "enum": ["running", "baseline_first_failure_sealed", "full_run_sealed", "delivery_incomplete", "interrupted_or_invalid"]
+      "enum": ["running", "baseline_first_failure_sealed", "convergence_first_failure_sealed", "full_run_sealed", "delivery_incomplete", "interrupted_or_invalid"]
     },
     "agent_result_state": {"type": ["string", "null"], "enum": ["done", "not_done", null]},
     "agent_ended_epoch": {"type": ["number", "null"]},
@@ -77,6 +78,11 @@
     "first_failure": {"type": ["object", "null"]},
     "scoring_first_failure": {"type": ["object", "null"]},
     "diagnostic_first_failure": {"type": ["object", "null"]},
+    "command_first_failure": {"type": ["object", "null"]},
+    "checkpoint": {"type": ["object", "null"]},
+    "checkpoint_restore": {"type": ["object", "null"]},
+    "failure_checkpoint_policy": {"type": "object"},
+    "failure_checkpoint": {"type": ["object", "null"]},
     "first_scoring_failure": {
       "type": ["object", "null"],
       "description": "Legacy alias of scoring_first_failure."

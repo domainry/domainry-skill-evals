@@ -1,0 +1,859 @@
+{
+  "family": "model_capability",
+  "command": "/bin/zsh -lc '/private/tmp/domainry-m1-canonical-unique-resume-convergence-43/codex-home/skills/domainry-builder-v1/bin/domainry-cli model capability --json --project /private/tmp/domainry-m1-canonical-unique-resume-convergence-43/project --reading-profile handler-repair --topics records,permissions,workflow,delayed-continuation,notifications,domain-truth'",
+  "exit_code": 0,
+  "output": {
+    "contract_version": "domainry-model-authoring-reading-plan-v3",
+    "profile": "handler-repair",
+    "topics": [
+      "delayed-continuation",
+      "domain-truth",
+      "notifications",
+      "permissions",
+      "records",
+      "workflow"
+    ],
+    "read_order": [
+      {
+        "path": "references/project-mutation.md",
+        "purpose": "project mutation and CAS boundary"
+      },
+      {
+        "path": "references/ownership-and-extensions.md",
+        "purpose": "project-owned implementation boundary"
+      },
+      {
+        "path": "references/capabilities/behavior-owner-decision.md",
+        "purpose": "behavior owner decision contract"
+      },
+      {
+        "path": "references/evidence-levels.md",
+        "purpose": "pre-finalize business-flow evidence semantics"
+      },
+      {
+        "path": "references/verification.md",
+        "purpose": "pre-finalize managed Runtime and evidence marker contract"
+      },
+      {
+        "path": "references/capabilities/workflow.md",
+        "purpose": "Workflow timer/wait and Runtime Record Timer ownership"
+      },
+      {
+        "path": "templates/ledger-delayed-continuation/pattern.json",
+        "purpose": "one-time delayed Workflow continuation composition inventory"
+      },
+      {
+        "path": "references/domain-truth-and-settlement.md",
+        "purpose": "calculation, snapshot, correction, and source-of-truth decisions"
+      },
+      {
+        "path": "references/capabilities/in-app-notifications.md",
+        "purpose": "business Inbox, notification intent, and exact grants for every managed verification actor"
+      },
+      {
+        "path": "references/capabilities/permissions-and-data-scope.md",
+        "purpose": "RBAC, field policy, and data scope"
+      },
+      {
+        "path": "references/capabilities/rbac-and-data-scope-cookbook.md",
+        "purpose": "standard actor and scope mappings"
+      },
+      {
+        "path": "references/capabilities/records-fields-and-relations.md",
+        "purpose": "record, field, relation, and default semantics"
+      },
+      {
+        "path": "references/capabilities/crud-and-state-machine.md",
+        "purpose": "CRUD and guarded lifecycle ownership"
+      },
+      {
+        "path": "references/capabilities/actions-and-transactions.md",
+        "purpose": "Action and transaction ownership"
+      },
+      {
+        "path": "templates/ledger-record-lifecycle/pattern.json",
+        "purpose": "record lifecycle composition inventory"
+      },
+      {
+        "path": "templates/ledger-transaction-handler/pattern.json",
+        "purpose": "transaction Handler composition inventory"
+      },
+      {
+        "path": "templates/ledger-workflow-approval/pattern.json",
+        "purpose": "Workflow approval composition inventory"
+      }
+    ],
+    "capability_keys": [
+      "identity.roles",
+      "notification.delivery_governance",
+      "notification.templates",
+      "records.authoring",
+      "schema.authoring",
+      "workflow.authoring"
+    ],
+    "capability_contracts": [
+      {
+        "category": {
+          "key": "identity.roles",
+          "name": "Identity roles",
+          "description": "Configure roles, permission grants, and user-role assignments."
+        },
+        "validations": [
+          {
+            "kind": "identity.role",
+            "description": "Validate one complete project role definition and its embedded permission/data/field policy."
+          }
+        ]
+      },
+      {
+        "category": {
+          "key": "notification.delivery_governance",
+          "name": "Notification delivery governance",
+          "description": "Configure event types and delivery rules and inspect delivery and Inbox governance metrics."
+        },
+        "contracts": [
+          {
+            "kind": "notification.authoring_rule",
+            "key": "project_handler_event_semantic_route",
+            "schema": {
+              "$schema": "https://json-schema.org/draft/2020-12/schema",
+              "title": "Project Handler notification event semantic route requirement",
+              "type": "object",
+              "x-domainry-cross-resource-rule": {
+                "requires": {
+                  "contains": {
+                    "resource_type": {
+                      "const": "project_record"
+                    },
+                    "route_key": {
+                      "minLength": 1,
+                      "type": "string"
+                    }
+                  },
+                  "path": "actions[]"
+                },
+                "route_key_inference": "forbidden",
+                "target_collection": "notification_event_types",
+                "target_key_source": "referenced_event_type",
+                "when": {
+                  "collection": "actions",
+                  "path": "handler.notification_event_types[]"
+                }
+              }
+            }
+          }
+        ],
+        "validations": [
+          {
+            "kind": "notification.event_type",
+            "description": "Validate one published project notification event type; when a project Action Handler references it, require an explicit project_record semantic route action with a non-empty route_key."
+          },
+          {
+            "kind": "notification.rule",
+            "description": "Validate one notification rule against explicitly referenced event types."
+          }
+        ]
+      },
+      {
+        "category": {
+          "key": "notification.templates",
+          "name": "Notification templates",
+          "description": "Author, preview, review, publish, disable, and restore governed notification templates."
+        },
+        "validations": [
+          {
+            "kind": "notification.template",
+            "description": "Validate one project-owned external-channel notification template."
+          }
+        ]
+      },
+      {
+        "category": {
+          "key": "records.authoring",
+          "name": "Action authoring",
+          "description": "Author Runtime Action metadata while project-owned handlers retain business behavior."
+        },
+        "contracts": [
+          {
+            "kind": "runtime.authoring_capability",
+            "key": "action.definition",
+            "lifecycle": "versioned_metadata",
+            "schema": {
+              "additionalProperties": false,
+              "properties": {
+                "assurance_policy": {
+                  "additionalProperties": false,
+                  "else": {
+                    "properties": {
+                      "approval_hash_field": {
+                        "pattern": "^\\s*$",
+                        "type": "string"
+                      },
+                      "approval_version_field": {
+                        "pattern": "^\\s*$",
+                        "type": "string"
+                      }
+                    }
+                  },
+                  "if": {
+                    "properties": {
+                      "required_methods": {
+                        "contains": {
+                          "const": "workflow_approval"
+                        }
+                      }
+                    },
+                    "required": [
+                      "required_methods"
+                    ]
+                  },
+                  "properties": {
+                    "approval_hash_field": {
+                      "type": "string"
+                    },
+                    "approval_version_field": {
+                      "type": "string"
+                    },
+                    "maker_field": {
+                      "type": "string"
+                    },
+                    "recent_reauth_max_age_seconds": {
+                      "type": "integer"
+                    },
+                    "required_methods": {
+                      "items": {
+                        "enum": [
+                          "normal_login",
+                          "recent_reauth",
+                          "otp",
+                          "maker_checker",
+                          "workflow_approval"
+                        ],
+                        "type": "string"
+                      },
+                      "type": "array"
+                    }
+                  },
+                  "required": [
+                    "required_methods"
+                  ],
+                  "then": {
+                    "properties": {
+                      "approval_hash_field": {
+                        "pattern": "\\S",
+                        "type": "string"
+                      },
+                      "approval_version_field": {
+                        "pattern": "\\S",
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "approval_version_field",
+                      "approval_hash_field"
+                    ]
+                  },
+                  "type": "object"
+                },
+                "concurrency_field": {
+                  "type": "string"
+                },
+                "defaults": {
+                  "type": "object"
+                },
+                "kind": {
+                  "enum": [
+                    "bulk_operation",
+                    "conditional_update",
+                    "object_create",
+                    "object_operation",
+                    "record_delete",
+                    "record_operation",
+                    "record_restore",
+                    "record_update",
+                    "transition_state"
+                  ],
+                  "type": "string"
+                },
+                "label": {
+                  "type": "string"
+                },
+                "object_key": {
+                  "type": "string"
+                },
+                "optimistic_concurrency": {
+                  "default": false,
+                  "type": "boolean"
+                },
+                "payload_fields": {
+                  "items": {
+                    "additionalProperties": false,
+                    "properties": {
+                      "default": {},
+                      "key": {
+                        "type": "string"
+                      },
+                      "name": {
+                        "type": "string"
+                      },
+                      "options": {
+                        "items": {
+                          "type": "string"
+                        },
+                        "type": "array"
+                      },
+                      "required": {
+                        "type": "boolean"
+                      },
+                      "type": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "key",
+                      "type"
+                    ],
+                    "type": "object"
+                  },
+                  "type": "array"
+                },
+                "preconditions": {
+                  "items": {
+                    "type": "string"
+                  },
+                  "type": "array"
+                },
+                "risk_level": {
+                  "enum": [
+                    "low",
+                    "medium",
+                    "high",
+                    "critical"
+                  ],
+                  "type": "string"
+                },
+                "store_organization_mutation": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "operations": {
+                      "items": {
+                        "enum": [
+                          "rename",
+                          "disable"
+                        ],
+                        "type": "string"
+                      },
+                      "type": "array"
+                    }
+                  },
+                  "required": [
+                    "operations"
+                  ],
+                  "type": "object"
+                },
+                "target_organization": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "input": {
+                      "type": "string"
+                    },
+                    "source": {
+                      "enum": [
+                        "explicit",
+                        "explicit_or_sole_authorized_store",
+                        "record_owner",
+                        "provisioned_store"
+                      ],
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "source"
+                  ],
+                  "type": "object"
+                }
+              },
+              "required": [
+                "kind",
+                "label",
+                "object_key"
+              ],
+              "type": "object"
+            },
+            "references": [
+              {
+                "input_json_pointer": "/payload/object_key",
+                "kind": "object_key"
+              },
+              {
+                "input_json_pointer": "/payload/assurance_policy/approval_version_field",
+                "kind": "field_key",
+                "scope_from": "/payload/object_key"
+              },
+              {
+                "input_json_pointer": "/payload/assurance_policy/approval_hash_field",
+                "kind": "field_key",
+                "scope_from": "/payload/object_key"
+              },
+              {
+                "input_json_pointer": "/payload/assurance_policy/maker_field",
+                "kind": "field_key",
+                "scope_from": "/payload/object_key"
+              }
+            ]
+          },
+          {
+            "kind": "plane.model_rule",
+            "key": "action.field_source",
+            "schema": {
+              "$schema": "https://json-schema.org/draft/2020-12/schema",
+              "additionalProperties": {
+                "type": "string"
+              },
+              "title": "Compact Action field DSL and Object-source reuse",
+              "type": "object",
+              "x-domainry-decision-table": [
+                {
+                  "author": "Standalone <type>[!] DSL without Object-only semicolon modifiers.",
+                  "must_not": [
+                    "Copy max_length, unique, indexed, numeric bounds, or other Object-only modifiers from a conceptual or external entity.",
+                    "Add a fake project Object field only to satisfy source inference."
+                  ],
+                  "when": "The value is owned by the Action or by a Foundation capability and is not persisted in a project Object field."
+                },
+                {
+                  "author": "Use the exact same stable field key, type, and Object-only modifiers as that Object field.",
+                  "must_not": [
+                    "Bind by a differently named field, synonym, prefix, suffix, or Action verb.",
+                    "Copy only some of the Object field's modifiers."
+                  ],
+                  "when": "The Action field is the same persisted business datum as a field on the owning Object or an Object in handler.access."
+                }
+              ],
+              "x-domainry-identity-handler-delivery": {
+                "identity_owned_non_profile_inputs": {
+                  "example": {
+                    "display_name": "text!",
+                    "login_id": "email!",
+                    "manager": "user",
+                    "role_key": "select![employee|manager]"
+                  },
+                  "rule": "Use standalone DSL because Identity, not the business Profile Object, owns these values."
+                },
+                "invalid_without_exact_object_source": {
+                  "display_name": "text!;max_length=120"
+                },
+                "profile_bound_inputs": {
+                  "example": {
+                    "action_input": {
+                      "employee_no": "text!;unique"
+                    },
+                    "profile_object_fields": {
+                      "employee_no": "text!;unique"
+                    }
+                  },
+                  "rule": "Reuse Object-only modifiers only when the bound Profile Object has the exact same field key and compatible field contract."
+                }
+              },
+              "x-domainry-object-source-trigger": {
+                "compatibility": "The Object field type and every authored Object-only modifier must match; ambiguous or incompatible candidates fail closed.",
+                "lookup": "Owning Object plus Objects declared in handler.access, exact same field key only; owning Object wins over another accessible Object.",
+                "semicolon_modifiers": [
+                  "unique",
+                  "indexed",
+                  "localized",
+                  "cardinality",
+                  "on_delete",
+                  "inverse",
+                  "dictionary",
+                  "value_domain",
+                  "min_length",
+                  "max_length",
+                  "min",
+                  "max",
+                  "pattern",
+                  "precision",
+                  "scale",
+                  "currency",
+                  "rounding"
+                ],
+                "types": [
+                  "currency",
+                  "percent"
+                ]
+              },
+              "x-domainry-scope": "actions.<action_key>.input and actions.<action_key>.output"
+            }
+          }
+        ],
+        "validations": [
+          {
+            "kind": "action.definition",
+            "description": "Validate one project Action definition against its referenced object contract."
+          }
+        ]
+      },
+      {
+        "category": {
+          "key": "schema.authoring",
+          "name": "Schema authoring",
+          "description": "Author and validate complete project object fragments and inspect the embedded field, relation, and dictionary schemas owned by Runtime Application Schema."
+        },
+        "contracts": [
+          {
+            "kind": "runtime.authoring_capability",
+            "key": "schema.object",
+            "lifecycle": "versioned_metadata",
+            "schema": {
+              "additionalProperties": false,
+              "properties": {
+                "capabilities": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "create": {
+                      "default": true,
+                      "type": "boolean"
+                    },
+                    "delete": {
+                      "default": true,
+                      "type": "boolean"
+                    },
+                    "export": {
+                      "default": true,
+                      "type": "boolean"
+                    },
+                    "read": {
+                      "default": true,
+                      "type": "boolean"
+                    },
+                    "update": {
+                      "default": true,
+                      "type": "boolean"
+                    }
+                  },
+                  "type": "object"
+                },
+                "config": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "title_field": {
+                      "minLength": 1,
+                      "type": "string"
+                    },
+                    "write_policy": {
+                      "default": "direct_crud",
+                      "enum": [
+                        "direct_crud",
+                        "action_only"
+                      ],
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                },
+                "description": {
+                  "type": "string"
+                },
+                "export_assurance_policy": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "recent_reauth_max_age_seconds": {
+                      "maximum": 86400,
+                      "minimum": 1,
+                      "type": "integer"
+                    },
+                    "required_methods": {
+                      "items": {
+                        "enum": [
+                          "normal_login",
+                          "recent_reauth",
+                          "otp",
+                          "maker_checker",
+                          "workflow_approval"
+                        ],
+                        "type": "string"
+                      },
+                      "minItems": 1,
+                      "type": "array"
+                    }
+                  },
+                  "required": [
+                    "required_methods"
+                  ],
+                  "type": "object"
+                },
+                "fields": {
+                  "default": [],
+                  "items": {
+                    "additionalProperties": false,
+                    "type": "object"
+                  },
+                  "type": "array"
+                },
+                "ledger_policy": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "signature": {
+                      "default": "none",
+                      "enum": [
+                        "none",
+                        "hmac_sha256"
+                      ],
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                },
+                "lifecycle_policy": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "immutable_states": {
+                      "items": {
+                        "type": "string"
+                      },
+                      "type": "array"
+                    },
+                    "mode": {
+                      "enum": [
+                        "mutable",
+                        "soft_delete_only",
+                        "append_only",
+                        "immutable_after_state"
+                      ],
+                      "type": "string"
+                    },
+                    "state_field": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "mode"
+                  ],
+                  "type": "object"
+                },
+                "name": {
+                  "description": "Human-readable object name.",
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "ux": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "config": {
+                      "additionalProperties": false,
+                      "properties": {
+                        "identity_relation_field": {
+                          "minLength": 1,
+                          "type": "string"
+                        }
+                      },
+                      "type": "object"
+                    },
+                    "display": {
+                      "additionalProperties": false,
+                      "properties": {
+                        "title_field": {
+                          "minLength": 1,
+                          "type": "string"
+                        }
+                      },
+                      "type": "object"
+                    },
+                    "kind": {
+                      "enum": [
+                        "identity_profile_extension"
+                      ],
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              },
+              "required": [
+                "name"
+              ],
+              "type": "object"
+            }
+          }
+        ],
+        "validations": [
+          {
+            "kind": "schema.object",
+            "description": "Validate one complete project object definition, including its embedded fields and relations."
+          }
+        ]
+      },
+      {
+        "category": {
+          "key": "workflow.authoring",
+          "name": "Workflow authoring",
+          "description": "Author and validate one complete workflow definition and inspect the embedded graph, node, resolver, trigger, condition, and edge schemas."
+        },
+        "contracts": [
+          {
+            "kind": "runtime.authoring_capability",
+            "key": "workflow.definition",
+            "lifecycle": "source_controlled_json",
+            "schema": {
+              "$ref": "#/$defs/workflow_definition"
+            },
+            "references": [
+              {
+                "input_json_pointer": "/payload/trigger_contract/object_key",
+                "kind": "object_key"
+              },
+              {
+                "input_json_pointer": "/payload/trigger_contract/field_key",
+                "kind": "field_key",
+                "scope_from": "/payload/trigger_contract/object_key"
+              },
+              {
+                "input_json_pointer": "/payload/graph/nodes/*/contract/action/action_key",
+                "kind": "action_key"
+              }
+            ]
+          },
+          {
+            "kind": "plane.model_rule",
+            "key": "delayed_continuation",
+            "schema": {
+              "$schema": "https://json-schema.org/draft/2020-12/schema",
+              "title": "Workflow delayed continuation ownership and verification",
+              "type": "object",
+              "x-domainry-authoring-bridge": {
+                "authored_collections": [
+                  "workflows"
+                ],
+                "contract_version": "domainry-workflow-delayed-continuation-authoring-bridge-v1",
+                "forbidden_collections": [
+                  "scheduled_jobs"
+                ],
+                "node_shapes": {
+                  "timer_from_record_field": {
+                    "contract": {
+                      "timer": {
+                        "purpose": "<purpose>",
+                        "source_field": "<date-or-datetime-field>",
+                        "timer_key": "<timer-key>",
+                        "timezone": "<iana-timezone>"
+                      }
+                    },
+                    "type": "timer"
+                  },
+                  "wait_duration": {
+                    "contract": {
+                      "timer": {
+                        "duration_seconds": "<positive-duration-seconds>",
+                        "timezone": "<iana-timezone>"
+                      }
+                    },
+                    "type": "wait_duration"
+                  },
+                  "wait_until": {
+                    "contract": {
+                      "timer": {
+                        "at": "<rfc3339-due-at>",
+                        "timezone": "<iana-timezone>"
+                      }
+                    },
+                    "type": "wait_until"
+                  }
+                },
+                "rearming_pattern": {
+                  "cancel_action": "The business Action clears <date-or-datetime-field> when the governing state no longer needs a continuation.",
+                  "due_action": "Re-read the governing business state and produce no effect when the timer is stale; otherwise apply the idempotent due effect and persist the next exact due instant when recurrence-by-rearming is required.",
+                  "schedule_action": "The business Action computes and persists the exact next due instant in <date-or-datetime-field>.",
+                  "timer_rule": "The timer_from_record_field node consumes source_field only; it does not recalculate an already-final business due instant.",
+                  "trigger_contract": {
+                    "field_key": "<date-or-datetime-field>",
+                    "object_key": "<object-key>",
+                    "type": "field_changed"
+                  }
+                },
+                "replacement_tokens": [
+                  "<positive-duration-seconds>",
+                  "<rfc3339-due-at>",
+                  "<timer-key>",
+                  "<purpose>",
+                  "<date-or-datetime-field>",
+                  "<iana-timezone>",
+                  "<object-key>"
+                ],
+                "runtime_system_object": "record_timer",
+                "selection": {
+                  "timer_from_record_field": "Resume from an exact date or datetime field common to every trigger Object. When the business Action already calculated the final instant, do not add offset_seconds or business_calendar_key.",
+                  "wait_duration": "Resume after a positive elapsed duration.",
+                  "wait_until": "Resume at one fixed RFC3339 instant."
+                }
+              },
+              "x-domainry-forbidden": [
+                "a verification-only clock or time input on a production Workflow or Action",
+                "a business Action or Workflow added only to make a short verification due authorable",
+                "claiming a timer observation or Runtime timer integration certificate that was not independently produced and identity-checked",
+                "a tenant Scheduler definition for one delayed continuation",
+                "a startup fixture or bootstrap mutation that fabricates elapsed time",
+                "a browser timer or project cron daemon as the time owner"
+              ],
+              "x-domainry-owner-decision": {
+                "delayed_continuation": {
+                  "author": "A timer, wait_until, or wait_duration node in the Workflow graph.",
+                  "intent": "Pause one already-started Workflow execution once and resume that same execution when its due time arrives.",
+                  "owner": "Runtime Workflow and Record Timer",
+                  "scheduled_job_allowed": false
+                },
+                "recurrence": {
+                  "author": "A scheduled_jobs definition targeting a scheduled Workflow or report snapshot refresh.",
+                  "intent": "Start a distinct governed run for each repeated calendar or interval window.",
+                  "owner": "Scheduler",
+                  "scheduled_job_allowed": true
+                }
+              },
+              "x-domainry-runtime-persistence": {
+                "due_field": "due_at",
+                "resume": "The due timer is claimed with fencing and resumes the existing Workflow process through its ordinary durable continuation path.",
+                "system_object": "record_timer",
+                "worker": "Runtime global Record Timer worker"
+              },
+              "x-domainry-verification": {
+                "evidence_binding": "The compiled manifest and immutable implementation packet bind the production Action/Workflow identities, focused Handler test paths, and exact Runtime timer integration certificate identity. A missing certificate or observation leaves verification incomplete.",
+                "required_observations": [
+                  "the production Action black-box path computes and persists the requirement's real due value and does not produce the due business effect immediately",
+                  "when the accepted business surface already permits a short future due, one same-business black-box case observes record_timer.due_at, no effect before due, and the same Workflow process advancing after due",
+                  "when that short due is not legally authorable, project Handler focused tests use a dependency-injected clock to prove pre-due and due business semantics without exposing time through production input",
+                  "when that short due is not legally authorable, an independently produced Runtime timer integration certificate proves record_timer pre-due, due claim/fencing/resume, and restart mechanics",
+                  "the compiled manifest and immutable implementation packet bind every selected evidence identity, and stale, retry, or restart paths do not create a duplicate business effect"
+                ],
+                "strategy": "Use a short real future due and bounded black-box polling only when the accepted business surface already permits that due value. Otherwise combine production-Action black-box proof, focused Handler tests with a dependency-injected clock, and an independently produced Runtime timer integration certificate; do not widen the business surface or add a Runtime clock seam."
+              }
+            }
+          }
+        ],
+        "validations": [
+          {
+            "kind": "workflow.definition",
+            "description": "Validate one complete project workflow definition."
+          }
+        ]
+      }
+    ],
+    "instructions": [
+      "Resolve every path relative to SKILL_ROOT and read the listed files in order before authoring.",
+      "Do not open capability indexes, templates, or patterns not listed by this plan.",
+      "Consume capability_contracts from this response as the complete machine-contract closure for the selected scope; do not issue one model capability --key call per category.",
+      "The listed documents and inlined source-owned contracts remain authoritative; this plan removes discovery calls, not semantics or validation."
+    ]
+  },
+  "raw_output": "{\"contract_version\":\"domainry-model-authoring-reading-plan-v3\",\"profile\":\"handler-repair\",\"topics\":[\"delayed-continuation\",\"domain-truth\",\"notifications\",\"permissions\",\"records\",\"workflow\"],\"read_order\":[{\"path\":\"references/project-mutation.md\",\"purpose\":\"project mutation and CAS boundary\"},{\"path\":\"references/ownership-and-extensions.md\",\"purpose\":\"project-owned implementation boundary\"},{\"path\":\"references/capabilities/behavior-owner-decision.md\",\"purpose\":\"behavior owner decision contract\"},{\"path\":\"references/evidence-levels.md\",\"purpose\":\"pre-finalize business-flow evidence semantics\"},{\"path\":\"references/verification.md\",\"purpose\":\"pre-finalize managed Runtime and evidence marker contract\"},{\"path\":\"references/capabilities/workflow.md\",\"purpose\":\"Workflow timer/wait and Runtime Record Timer ownership\"},{\"path\":\"templates/ledger-delayed-continuation/pattern.json\",\"purpose\":\"one-time delayed Workflow continuation composition inventory\"},{\"path\":\"references/domain-truth-and-settlement.md\",\"purpose\":\"calculation, snapshot, correction, and source-of-truth decisions\"},{\"path\":\"references/capabilities/in-app-notifications.md\",\"purpose\":\"business Inbox, notification intent, and exact grants for every managed verification actor\"},{\"path\":\"references/capabilities/permissions-and-data-scope.md\",\"purpose\":\"RBAC, field policy, and data scope\"},{\"path\":\"references/capabilities/rbac-and-data-scope-cookbook.md\",\"purpose\":\"standard actor and scope mappings\"},{\"path\":\"references/capabilities/records-fields-and-relations.md\",\"purpose\":\"record, field, relation, and default semantics\"},{\"path\":\"references/capabilities/crud-and-state-machine.md\",\"purpose\":\"CRUD and guarded lifecycle ownership\"},{\"path\":\"references/capabilities/actions-and-transactions.md\",\"purpose\":\"Action and transaction ownership\"},{\"path\":\"templates/ledger-record-lifecycle/pattern.json\",\"purpose\":\"record lifecycle composition inventory\"},{\"path\":\"templates/ledger-transaction-handler/pattern.json\",\"purpose\":\"transaction Handler composition inventory\"},{\"path\":\"templates/ledger-workflow-approval/pattern.json\",\"purpose\":\"Workflow approval composition inventory\"}],\"capability_keys\":[\"identity.roles\",\"notification.delivery_governance\",\"notification.templates\",\"records.authoring\",\"schema.authoring\",\"workflow.authoring\"],\"capability_contracts\":[{\"category\":{\"key\":\"identity.roles\",\"name\":\"Identity roles\",\"description\":\"Configure roles, permission grants, and user-role assignments.\"},\"validations\":[{\"kind\":\"identity.role\",\"description\":\"Validate one complete project role definition and its embedded permission/data/field policy.\"}]},{\"category\":{\"key\":\"notification.delivery_governance\",\"name\":\"Notification delivery governance\",\"description\":\"Configure event types and delivery rules and inspect delivery and Inbox governance metrics.\"},\"contracts\":[{\"kind\":\"notification.authoring_rule\",\"key\":\"project_handler_event_semantic_route\",\"schema\":{\"$schema\":\"https://json-schema.org/draft/2020-12/schema\",\"title\":\"Project Handler notification event semantic route requirement\",\"type\":\"object\",\"x-domainry-cross-resource-rule\":{\"requires\":{\"contains\":{\"resource_type\":{\"const\":\"project_record\"},\"route_key\":{\"minLength\":1,\"type\":\"string\"}},\"path\":\"actions[]\"},\"route_key_inference\":\"forbidden\",\"target_collection\":\"notification_event_types\",\"target_key_source\":\"referenced_event_type\",\"when\":{\"collection\":\"actions\",\"path\":\"handler.notification_event_types[]\"}}}}],\"validations\":[{\"kind\":\"notification.event_type\",\"description\":\"Validate one published project notification event type; when a project Action Handler references it, require an explicit project_record semantic route action with a non-empty route_key.\"},{\"kind\":\"notification.rule\",\"description\":\"Validate one notification rule against explicitly referenced event types.\"}]},{\"category\":{\"key\":\"notification.templates\",\"name\":\"Notification templates\",\"description\":\"Author, preview, review, publish, disable, and restore governed notification templates.\"},\"validations\":[{\"kind\":\"notification.template\",\"description\":\"Validate one project-owned external-channel notification template.\"}]},{\"category\":{\"key\":\"records.authoring\",\"name\":\"Action authoring\",\"description\":\"Author Runtime Action metadata while project-owned handlers retain business behavior.\"},\"contracts\":[{\"kind\":\"runtime.authoring_capability\",\"key\":\"action.definition\",\"lifecycle\":\"versioned_metadata\",\"schema\":{\"additionalProperties\":false,\"properties\":{\"assurance_policy\":{\"additionalProperties\":false,\"else\":{\"properties\":{\"approval_hash_field\":{\"pattern\":\"^\\\\s*$\",\"type\":\"string\"},\"approval_version_field\":{\"pattern\":\"^\\\\s*$\",\"type\":\"string\"}}},\"if\":{\"properties\":{\"required_methods\":{\"contains\":{\"const\":\"workflow_approval\"}}},\"required\":[\"required_methods\"]},\"properties\":{\"approval_hash_field\":{\"type\":\"string\"},\"approval_version_field\":{\"type\":\"string\"},\"maker_field\":{\"type\":\"string\"},\"recent_reauth_max_age_seconds\":{\"type\":\"integer\"},\"required_methods\":{\"items\":{\"enum\":[\"normal_login\",\"recent_reauth\",\"otp\",\"maker_checker\",\"workflow_approval\"],\"type\":\"string\"},\"type\":\"array\"}},\"required\":[\"required_methods\"],\"then\":{\"properties\":{\"approval_hash_field\":{\"pattern\":\"\\\\S\",\"type\":\"string\"},\"approval_version_field\":{\"pattern\":\"\\\\S\",\"type\":\"string\"}},\"required\":[\"approval_version_field\",\"approval_hash_field\"]},\"type\":\"object\"},\"concurrency_field\":{\"type\":\"string\"},\"defaults\":{\"type\":\"object\"},\"kind\":{\"enum\":[\"bulk_operation\",\"conditional_update\",\"object_create\",\"object_operation\",\"record_delete\",\"record_operation\",\"record_restore\",\"record_update\",\"transition_state\"],\"type\":\"string\"},\"label\":{\"type\":\"string\"},\"object_key\":{\"type\":\"string\"},\"optimistic_concurrency\":{\"default\":false,\"type\":\"boolean\"},\"payload_fields\":{\"items\":{\"additionalProperties\":false,\"properties\":{\"default\":{},\"key\":{\"type\":\"string\"},\"name\":{\"type\":\"string\"},\"options\":{\"items\":{\"type\":\"string\"},\"type\":\"array\"},\"required\":{\"type\":\"boolean\"},\"type\":{\"type\":\"string\"}},\"required\":[\"key\",\"type\"],\"type\":\"object\"},\"type\":\"array\"},\"preconditions\":{\"items\":{\"type\":\"string\"},\"type\":\"array\"},\"risk_level\":{\"enum\":[\"low\",\"medium\",\"high\",\"critical\"],\"type\":\"string\"},\"store_organization_mutation\":{\"additionalProperties\":false,\"properties\":{\"operations\":{\"items\":{\"enum\":[\"rename\",\"disable\"],\"type\":\"string\"},\"type\":\"array\"}},\"required\":[\"operations\"],\"type\":\"object\"},\"target_organization\":{\"additionalProperties\":false,\"properties\":{\"input\":{\"type\":\"string\"},\"source\":{\"enum\":[\"explicit\",\"explicit_or_sole_authorized_store\",\"record_owner\",\"provisioned_store\"],\"type\":\"string\"}},\"required\":[\"source\"],\"type\":\"object\"}},\"required\":[\"kind\",\"label\",\"object_key\"],\"type\":\"object\"},\"references\":[{\"input_json_pointer\":\"/payload/object_key\",\"kind\":\"object_key\"},{\"input_json_pointer\":\"/payload/assurance_policy/approval_version_field\",\"kind\":\"field_key\",\"scope_from\":\"/payload/object_key\"},{\"input_json_pointer\":\"/payload/assurance_policy/approval_hash_field\",\"kind\":\"field_key\",\"scope_from\":\"/payload/object_key\"},{\"input_json_pointer\":\"/payload/assurance_policy/maker_field\",\"kind\":\"field_key\",\"scope_from\":\"/payload/object_key\"}]},{\"kind\":\"plane.model_rule\",\"key\":\"action.field_source\",\"schema\":{\"$schema\":\"https://json-schema.org/draft/2020-12/schema\",\"additionalProperties\":{\"type\":\"string\"},\"title\":\"Compact Action field DSL and Object-source reuse\",\"type\":\"object\",\"x-domainry-decision-table\":[{\"author\":\"Standalone \\u003ctype\\u003e[!] DSL without Object-only semicolon modifiers.\",\"must_not\":[\"Copy max_length, unique, indexed, numeric bounds, or other Object-only modifiers from a conceptual or external entity.\",\"Add a fake project Object field only to satisfy source inference.\"],\"when\":\"The value is owned by the Action or by a Foundation capability and is not persisted in a project Object field.\"},{\"author\":\"Use the exact same stable field key, type, and Object-only modifiers as that Object field.\",\"must_not\":[\"Bind by a differently named field, synonym, prefix, suffix, or Action verb.\",\"Copy only some of the Object field's modifiers.\"],\"when\":\"The Action field is the same persisted business datum as a field on the owning Object or an Object in handler.access.\"}],\"x-domainry-identity-handler-delivery\":{\"identity_owned_non_profile_inputs\":{\"example\":{\"display_name\":\"text!\",\"login_id\":\"email!\",\"manager\":\"user\",\"role_key\":\"select![employee|manager]\"},\"rule\":\"Use standalone DSL because Identity, not the business Profile Object, owns these values.\"},\"invalid_without_exact_object_source\":{\"display_name\":\"text!;max_length=120\"},\"profile_bound_inputs\":{\"example\":{\"action_input\":{\"employee_no\":\"text!;unique\"},\"profile_object_fields\":{\"employee_no\":\"text!;unique\"}},\"rule\":\"Reuse Object-only modifiers only when the bound Profile Object has the exact same field key and compatible field contract.\"}},\"x-domainry-object-source-trigger\":{\"compatibility\":\"The Object field type and every authored Object-only modifier must match; ambiguous or incompatible candidates fail closed.\",\"lookup\":\"Owning Object plus Objects declared in handler.access, exact same field key only; owning Object wins over another accessible Object.\",\"semicolon_modifiers\":[\"unique\",\"indexed\",\"localized\",\"cardinality\",\"on_delete\",\"inverse\",\"dictionary\",\"value_domain\",\"min_length\",\"max_length\",\"min\",\"max\",\"pattern\",\"precision\",\"scale\",\"currency\",\"rounding\"],\"types\":[\"currency\",\"percent\"]},\"x-domainry-scope\":\"actions.\\u003caction_key\\u003e.input and actions.\\u003caction_key\\u003e.output\"}}],\"validations\":[{\"kind\":\"action.definition\",\"description\":\"Validate one project Action definition against its referenced object contract.\"}]},{\"category\":{\"key\":\"schema.authoring\",\"name\":\"Schema authoring\",\"description\":\"Author and validate complete project object fragments and inspect the embedded field, relation, and dictionary schemas owned by Runtime Application Schema.\"},\"contracts\":[{\"kind\":\"runtime.authoring_capability\",\"key\":\"schema.object\",\"lifecycle\":\"versioned_metadata\",\"schema\":{\"additionalProperties\":false,\"properties\":{\"capabilities\":{\"additionalProperties\":false,\"properties\":{\"create\":{\"default\":true,\"type\":\"boolean\"},\"delete\":{\"default\":true,\"type\":\"boolean\"},\"export\":{\"default\":true,\"type\":\"boolean\"},\"read\":{\"default\":true,\"type\":\"boolean\"},\"update\":{\"default\":true,\"type\":\"boolean\"}},\"type\":\"object\"},\"config\":{\"additionalProperties\":false,\"properties\":{\"title_field\":{\"minLength\":1,\"type\":\"string\"},\"write_policy\":{\"default\":\"direct_crud\",\"enum\":[\"direct_crud\",\"action_only\"],\"type\":\"string\"}},\"type\":\"object\"},\"description\":{\"type\":\"string\"},\"export_assurance_policy\":{\"additionalProperties\":false,\"properties\":{\"recent_reauth_max_age_seconds\":{\"maximum\":86400,\"minimum\":1,\"type\":\"integer\"},\"required_methods\":{\"items\":{\"enum\":[\"normal_login\",\"recent_reauth\",\"otp\",\"maker_checker\",\"workflow_approval\"],\"type\":\"string\"},\"minItems\":1,\"type\":\"array\"}},\"required\":[\"required_methods\"],\"type\":\"object\"},\"fields\":{\"default\":[],\"items\":{\"additionalProperties\":false,\"type\":\"object\"},\"type\":\"array\"},\"ledger_policy\":{\"additionalProperties\":false,\"properties\":{\"signature\":{\"default\":\"none\",\"enum\":[\"none\",\"hmac_sha256\"],\"type\":\"string\"}},\"type\":\"object\"},\"lifecycle_policy\":{\"additionalProperties\":false,\"properties\":{\"immutable_states\":{\"items\":{\"type\":\"string\"},\"type\":\"array\"},\"mode\":{\"enum\":[\"mutable\",\"soft_delete_only\",\"append_only\",\"immutable_after_state\"],\"type\":\"string\"},\"state_field\":{\"type\":\"string\"}},\"required\":[\"mode\"],\"type\":\"object\"},\"name\":{\"description\":\"Human-readable object name.\",\"minLength\":1,\"type\":\"string\"},\"ux\":{\"additionalProperties\":false,\"properties\":{\"config\":{\"additionalProperties\":false,\"properties\":{\"identity_relation_field\":{\"minLength\":1,\"type\":\"string\"}},\"type\":\"object\"},\"display\":{\"additionalProperties\":false,\"properties\":{\"title_field\":{\"minLength\":1,\"type\":\"string\"}},\"type\":\"object\"},\"kind\":{\"enum\":[\"identity_profile_extension\"],\"type\":\"string\"}},\"type\":\"object\"}},\"required\":[\"name\"],\"type\":\"object\"}}],\"validations\":[{\"kind\":\"schema.object\",\"description\":\"Validate one complete project object definition, including its embedded fields and relations.\"}]},{\"category\":{\"key\":\"workflow.authoring\",\"name\":\"Workflow authoring\",\"description\":\"Author and validate one complete workflow definition and inspect the embedded graph, node, resolver, trigger, condition, and edge schemas.\"},\"contracts\":[{\"kind\":\"runtime.authoring_capability\",\"key\":\"workflow.definition\",\"lifecycle\":\"source_controlled_json\",\"schema\":{\"$ref\":\"#/$defs/workflow_definition\"},\"references\":[{\"input_json_pointer\":\"/payload/trigger_contract/object_key\",\"kind\":\"object_key\"},{\"input_json_pointer\":\"/payload/trigger_contract/field_key\",\"kind\":\"field_key\",\"scope_from\":\"/payload/trigger_contract/object_key\"},{\"input_json_pointer\":\"/payload/graph/nodes/*/contract/action/action_key\",\"kind\":\"action_key\"}]},{\"kind\":\"plane.model_rule\",\"key\":\"delayed_continuation\",\"schema\":{\"$schema\":\"https://json-schema.org/draft/2020-12/schema\",\"title\":\"Workflow delayed continuation ownership and verification\",\"type\":\"object\",\"x-domainry-authoring-bridge\":{\"authored_collections\":[\"workflows\"],\"contract_version\":\"domainry-workflow-delayed-continuation-authoring-bridge-v1\",\"forbidden_collections\":[\"scheduled_jobs\"],\"node_shapes\":{\"timer_from_record_field\":{\"contract\":{\"timer\":{\"purpose\":\"\\u003cpurpose\\u003e\",\"source_field\":\"\\u003cdate-or-datetime-field\\u003e\",\"timer_key\":\"\\u003ctimer-key\\u003e\",\"timezone\":\"\\u003ciana-timezone\\u003e\"}},\"type\":\"timer\"},\"wait_duration\":{\"contract\":{\"timer\":{\"duration_seconds\":\"\\u003cpositive-duration-seconds\\u003e\",\"timezone\":\"\\u003ciana-timezone\\u003e\"}},\"type\":\"wait_duration\"},\"wait_until\":{\"contract\":{\"timer\":{\"at\":\"\\u003crfc3339-due-at\\u003e\",\"timezone\":\"\\u003ciana-timezone\\u003e\"}},\"type\":\"wait_until\"}},\"rearming_pattern\":{\"cancel_action\":\"The business Action clears \\u003cdate-or-datetime-field\\u003e when the governing state no longer needs a continuation.\",\"due_action\":\"Re-read the governing business state and produce no effect when the timer is stale; otherwise apply the idempotent due effect and persist the next exact due instant when recurrence-by-rearming is required.\",\"schedule_action\":\"The business Action computes and persists the exact next due instant in \\u003cdate-or-datetime-field\\u003e.\",\"timer_rule\":\"The timer_from_record_field node consumes source_field only; it does not recalculate an already-final business due instant.\",\"trigger_contract\":{\"field_key\":\"\\u003cdate-or-datetime-field\\u003e\",\"object_key\":\"\\u003cobject-key\\u003e\",\"type\":\"field_changed\"}},\"replacement_tokens\":[\"\\u003cpositive-duration-seconds\\u003e\",\"\\u003crfc3339-due-at\\u003e\",\"\\u003ctimer-key\\u003e\",\"\\u003cpurpose\\u003e\",\"\\u003cdate-or-datetime-field\\u003e\",\"\\u003ciana-timezone\\u003e\",\"\\u003cobject-key\\u003e\"],\"runtime_system_object\":\"record_timer\",\"selection\":{\"timer_from_record_field\":\"Resume from an exact date or datetime field common to every trigger Object. When the business Action already calculated the final instant, do not add offset_seconds or business_calendar_key.\",\"wait_duration\":\"Resume after a positive elapsed duration.\",\"wait_until\":\"Resume at one fixed RFC3339 instant.\"}},\"x-domainry-forbidden\":[\"a verification-only clock or time input on a production Workflow or Action\",\"a business Action or Workflow added only to make a short verification due authorable\",\"claiming a timer observation or Runtime timer integration certificate that was not independently produced and identity-checked\",\"a tenant Scheduler definition for one delayed continuation\",\"a startup fixture or bootstrap mutation that fabricates elapsed time\",\"a browser timer or project cron daemon as the time owner\"],\"x-domainry-owner-decision\":{\"delayed_continuation\":{\"author\":\"A timer, wait_until, or wait_duration node in the Workflow graph.\",\"intent\":\"Pause one already-started Workflow execution once and resume that same execution when its due time arrives.\",\"owner\":\"Runtime Workflow and Record Timer\",\"scheduled_job_allowed\":false},\"recurrence\":{\"author\":\"A scheduled_jobs definition targeting a scheduled Workflow or report snapshot refresh.\",\"intent\":\"Start a distinct governed run for each repeated calendar or interval window.\",\"owner\":\"Scheduler\",\"scheduled_job_allowed\":true}},\"x-domainry-runtime-persistence\":{\"due_field\":\"due_at\",\"resume\":\"The due timer is claimed with fencing and resumes the existing Workflow process through its ordinary durable continuation path.\",\"system_object\":\"record_timer\",\"worker\":\"Runtime global Record Timer worker\"},\"x-domainry-verification\":{\"evidence_binding\":\"The compiled manifest and immutable implementation packet bind the production Action/Workflow identities, focused Handler test paths, and exact Runtime timer integration certificate identity. A missing certificate or observation leaves verification incomplete.\",\"required_observations\":[\"the production Action black-box path computes and persists the requirement's real due value and does not produce the due business effect immediately\",\"when the accepted business surface already permits a short future due, one same-business black-box case observes record_timer.due_at, no effect before due, and the same Workflow process advancing after due\",\"when that short due is not legally authorable, project Handler focused tests use a dependency-injected clock to prove pre-due and due business semantics without exposing time through production input\",\"when that short due is not legally authorable, an independently produced Runtime timer integration certificate proves record_timer pre-due, due claim/fencing/resume, and restart mechanics\",\"the compiled manifest and immutable implementation packet bind every selected evidence identity, and stale, retry, or restart paths do not create a duplicate business effect\"],\"strategy\":\"Use a short real future due and bounded black-box polling only when the accepted business surface already permits that due value. Otherwise combine production-Action black-box proof, focused Handler tests with a dependency-injected clock, and an independently produced Runtime timer integration certificate; do not widen the business surface or add a Runtime clock seam.\"}}}],\"validations\":[{\"kind\":\"workflow.definition\",\"description\":\"Validate one complete project workflow definition.\"}]}],\"instructions\":[\"Resolve every path relative to SKILL_ROOT and read the listed files in order before authoring.\",\"Do not open capability indexes, templates, or patterns not listed by this plan.\",\"Consume capability_contracts from this response as the complete machine-contract closure for the selected scope; do not issue one model capability --key call per category.\",\"The listed documents and inlined source-owned contracts remain authoritative; this plan removes discovery calls, not semantics or validation.\"]}\n",
+  "stdout": null,
+  "stderr": null,
+  "output_streams_status": "aggregated_only",
+  "event_item_id": "item_5",
+  "event_line": 12,
+  "observed_started_epoch": 1788755303.8232708,
+  "observed_completed_epoch": 1788755305.276593,
+  "observed_started_event_line": 11,
+  "observed_completed_event_line": 12,
+  "duration_seconds": 1.453,
+  "timing_source": "agent-event-observations.jsonl",
+  "capture_file": "cli/001-model_capability.json"
+}

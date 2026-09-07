@@ -1,0 +1,19 @@
+{
+  "candidate_id": "v0.3.16-5-m1-org-unit-20260907+9aeea6610bf4",
+  "skill_name": "domainry-builder-v1",
+  "skill_root": "/private/tmp/domainry-m1-foundation-organization-unit-convergence-35/codex-home/skills/domainry-builder-v1",
+  "cli": "/private/tmp/domainry-m1-foundation-organization-unit-convergence-35/codex-home/skills/domainry-builder-v1/bin/domainry-cli",
+  "skill_version": "v0.3.16-5-m1-org-unit-20260907",
+  "skill_identity_sha256": "ebd64d96025aeabc3ec803e2cef1d6330e670533269edbfc0dda8172909aaceb",
+  "package_metadata_sha256": "c2bc7bff1cc1f226536b547de35d614e30bce888bc38c5af3cdb5f5c46360474",
+  "skill_tree_sha256": "9aeea6610bf41f8467d491049782b95c4e1b4e14a9ebab1963e64a304a0c7ed8",
+  "cli_binary_sha256": "d5c872905b2b8545418e3f19457681630b8d92c8ba868164706492f0aec710da",
+  "runtime_api_contract_version": "runtime-domain-api-v1",
+  "runtime_api_contract_hash": "4fe655cbfd4fa0bc0b0c04c89b86926fc6aceb059c9fccf5b09eec9b459330f7",
+  "apply_target_flag": "--service",
+  "apply_target_value": "http://127.0.0.1:8283",
+  "apply_target_args": [
+    "--service",
+    "http://127.0.0.1:8283"
+  ]
+}

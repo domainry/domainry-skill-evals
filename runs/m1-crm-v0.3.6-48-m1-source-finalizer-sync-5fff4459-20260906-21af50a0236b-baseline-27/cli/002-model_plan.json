@@ -1,0 +1,52 @@
+{
+  "family": "model_plan",
+  "command": "/bin/zsh -lc '/private/tmp/domainry-m1-v48-source-finalizer-sync-baseline-27/codex-home/skills/domainry-builder-v1/bin/domainry-cli model plan --json --project /private/tmp/domainry-m1-v48-source-finalizer-sync-baseline-27/project'",
+  "exit_code": 1,
+  "output": {
+    "artifact": ".domainry/builder/disposable/model-preflight-result.json",
+    "artifact_relative_to": "--project",
+    "contract_version": "domainry-model-preflight-envelope-v1",
+    "diagnostics": [
+      {
+        "code": "model.unknown_field",
+        "message": "scheduled_jobs.weekday_followup_reminders contains unknown field \"trigger_type\"",
+        "path": "backend/model/40-followup-reminders.json#modules/crm/features/followup_reminders/scheduled_jobs/weekday_followup_reminders",
+        "file": "backend/model/40-followup-reminders.json",
+        "json_pointer": "/modules/crm/features/followup_reminders/scheduled_jobs/weekday_followup_reminders",
+        "line": 91,
+        "column": 13,
+        "constraint": "model.unknown_field",
+        "repair_hint": "repair the reported constraint at the file/JSON Pointer and rerun model plan",
+        "owner": "domainry-cli",
+        "stage": "model_loader",
+        "ledger_path": "backend/model/40-followup-reminders.json#modules/crm/features/followup_reminders/scheduled_jobs/weekday_followup_reminders",
+        "repair_facts": {
+          "artifact_path": ".domainry/builder/disposable/model-preflight-result.json",
+          "artifact_relative_to": "--project",
+          "collection": "scheduled_jobs",
+          "feature": "followup_reminders",
+          "key": "weekday_followup_reminders",
+          "module": "crm",
+          "source_file": "backend/model/40-followup-reminders.json"
+        }
+      }
+    ],
+    "identity": "ca5f8db825428da16a20ac91d6f60a4462c17a30fc3a25c36c1188b6241d4169",
+    "issue_count": 1,
+    "sha256": "86c61f758377c8c3f8129b68c13d1275c0ff1135bb6555dc75172e362fe24eb5",
+    "state": "repair_required"
+  },
+  "raw_output": "{\"artifact\":\".domainry/builder/disposable/model-preflight-result.json\",\"artifact_relative_to\":\"--project\",\"contract_version\":\"domainry-model-preflight-envelope-v1\",\"diagnostics\":[{\"code\":\"model.unknown_field\",\"message\":\"scheduled_jobs.weekday_followup_reminders contains unknown field \\\"trigger_type\\\"\",\"path\":\"backend/model/40-followup-reminders.json#modules/crm/features/followup_reminders/scheduled_jobs/weekday_followup_reminders\",\"file\":\"backend/model/40-followup-reminders.json\",\"json_pointer\":\"/modules/crm/features/followup_reminders/scheduled_jobs/weekday_followup_reminders\",\"line\":91,\"column\":13,\"constraint\":\"model.unknown_field\",\"repair_hint\":\"repair the reported constraint at the file/JSON Pointer and rerun model plan\",\"owner\":\"domainry-cli\",\"stage\":\"model_loader\",\"ledger_path\":\"backend/model/40-followup-reminders.json#modules/crm/features/followup_reminders/scheduled_jobs/weekday_followup_reminders\",\"repair_facts\":{\"artifact_path\":\".domainry/builder/disposable/model-preflight-result.json\",\"artifact_relative_to\":\"--project\",\"collection\":\"scheduled_jobs\",\"feature\":\"followup_reminders\",\"key\":\"weekday_followup_reminders\",\"module\":\"crm\",\"source_file\":\"backend/model/40-followup-reminders.json\"}}],\"identity\":\"ca5f8db825428da16a20ac91d6f60a4462c17a30fc3a25c36c1188b6241d4169\",\"issue_count\":1,\"sha256\":\"86c61f758377c8c3f8129b68c13d1275c0ff1135bb6555dc75172e362fe24eb5\",\"state\":\"repair_required\"}\nbackend/model/40-followup-reminders.json:91:13: model.unknown_field: scheduled_jobs.weekday_followup_reminders contains unknown field \"trigger_type\"\nerror: Builder validation found 1 issue(s)\n",
+  "stdout": null,
+  "stderr": null,
+  "output_streams_status": "aggregated_only",
+  "event_item_id": "item_43",
+  "event_line": 84,
+  "observed_started_epoch": 1788676818.7996821,
+  "observed_completed_epoch": 1788676818.902581,
+  "observed_started_event_line": 83,
+  "observed_completed_event_line": 84,
+  "duration_seconds": 0.103,
+  "timing_source": "agent-event-observations.jsonl",
+  "capture_file": "cli/002-model_plan.json"
+}

@@ -1,0 +1,45 @@
+{
+  "benchmark": "m1-crm",
+  "candidate_id": "v0.3.16-6-m1-evolution-action-20260907+9b42936cb7ec",
+  "skill_version": "v0.3.16-6-m1-evolution-action-20260907",
+  "model": "gpt-5.6-sol",
+  "run_id": "m1-crm-evaluator-cache-convergence-38",
+  "run_kind": "convergence",
+  "parent_run_id": "m1-crm-plane-evolution-action-convergence-37",
+  "checkpoint": {
+    "contract_version": "domainry-eval-checkpoint-v1",
+    "source_run_id": "m1-crm-plane-evolution-action-convergence-37",
+    "checkpoint_kind": "pre_apply_evaluator_cache_write_permission_gap",
+    "measurement_class": "checkpoint_convergence_not_baseline",
+    "baseline_eligibility": false,
+    "manifest_sha256": "4a80e38cc910da2351238a205c0b5fdcb16e4e07dd27826accc5daad32258746",
+    "archive_sha256": "03c97ebaca84daa49e9087bf9ed68b26b0d595b089b3208a4d0676a27d23b397",
+    "resume_boundary": {
+      "stage": "apply",
+      "next_node": "after the evaluator supplies a writable explicit DOMAINRY_CACHE_DIR under checkpoint-excluded project-managed Runtime state, restore this project and rerun apply model under the same installed candidate, then preserve the typed provision_department Handler and continue with focused tests, BF01-BF08 completion, apply finalize, full tree, and managed verify",
+      "rule": "Do not repeat accepted requirements or unrelated model work; do not modify foundation code for this evaluator-only error; do not restore Git history, Agent sessions, managed Runtime state, SQLite, locks, or stale verification/finalization evidence.",
+      "prior_delivery_id": "sha256:a1a7aed4a3ddc21d59f2cedb8250e159c76db90261e3e0584f2f963634d7e937"
+    },
+    "prohibited_repairs": [
+      "do not change Plane, Runtime, Identity, or the installed Builder candidate for this evaluator-only defect",
+      "do not grant the Agent broad filesystem access",
+      "do not remove the project-owned Handler or move CRM orchestration into Runtime",
+      "do not increase store quota or recreate a CRM department registry",
+      "do not restore Git history, Agent sessions, Runtime databases, locks, or stale receipts"
+    ]
+  },
+  "terminal_state": "delivery_incomplete",
+  "measurement_complete": false,
+  "environment_valid": true,
+  "agent_declared_done": false,
+  "agent_result_state": null,
+  "human_interventions": 0,
+  "started_epoch": 1788721299.69727,
+  "agent_ended_epoch": 1788723018.276319,
+  "ended_epoch": 1788723018.6472151,
+  "project_path": "/private/tmp/domainry-m1-evaluator-cache-convergence-38/project",
+  "isolation_root": "/private/tmp/domainry-m1-evaluator-cache-convergence-38",
+  "codex_home": "/private/tmp/domainry-m1-evaluator-cache-convergence-38/codex-home",
+  "database_path": "/private/tmp/domainry-m1-evaluator-cache-convergence-38/runtime/cohort.sqlite",
+  "agent_session_id": "01a07819-09f0-7351-8a2e-0df792925a6f"
+}

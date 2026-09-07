@@ -1,0 +1,19 @@
+{
+  "candidate_id": "v0.3.17-6-reviewed-removal-guidance-20260907+69df32b918eb",
+  "skill_name": "domainry-builder-v1",
+  "skill_root": "/private/tmp/domainry-m1-reviewed-removal-resume-convergence-44/codex-home/skills/domainry-builder-v1",
+  "cli": "/private/tmp/domainry-m1-reviewed-removal-resume-convergence-44/codex-home/skills/domainry-builder-v1/bin/domainry-cli",
+  "skill_version": "v0.3.17-6-reviewed-removal-guidance-20260907",
+  "skill_identity_sha256": "ebd64d96025aeabc3ec803e2cef1d6330e670533269edbfc0dda8172909aaceb",
+  "package_metadata_sha256": "85223c9ac640194d41c6f256e0ce1697244738c5cef83d5c8b68be6145a5b417",
+  "skill_tree_sha256": "69df32b918ebb019d446803c13ccd40abe58988ed9e566e09da59d8b8b359a9d",
+  "cli_binary_sha256": "f2bd71c1cc637ce61350993a1abbf3f35e0b3f7d8c13476f19b9bc8c06a00fed",
+  "runtime_api_contract_version": "runtime-domain-api-v1",
+  "runtime_api_contract_hash": "4fe655cbfd4fa0bc0b0c04c89b86926fc6aceb059c9fccf5b09eec9b459330f7",
+  "apply_target_flag": "--service",
+  "apply_target_value": "http://127.0.0.1:8283",
+  "apply_target_args": [
+    "--service",
+    "http://127.0.0.1:8283"
+  ]
+}

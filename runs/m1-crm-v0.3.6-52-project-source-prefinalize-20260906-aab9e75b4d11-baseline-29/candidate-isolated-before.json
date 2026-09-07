@@ -1,0 +1,19 @@
+{
+  "candidate_id": "v0.3.6-52-project-source-prefinalize-20260906+aab9e75b4d11",
+  "skill_name": "domainry-builder-v1",
+  "skill_root": "/private/tmp/domainry-m1-v52-project-source-prefinalize-baseline-29/codex-home/skills/domainry-builder-v1",
+  "cli": "/private/tmp/domainry-m1-v52-project-source-prefinalize-baseline-29/codex-home/skills/domainry-builder-v1/bin/domainry-cli",
+  "skill_version": "v0.3.6-52-project-source-prefinalize-20260906",
+  "skill_identity_sha256": "ebd64d96025aeabc3ec803e2cef1d6330e670533269edbfc0dda8172909aaceb",
+  "package_metadata_sha256": "dbc18738f4ad81881fc5a252b6ef87cd74e07347029049b7ae12ce571bb4671b",
+  "skill_tree_sha256": "aab9e75b4d11b5452b936a535657752bb24cd430c409bef7ca2404b1b84e7d85",
+  "cli_binary_sha256": "83f55d12f703538a8e907098f23e3dbf7321049fe07fbbf5e0fc664c81b8ea8f",
+  "runtime_api_contract_version": "runtime-domain-api-v1",
+  "runtime_api_contract_hash": "4fe655cbfd4fa0bc0b0c04c89b86926fc6aceb059c9fccf5b09eec9b459330f7",
+  "apply_target_flag": "--service",
+  "apply_target_value": "http://127.0.0.1:8283",
+  "apply_target_args": [
+    "--service",
+    "http://127.0.0.1:8283"
+  ]
+}

@@ -1,0 +1,190 @@
+{
+  "contract_version": "domainry-eval-checkpoint-v1",
+  "source_run_id": "m1-crm-scheduler-run-route-resume-convergence-41",
+  "checkpoint_kind": "post_candidate8_reviewed_apply_managed_elapsed_time_verification_seam_gap_v5",
+  "measurement_class": "checkpoint_convergence_not_baseline",
+  "baseline_eligibility": false,
+  "parent_checkpoint": {
+    "checkpoint_id": "m1-crm-project-org-unit-resolve-convergence-40-checkpoint-scheduler-run-route-gap-v4",
+    "manifest_sha256": "2031b14e838678080853bcf02725bfd2c21f9f3dbd7201622e451d9371e71d9e",
+    "archive_sha256": "6c8ce635d7fed2544f6755385ae227d74e9be2c00514c716b092768b148ec67a",
+    "restored_file_count": 1299
+  },
+  "archive": {
+    "path": "checkpoint-project.tar.gz",
+    "sha256": "4aec796c2809fddc88d9d18172029bc4e991140277b4cbcc23c76522cc17ecd9"
+  },
+  "archive_policy": {
+    "git_history_included": false,
+    "runtime_state_included": false,
+    "sqlite_included": false,
+    "lock_files_included": false,
+    "agent_sessions_included": false,
+    "temporary_state_included": false,
+    "disposable_preflight_included": false,
+    "cache_state_included": false,
+    "appledouble_included": false
+  },
+  "restore_expectations": {
+    "restored_file_count": 1387,
+    "restored_directory_count": 305,
+    "archive_member_count": 1692,
+    "ignored_appledouble_member_count": 0,
+    "ignored_git_member_count": 0,
+    "ignored_runtime_state_member_count": 0,
+    "ignored_sqlite_member_count": 0,
+    "ignored_lock_member_count": 0,
+    "ignored_agent_session_member_count": 0
+  },
+  "candidate": {
+    "candidate_id": "v0.3.16-8-m1-scheduler-run-route-20260907+2ca45a33a705",
+    "skill_version": "v0.3.16-8-m1-scheduler-run-route-20260907",
+    "skill_identity_sha256": "ebd64d96025aeabc3ec803e2cef1d6330e670533269edbfc0dda8172909aaceb",
+    "package_metadata_sha256": "1901497e11d111a6ee6ca1f257b37014a99f50a10dc64d5d255d7c1aa9fdc180",
+    "skill_tree_sha256": "2ca45a33a705428b0d81412c15792978426d42734cb013d5c908a27373a3c6dc",
+    "cli_binary_sha256": "33f62c9d4a710b7a7473ed335e29ac836457d4382eb891154422ae6a7e850ae2",
+    "runtime_api_contract_version": "runtime-domain-api-v1",
+    "runtime_api_contract_hash": "4fe655cbfd4fa0bc0b0c04c89b86926fc6aceb059c9fccf5b09eec9b459330f7"
+  },
+  "source_run_interruption": {
+    "agent_session_id": "01a07926-72dc-7d20-9934-0b44963004ad",
+    "operator_action": "ctrl_c_after_item_28",
+    "process_exit_code": 130,
+    "measurement_complete": false,
+    "baseline_evidence_eligible": false,
+    "run_artifacts_finalized": false,
+    "lifecycle_artifact_state_at_interrupt": "agent_running",
+    "measurement_boundary": "operator_interrupted_after_rejected_project_workaround",
+    "checker_executed": false,
+    "managed_verify_executed": false,
+    "progress_snapshot": {
+      "domainry_cli_invocations_total": 7,
+      "domainry_cli_completed_total": 6,
+      "domainry_cli_failed_total": 1,
+      "domainry_cli_retries_total": 4,
+      "agent_command_invocations_total": 25,
+      "agent_command_completions_total": 24,
+      "agent_command_failures_total": 1
+    }
+  },
+  "accepted_candidate8_progress": {
+    "stage": "apply",
+    "initial_ordering_failure": {
+      "event_item_id": "item_6",
+      "event_line": 13,
+      "exit_code": 1,
+      "family": "apply_model",
+      "error_code": "model.preflight_missing",
+      "classification": "command_order_error",
+      "diagnostic": "apply model was invoked before candidate8 model plan; the CLI correctly required model plan first",
+      "baseline_failure": false
+    },
+    "model_plan": {
+      "event_item_id": "item_8",
+      "event_line": 16,
+      "state": "valid",
+      "identity": "dd6dcd7e71c3268ba39f71e4c3f0c7afe4218f7d68b7bf48a9417146a7a0de3d",
+      "sha256": "ad714f4cf6a9b6c0b6c925fbf40e851456339dfd3d680e197667d7dcea564436",
+      "items": 40,
+      "creates": 0,
+      "updates": 0,
+      "deletes": 0,
+      "issue_count": 0
+    },
+    "reviewed_apply": {
+      "review_event_item_id": "item_14",
+      "review_event_line": 28,
+      "state": "implementation_ready",
+      "created_source_files": 0,
+      "delivery_id": "sha256:000477f0e464666cbf57696e82c15ccc5482a2d5a65395c29cf5c2be3321e471",
+      "evolution_audit_sha256": "ef1571ef1fb7bd873b3b5bd2cf65e7d6cb00ffaa9f422b1c6ce8b863c756d783",
+      "evolution_audit_file_sha256": "01d97b408c10d163c723fe2b20aab569f171dea7f3e85813f975339e44ed60dd",
+      "evolution_audit_file_size_bytes": 59505,
+      "materialization_receipt_sha256": "e3842bc11a36e4c1564fd82ca47abe67013d6e83704bf3bf8be6b352b24e785b",
+      "materialization_file_sha256": "a2f00f08268a346b3e2b1f7665aeece0c89f29cf8027094b033d73a7c69944e9",
+      "implementation_packet_sha256": "f11af87d0144e6fea7e048b4168e4ef9f7dd46a1e376d1a9ba6324a3318c10c7",
+      "implementation_packet_bytes": 10149,
+      "verification_guide_sha256": "13a35fa85110c46a59190dab5843e7d3f8f189276a3ae9452cc9b43e11344907",
+      "verification_guide_bytes": 26577,
+      "route_catalog_sha256": "4084bbe14acaf4fd7faebfedbaad874bdb7a3460476312452b4a7cd229012f31",
+      "route_catalog_count": 117,
+      "scheduler_route_shard_sha256": "cd8a80ed5d23fe73df79b40141fb99020e17098dfa8c4a0658aa67b8fe5cb532",
+      "scheduler_route_shard_bytes": 2443
+    },
+    "project_stage": {
+      "requirements_started": 1788705879,
+      "requirements_ended": 1788706049,
+      "model_started": 1788734524,
+      "model_ended_from_item_8_completion": 1788739027,
+      "apply_started": 1788734642,
+      "apply_ended": null,
+      "verify_started": null,
+      "verify_ended": null,
+      "stages_file_sha256": "006caa340819fa5a9c502ed2ec3c4b007eac25b43ab84f2a4c298663ac2268c4"
+    },
+    "reconstruction_validation": {
+      "base_checkpoint_restored_file_count": 1299,
+      "candidate8_plan_identity_reproduced": true,
+      "candidate8_evolution_audit_identity_reproduced": true,
+      "candidate8_reviewed_apply_identity_reproduced": true,
+      "focused_action_tests_passed": true,
+      "business_flow_compile_passed": true
+    }
+  },
+  "rejected_item_28_state": {
+    "accepted": false,
+    "event_item_id": "item_28",
+    "event_lines": [51, 52],
+    "reason": "The change introduced a human sales_director manual assessment Workflow carrying evaluation_time into the service-run scan. That is a project workaround for a missing managed verification seam and violates the v4 boundary even though the internal Action remained service-owned.",
+    "modified_paths": [
+      ".domainry/development/stages.json",
+      "backend/model/10-organization-identity.json",
+      "backend/model/40-followup-reminder.json",
+      "backend/tests/businessflow/bf06_test.go",
+      "docs/backend-requirements-prd.md"
+    ],
+    "rejected_live_sha256": {
+      ".domainry/development/stages.json": "841fb9990bd842c9b92143982b056b724a20c6b4c61f8fad84e38cbf7c7ed2c8",
+      "backend/model/10-organization-identity.json": "6c50a31e6b884620e2b551e74ddcb1fc954b29a9645a3e7ec39d02c3ac6c858b",
+      "backend/model/40-followup-reminder.json": "6a94c7032fa5a1cb94daa250103e901e832671b12bd051eb11a1e09a48da5f69",
+      "backend/tests/businessflow/bf06_test.go": "4b6fe9ba0b4a457265ba5e895d3cc1e3bb22c5c517202771705fe29cde144b0a",
+      "docs/backend-requirements-prd.md": "43350b90457b0805907ef73e66b146760ce7721e53fcc5ff54cd892efd560182"
+    },
+    "archived_safe_sha256": {
+      ".domainry/development/stages.json": "006caa340819fa5a9c502ed2ec3c4b007eac25b43ab84f2a4c298663ac2268c4",
+      "backend/model/10-organization-identity.json": "133f3636ba09150ff0038d1299145742ce7c5a7a76552aee05f87377d608ee22",
+      "backend/model/40-followup-reminder.json": "287f9e286dd8472671832cc7d73db154a2c7e43914f28700c30715bee3ceced8",
+      "backend/tests/businessflow/bf06_test.go": "d4dddaddacb4c0026f9e92076d7902c474828fc251ce61f7ab029850aafab563",
+      "docs/backend-requirements-prd.md": "c75c515395665d2375420b9b3f79ecc90eb4015980b3dbe820ba67530eb8b9bf"
+    },
+    "contaminated_tail": "Ctrl-C was issued after item_28. Any already-buffered or subsequently observed item_29 through item_34 activity, including the manual-assessment plan/evolution audit, is rejected and absent from this archive."
+  },
+  "blocking_condition": {
+    "classification": "foundation_managed_black_box_elapsed_time_verification_seam_missing",
+    "domainry_foundation_gap": true,
+    "owner": "foundation.verification_contract",
+    "details": [
+      "Candidate8 successfully publishes POST /scheduler/definitions/{definitionID}/run with scheduler.definitions.run;all, stable Idempotency-Key, and X-Operation-Reason. This closes v4's missing-route gap.",
+      "The published Scheduler definition-run route has no request body. The candidate8 verification guide also states that the ordinary Scheduler-to-Workflow path passes no evaluation_time, while BF06 requires an explicit bounded evaluation_time to prove a greater-than-seven-days branch in a newly created managed cohort without sleeping seven days.",
+      "The guide describes a black-box verification use for the internal service Action, but the published managed surface contains no generic authorized seam that supplies controlled evaluation_time while preserving Scheduler causality and service-only execution.",
+      "A new human-triggered manual Workflow is not that seam: it changes project business surface, grants a human entry to the service-run assessment path, and can no longer prove that the Scheduler caused the reminder."
+    ],
+    "prohibited_repairs": [
+      "do not add or invoke a manual Workflow to carry evaluation_time for BF06",
+      "do not widen sales_director or any human Role with the internal scan Action or an assessment Workflow permission",
+      "do not backdate records, mutate SQLite or another database directly, inject historical timestamps through bootstrap, or use a global clock override",
+      "do not pass evaluation_time through the ordinary production Scheduler path when its published contract has no body",
+      "do not call the Scheduler separately from an assessment path and then claim the Scheduler caused the elapsed-time reminder",
+      "do not fabricate Scheduler run, reminder, notification, idempotency, deduplication, weekday, or restart evidence",
+      "do not modify Plane, Builder, Runtime, Scheduler, SDKs, evaluator code, or another foundation repository from this project checkpoint",
+      "do not restore item_28 or its post-item_28 model plan/evolution artifacts",
+      "do not restore Git history, managed Runtime/cache state, disposable preflight state, databases, SQLite, Agent sessions, locks, temporary files, or measured-run evidence"
+    ]
+  },
+  "resume_boundary": {
+    "stage": "apply",
+    "next_node": "Do not continue BF06 until foundation publishes a generic managed black-box verification seam for controlled elapsed-time evaluation. Restore this archive, preserve the candidate8 valid zero-change model plan, reviewed implementation_ready delivery sha256:000477f0e464666cbf57696e82c15ccc5482a2d5a65395c29cf5c2be3321e471, content-addressed implementation/verification packets, and all retained v4 business source. Never restore or recreate item_28's followup_elapsed_time_assessment manual Workflow, sales_director grant, PRD/model rewrite, or BF06 workaround. When a successor candidate publishes the seam, run only the compatibility plan/review/apply needed to obtain its exact packet; verify the seam's authorization, time bounds, isolation-only availability, service principal, Scheduler causality, headers/body, response, and restart semantics before editing BF06. BF06 must exercise the real Scheduler-owned definition run and the generic controlled-time seam as one attributable verification path, prove a genuinely greater-than-seven-days weekday case, stable idempotency, same-day deduplication, notification delivery, human denial, and restart persistence without waiting seven days or changing production Scheduler payload semantics. Then run focused tests, project check, business-flow compile, reviewed finalize, full tree, and exactly one managed verify over initial plus restart. Require verified_and_stopped and checker eligibility before claiming completion.",
+    "prior_delivery_id": "sha256:000477f0e464666cbf57696e82c15ccc5482a2d5a65395c29cf5c2be3321e471",
+    "rule": "Convergence-41 is convergence-only and cannot become baseline evidence. Its item_6 apply failure was a corrected ordering error, while item_28 and the contaminated tail were actively rejected rather than accepted progress. The v5 archive was rebuilt from v4 plus a fresh deterministic candidate8 plan, audited evolution, and reviewed apply in an independent temporary project; it was not copied from the contaminated live tree. Candidate8 closes only the Scheduler route publication gap. It does not expose the controlled elapsed-time managed verification seam required by its own black-box contract. Keep the project at apply and make no business or foundation workaround until that general seam is published."
+  }
+}

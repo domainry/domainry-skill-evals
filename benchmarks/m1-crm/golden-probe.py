@@ -3,7 +3,7 @@
 
 用法: golden-probe.py <base_url> <runtime_db_path> <out.json>
 身份与键位经环境变量适配:REP_EAST, REP_EAST2, REP_NORTH, DIRECTOR(user_id),
-ACT_REGISTER, ACT_CONTACT, ACT_QUALIFY, ACT_LOSE, ACT_CONVERT, ACT_APPROVE, ACT_REJECT, ACT_DISPATCH, ACT_EXPORT(action keys),
+ACT_REGISTER, ACT_CONTACT, ACT_QUALIFY, ACT_LOSE, ACT_CONVERT, ACT_APPROVE, ACT_REJECT, ACT_EXPORT(action keys),
 STATE_FIELD(默认 status)。
 """
 import json
@@ -30,7 +30,6 @@ ACT_QUALIFY = os.environ.get("ACT_QUALIFY", "lead.mark_qualified")
 ACT_CONVERT = os.environ.get("ACT_CONVERT", "lead.request_conversion")
 ACT_APPROVE = os.environ.get("ACT_APPROVE", "conversion_request.approve_conversion")
 ACT_REJECT = os.environ.get("ACT_REJECT", "conversion_request.reject_conversion")
-ACT_DISPATCH = os.environ.get("ACT_DISPATCH", "lead.dispatch_followup_reminders")
 ACT_EXPORT = os.environ.get("ACT_EXPORT", "report_export_audit.request_lead_export")
 STATE_FIELD = os.environ.get("STATE_FIELD", "status")
 DEPT_EAST = os.environ.get("DEPT_EAST", "dept_east")
@@ -255,14 +254,10 @@ record("M10", "P0", st_u in (401, 403, 404, 405) and st_d in (401, 403, 404, 405
 st_t, bt, _ = obj_action(east, "lead", ACT_CONTACT, {STATE_FIELD: "contacted"}, f"t-{TAG}", rid=lead_small)
 record("M02", "P0", st_t >= 400, f"converted 终态再转换 http={st_t} code={bt.get('code')}")
 
-# M14 定时提醒:DB 老化 fixture 后手动 dispatch
-aged = db("UPDATE lead SET updated_at = datetime('now','-10 days') WHERE status='contacted'", write=True)
-st_disp, bd, _ = obj_action(director, "lead", ACT_DISPATCH, {"run_date": time.strftime("%Y-%m-%d")}, f"disp-{TAG}")
-time.sleep(0.5)
-rem = db("SELECT COUNT(*) FROM followup_reminder")[0][0] if db("SELECT name FROM sqlite_master WHERE name='followup_reminder'") else -1
-sched = db("SELECT COUNT(*) FROM sqlite_master WHERE name LIKE '%schedul%'")[0][0]
-record("M14", "P1", st_disp == 200 and rem > 1 and aged >= 1,
-       f"aged={aged} dispatch http={st_disp} reminders={rem} scheduler_tables={sched}")
+# M14 必须由当前契约驱动 checker 的两阶段 BF06 验证。这个遗留探针没有
+# record_timer 生命周期观察面，禁止再通过直写 SQLite/手动 dispatch 伪造时间因果。
+record("M14", "P1", False,
+       "legacy fixed probe cannot prove event-driven one-shot due continuation; use run_m1_baseline.py BF06")
 
 # M15 漏斗报表
 st_rep, rep, _ = http("GET", "/reports/lead_funnel/summary", token=director)

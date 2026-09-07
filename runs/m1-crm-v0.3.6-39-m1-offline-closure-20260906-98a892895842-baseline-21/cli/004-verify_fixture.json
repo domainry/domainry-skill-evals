@@ -1,0 +1,19 @@
+{
+  "family": "verify_fixture",
+  "command": "/bin/zsh -lc '/private/tmp/domainry-m1-v39-offline-closure-baseline-21/codex-home/skills/domainry-builder-v1/bin/domainry-cli verify fixture --json --project /private/tmp/domainry-m1-v39-offline-closure-baseline-21/project'",
+  "exit_code": 1,
+  "output": "error: project compiler-bound Runtime acceptance fixture: Runtime acceptance fixture \"bf06_overdue_contacted\" department owner organization index is invalid",
+  "raw_output": "error: project compiler-bound Runtime acceptance fixture: Runtime acceptance fixture \"bf06_overdue_contacted\" department owner organization index is invalid\n",
+  "stdout": null,
+  "stderr": null,
+  "output_streams_status": "aggregated_only",
+  "event_item_id": "item_56",
+  "event_line": 109,
+  "observed_started_epoch": 1788633285.289133,
+  "observed_completed_epoch": 1788633285.289763,
+  "observed_started_event_line": 108,
+  "observed_completed_event_line": 109,
+  "duration_seconds": 0.001,
+  "timing_source": "agent-event-observations.jsonl",
+  "capture_file": "cli/004-verify_fixture.json"
+}
