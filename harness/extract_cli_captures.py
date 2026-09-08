@@ -12,6 +12,7 @@ import shlex
 
 CLI_MARKER = re.compile(r"(?:domainry-cli|DOMAINRY_CLI)")
 SHELL_SEPARATORS = {";", "&&", "||", "|", "&"}
+SHELL_WRAPPERS = {"bash", "sh", "zsh", "dash", "ksh"}
 METADATA_ARGUMENTS = {"--help", "-h", "help", "--version", "-V", "version"}
 OBSERVATION_CONTRACT = "domainry-eval-event-observations-v1"
 
@@ -31,12 +32,14 @@ def _command_words(command: str) -> list[str]:
     except ValueError:
         return []
     script = command
-    for flag in ("-lc", "-c"):
-        if flag in outer:
-            index = outer.index(flag)
-            if index + 1 < len(outer):
-                script = outer[index + 1]
-                break
+    # Only a leading shell wrapper (``bash -lc <script>``, ``sh -c <script>``)
+    # carries the real program in its next argument. A ``-c`` that belongs to a
+    # later command such as ``python3 -c`` or ``grep -c`` is ordinary argv and
+    # must not hide the Domainry CLI invocation that precedes it.
+    if len(outer) >= 3 and Path(outer[0]).name in SHELL_WRAPPERS and outer[1] in ("-lc", "-c", "-l", "-lc"):
+        script = outer[2]
+    elif len(outer) >= 4 and Path(outer[0]).name in SHELL_WRAPPERS and outer[1] == "-l" and outer[2] == "-c":
+        script = outer[3]
     # Codex commonly sends multi-line shell programs. Domainry scoring commands
     # are standalone lines; preserving the boundary prevents later prose or
     # commands from becoming their arguments.

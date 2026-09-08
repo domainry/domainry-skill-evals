@@ -1,0 +1,20 @@
+[
+  {
+    "failure_kind": "command",
+    "stage": "agent_command",
+    "owner": "agent",
+    "note": "Agent command failed during strict baseline measurement",
+    "terminal_state": "baseline_first_command_failure",
+    "attribution_status": "attributed",
+    "detail": {
+      "failure_kind": "command",
+      "family": null,
+      "exit_code": 2,
+      "output_state": null,
+      "command_sha256": "23ca93f092aca347f49e298f3832e6c18aad6b0daccd00747e0baf6080eaac9a",
+      "event_item_id": "toolu_01JU4HLRhBmJT2hB742G48XF",
+      "event_line": 216,
+      "observed_epoch": 1788910975.0913026
+    }
+  }
+]

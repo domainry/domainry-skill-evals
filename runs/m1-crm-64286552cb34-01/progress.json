@@ -1,0 +1,122 @@
+{
+  "contract_version": "domainry-eval-progress-v1",
+  "run_id": "m1-crm-64286552cb34-01",
+  "run_kind": "baseline",
+  "status": "terminal",
+  "lifecycle_phase": "terminal",
+  "lifecycle_state": "baseline_first_command_failure",
+  "lifecycle_phase_timing": {
+    "agent": {
+      "started_epoch": 1788909992.5000274,
+      "ended_epoch": 1788910975.0933123
+    },
+    "checker": {
+      "started_epoch": 1788910975.602606,
+      "ended_epoch": 1788910975.6039472
+    },
+    "scorer": {
+      "started_epoch": 1788910975.6039472,
+      "ended_epoch": 1788910975.652437
+    },
+    "terminal": {
+      "started_epoch": 1788910975.652437,
+      "ended_epoch": 1788910975.652437
+    }
+  },
+  "delivery_stage": null,
+  "delivery_stage_source": null,
+  "delivery_stage_timing": {
+    "requirements": {
+      "started_epoch": null,
+      "ended_epoch": null
+    },
+    "model": {
+      "started_epoch": null,
+      "ended_epoch": null
+    },
+    "apply": {
+      "started_epoch": null,
+      "ended_epoch": null
+    },
+    "verify": {
+      "started_epoch": null,
+      "ended_epoch": null
+    }
+  },
+  "delivery_stage_timing_source": null,
+  "delivery_stage_timing_status": "unavailable",
+  "wall_elapsed_seconds": 983.152,
+  "domainry_cli": {
+    "invocations_total": 0,
+    "completed_total": 0,
+    "failed_total": 0,
+    "retries_total": 0,
+    "latest": null
+  },
+  "diagnostic_cli": {
+    "invocations_total": 0,
+    "completed_total": 0,
+    "failed_total": 0,
+    "retries_total": 0,
+    "latest": null,
+    "first_failure": null
+  },
+  "agent": {
+    "last_activity_epoch": 1788910975.0913026,
+    "last_activity_status": "observed",
+    "total_tokens": 13338585,
+    "total_tokens_status": "observed",
+    "token_usage": {
+      "input_tokens": 13337502,
+      "cached_input_tokens": 13000407,
+      "non_cached_input_tokens": 337095,
+      "output_tokens": 1083,
+      "reasoning_output_tokens": 0,
+      "budget_tokens": 13338585,
+      "budget_basis": "provider_cumulative_input_plus_output",
+      "cached_input_included_in_input": true,
+      "reasoning_output_included_in_output": true,
+      "observability_status": "complete"
+    },
+    "command_invocations_total": 68,
+    "command_completions_total": 68,
+    "command_failures_total": 1
+  },
+  "scoring_first_failure": null,
+  "diagnostic_first_failure": null,
+  "command_first_failure": {
+    "failure_kind": "command",
+    "family": null,
+    "exit_code": 2,
+    "output_state": null,
+    "command_sha256": "23ca93f092aca347f49e298f3832e6c18aad6b0daccd00747e0baf6080eaac9a",
+    "event_item_id": "toolu_01JU4HLRhBmJT2hB742G48XF",
+    "event_line": 216,
+    "observed_epoch": 1788910975.0913026
+  },
+  "first_failure": {
+    "failure_kind": "command",
+    "family": null,
+    "exit_code": 2,
+    "output_state": null,
+    "command_sha256": "23ca93f092aca347f49e298f3832e6c18aad6b0daccd00747e0baf6080eaac9a",
+    "event_item_id": "toolu_01JU4HLRhBmJT2hB742G48XF",
+    "event_line": 216,
+    "observed_epoch": 1788910975.0913026
+  },
+  "first_failure_seal_triggered": true,
+  "failure_checkpoint_policy": {
+    "checkpoint_on_first_failure": false,
+    "agent_failure_action": "mode_default",
+    "checkpoint_baseline_eligibility": false
+  },
+  "failure_checkpoint": null,
+  "checker_allowed": false,
+  "checker_decision_reason": "baseline_first_agent_command_failure",
+  "scorecard": {
+    "available": true,
+    "pass_at_1": false,
+    "run_outcome_pass": false
+  },
+  "updated_epoch": 1788910975.652437
+}

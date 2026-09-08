@@ -1,0 +1,174 @@
+{
+  "contract_version": "domainry-eval-freeze-manifest-v1",
+  "run_id": "m1-crm-64286552cb34-01",
+  "benchmark": "m1-crm",
+  "run_kind": "baseline",
+  "parent_run_id": null,
+  "model": "claude-fable-5-1",
+  "budgets": {
+    "wall_clock_seconds": 10800.0,
+    "total_tokens": null,
+    "cli_invocations": 30,
+    "cli_retries": 0
+  },
+  "absence_proof": {
+    "checked_epoch": 1788909992.2663107,
+    "isolation_root_absent": true,
+    "project_absent": true,
+    "codex_home_absent": true,
+    "agent_home_absent": true,
+    "sqlite_database_absent": true,
+    "sqlite_wal_absent": true,
+    "sqlite_shm_absent": true
+  },
+  "isolation": {
+    "root": "/tmp/eval-iso-m1-crm-64286552cb34-01",
+    "codex_home": "/tmp/eval-iso-m1-crm-64286552cb34-01/codex-home",
+    "agent_home": "/tmp/eval-iso-m1-crm-64286552cb34-01/home",
+    "temp": "/tmp/eval-iso-m1-crm-64286552cb34-01/tmp",
+    "project": "/tmp/eval-iso-m1-crm-64286552cb34-01/project",
+    "runtime": "/tmp/eval-iso-m1-crm-64286552cb34-01/runtime",
+    "database": "/tmp/eval-iso-m1-crm-64286552cb34-01/runtime/cohort.sqlite",
+    "candidate_copy": "/tmp/eval-iso-m1-crm-64286552cb34-01/codex-home/skills/domainry-builder-v1"
+  },
+  "candidate": {
+    "candidate_id": "v0.3.34-2-g703b8c4+64286552cb34",
+    "skill_name": "domainry-builder-v1",
+    "skill_version": "v0.3.34-2-g703b8c4",
+    "skill_identity_sha256": "ebd64d96025aeabc3ec803e2cef1d6330e670533269edbfc0dda8172909aaceb",
+    "package_metadata_sha256": "42e27e0eb89a50e589e9ca73e654b7726bd8a5e72139fc72ecabf2188d221935",
+    "skill_tree_sha256": "64286552cb34ce9bf2f7ed78cfaea7358ccf9bce9d2383c5bfdb661354e5009a",
+    "cli_binary_sha256": "02d6eec031e6558255fa5515ff982fa9491281fac642cbddfaae34a60224cf3a",
+    "runtime_api_contract_version": "runtime-domain-api-v1",
+    "runtime_api_contract_hash": "4fe655cbfd4fa0bc0b0c04c89b86926fc6aceb059c9fccf5b09eec9b459330f7",
+    "apply_target_flag": "--service",
+    "apply_target_value": "http://127.0.0.1:8283"
+  },
+  "isolated_candidate": {
+    "candidate_id": "v0.3.34-2-g703b8c4+64286552cb34",
+    "skill_name": "domainry-builder-v1",
+    "skill_version": "v0.3.34-2-g703b8c4",
+    "skill_identity_sha256": "ebd64d96025aeabc3ec803e2cef1d6330e670533269edbfc0dda8172909aaceb",
+    "package_metadata_sha256": "42e27e0eb89a50e589e9ca73e654b7726bd8a5e72139fc72ecabf2188d221935",
+    "skill_tree_sha256": "64286552cb34ce9bf2f7ed78cfaea7358ccf9bce9d2383c5bfdb661354e5009a",
+    "cli_binary_sha256": "02d6eec031e6558255fa5515ff982fa9491281fac642cbddfaae34a60224cf3a",
+    "runtime_api_contract_version": "runtime-domain-api-v1",
+    "runtime_api_contract_hash": "4fe655cbfd4fa0bc0b0c04c89b86926fc6aceb059c9fccf5b09eec9b459330f7",
+    "apply_target_flag": "--service",
+    "apply_target_value": "http://127.0.0.1:8283"
+  },
+  "service_identity": {
+    "target_kind": "service",
+    "healthy": true,
+    "http_status": 200,
+    "health_document_sha256": "5565e6a664f8489c1c2a3437ad4ca0ab2fe4c7b65c5bb81a8300745ebf41d6bb",
+    "published_identity": {
+      "contract_version": "domainry-control-plane-health-v1",
+      "discovery": "/.well-known/domainry-plane",
+      "service_kind": "template-control-plane",
+      "version": "v0.3.34-2-g703b8c4",
+      "checks": [
+        {
+          "detail": "v0.3.34-2-g703b8c4",
+          "name": "application_delivery",
+          "status": "passed"
+        },
+        {
+          "detail": "domainry-frontend-product_v0.3.34-2-g703b8c4.tar.gz sha256:bc5f1e19c09ff073be77a319581674a35700b2118dbe427679a7c695f6896bf1",
+          "name": "frontend_product",
+          "status": "passed"
+        },
+        {
+          "detail": "github.com/domainry/domainry-identity@v0.2.0",
+          "name": "identity_module",
+          "status": "passed"
+        },
+        {
+          "detail": "github.com/domainry/domainry-notification@v0.1.0",
+          "name": "notification_module",
+          "status": "passed"
+        },
+        {
+          "detail": "github.com/domainry/domainry-notification-sdk@v0.1.0",
+          "name": "notification_sdk",
+          "status": "passed"
+        },
+        {
+          "detail": "domainry-project-delivery-local-development",
+          "name": "project_delivery_signer",
+          "status": "passed"
+        },
+        {
+          "detail": "available",
+          "name": "project_delivery_store",
+          "status": "passed"
+        },
+        {
+          "detail": "local.domainry.project-delivery revision 1",
+          "name": "project_delivery_trust",
+          "status": "passed"
+        },
+        {
+          "detail": "domainry-project-template_v0.3.34-2-g703b8c4.tar.gz sha256:9f42f06ff630bd4d7eec330ee1d70e57ca73af98918b4c5029d85d162be4af40",
+          "name": "project_template",
+          "status": "passed"
+        },
+        {
+          "detail": "domainry-runtime-client-sdk_v0.3.34-2-g703b8c4.tar.gz sha256:7a86bfc5a252cf12d26ce518927bf76994c948b08a5a30da4b89ce3304b4b8ac",
+          "name": "runtime_client_sdk",
+          "status": "passed"
+        },
+        {
+          "detail": "runtime-domain-api-v1 + runtime-authoring-v1",
+          "name": "runtime_contract",
+          "status": "passed"
+        },
+        {
+          "detail": "github.com/domainry/domainry-runtime@v0.0.0-source-83ce888b7a19e3ea",
+          "name": "runtime_module",
+          "status": "passed"
+        },
+        {
+          "detail": "1 platforms",
+          "name": "skill_packages",
+          "status": "passed"
+        }
+      ]
+    }
+  },
+  "checkpoint": null,
+  "failure_checkpoint_policy": {
+    "checkpoint_on_first_failure": false,
+    "agent_failure_action": "mode_default",
+    "checkpoint_baseline_eligibility": false
+  },
+  "hashes": {
+    "candidate_config_sha256": "dc6f0462c79d77e152d090488ae41ad2c030c71f11780e4eb3952b005c9bbbcc",
+    "requirements_sha256": "238ba26d17783e16989a964419576d775c24db777a1b7b8e9524d4457a17bb4e",
+    "rendered_driver_prompt_sha256": "380b0838e5740ed503d413c0fb87ca8f3d91c1596c6c667dd9a6a0a5f296b5e7",
+    "checker_sha256": "9ff2410ab7ee5bbff2f5d972bbb2ac0b80a007eaf2a6082884f69d83f4b3215a",
+    "scorer_sha256": "0e7fc7903e0f4e957d5860c3b7b8e4a5d07fc0d4b77f4faeb117a7db20d32109",
+    "frozen_checker_sha256": "9ff2410ab7ee5bbff2f5d972bbb2ac0b80a007eaf2a6082884f69d83f4b3215a",
+    "frozen_scorer_sha256": "0e7fc7903e0f4e957d5860c3b7b8e4a5d07fc0d4b77f4faeb117a7db20d32109",
+    "driver_sha256": "f4ec3397b04fe0bd50a7e0635380c999bdecf854894d3cc484af83e56fc2fc0e",
+    "agent_command_sha256": "ce6c7f1a69960555fb10b3dfcf63450d632c0f6cb4be1ac46b63dab77c8ed3c0",
+    "checker_command_sha256": "03bb0f85ec953b1bc3b317616e76fe65950acc8de966d5aac01491f1b9229d75"
+  },
+  "agent_context": {
+    "fresh_session_required": true,
+    "resume_forbidden": true,
+    "codex_home_contents_during_agent": [
+      "auth.json",
+      "skills/domainry-builder-v1"
+    ],
+    "ephemeral_auth_staged": true,
+    "auth_retention": "remove_immediately_after_agent",
+    "environment_policy": "minimal-isolated-v1",
+    "prompt_inputs": [
+      "requirements",
+      "evaluator-owned measured-run policy"
+    ],
+    "evaluator_assets_exposed": false,
+    "checkpoint_project_restored": false
+  }
+}

@@ -1,0 +1,122 @@
+{
+  "contract_version": "domainry-eval-run-lifecycle-v1",
+  "run_id": "m1-crm-64286552cb34-01",
+  "run_kind": "baseline",
+  "parent_run_id": null,
+  "state": "baseline_first_command_failure",
+  "measurement_complete": false,
+  "environment_valid": true,
+  "measurement_boundary": "baseline_first_failure_sealed",
+  "started_epoch": 1788909992.5000274,
+  "ended_epoch": 1788910975.603169,
+  "budgets": {
+    "wall_clock_seconds": 10800.0,
+    "total_tokens": null,
+    "cli_invocations": 30,
+    "cli_retries": 0
+  },
+  "usage": {
+    "wall_clock_seconds": 983.103,
+    "total_tokens": 13338585,
+    "token_usage": {
+      "input_tokens": 13337502,
+      "cached_input_tokens": 13000407,
+      "non_cached_input_tokens": 337095,
+      "output_tokens": 1083,
+      "reasoning_output_tokens": 0,
+      "budget_tokens": 13338585,
+      "budget_basis": "provider_cumulative_input_plus_output",
+      "cached_input_included_in_input": true,
+      "reasoning_output_included_in_output": true,
+      "observability_status": "complete"
+    },
+    "cli_invocations_started": 0,
+    "cli_invocations_captured": 0,
+    "cli_retries_started": 0,
+    "diagnostic_cli_invocations_started": 0,
+    "diagnostic_cli_invocations_captured": 0,
+    "diagnostic_cli_completions": 0,
+    "diagnostic_cli_failures": 0,
+    "diagnostic_cli_retries": 0,
+    "agent_command_invocations": 68,
+    "agent_command_completions": 68,
+    "agent_command_failures": 1
+  },
+  "termination": {
+    "failure_kind": "command",
+    "family": null,
+    "exit_code": 2,
+    "output_state": null,
+    "command_sha256": "23ca93f092aca347f49e298f3832e6c18aad6b0daccd00747e0baf6080eaac9a",
+    "event_item_id": "toolu_01JU4HLRhBmJT2hB742G48XF",
+    "event_line": 216,
+    "observed_epoch": 1788910975.0913026
+  },
+  "first_failure": {
+    "failure_kind": "command",
+    "family": null,
+    "exit_code": 2,
+    "output_state": null,
+    "command_sha256": "23ca93f092aca347f49e298f3832e6c18aad6b0daccd00747e0baf6080eaac9a",
+    "event_item_id": "toolu_01JU4HLRhBmJT2hB742G48XF",
+    "event_line": 216,
+    "observed_epoch": 1788910975.0913026
+  },
+  "scoring_first_failure": null,
+  "diagnostic_first_failure": null,
+  "command_first_failure": {
+    "failure_kind": "command",
+    "family": null,
+    "exit_code": 2,
+    "output_state": null,
+    "command_sha256": "23ca93f092aca347f49e298f3832e6c18aad6b0daccd00747e0baf6080eaac9a",
+    "event_item_id": "toolu_01JU4HLRhBmJT2hB742G48XF",
+    "event_line": 216,
+    "observed_epoch": 1788910975.0913026
+  },
+  "first_scoring_failure": null,
+  "diagnostic_cli": {
+    "invocations_total": 0,
+    "completed_total": 0,
+    "failed_total": 0,
+    "retries_total": 0,
+    "latest": null,
+    "first_failure": null
+  },
+  "checkpoint": null,
+  "checkpoint_restore": null,
+  "failure_checkpoint_policy": {
+    "checkpoint_on_first_failure": false,
+    "agent_failure_action": "mode_default",
+    "checkpoint_baseline_eligibility": false
+  },
+  "failure_checkpoint": null,
+  "freeze_manifest_sha256": "c97a7dbb648135388b3654648a562bbe8427132aa7a250abf86022146d5f3378",
+  "ephemeral_auth_staged": true,
+  "auth_cleanup_status": "removed",
+  "agent_result_state": null,
+  "agent_exit_code": -15,
+  "checker_exit_code": null,
+  "checker_gate": {
+    "ready": false,
+    "reason": "delivery_prerequisites_incomplete",
+    "missing": [
+      "agent_result:missing",
+      "model_plan:missing",
+      "apply_model:missing",
+      "apply_finalize:missing",
+      "verify:missing",
+      "verify_artifact:missing_or_unparseable",
+      "flow_evidence:missing_invalid_or_unparseable"
+    ]
+  },
+  "agent_ended_epoch": 1788910975.0933123,
+  "agent_session_id": "1ee0fb35-0c08-46cf-8ad8-6721f5b1baa6",
+  "business_flow_evidence_source": "missing",
+  "business_flow_evidence_contract_valid": null,
+  "business_flow_evidence_sha256": null,
+  "business_flow_evidence_error": null,
+  "service_identity_before_sha256": "51eccced2d497b3bba516ee2e18e89b0dc557fe956ce6478808868c1b32c0287",
+  "service_identity_after_sha256": "51eccced2d497b3bba516ee2e18e89b0dc557fe956ce6478808868c1b32c0287",
+  "scorer_exit_code": 0
+}

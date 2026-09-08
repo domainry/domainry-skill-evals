@@ -8,3 +8,6 @@ runs/**/*.tar.gz
 .idea/
 __pycache__/
 *.py[cod]
+
+# machine-local candidate override
+config.local.json

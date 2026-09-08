@@ -231,3 +231,18 @@ def test_parse_output_preserves_pure_json_and_returns_non_json_text():
     assert MOD.parse_output(json.dumps(pure)) == pure
     assert MOD.parse_output("progress only\nerror: no structured result") == (
         "progress only\nerror: no structured result")
+
+
+def test_later_dash_c_does_not_hide_the_preceding_builder_command(tmp_path):
+    events = tmp_path / "events.jsonl"
+    events.write_text("\n".join([
+        completed('/candidate/bin/domainry-cli model plan --json --project . --service http://127.0.0.1:8283 > /tmp/plan.json; '
+                  'python3 -c "import json; print(json.load(open(\'/tmp/plan.json\'))[\'state\'])"',
+                  '{"state":"planned"}'),
+        completed("bash -lc '\"$DOMAINRY_CLI\" apply model --json --project .'", '{"state":"applied"}'),
+        completed("grep -c domainry-cli SKILL.md", "3"),
+    ]) + "\n")
+    artifacts = MOD.extract(events)
+    assert [row["family"] for row in artifacts] == ["model_plan", "apply_model"]
+    assert MOD.family_for('/candidate/bin/domainry-cli model plan --json --project . ; python3 -c "print(1)"') == "model_plan"
+    assert MOD.family_for("sh -c '/candidate/bin/domainry-cli verify --json --project .'") == "verify"

@@ -96,6 +96,18 @@ python3 harness/run_driver.py \
   --checker-command-json '["python3","{checker}","--project","{project}","--run-dir","{run_dir}","--database","{database}","--verify-result","{verify_result}","--flow-evidence","{flow_evidence}"]'
 ```
 
+### Claude Code 作为被评估 Agent
+
+`harness/claude_agent.py` 把 `claude -p --output-format stream-json` 翻译成 driver 已消费的 Codex 事件形态（`thread.started`、`item.started/completed` 的 `command_execution` 含 `exit_code`、累计 `usage`），并把 `CLAUDE_CONFIG_DIR` 指向隔离 `CODEX_HOME`，使 Agent 只看到冻结候选。driver 拒绝 agent 命令中出现 evaluator 路径，因此把适配器以裸命令名放到 `PATH`（例如 `ln -s <repo>/harness/claude_agent.py ~/.local/bin/claude-eval-agent`）。认证走 `--auth-source <0600 JSON>`，内容是 `ANTHROPIC_*` 环境变量键值，适配器只注入子进程环境。示例：
+
+```bash
+python3 harness/run_driver.py ... --model claude-fable-5-1 \
+  --agent-command-json '["claude-eval-agent","--model","{model}","{prompt}"]' \
+  --auth-source ~/.config/domainry-evals/claude-auth.json
+```
+
+注意 Claude 的 `usage.input_tokens` 含缓存读取（Codex 口径亦然），C2 数值会显著大于 Codex run；比较时看 `non_cached_input_tokens`。
+
 `baseline` 不得带 parent；任一 Agent 命令非零退出，或任一 Domainry CLI 返回明确失败状态后，
 driver 强制停止 Agent，不等待其自主
 收敛。`convergence` 必须显式使用 `--mode convergence --parent-run-id <baseline-or-prior-run>`，

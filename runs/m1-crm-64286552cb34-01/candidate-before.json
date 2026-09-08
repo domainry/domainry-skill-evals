@@ -1,0 +1,19 @@
+{
+  "candidate_id": "v0.3.34-2-g703b8c4+64286552cb34",
+  "skill_name": "domainry-builder-v1",
+  "skill_root": "/home/ubuntu/eval-candidates/domainry-builder-v1",
+  "cli": "/home/ubuntu/eval-candidates/domainry-builder-v1/bin/domainry-cli",
+  "skill_version": "v0.3.34-2-g703b8c4",
+  "skill_identity_sha256": "ebd64d96025aeabc3ec803e2cef1d6330e670533269edbfc0dda8172909aaceb",
+  "package_metadata_sha256": "42e27e0eb89a50e589e9ca73e654b7726bd8a5e72139fc72ecabf2188d221935",
+  "skill_tree_sha256": "64286552cb34ce9bf2f7ed78cfaea7358ccf9bce9d2383c5bfdb661354e5009a",
+  "cli_binary_sha256": "02d6eec031e6558255fa5515ff982fa9491281fac642cbddfaae34a60224cf3a",
+  "runtime_api_contract_version": "runtime-domain-api-v1",
+  "runtime_api_contract_hash": "4fe655cbfd4fa0bc0b0c04c89b86926fc6aceb059c9fccf5b09eec9b459330f7",
+  "apply_target_flag": "--service",
+  "apply_target_value": "http://127.0.0.1:8283",
+  "apply_target_args": [
+    "--service",
+    "http://127.0.0.1:8283"
+  ]
+}
