@@ -363,3 +363,24 @@ bench-01 跑在 Opus 上而基线 v4 跑在 Fable 上,数字不可直接归因�
 一个过程性教训:我起初写的文档说"放在同目录的兄弟文件里也可以",探测直接证伪了它,**在发布前改掉**。涉及闸门行为的断言必须实测,不能读代码推断。
 
 已提交 `7b7f8e7`:`references/project-mutation.md` 补规则,并加回归测试 `handler_capability_locality_test.go` 钉住四种情形(同目录 helper / 另一 actions 目录 / domain owner 下 / Handler 体内直调),让文档与代码不能再悄悄漂移。**该提交尚未部署**:bench-03 正在用 v0.3.36-7 复跑,中途替换已安装 Skill 会毁掉对照。
+
+### bench-03 复跑:Fable 轮被路由容量打断,改 Opus 干净重跑
+
+**Fable 不可用**:两次恢复 + 一个零工具探针全部 429(`Fable is momentarily at capacity on this router`,非用量上限)。放弃同模型续跑。
+
+**不做 Fable/Opus 混合跑**——那样总耗时既不能比 bench-02(Fable,104.5 min)也不能比 bench-01(Opus,84.6 min),只剩质量结论。改为 Opus 干净重跑,对照 bench-01。**这个对照比原计划弱一层**:bench-01 既无 fakes 生成器也无 speed-05,差值是两者之和;fakes 的贡献虽在 bench-02 单独测过(~10 min + 4 轮返工 → 0.02 min),但那是跨模型测量,只能作量级参考,不是精确扣除。**真正干净的同模型计时仍欠一轮**,等 Fable 有容量再跑。
+
+**Fable 半程存档** `~/backend-bench-03-fable-partial`(22:34:44→23:24:58,断在 Handler 测试阶段;`outages.csv` 记录 6.0 min 窗口)。中断发生在后半程,**前半程无缺口、同模型、同夹具**,可直接比 bench-02:
+
+| 阶段 | bench-02 | Fable 半程 | 差 |
+|---|---|---|---|
+| requirements → model-start | 9.8 | 8.4 | −1.4 |
+| model-start → model-plan-valid | 16.2 | **12.2** | **−4.1** |
+| model-plan-valid → apply-ok | 1.1 | 0.5 | −0.6 |
+| 前半程合计 | 27.2 | 25.8 | −1.4 |
+
+建模段 −4.1 min,方向与分阶段阅读清单(建模窗口 −31% 字节)一致。**但这是 n=1 半程数据,只算初步信号,不是结论。**
+
+**主动记录一处对照瑕疵**:重建 bench-03 夹具时删掉了 v4 遗留的 `.domainry/development/<session>.md` TODO(它会让代理"恢复"一个过期阶段),而 bench-02 开跑时该文件在。上表因此有轻微不一致。
+
+**部署**:Opus 轮前把 `7b7f8e7`/`9152bf5` 一并装上,基准测当前 HEAD `v0.3.36-9-g9152bf5`,非过期构建。对照工具 `~/.claude/handoffs/tools/bench_phase_table.py`(缺失事件留空不插值,中断时长单列、不自动扣进任何阶段)。
