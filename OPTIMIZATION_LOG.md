@@ -284,3 +284,27 @@ S1 已完成完整标准验收 `65/65`。下一阶段不再围绕 ticketing 调�
 - PB 三道标识闸未被触发(本次后端严格实现冻结标识,无改名),属预防性。
 
 本轮新暴露:①`inventory-from-plan.py` 读包路径优先级错误导致规则回退(已修 plane@33dbae5,无功能影响——回退表与包内规则逐字节一致);②冻结计划某条 oracle 与前端权限矩阵矛盾(FAPI-RESULT-DELIVER),属计划撰写期缺口,建议 freeze 增加 oracle 与前端契约的一致性提示。
+
+## 同模型对照(backend-bench-02,Fable,2026-09-09)——拆开模型换代的混淆
+
+bench-01 跑在 Opus 上而基线 v4 跑在 Fable 上,数字不可直接归因。bench-02 用与基线**同一模型(Fable)**、同一固定输入(v4 的请求+冻结计划+已批准前端)、优化后 Skill(含 fakes 生成器)重跑。
+
+| 阶段 | v4 基线(Fable,旧) | bench-02(Fable,新) | bench-01(Opus,新) |
+|---|---|---|---|
+| 需求 | 8.7 | 9.8 | — |
+| 模型到 model plan 通过 | 8.2 | **16.3** | 8.9 |
+| apply | — | 1.1 | 0.4 |
+| 单测替身 | ~9-11(并行手写)+4 轮返工 | **0.02(生成器)** | 手写 |
+| handler | 24.2 | 29.4 | 26.1 |
+| PRD + inventory | 14.3 | **0.9** | 6.1 |
+| 接口验收循环 | 78.0 | **20.1** | 16.3 |
+| finalize | 2.6 | 0.8 | 2.9 |
+| 最终 verify | ~10 | 7.8 | 9.9 |
+| **合计** | **149.4** | **104.5(−30%)** | **84.6(−43%)** |
+
+**净归因**:同模型下 Skill 改动值 **−30%(45 分钟)**;Opus 相对 Fable 再快约 20 分钟。
+收益来源:接口验收 78→20.1(−74%,与 bench-01 的 16.3 同量级,证明该收益属 Skill 非模型);inventory 14.3→0.9(`inventory-from-plan.py`);单测替身 ~10 min + 4 轮返工 → 0.02 min(`generate-capability-fakes.py`,8 个 fakes_test.go 100% 生成器产出)。
+**反向**:model plan 段 8.2→16.3,新增的保留字段键/系统列前置校验与检查清单让建模阶段变重,吃掉约 8 分钟。这是下一轮的靶点。
+质量:`verified_and_stopped`,**37/37 接口 initial+restart 双阶段全过**(独立复跑 verify 二次确认,148 条 check 全 passed)。断言未削弱;本轮又抓出一个真实审计缺陷(硬清除后患者编号被重发,`patient.enroll` 现按 deletion_record 取最大序号)。
+
+本轮新暴露:①`apply compose` 的 `project.action_conditional_mutation_unguarded` 比 `project check --scope actions` 更严,同一份代码前者拒后者过(检查一致性缺陷);②`project.action_capability_unused` 语义未文档化;③`dev-runtime.sh check-env` 不接受 `--project/--address`;④对象级 Action 返回 `created_records[]` 而非 `record`,与前端契约文档矛盾,harness 缺对应 helper。
