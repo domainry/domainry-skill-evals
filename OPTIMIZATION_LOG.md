@@ -348,3 +348,18 @@ bench-01 跑在 Opus 上而基线 v4 跑在 Fable 上,数字不可直接归因�
 **关于第 4 项的安全性**:延后读 `verification.md` 之所以安全,是因为第 1、2 项已先把"模型必须知道"的两条事实搬进 `backend-model.md` 检查清单。守护测试 `TestEveryReadingProfileFrontLoadsInterfaceAcceptanceEvidenceBeforeFinalize` 原本只检查成员资格,名不副实;已改写为如实断言 evidence 文档 staged 为 `verify`,并新增一条测试要求每个条目都带已知 stage 且顺序已分组。
 
 **验证状态**:五项均通过 plane 全量单测与 PB/兼容 selftest;生成器另用 bench-02 真实 37 行清单验证(gofmt/vet 干净、仅靠 v4 harness 即可编译、输出字节确定、改名能被 `--check` 抓出两侧)。**上表的分钟数是归因出的"该环节曾经耗时",不是已兑现的节省**;是否兑现要等下一轮同夹具复跑(bench-03,Fable,对照 bench-02 的 104.5 min)。
+
+### 更正:"apply compose 比 project check 更严"未能复现,真实原因是静态检查看不穿辅助函数
+
+上一节(`483f5d8`)把 `project.action_conditional_mutation_unguarded` 记为"同一份代码 `apply compose` 拒、`project check --scope actions` 过"的检查一致性缺陷。追代码后**这个差异复现不出来**:两条命令汇聚到同一份实现(`ValidateUserSourceAt` → `buildComposition` → `validateBusinessSources`),该函数全仓只有一处定义、三处调用,不存在第二条策略路径。更可能的解释是两次调用之间工作树变了。**不再把它当平台缺陷登记。**
+
+真实原因是另一回事,而且更值得写进 Skill——我直接探测了分析器,没有靠推断:
+
+- `project.action_capability_unused` 只认**导出 Handler 函数体内**的直接 `caps.<Object>.<Method>(` 调用。把调用交给辅助函数就不算数,**放在同目录、同 package 也不算数**。
+- `project.action_conditional_mutation_unguarded` 同理:守卫必须出现在 `ConditionalUpdate` 的参数链或其声明语句里,helper 组装出来的 mutation 即使守卫了也报未守卫。
+
+两者都是文件局部静态分析的能力上限,不是被拒代码真有缺陷,但闸门就是闸门。这条限制此前在 Skill 里**一个字都没有**,bench-02 为它耗掉若干轮返工。
+
+一个过程性教训:我起初写的文档说"放在同目录的兄弟文件里也可以",探测直接证伪了它,**在发布前改掉**。涉及闸门行为的断言必须实测,不能读代码推断。
+
+已提交 `7b7f8e7`:`references/project-mutation.md` 补规则,并加回归测试 `handler_capability_locality_test.go` 钉住四种情形(同目录 helper / 另一 actions 目录 / domain owner 下 / Handler 体内直调),让文档与代码不能再悄悄漂移。**该提交尚未部署**:bench-03 正在用 v0.3.36-7 复跑,中途替换已安装 Skill 会毁掉对照。
