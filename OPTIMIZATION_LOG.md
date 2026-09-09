@@ -262,3 +262,25 @@ S1 已完成完整标准验收 `65/65`。下一阶段不再围绕 ticketing 调�
 | speed-01 plane | plane@31f0285 | `project check` 一次列全 inventory 问题+packet 发布观测词汇表 → 6 连拒→1;`high_risk_assurance_required` 带消息;harness v2 通用 helper → 17 KB support_test.go 不再自写 | 14:55–15:00 六次单键拒收+二进制 grep;14:54 support_test.go 4.9 min+6 次修订 | 待 v3 复测 |
 | speed-02 builder-v1 | plane@dffd7ef | v18 模型检查清单/级联删除契约/identity 交付默认值/evolution 一次性 recipe/`dev-runtime.sh`/`inventory-sync.py` → model plan 5 连拒、级联 purge 3 轮、identity 2 轮、Runtime 启动脚本自写 12 min 消失 | 14:08–14:10、15:02–15:31、14:59–15:12、7 次 evolution 门 | 待 v3 复测 |
 | speed-03 PB+static-ui | plane@04bd3c5 | `scaffold-acceptance` 生成 config/fixture/CJS package.json/stubs;ui-check/backend-check 结构化失败摘要;nonce 作用域/页大小/CORS 代理/contract_version 文档;vite 模板代理 → 脚手架 14 min、CORS 11 min、翻日志 7 min、遗留数据 7 min 消失 | 16:06/16:10/16:35 生成、16:50 CJS、17:05–17:16 CORS、26 次日志检查 | 待 v3 复测 |
+
+## 后端单独复测裁决(backend-bench-01,2026-09-09)
+
+固定输入 = v4 的产品请求 + 冻结计划(16 需求 / 31 后端绑定)+ 已批准前端;后端 Skill 从零重建(删掉 backend、.domainry/builder 与上一轮 PRD),Plane v0.3.34-42-ge0aded6。参照组 = v4 后端段(同一 PRD、同一 skill 的上一版)。
+
+| 里程碑(自后端开始) | v4 基线 | backend-bench-01 | 变化 |
+|---|---|---|---|
+| 到第一次接口验收 | 54.6 min | 55.5 min | 持平 |
+| 接口验收循环 | 78.0 min | 16.3 min | **−79%** |
+| finalize | 2.6 min | 2.9 min | 持平 |
+| 最终 verify | ~10 min | 9.9 min | 持平 |
+| **总计到 verified_and_stopped** | **149.4 min** | **84.6 min** | **−43%** |
+
+质量门槛:`verified_and_stopped`,31/31 acceptance_required 接口在 initial 与 restart 两阶段全过(独立复跑 verify 二次确认)。断言未削弱;复测还额外抓出两个真实产品缺陷(staff_account 泄露 pin_hash/pin_salt;事务内 List 看不到刚建的 family_member)。
+
+**speed-01..04 全部 keep**。归因:
+- 收益全部落在接口验收段。harness v3 全键 `<object>.<verb>` 让 v4 那次"37 个接口一次全挂 auth.permission_denied"零复发;Runtime 行为速查(子对象读权限、`__in`、错误码优先级、logout 空体)使该段返工从 6 轮降到收敛。
+- 前半程无净收益:需求+建模快约 6 min(v18 检查清单 + 保留字段键前置拦截,能力名重复零复发),但被 handler/接口测试编写吃回。
+- `inventory-from-plan.py` 让 inventory 段 14.3 → 6.1 min,且 `project.interface_acceptance_invalid` 单键连拒(v4 六轮)零复发。
+- PB 三道标识闸未被触发(本次后端严格实现冻结标识,无改名),属预防性。
+
+本轮新暴露:①`inventory-from-plan.py` 读包路径优先级错误导致规则回退(已修 plane@33dbae5,无功能影响——回退表与包内规则逐字节一致);②冻结计划某条 oracle 与前端权限矩阵矛盾(FAPI-RESULT-DELIVER),属计划撰写期缺口,建议 freeze 增加 oracle 与前端契约的一致性提示。
