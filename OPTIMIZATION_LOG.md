@@ -308,3 +308,43 @@ bench-01 跑在 Opus 上而基线 v4 跑在 Fable 上,数字不可直接归因�
 质量:`verified_and_stopped`,**37/37 接口 initial+restart 双阶段全过**(独立复跑 verify 二次确认,148 条 check 全 passed)。断言未削弱;本轮又抓出一个真实审计缺陷(硬清除后患者编号被重发,`patient.enroll` 现按 deletion_record 取最大序号)。
 
 本轮新暴露:①`apply compose` 的 `project.action_conditional_mutation_unguarded` 比 `project check --scope actions` 更严,同一份代码前者拒后者过(检查一致性缺陷);②`project.action_capability_unused` 语义未文档化;③`dev-runtime.sh check-env` 不接受 `--project/--address`;④对象级 Action 返回 `created_records[]` 而非 `record`,与前端契约文档矛盾,harness 缺对应 helper。
+
+---
+
+## 2026-09-09 晚 · bench-02 转录归因(speed-05):上一节的回归归因是错的
+
+对 bench-02 后端转录(`agent-a1bb382955a7901fb.jsonl`,1298 行,16:52:00Z→18:38:03Z)做逐调用取证,只读 `tool_use`/`tool_result`/`text`,不读思考块。结论推翻了上一节"新增的保留字段键/系统列前置校验让建模变重,吃掉约 8 分钟":
+
+- `metadata.field_key_reserved` **全程一次都没触发**,该字符串在转录中不存在。
+- `model plan` 只跑了 2 次,诊断共 2 条(都是 `model.empty_value_forbidden`,空 `parameters`/空 `input`),修复用 2 行 `del`,**全部修复耗时 16 秒**。
+- 新的建模检查清单只被读了一次,模型在一次生成里写完 10 个文件后直接 `model plan`,**没有发生任何预防性重构**。Object SQL 清单反而是净收益:两个 `.sql` 一次通过。
+
+那 16.3 分钟的真实去向:
+
+| 去向 | 分钟 |
+|---|---|
+| **上下文自动压缩(2 次)** | **5.6** |
+| 一次无工具调用的静默推理(17:06:00→17:09:11) | 3.2 |
+| 读 Skill 文档 | 3.2 |
+| 写 `backend/model/*.json` + `reports/*.sql`(单次生成 110 秒) | 2.1 |
+| 读产品输入 / Ledger 探索 | 2.0 |
+| **`model plan` 与诊断修复** | **0.3** |
+
+全程 8 次压缩合计 **18.4 分钟**,是本轮最大的可回收整块;第 3 次压缩还逼得 `backend-model.md` 又被重读 3 遍、前端契约重读第 3 遍。驱动因素是 `model capability` 强制的 **21 个文件 / 218KB** 阅读清单(代理严格照读,未多读一个文件),叠加手写的 100KB PRD、28KB 冻结计划、27KB 契约与 90KB Ledger dump。
+
+### 本轮五项修复(均已推 domainry-plane main)
+
+| # | 提交 | 内容 | 依据(实测) |
+|---|---|---|---|
+| 1 | `ed464c3` | object 型 Action 返回**没有** `record`/`record_id`,只有 `created_records[]`;harness v4 加 `actionRecord`/`actionRecordRef`/`actionRecordRefs`,`verification.md` 补事实 | 该契约全 Skill 缺失,IA 第一轮 37 个测试经同一个 fixture 全挂,18:08:00→18:14:30 = **6.5 min** |
+| 2 | `ed464c3` | 业务序列号必须扛硬清除:改为 `max(活,已清除)+1` 并在 handler.access 声明 `deletion_record:["list"]`,规则进建模检查清单 | 重启阶段 `TestFAPIDeletionRecordList` 失败 18:17:25 → 重新 apply → 转绿 18:28:04 = **10.6 min** |
+| 3 | `ed464c3` | `dev-runtime.sh` 参数对称化 | 两次参数报错 18:11:29 / 18:11:34 |
+| 4 | `00c3864` | **阅读清单分阶段**(model/implement/verify),read_order 按阶段分组 | 建模窗口 218,216 → 149,630 字节(**−31%**) |
+| 5 | `2f78755` | `inventory-from-plan.py` 解除"先有鸡后有蛋":它本就能打印 PRD §3/§12 表,却因缺 PRD 直接退出 | `missing PRD` 16:53:47 → 手写 100KB PRD 16:57:06→17:01:53 = **4.8 min** |
+| 6 | `6aad51f` | 新增 `generate-acceptance-skeletons.py`,按 inventory 每行生成可编译 IA 测试骨架,业务内容留 `TODO(business)`;`--check` 守住"测试集 == inventory 分母" | IA 撰写 17:49:35→18:08:00 = 18.4 min,其中 38 个证据块 / 37 组观测与行 1:1 对应 |
+
+**修正一条旧指引**:`verification.md` 原文教测试作者"purge 用例不要断言序号有跳号",即容忍编号重发。bench-02 证明重发是真实审计缺陷(同一个 `PMP20260909024` 对应 3 条删除记录),该指引方向错误,已改为定性为产品缺陷并给出模型层修法。
+
+**关于第 4 项的安全性**:延后读 `verification.md` 之所以安全,是因为第 1、2 项已先把"模型必须知道"的两条事实搬进 `backend-model.md` 检查清单。守护测试 `TestEveryReadingProfileFrontLoadsInterfaceAcceptanceEvidenceBeforeFinalize` 原本只检查成员资格,名不副实;已改写为如实断言 evidence 文档 staged 为 `verify`,并新增一条测试要求每个条目都带已知 stage 且顺序已分组。
+
+**验证状态**:五项均通过 plane 全量单测与 PB/兼容 selftest;生成器另用 bench-02 真实 37 行清单验证(gofmt/vet 干净、仅靠 v4 harness 即可编译、输出字节确定、改名能被 `--check` 抓出两侧)。**上表的分钟数是归因出的"该环节曾经耗时",不是已兑现的节省**;是否兑现要等下一轮同夹具复跑(bench-03,Fable,对照 bench-02 的 104.5 min)。
