@@ -445,3 +445,37 @@ bench-03 的时间线里有**两条 `verify-ok`**:代理发现自己写错了 PR
 **修正后的裁决**:bench-03 实际 **92.2 min**,比 bench-01(Opus,84.6)**慢 7.6 min**,而非持平。结合该轮 ~43 min 的偶发事故(货币/float 返工 ~25、级联删除排查 ~18)与 PRD §12 返工 ~6.7 min,这轮的额外耗时基本都能落到具体事件上。
 
 工具已改:保留每个事件的**第一次**时间戳,并在表尾显式打印重复事件与其延迟,不再静默覆盖。
+
+### bench-04(Opus,73.3 min):计时结论作废 —— 覆盖缺失 6 个真实接口
+
+**质量(在其自称范围内):通过。** 我独立复跑 verify:`verified_and_stopped`,初始 31/31、重启 31/31,零未通过。
+
+**但计时不可比,结论作废。** bench-04 的 inventory 只有 **31 行**,bench-03 是 **37 行**。缺的 6 个是:
+
+`auth.logout`、`expense.list`、`patient_visit.list`、`result_template.list`、`supplier_payment.list`、`test_result.get`
+
+它们**不是**被标为 `frontend_only`,而是**根本不在清单里**——从未进入分母,自然也不会失败。73.3 min 里有一部分是少做了事换来的。
+
+#### 一次我先说反了的判断,记录在案
+
+我最初断言这 6 行是 `inventory-from-plan.py` 宽松匹配的**假阳性**,理由是"全前端只有一处 `queryRecords('lab_test')`",并据此推论 **bench-03 多验了 5 个不存在的接口**。
+
+**这个结论是错的。** 我的 grep 写成 `queryRecords(\s*'[a-z_]*'`,而前端实际写法是 `recordClient.queryRecords<ExpenseData>('expense', ...)` —— 方法名与括号之间夹着泛型参数,整类调用被我的模式漏掉。改用脚本自己的正则重跑源码后结果相反:**6 个全部真实**,bench-03 的 37 是对的,bench-04 **漏验**。
+
+教训与之前"同目录 helper"那次相同:**涉及匹配行为的断言必须用真实模式跑真实源码,不能用手写 grep 近似**。这次的修复(下述扫描器)因此直接复用脚本自己的调用模式,而不是另写一套 grep。
+
+#### 根因是结构性的,不是代理疏忽
+
+`inventory-from-plan.py` 只能从 `acceptance.backend` 绑定派生,而计划只绑定 31 个。前端调用但计划未绑定的接口对它**完全不可见**,它只在 docstring 里写了一句"需手工添加"。bench-03 的代理补了(记为 D-16),bench-04 的没补,**两种情况都不报错**。
+
+#### 修复(`6edc185`,已推)
+
+脚本本就规定"有行无调用点 = 硬错误";现在补上对称的另一半:扫描前端实际调用的操作(对象/记录 Action、含泛型形式的 `queryRecords`/`listRecords`/`getRecord`、报表 `query`、登录、登出),**只要有调用没有对应行就拒绝 `--write`/`--print-json`**,逐个列出调用点,并说明计划无法派生它们、该补成 `acceptance_required` 还是 `frontend_only`。
+
+双向验证:bench-04 的清单恰好报出那 6 个并退出 1;bench-03 完整的 37 行零报错。中途一次假阳性(report 模式的 `\bquery\w*` 把 `queryRecords` 也算作报表查询)已收紧为精确 `\bquery`。
+
+#### bench-05 起于 2026-09-10T03:51:32Z
+
+同 Opus、同夹具、**强制同覆盖**,对照 bench-03 的 92.2 min。任务书新增三条:覆盖强制(且不许删行让脚本通过)、时间线只追加不改写(bench-03 两条 `verify-ok` 曾差点漏算 6.7 min)、CLI 参数例外(`model capability` 拒绝 `--environment`,`verify` 只收 `--project`/`--address` —— 上一轮我在任务书里笼统要求"所有 Plane 调用加 `--environment`",代理照做后撞错)。
+
+**已知混淆项**:应用户要求同步了 domainry-runtime `cdba4e8` → `288b630`(含 Identity/Notification 升级),而本基准大量使用 Identity。因此 bench-05 相对 bench-03 有两个变量,计时归因据此打折。
