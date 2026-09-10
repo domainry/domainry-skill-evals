@@ -384,3 +384,49 @@ bench-01 跑在 Opus 上而基线 v4 跑在 Fable 上,数字不可直接归因�
 **主动记录一处对照瑕疵**:重建 bench-03 夹具时删掉了 v4 遗留的 `.domainry/development/<session>.md` TODO(它会让代理"恢复"一个过期阶段),而 bench-02 开跑时该文件在。上表因此有轻微不一致。
 
 **部署**:Opus 轮前把 `7b7f8e7`/`9152bf5` 一并装上,基准测当前 HEAD `v0.3.36-9-g9152bf5`,非过期构建。对照工具 `~/.claude/handoffs/tools/bench_phase_table.py`(缺失事件留空不插值,中断时长单列、不自动扣进任何阶段)。
+
+### bench-03 裁决(Opus,85.5 min):质量通过,计时持平;暴露六项摩擦并已修复
+
+**质量:通过,且经我独立复核。** 我自己跑了一次 `verify --json --project ~/backend-bench-03 --address 127.0.0.1:18097`(注意 `verify` **不接受** `--environment`,我第一次传错参数导致命令立刻失败,而我误以为它在运行——已更正):
+
+```
+state = verified_and_stopped
+initial  接口 37/37  检查 37  未通过 0  缺失=无
+restart  接口 37/37  检查 37  未通过 0  缺失=无
+```
+
+逐个 FAPI ID 与 inventory 分母对齐,无缺失。代理自己也跑了两次 `verified_and_stopped`。
+
+**计时:85.5 min vs bench-01(Opus)84.6 min,持平。**
+
+| 阶段 | bench-02(Fable) | bench-03(Opus) |
+|---|---|---|
+| 需求 | 9.8 | 3.7 |
+| 建模到 model-plan-valid | 16.2 | 7.1 |
+| apply + fakes | 1.1 | 0.7 |
+| Handler | 29.4 | 17.3 |
+| inventory | 0.9 | 0.6 |
+| **IA 用例撰写** | **18.4** | **28.0** |
+| IA 验收循环 | 20.1 | 18.3 |
+| finalize | 0.8 | 3.0 |
+| 最终 verify | 7.8 | 6.8 |
+| **合计** | **104.5** | **85.5** |
+
+**但这个"持平"含 ~43 min 偶发事故**:货币/float 返工 ~25 min、级联删除排查 ~18 min。两者现均已修复,所以单次运行的噪声远大于我原先假定 —— 85.5 与 84.6 之间**分不出胜负**。
+
+**一处我自己的测量错误,已收回**:我曾称"生成器证据块被 37/37 采用",依据是 `passedCheck("target", ...)`。该写法在 bench-02 手写代码中同样存在,**不是生成器特有标记**,结论不成立。代理明确说骨架被它删除重写,理由是"编辑 37 个 `TODO(business)` 块比手写更慢"。
+
+**六项摩擦修复(`65d0a10`,已推)**
+
+| # | 问题 | 实测代价 | 修法 |
+|---|---|---|---|
+| 1 | `project check` 因清单不完整而短路,源码闸门(含 float 禁令)根本不跑,直到 `apply compose` 才 16 条齐爆 | **~25 min** | 清单诊断改为非终止,继续跑完源码/通知/编译闸门;后置闸门硬错误时回落报清单结论。**新测试在旧代码上失败,症状与报告一致** |
+| 2 | 级联删除无法经 Role 授权(`action_only` 子对象无 CRUD 权限键),`403` 不指明任何对象/权限/字段 | **~18 min** | `backend-model.md` 写明症状(有子记录 403 / 无子记录 200)与 `handler.access` 闭包,并补姊妹坑:自删子记录会让级联重复规划,提交撞 `409 version_conflict` |
+| 3 | harness `idempotencyKey` 不含 run nonce,而 `nonceValue` 含 → 同阶段第二轮同键异载荷,撞 `409 key_reused` | 一次循环 | harness **v5** 纳入 `harnessRunNonce`;进程内不变,同轮重放断言不受影响 |
+| 4 | `dev-runtime.sh ia` 拒绝 `backend-runtime.md` 明文宣传的 `-run TestX` | 一个完整失败周期 | 接受透传参数;`start` 补 `--phase`;其余子命令仍拒绝未知参数 |
+| 5 | `action_query_unbounded` 要求"1–200 的字面量"却指着值为 200 的具名常量,读作误报 | — | 改为明说必须内联写数字、具名常量不被读取 |
+| 6 | `apply-model.sh` 必需的 `--go-module-path` 未出现在 apply 阶段该读的 `project-mutation.md` | 一轮 | 补入该文档 |
+
+**骨架生成器按证据降级**:`--check` 保持无条件使用(代理评价"最廉价的分母守卫",用了两次),骨架改为可选,文档如实写明实测结论。另给 `--check` 加"行与固定 Runtime 契约矛盾"检查——即那条被误标为 `authenticated` 的 `auth.logout` 行,它曾被忠实放大成无法满足的必需观测项;已用变异数据验证该检查会指名报出。
+
+**下一轮 bench-04** 起于 2026-09-10T02:18:33Z:同 Opus、同夹具、同起点,对照 85.5 min。任务书同时修正了我上一轮自己的两处错误(顺序不可能成立的 `skeletons-generated` 事件;未提醒 `verify` 不接受 `--environment`)。
