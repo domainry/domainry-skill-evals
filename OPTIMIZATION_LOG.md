@@ -674,3 +674,41 @@ mini-01 分阶段:契约 9.7 min / 1.6 M ctx;前端 24.3 / 34.2 M;后端合计 4
 - agent 报告要点:契约阶段只读了 contract-stage.md("够用,精准命中报表参数/游标分页两个坑");`model plan` 契约阶段 2 次失败(`indexed` 修饰符用在 relation 字段;Handler access 引用不存在的 `deletion_record`)+ 后端阶段 1 次(GAP-6);prd-from-plan 的 AUTHOR 格分布同 mini-02,并**正确报警**了未绑定的 auth.logout 调用点(但发生在 mock 通过之后,已在 0.3.60 提前到 mock 审计)。
 - 新平台缺陷:**GAP-7 `/report/*` 与 `/auth/*` 响应不带 CORS 头**(preflight 有,真响应没有;records 有)→ 报表只能走同源转发器,mini-02 同样;**GAP-6 `max_length` 按字节计数且 Action input 上不生效**(300 字 → 汉字 100 个就拒;900 ASCII 进 Handler)→ 模型放大三倍 + Handler 按 rune 判;**GAP-8 报表 `datetime!` 参数必须带时区**,文档未写;**GAP-5 password 登录无刷新凭据 → logout 不吊销、SPA 刷新掉线**,且 verification.md("204 + Set-Cookie 清 cookie,重放被拒")与实现包 v15("logout 什么都不吊销,断言该契约")互相矛盾;脚手架 nonce 是每次运行一个而非每用例一个 → Runtime 下第二个用例撞邮箱,一轮挂 9 个用例;`backend-check` 要求先 `record-skill` 但 next_action 没说;`project check --project` 传 `backend/` 时报"snapshot root must equal the Git worktree root";`dev-runtime.sh start` 把 go 的 `go mod tidy` 建议原样打出;`ia` 默认 `go test` 10 min 超时不可见;冻结时 oracle 写"错误消息包含 X"无人提醒(Message 到不了客户端)。
 - 三 Skill 重复劳动(agent):[PB:n] 与 TestFAPI* 证明同一批规则、oracle 同文两写(建议由 plan oracle 生成两侧骨架);"建维修工 + 派工单"前置链三写(scenario / journey / Go fixture);业务规则四处表述;平台缺口四处登记;CORS 绕法前端阶段发现一次(/auth)运行时又一次(/report)——**Mock 对传输层全盲**。
+
+## mini-04 — 2026-09-11,需求 A(请假审批),skill 0.3.60(Plane 9b2e53b,runtime v0.1.30)
+
+- 隔离:新目录 `~/mini-04`,端口 18880/18890/5573/4573,brief `/tmp/mini04-brief.txt` 禁读 mini-01..03 与 `~/.claude/projects/`;参考目录 chmod 000;Opus。
+- **墙钟 98.9 min**(阶段日志口径 93.7:21:45:35Z → 23:19:15Z)。对照 mini-02(同需求 A,0.3.58)83.8 min。
+- 自报 + **独立复核一致**:PB `done`;mock/runtime ui-check 各 10 条全过;backend-check 17 个 FAPI,initial 17/17、restart 17/17;独立 verify(:19090)同样 `verified_and_stopped`,两个 phase 各 17/17。零弱化。
+- 剖析(`pb_flow_profile.py`):
+
+| 阶段 | min | 调用 | 输出 k | 上下文 M | 工具 | 文档 KB | 结果 KB |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| contract | 6.0 | 37 | 29.2 | 3.6 | 25 | 412 | 239 |
+| frontend(首轮) | 23.8 | 133 | 123.8 | 35.5 | 86 | 172 | 198 |
+| backend(首轮,撞 oracle 冲突) | 3.4 | 26 | 15.5 | 10.7 | 18 | 199 | 131 |
+| reopen → 重新冻结 → mock 重跑 | 1.4 | 6 | 5.2 | 2.6 | 6 | 0 | 1 |
+| backend(Handler+17 FAPI+finalize) | 29.7 | 175 | 107.8 | 32.5 | 123 | 262 | 301 |
+| runtime | 26.3 | 97 | 48.5 | 30.2 | 67 | 12 | 88 |
+| done | 4.9 | 21 | 22.7 | 7.6 | 15 | 20 | 15 |
+| **合计** | 98.5 | 520 | 365.4 | **125.7** | 357 | ≤1094 | 998 |
+
+- 与 mini-02(同需求)对比:契约 9.3→6.0,前端 27.6→23.8,后端 25.6→33.1(FAPI 9→17,交付面本身翻倍),runtime 21.2→26.3,上下文 104→125.7 M。**契约与前端的减法生效,runtime 阶段反而变长,是本轮的主要归因对象。**
+- reopen 1 次(上一轮已预告的两条 oracle:logout 不撤销 password bearer、降序业务排序不能配游标续页)。
+
+### runtime 阶段 26.3 min 的构成(逐工具调用还原)
+
+单跑一次 runtime 套件只要 52.5 s,26.3 min 里几乎全是查错:
+
+1. **CORS 与交付 Identity 客户端互斥(≈8 min)**:客户端对每个 `/auth/*` 写死 `credentials: 'include'`,Runtime 回 `Access-Control-Allow-Origin: *` 且无 `Allow-Credentials`,浏览器拒发 → 10 条全挂在登录,而 `curl` 全绿。代理最后用客户端自带的 `fetch` 注入点绕过。
+2. **`initial_credential` 生成类型是 `string`,Runtime 返回对象(≈7 min)**:`tsc` 全绿、Action 在 Runtime 上执行成功、后端验收全绿,只有页面什么都不显示。四条用例连环失败。
+3. **改密永久生效这一事实没人写(≈5 min)**:代理按 run nonce 派生轮换口令,第一次跑完就把工作区管理员口令换成下轮无法复现的值,第二次必然全挂;且 runtime 轮"用谁登录"没有任何契约,环境变量名是代理自己起的。
+4. **enrol 非幂等 + Playwright 失败后重启 worker(≈3 min)**:模块级 registry 被清空而 Runtime 里账号还在,`user_email_exists` 连环失败。
+5. **nonce 规则倒逼产品加列(≈3 min)**:需求 §4 的列里没有"事由",但 nonce 只能写进事由,于是为了验收给产品加了一列。
+
+### 本轮据此做的源码修复(全部进 0.3.61 / runtime v0.1.32)
+
+- Runtime v0.1.32:CORS 回显请求方 Origin 并带 `Access-Control-Allow-Credentials`(`*` 只是开发配置,生产配置本就拒绝它);记录列表 filter 键必须命名对象字段,否则 `400 backend.validation.filter_field_unknown`,`{"id": ...}` 按 `id__in` 单值处理(过去是静默丢弃 → 返回整页,调用方以为读到了自己要的那一条)。
+- Plane:identity-delivery 的 `initial_credential` 生成为 `{ initial_password, must_change_password }` 对象类型;packet 的 stage_boundary 写明 `apply model` 后要 `apply compose`;`apply-model.sh` 不再打印它自己不接受的 `--reason` 用法。
+- PB:acceptance scaffold 增加 `RUNTIME_ADMIN`(读 dev-runtime 的 `DOMAINRY_MANAGED_RUNTIME_*` 导出)与 `rotatedPasswordFor()`(按 login id 派生,可跨轮复现),`prepareSession`/`switchAccount` 注释写明改密永久生效、enrol 幂等回落、worker 重启会丢 registry;runtime 的 `next_action` 改成先 `eval dev-runtime.sh env --with-secrets`;freeze 新增两条 oracle 警告(logout 撤销、降序+游标);所有权审计的 raw transport 消息说明如何把传输注入交付客户端。
+- 文档:verification.md(filter 键契约、Runtime 用 `params.field` 而 Handler 用自己的 params)、backend-model.md(Action 入参上的长度修饰符是落库约束,不校验 Action payload)、两个前端交接文档(凭据对象形状、改密永久、enrol 非幂等、CORS 凭据)、batch-acceptance.md(nonce 标签要放进需求本来就渲染的字段,不要为验收给产品加列)。
