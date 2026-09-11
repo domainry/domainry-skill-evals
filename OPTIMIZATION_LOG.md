@@ -546,3 +546,32 @@ bench-03 的时间线里有**两条 `verify-ok`**:代理发现自己写错了 PR
 **代理自报新靶点**(自报分钟,已知超发,只看排序):Object SQL v1 无字符串字面量/UNION/子查询,两个 Report 改为 append-only 账本 Object 双写 month/year 行 ~35;生成类型四个坑(relation 输入是裸 `schema.XID`、select 输入是值类型、可选 relation 需 `NewXIDReference`、mutation 内部不导出只能 `ValidateConditionalMutation`)~45;Object 字段默认全 Role 可读致 `pin_fingerprint` 泄漏,一行 `field_permissions` 因 evolution 门 + packet 被 compose 删掉花 ~12;`apply model` 返回 evolution_review_required 仍 exit 0;`inventory-sync.py` 无 `--write`;`dev-runtime.sh ia` 不复用 start 记录的地址。
 
 **结论**:bench-13→14 −14 min,其中工具等待 −14.7 直接对应"去重复 IA";思考量持平。噪声带 ±10 仍在,但方向与分阶段信号一致。下一轮靶点按剖析定,不按自报。
+
+## bench-15(Opus,skill 0.3.53 + Runtime v0.1.27,2026-09-11)——三项修复零摩擦,总时长回到 83.6
+
+**改动**(plane `a385e13`/`e10650b`/`8a1f37e`,runtime `80439cc`=v0.1.27):① `apply model` 审核停止 exit 3、implementation packet 随当前回执保留(compose 不再删);② 字段 DSL `;sensitive` + 编译器按 Role 补关闭项 + `model plan` 诊断 `model.field_sensitive_default_open`;③ Runtime 字段级关闭(无精确命名该字段的 policy 一律拒)。用户原定这条夹具不再跑,后指示"修完继续评估",故仍用同夹具、同 brief。
+
+**结果**:10:57:12Z → 12:20:45Z = **83.6 min**(bench-14 70.7,bench-13 84.7,bench-12 83.8)。质量 `verified_and_stopped` 37/37 双阶段;evaluator 另起端口 :18240 独立 verify 复核 initial/restart 均 `passed`。
+
+| 阶段(think min / exec min) | bench-14 | bench-15 |
+|---|---|---|
+| model | 2.5 / 1.3 | 4.9 / 0.9 |
+| handlers | 12.2 / 0.3 | 16.1 / 0.3 |
+| acceptance | 12.0 / 4.8 | 14.4 / 11.0 |
+| check_verify | 2.9 / 0.8 | 0.5 / 8.6(verify 前台) |
+| other | 24.4(含 verify 后台轮询) | 13.7 |
+| 思考合计 / 工具等待合计 | 61.6 / 7.9 | 59.8 / 21.2 |
+| 修复窗口(首轮 IA 失败→全绿) | 5.8 | 9.2 |
+
+里程碑(自首次工具调用起,min):首次 apply 13.9→11.2;首次 Handler 测试 29.5→25.8;首次起 dev Runtime 52.0→**59.3**;全绿 60.5→68.8;verify 起 61.4→72.3;结束 69.5→81.0。两轮各发生 2 次上下文压缩,条件对等。
+
+**三项修复的信号(全部出现)**:`pin_fingerprint` 建模时直接写成 `"text;sensitive"`,没有逐 Role 条目、没触发诊断、没为它跑 evolution 轮(bench-14 为此花 3 min + 一整轮 plan/apply);建模段唯一一次再 plan 是代理自己后补 `visit_payment.patient_id` 撞上 `model.required_field_upgrade_rule_required`,`legacy=exempt` 后经 `apply-model.sh` 一次到 `implementation_ready`,packet 未丢,合计约 1 min(bench-14 的 evolution+packet 窗口 2.6 min);exit 3 由脚本消费,代理没有感知。
+
+**+13 min 的落点**(transcript 归因,非自报):① 验收用例写作段 11:29→11:54 = **25 min**(10 个文件 37 例;bench-14 同段约 14 min)——每例更多 live `mustReject` 与最小权限 Role 矩阵(allowed/denied 都按 §2 矩阵取最小权限 Role 跑),属质量投入,非摩擦;② 全绿后代理又在 dev 上跑了整套 initial(168 s)+ restart(161 s)再 verify,**bench-14 去掉的重复这轮回来了**,≈5.5 min——SKILL 规则"只重跑修过的用例→直接 verify"没被遵守,是代理行为方差,不是缺陷;③ Handler 段 +4 min(自报 D5"40 min"的实测上限)。模型/PRD 段反而 −2。噪声带 ±10 仍在。
+
+**修复窗口 9.2 min 的构成**(四个新缺陷,实测):D1 `identity.handler_delivery_initial_credential_output_occupied`(HTTP 500,`RegisterInitialCredential` 文档注释诱导返回空结构体而非 nil)0.8 min;D4/D10 `verify_pin` 在受管 Runtime 里种子 profile 绑定 bootstrap 管理员、`staff_account.read` admin-only 1 min;D3 `backend.report.page_size_invalid`(无 message、无上限说明,骨架注释又引导对齐 SQL LIMIT 500)+ D2 refusal `message` 被 code 覆盖 3 min;其余为两次全量 IA 执行等待。
+
+**代理自报新靶点**(自报分钟已知超发,只看排序与可修性):D1 一句文档即可根治;D3 文档写明 page_size 上限并让骨架发合法值;D2 已知事实(bench-13 起),但前端契约要求"message 含 balance 与金额"与平台行为冲突,需在 Handler 参考里写"事实进 Parameters,Message 只进日志";D11 `inventory-from-plan.py` §12 三列占位符(自报 25,剖析 inventory 段 think 2.5);D6 `project check --json` 是 NDJSON 带尾行;D7 升级规则诊断不指明该用哪个修饰符;D8 裸 `go test ./...` 失败像坏交付;D9 gofmt 门在最后且不修;D5 `UpdateMutation` 无访问器。骨架约 60% 存活(输入/输出契约行、收割拒绝码、shadowed 列表、evidence 块),"denied Role 是产品决定"37 次被点名为最机械的残留——Role 授权矩阵已能确定。
+
+**结论**:三项修复各自的窗口消失,方向成立;但被验收写作段变长(质量投入)与 dev 重复全量(行为方差)吞掉,总时长回到 83～85 带。下一轮若继续,先修 D1/D3/D2 文档三条(合计 ≤5 min 但都是首轮 IA 必撞),并把"修复后只重跑修过的用例"从文档规则提升为 `dev-runtime.sh ia` 的默认行为(例如 `ia --repaired` 读上次失败清单)。
+
