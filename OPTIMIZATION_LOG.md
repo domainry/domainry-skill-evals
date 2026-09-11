@@ -661,3 +661,16 @@ mini-01 分阶段:契约 9.7 min / 1.6 M ctx;前端 24.3 / 34.2 M;后端合计 4
 - 文档错:builder-v1 SKILL.md 第 48 行的 `--write` 被读成 `generate-acceptance-skeletons.py --write`(不存在);backend-model.md 说 `project check` 不查导航,实测查;prd-from-plan 把前端 `logout()` 调用点生成为计划外的 `FAPI-AUTH-LOGOUT` 且标 `authenticated`,skeleton `--check` 又说必须 `public`;lifecycle-todo 头部 `Stage: frontend` 与 `contract_stage_complete: false` 并存。
 - 三 Skill 重复劳动(agent 报告):需求文本四写(plan outcome / PRD / Notes / 用例标题);接口清单两次推导口径不同;identity 字面量审计前后端各一次、报错时机差一个阶段;同一业务规则三层断言、测试数据搭建两套;mock scenario 是后端的一次性影子;改密流程实现三遍。
 - 下一步:修脚手架四缺陷 + `ui-check --mode runtime` 在 mock 证据过期时自动先跑 mock;playwright_outcomes 报错带用例标题;prd-from-plan 对计划外行给出对账提示并沿用 identity 授权级;文档三处更正;补 must_change_password / profile 归属 / Page 字面量三条事实。
+
+## mini-03 — 2026-09-11,skill 0.3.59(runtime 阶段脚手架修复 + 链式 mock 重跑),需求 B(设备报修,首轮)
+
+- 隔离:新目录 `~/mini-03`,其余项目目录 chmod 000,端口 18680/18690/5473/4473;brief `/tmp/mini03-brief.txt`;Opus。
+- **墙钟 104.8 min**(stage-log 19:32:57Z → 21:17:45Z;转录 105.7)。契约 14.9(含 1 次 reopen:GAP-1 行级数据范围)/ 前端+mock 20.1(含第 2 次 reopen:分页 FAPI)/ 后端 40.6(起于第 3 次 reopen:prd-from-plan 发现未绑定 auth.logout,与 mini-02 同一坑)/ **runtime 27.8**(4 轮 runtime ui-check,前 3 轮失败)。
+- 剖析:模型调用 574,输出 410 k,**上下文 129 M**,工具 379,文档读取 ≤908 KB(verification.md 5 次 × 53 KB 占最大头),结果 963 KB。
+- 质量门:mock 13 用例 / runtime 13 用例;backend-check verify 两阶段全绿;独立 verify(:18990)`verified_and_stopped`,initial 19/19、restart 19/19(FAPI 分母 19,含 GAP 绕行的 action_only 列表与分页接口)。
+- 需求 B 与 A 的差异暴露了平台表达力缺口:**GAP-1** 行级数据范围只有 all/owner/org/org_child/target_org,owner 恒为创建者(调度员),"维修工只看指派给自己的工单"无法用 Role 数据范围表达 → 用 action_only 列表 Action 绕行;GAP-3 分页接口单列绑定。
+- runtime 阶段三轮失败的共同形态:quality baseline 的"零控制台错误"在真 Runtime 上抓到 `Failed to load resource: 401/403` 与一条 CORS(报表直连 Runtime 源而不是走 app-origin 转发器),外加 3 条业务缺陷(分页两页重复、统计页错误态、开始处理后状态未刷新)。agent 没有放宽断言,而是修产品(session 未登录不拉数据、报表走转发器、分页 afterId)。**Mock 永远不产生这些信号**(Mock 不发 HTTP、不按角色拒绝、没有 CORS、没有强制改密),所以它们只能在 runtime 阶段以 4-5 min/轮的代价暴露——这是 A、B 两个需求共同的结构性瓶颈,不是单项目拟合。
+- 0.3.59 修复的信号:readback 无超时;`[PB:runtime-unavailable]` 首轮即满足 runtime_origin 判据;链式 mock 重跑(runtime 轮之间没有单独的 mock 命令轮次)。
+- agent 报告要点:契约阶段只读了 contract-stage.md("够用,精准命中报表参数/游标分页两个坑");`model plan` 契约阶段 2 次失败(`indexed` 修饰符用在 relation 字段;Handler access 引用不存在的 `deletion_record`)+ 后端阶段 1 次(GAP-6);prd-from-plan 的 AUTHOR 格分布同 mini-02,并**正确报警**了未绑定的 auth.logout 调用点(但发生在 mock 通过之后,已在 0.3.60 提前到 mock 审计)。
+- 新平台缺陷:**GAP-7 `/report/*` 与 `/auth/*` 响应不带 CORS 头**(preflight 有,真响应没有;records 有)→ 报表只能走同源转发器,mini-02 同样;**GAP-6 `max_length` 按字节计数且 Action input 上不生效**(300 字 → 汉字 100 个就拒;900 ASCII 进 Handler)→ 模型放大三倍 + Handler 按 rune 判;**GAP-8 报表 `datetime!` 参数必须带时区**,文档未写;**GAP-5 password 登录无刷新凭据 → logout 不吊销、SPA 刷新掉线**,且 verification.md("204 + Set-Cookie 清 cookie,重放被拒")与实现包 v15("logout 什么都不吊销,断言该契约")互相矛盾;脚手架 nonce 是每次运行一个而非每用例一个 → Runtime 下第二个用例撞邮箱,一轮挂 9 个用例;`backend-check` 要求先 `record-skill` 但 next_action 没说;`project check --project` 传 `backend/` 时报"snapshot root must equal the Git worktree root";`dev-runtime.sh start` 把 go 的 `go mod tidy` 建议原样打出;`ia` 默认 `go test` 10 min 超时不可见;冻结时 oracle 写"错误消息包含 X"无人提醒(Message 到不了客户端)。
+- 三 Skill 重复劳动(agent):[PB:n] 与 TestFAPI* 证明同一批规则、oracle 同文两写(建议由 plan oracle 生成两侧骨架);"建维修工 + 派工单"前置链三写(scenario / journey / Go fixture);业务规则四处表述;平台缺口四处登记;CORS 绕法前端阶段发现一次(/auth)运行时又一次(/report)——**Mock 对传输层全盲**。
