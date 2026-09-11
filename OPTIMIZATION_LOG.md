@@ -631,3 +631,33 @@ bench-03 的时间线里有**两条 `verify-ok`**:代理发现自己写错了 PR
   7. Identity audience:交付 admin 树的 `.env.example`/`api.ts` 写 `domainry-admin`,项目 Runtime 的 `IDENTITY_AUDIENCE` 是 `domainry-runtime`,不匹配只报 401 → 写进 static-product-ui 交接文档。
   8. 杂项:`frontend-install --manifest` 报错不给候选路径(**PB 修**:列出候选);Playwright 浏览器版本与脚手架安装的 `@playwright/test` 不匹配、npm 11 拦 esbuild postinstall(写进交接文档);导航编译器标记块只接受纯 JSON;`apply model` 撞 sum.golang.org 瞬时错误无重试。
 - **三个 Skill 之间仍重复的劳动**(agent 报告):业务校验规则前端/Playwright/Handler 三写;Mock scenario 手抄后端模型(记录、字段、select 词表没有生成物);权限 key 在 `MockAuthGateway` 逐字重复;导航 key → 角色映射手抄;验收断言 mock/runtime 双写;计划 binding / PRD / inventory 三处描述同一接口。下一步候选:从契约快照生成 Mock scenario 骨架与权限表。
+
+## 持续优化循环:基线(2026-09-11,用户 /goal)
+
+目标:以 mini 项目为基线,在保证质量的前提下缩短三个 Skill 的执行时间与上下文 token 消耗;避免拟合单项目(交替两套需求:A 请假审批 /tmp/mini-request.md,B 设备报修 /tmp/mini-request-b.md);每轮评估环境隔离(新目录、其它项目 chmod 000、独立端口、禁读 ~/.claude/projects)。
+
+度量口径(`~/.claude/handoffs/tools/pb_flow_profile.py <transcript> <stage-log>`):墙钟、模型调用次数、输出 token、**上下文体量**(每次调用处理的 cache_read + cache_create + input 之和,直接对应压缩次数与费用)、工具调用数、Skill 文档读取量(按提及次数 × 全文大小,是上界)、工具结果字节。质量门:PB `done`(mock + runtime ui-check、backend-check 两阶段)+ 独立复核。
+
+| 轮 | 需求 | Skill | 墙钟 | 调用 | 输出 k | 上下文 M | 工具 | 文档 KB | 结果 KB | 备注 |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| mini-01 | A | 0.3.56 | 81 | 531 | 392 | 122.6 | 368 | ≤1285 | 868 | 3 次 reopen;翻页 500 绕行;契约 9:41 / 前端 27 / 后端 41 / runtime 3 |
+| bench-17(仅后端) | 实验室 | 0.3.55 | 63 | 257 | 293 | 54.1 | 165 | ≤443 | 742 | 对照:单 Skill 后端交付 |
+
+mini-01 分阶段:契约 9.7 min / 1.6 M ctx;前端 24.3 / 34.2 M;后端合计 41 / 74 M(含三次 reopen 的重跑);runtime+done 6.6 / 9.5 M。最常被重复读取的文档:verification.md(53 KB,7 次提及)、backend-model.md(46 KB,7 次)、builder-v1 SKILL.md(33 KB,6 次)——压缩后重读是上下文体量的主要来源之一。
+
+## mini-02 — 2026-09-11,skill 0.3.58(生命周期 TODO + 契约阶段切片 + prd-from-plan),需求 A
+
+- 隔离:新目录 `~/mini-02`,其余项目目录 chmod 000,端口 18580/18590/5472/4472,禁读 `~/.claude/projects`;brief `/tmp/mini02-brief.txt`。
+- **墙钟 83.8 min**(stage-log 17:54:03Z → 19:17:53Z;转录首末 87.8)。契约 9.3 / 前端+mock 27.6 / 后端 25.6 / **runtime 21.2**。对照 mini-01:81 min,契约 9.7 / 前端 24.3 / 后端 41(3 次 reopen)/ runtime 6.6。
+- 剖析:模型调用 476(mini-01 531),输出 400 k(392),**上下文 104 M(122.6)**,工具 307(368),文档读取 ≤832 KB(≤1285),结果 969 KB(868)。
+- 质量门:mock 10 用例 / runtime 10 用例;backend-check 分母 9,initial 9/9、restart 9/9;独立 verify(:18790)`verified_and_stopped` 9/9 + 9/9。**零 reopen**(mini-01 3 次)——契约阶段把报表参数、游标分页写进 Notes 后,后端阶段没有再改契约。
+- 后端阶段 41 → 25.6 min、上下文 74 M → 41 M:prd-from-plan 生成 PRD(39 个 AUTHOR 格)、骨架按 test_path 分文件、生命周期 TODO 的 Designed/Notes 列直接被后端用作对账表。
+- **runtime 阶段 6.6 → 21.2 min 是本轮唯一恶化**:5 轮 runtime ui-check(前 4 轮失败)+ 5 次配套 mock 重跑。四个失败全部是脚手架/校验器自身缺陷、且只在 runtime 才暴露:
+  1. `helpers.ts` `readback(page, path)` 先经 `/` 离开再回来,而角色落地路由就是 `path`(`/` 重定向回去),`waitForURL(pathname !== path)` 永远不成立 → 120 s 超时;mock 模式不执行回读分支,所以 mock 永远绿。
+  2. `quality.spec.ts` 改页容量后同步读行数(`count() <= smallest`),Mock 客户端同步所以绿,真 Runtime 一次往返后才刷新 → 13 > 10。
+  3. `runtime.spec.ts` 的 `[PB:runtime-unavailable]` 切断的是 app origin 的 `/auth`、`/report`,而 `playwright_outcomes` 要求 **runtime_origin** 上有一次真实失败传输;10 用例全绿却整轮判失败,报错不说是哪个用例。
+  4. hosted Runtime 的工作区管理员带 `must_change_password`:token 签发成功但业务路由一律 403 `auth.password_change_required`;脚手架 `signInInDocument` 只有一个口令;产品自身也在改密前拉业务数据,两条 403 控制台错误被 quality baseline 抓成失败。
+- 平台缺陷(未改平台):字段 `legacy=exempt` 触发 `report.definition.object_context_invalid: json: unknown field "upgrade"`(报错指向报表,真因在对象字段);`identity_handler_delivery` 建出的 profile `owner_user_id` 是创建者(经理),成员 `member.read;owner` 读不到自己 → 改 `;org`;重复邮箱 `member.enroll` 返回 500 `backend.identity.user_email_exists`(应为 4xx);`project check --scope all` 把导航缺件重复报成 `project.actions_invalid`;`Page(page, pageSize)` 页容量必须内联整数字面量(常量也拒),packet shared_constraints 未列。
+- 文档错:builder-v1 SKILL.md 第 48 行的 `--write` 被读成 `generate-acceptance-skeletons.py --write`(不存在);backend-model.md 说 `project check` 不查导航,实测查;prd-from-plan 把前端 `logout()` 调用点生成为计划外的 `FAPI-AUTH-LOGOUT` 且标 `authenticated`,skeleton `--check` 又说必须 `public`;lifecycle-todo 头部 `Stage: frontend` 与 `contract_stage_complete: false` 并存。
+- 三 Skill 重复劳动(agent 报告):需求文本四写(plan outcome / PRD / Notes / 用例标题);接口清单两次推导口径不同;identity 字面量审计前后端各一次、报错时机差一个阶段;同一业务规则三层断言、测试数据搭建两套;mock scenario 是后端的一次性影子;改密流程实现三遍。
+- 下一步:修脚手架四缺陷 + `ui-check --mode runtime` 在 mock 证据过期时自动先跑 mock;playwright_outcomes 报错带用例标题;prd-from-plan 对计划外行给出对账提示并沿用 identity 授权级;文档三处更正;补 must_change_password / profile 归属 / Page 字面量三条事实。
