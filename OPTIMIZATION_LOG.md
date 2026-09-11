@@ -601,3 +601,33 @@ bench-03 的时间线里有**两条 `verify-ok`**:代理发现自己写错了 PR
 
 **结论**:三条文档修复直接命中首轮 IA,修复窗口 −4 min、总时长 −8 min,方向与分阶段信号一致;首轮失败换成了新一批"读回路径/平台预校验"问题。下一轮最值得做的两条:① `dev-runtime.sh ia` 默认只重跑上次失败用例(把三轮都没遵守的规则变成行为);② 骨架按授权矩阵生成回读与 denied Role 断言(bench-15/16 两轮都点名)。
 
+
+## bench-17 — 2026-09-11,skill 0.3.55(`ia` 默认只重跑失败用例)
+
+- 夹具:bench-11 复制(9592 文件,仅前端 + 冻结计划 + 前端接口契约);Opus;端口 18280;brief `/tmp/bench17-brief.txt`。参考目录全部 chmod 000。
+- **墙钟 62.9 min**(子代理转录首末时间戳 15:03:45Z → 16:06:37Z;剖析脚本口径 61.4)。对照 bench-14 70.7 / bench-15 83.6 / bench-16 75.4。
+- 自报:verify `verified_and_stopped`,分母 37(31 计划绑定 + 6 条计划未绑定但前端调用的操作,由 `inventory-from-plan.py` 报出),initial 37/37、restart 37/37。独立 verify(:18290):`verified_and_stopped`,initial 37/37、restart 37/37。
+- 剖析(分钟,think/exec):skill_docs 0.1/0(bench-16 2.3);prd_docs 6.6/0(4.0);model 6.6/0.4(4.2/0.6);handlers 14.3/0.2(15.9/0.3);inventory 0.9/0.4(5.7/0.5);acceptance 8.7/3.0(13.4/8.1);check_verify 0.2/8.1(0.3/7.3);total think 49.0 / exec 12.4(57.2 / 17.1)。
+- **本轮改动的信号**:`ia` 只跑了一次(`--all`,164 s),修完直接 `verify`,dev 上没有再跑整套 initial+restart —— acceptance exec 从 8.1 降到 3.0,inventory think 从 5.7 降到 0.9(inventory-from-plan 直接采用)。
+- PRD 仍是手写:77.7 KB,prd_docs think 6.6 min —— 这是 0.3.56 `prd-from-plan.py` 的目标(本轮未部署)。
+- 代理报告的缺陷(按其耗时):Object SQL v1 无法表达跨表汇总,靠写 Handler 追加预汇总 ledger 行绕过(≈45 min,已知);`project.action_conditional_mutation_unguarded` 只认字面写法(≈15 min);`BusinessError.Message` 上线即被 code 替换,事实只能放 params(≈10 min,文档已改);Action 动词以 `_test` 结尾 → Handler 文件名成了 Go 测试文件,静默不编译(≈10 min);`staff_account.register` 不能指定密码,计划的"旧密码失效"oracle 不可满足(≈10 min);**`/auth/logout` 返回 200 但 bearer token 继续有效**(≈8 min,Runtime 安全问题,新);`project.source_metadata_key_forbidden` 误匹配 Go 局部变量名 `objectKey`(≈5 min);verify 对 finalize 后改源码只报 "finalization receipt is stale",不提示重跑 `apply finalize`(≈3 min)。
+- 代理建议:reports.md 写明"跨对象汇总 = ledger 需求"的配方;骨架生成器加 `--with-setup`(按 Action 关系输入生成 setup 链)和共享 `support_test.go`;把 `_test` 文件名、CAS 守卫写法、metadata 标识符三条 lint 提前到 `apply model` 生成 packet 时;logout 与 BusinessError 两条 Runtime 事实放进 Handler 文档。
+- 观察:代理三次打开 `~/.claude/projects/...` 下的转录文件(给自己计时),brief 未禁止;mini-01 起已加禁令。
+
+## mini-01 — 2026-09-11,PB 全流程验证(skill 0.3.56:prd-from-plan + 契约切片 + 生命周期 TODO)
+
+- 目的:验证 Project Builder 全流程(contract → frontend → mock → backend → runtime → done)在三项改动后是否走得通,不是计时对照。需求 /tmp/mini-request.md(请假审批,7 条需求,经理/成员两角色,含 1 个报表),`review_policy: autonomous`,Opus,brief /tmp/mini-brief.txt。
+- **结果:`done`,81 分钟**(16:09:33Z → 17:30:34Z)。mock 11 用例、runtime 11 用例覆盖需求 1～8;backend-check 分母 16 FAPI,initial+restart 各 16 通过;verify 235 s。阶段用时:contract 9:41(freeze 2:23 + 建模与 apply model 7:18),frontend 26:57(含 4 轮 mock 验收),backend 41:00,runtime 3:01。三次 `reopen --batch` 本身 2 分钟,但每次都拖一轮 frontend-install + mock 重跑。
+- **生命周期 TODO**:全程与 `status` 无一次不一致,三次 reopen 后 Frontend 列即时退回 pending;agent 实际用到的是 Notes(跨阶段传决策的唯一通道,后端阶段照着写模型和 Handler)、Designed(要实现的 Action 身份)、Pending by stage;其余状态列信息量低。契约阶段的 Notes 记了每条需求的建模决策与对原始需求的偏离(如 Identity 不接受指定密码 → 系统生成一次性密码)。
+- **契约切片**:流程够用(agent 直到 mock 通过进后端才读 builder-v1 SKILL.md),但只靠它写不出能过 `model plan` 的模型:字段 DSL 修饰符顺序、`field_permissions` 默认开、Object SQL 硬约束、报表参数不能带默认值,都得去读 backend-model.md / reports.md(阅读计划 model 段点名的,不算越界)。
+- **prd-from-plan**:16 行 FAPI,路由/方法/call_sites/授权/观察项全对,无错生成;agent 补的是业务结果、拒绝码与拒绝方、D-01 决策、20 条清单。2 条计划未绑定行(logout、member list)的 `SET-THE-PRD-REQUIREMENT-NUMBER` 占位符没有文档提。
+- **暴露的问题与处置**:
+  1. Runtime records 列表 `page>=2` 一律 500(`backend.internal`,`{"operation":"list records"}`),游标 `after_id` 正常;交付的 record-client 没有 `after_id` 参数,前端只能做"窗口式翻页"绕过。根因两层:runtime `57b0f8d` 让 store 返 400,但领域服务 `recordInternalError` 把所有仓储错误重贴成 internal → **runtime v0.1.28 修**;record-client 加 `afterId`/`next_after_id`,Mock 后端同样拒绝无游标的 page>1(让翻页在 mock 阶段就失败)→ **plane `f4018bb`,0.3.57 部署**;三处 Skill 文档写明游标契约。
+  2. mock 审计只查 Action 字面量,records/report 的对象键写成变量时后端阶段的 inventory 派生找不到调用点,只能 reopen → `audit_frontend_identities` 现在也要求 records/report 键以字面量出现在交付客户端调用形式里(**PB 修**)。
+  3. 后端阶段禁止直接重跑 `ui-check --mode mock`,任何前端改动都得 `reopen --batch` → 放开 backend 阶段的 mock 重跑(它本来只作废 mock 证据)(**PB 修**)。
+  4. `freeze` 直接把 stage 推到 frontend 而契约建模未做 → `status` 在快照缺失时报 `contract_stage_complete: false`、required_skill 指向 builder-v1 与 contract-stage.md,`record-skill builder-v1` 在此窗口被接受(**PB 修**)。
+  5. `backend-check` 按计划 `test_path` 要求分文件,骨架生成器只出一个文件且 `--check` 不看路径,agent 在 finalize 后才撞上,多付一轮 finalize → 生成器按 `test_path` 分文件、`--check` 校验路径(**builder-v1 修,见下一条记录**)。
+  6. 报表参数不能带默认值、Report 源 Object 不能挂 `backfill=`(报错文本无关:`report.definition.object_context_invalid: json: unknown field "upgrade"`)、`model plan` 失败轮次不落盘不可审计 → 前两条写进 contract-stage.md"现在就定"清单;后两条待平台侧。
+  7. Identity audience:交付 admin 树的 `.env.example`/`api.ts` 写 `domainry-admin`,项目 Runtime 的 `IDENTITY_AUDIENCE` 是 `domainry-runtime`,不匹配只报 401 → 写进 static-product-ui 交接文档。
+  8. 杂项:`frontend-install --manifest` 报错不给候选路径(**PB 修**:列出候选);Playwright 浏览器版本与脚手架安装的 `@playwright/test` 不匹配、npm 11 拦 esbuild postinstall(写进交接文档);导航编译器标记块只接受纯 JSON;`apply model` 撞 sum.golang.org 瞬时错误无重试。
+- **三个 Skill 之间仍重复的劳动**(agent 报告):业务校验规则前端/Playwright/Handler 三写;Mock scenario 手抄后端模型(记录、字段、select 词表没有生成物);权限 key 在 `MockAuthGateway` 逐字重复;导航 key → 角色映射手抄;验收断言 mock/runtime 双写;计划 binding / PRD / inventory 三处描述同一接口。下一步候选:从契约快照生成 Mock scenario 骨架与权限表。
