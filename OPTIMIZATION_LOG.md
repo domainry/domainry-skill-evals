@@ -479,3 +479,46 @@ bench-03 的时间线里有**两条 `verify-ok`**:代理发现自己写错了 PR
 同 Opus、同夹具、**强制同覆盖**,对照 bench-03 的 92.2 min。任务书新增三条:覆盖强制(且不许删行让脚本通过)、时间线只追加不改写(bench-03 两条 `verify-ok` 曾差点漏算 6.7 min)、CLI 参数例外(`model capability` 拒绝 `--environment`,`verify` 只收 `--project`/`--address` —— 上一轮我在任务书里笼统要求"所有 Plane 调用加 `--environment`",代理照做后撞错)。
 
 **已知混淆项**:应用户要求同步了 domainry-runtime `cdba4e8` → `288b630`(含 Identity/Notification 升级),而本基准大量使用 Identity。因此 bench-05 相对 bench-03 有两个变量,计时归因据此打折。
+
+## bench-05～bench-12 汇总(Opus,同夹具 pioneer-lab-v4 前端,2026-09-10～11)
+
+前面各轮裁决当时只写在会话里,这里统一补记。所有轮次质量均为 `verified_and_stopped`、37/37 initial+restart 双阶段,且由 evaluator 在另一端口独立复跑 `verify` 确认。
+
+| 轮次 | 墙钟 (min) | 变量 / 备注 |
+|---|---|---|
+| bench-05 | 82.1 | 强制同覆盖 37 行;同步 runtime 288b630(混淆项) |
+| bench-06 | 83.3 | 修复循环 22.6→11.4 min,总时长持平(噪声内) |
+| bench-07 | 80.6 | |
+| bench-08 | 92.9 | 最贵一条摩擦 ~35 min |
+| bench-09 | 94.1 | 单行聚合 Report `ORDER BY` 假豁免首报 |
+| bench-10 | **70.1** | 最佳;骨架生成器之前的包 |
+| bench-11 | 79.2 | v0.3.47 + 骨架生成器首轮;收割拒绝码含平台前置校验遮蔽的码,丢一个 IA 周期(已修 ffc8ce5) |
+| bench-12 | 83.8 | aca9df4 八条摩擦修复前的包;代理把生成的 88KB 骨架整个删了,只留拒绝码清单/路由选择/evidence 块 |
+
+**结论**:bench-09→10 无 skill 大改仍摆 24 min,总墙钟噪声≈信号,单看总时长不能归因。bench-12 transcript 剖析:84 min 里模型思考 68(81%)、工具执行 16;CLI 全程只 19 次(修复循环这条线已解决)。两轮对骨架生成器的直接证据一致:留下的永远是拒绝码清单、路由/helper 选择、evidence 块,扔掉的永远是 payload 渲染 → 生成器方向错了,改做减法(`8213f5b`)。
+
+## bench-13(Opus,skill 0.3.49,2026-09-11)——减法版骨架生成器:总时长持平,思考量降 8 分钟
+
+**改动**:`8213f5b` 骨架生成器不再渲染 payload 占位值、`requireField` 块和 `acceptance_actors_test.go`,各换成一行契约注释(输入键+线型 / 输出保证字段 / 拒绝码分流)。在途版本曾删掉 `PLATFORM_REQUIRED_CODE` 而自检仍过,跑真实项目 NameError——自检现在完整渲染一个 case。夹具、brief、模型、端口规则与 bench-12 相同(仅补一句 `project check` 不接受 `--environment`)。
+
+**墙钟**:04:25:51Z → 05:50:31Z = **84.7 min**,对 bench-12 83.8 **持平**。
+
+**分阶段剖析**(`~/.claude/handoffs/tools/bench_phase_profile.py`,按每次工具调用触碰的路径归阶段;think = 调用前的思考间隔,exec = 工具执行;单位 min):
+
+| 阶段 | bench-11 think | bench-12 think | bench-13 think | 13 exec |
+|---|---|---|---|---|
+| model | 3.7 | 11.3 | 5.5 | 0.4 |
+| handlers | 13.1 | 15.7 | 14.7 | 0.2 |
+| inventory | 1.1 | 5.7 | 0.9 | 0.0 |
+| acceptance | 20.8 | 18.6 | 15.6 | 12.4 |
+| check_verify | 0.5 | 0.5 | 0.6 | 9.2 |
+| skill_docs | 1.3 | 0.8 | 3.1 | 0.0 |
+| other | 22.3 | 11.7 | 9.0 | 0.2 |
+| **思考合计** | 74.2 | 68.2 | **59.9** | |
+| **工具等待合计** | 5.2 | 15.6 | **22.6** | |
+
+思考总量 68.2 → 59.9(−8.3 min),其中 model −5.8、inventory −4.8、acceptance −3.0;但工具等待 +7 min(IA 与 verify 跑了更多轮),两者抵消,总墙钟不动。注意 skill_docs 一项三轮都在 1～3 min:上一节"读文档占 9.2 min"用的是另一套归类,按本脚本复现不出来,以后只用本脚本比。
+
+**骨架生成器判据(直接证据)**:生成文件被删,但契约注释行保留进 9/10 个手写文件(25 处),路由调用形式和 evidence 块沿用;拒绝码菜单 0 处保留。代理原话:留下的是"声明输入契约的那行注释、Output contract guarantees 行、路由形式、evidence 块、只读 Action 不能 actionRecord 的提示";扔掉的是全部 TODO 体和单文件布局。三轮一致 → 生成器现在的形状就是它的终态,不再加东西。
+
+**代理自报最贵摩擦**(自报分钟,已知会超发,只看排序):FAPI-AUTH-LOGOUT ~40(bearer 不吊销,而 inventory 规则强制 logout 行带 `durable_result_read_back`/`idempotency_required`/`transaction_required`,代理只能用"下次登录 session_id 变了"当读回);BusinessError.Message 被 code 覆盖、事实只能走 `params` ~20;`initial_credential` 是对象不是字符串 ~15;受管 Runtime 每 Object 一条 baseline 种子行落进 Object SQL Report 窗口、`LIMIT 2` 险些截断 ~15;packet 命令顺序 `full_tree` 排在 `apply compose` 前 ~5;`generate-acceptance-skeletons.py` 不认 `--write` ~1。前四条都是文档/规则缺口,下一轮靶点。
