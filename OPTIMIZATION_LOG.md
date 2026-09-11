@@ -575,3 +575,29 @@ bench-03 的时间线里有**两条 `verify-ok`**:代理发现自己写错了 PR
 
 **结论**:三项修复各自的窗口消失,方向成立;但被验收写作段变长(质量投入)与 dev 重复全量(行为方差)吞掉,总时长回到 83～85 带。下一轮若继续,先修 D1/D3/D2 文档三条(合计 ≤5 min 但都是首轮 IA 必撞),并把"修复后只重跑修过的用例"从文档规则提升为 `dev-runtime.sh ia` 的默认行为(例如 `ia --repaired` 读上次失败清单)。
 
+## bench-16(Opus,skill 0.3.54,2026-09-11)——三条"首轮必撞"文档修复:修复窗口 9.2→5.2,总时长 75.4
+
+**改动**(plane `349b707`):① 生成的 `<Action>InitialCredential` 注释改为"Handler 返回时该字段留 nil,非 nil 即 `identity.handler_delivery_initial_credential_output_occupied`(500)",identity-handler-delivery.md 正文与默认值清单各一条;② report 查询 `page_size` 1..200 默认 100、超出 400 `backend.report.page_size_invalid`(与记录列表钳制不同,与 SQL LIMIT 无关),写进 reports.md / verification.md / 骨架注释,packet 的 `module.report.queryReportObjectSQL` 分片加 Pagination 规则;③ refusal 事实进 `Parameters`、`Message` 不到客户端,写进 packet `summary.shared_constraints` 与 backend-runtime.md 习语段。
+
+**结果**:12:49:19Z → 14:04:44Z = **75.4 min**(bench-15 83.6,bench-14 70.7)。质量 `verified_and_stopped` 37/37 双阶段;evaluator 另起端口 :18260 独立 verify 复核 initial/restart 均 passed。
+
+| 阶段(think / exec min) | bench-14 | bench-15 | bench-16 |
+|---|---|---|---|
+| model | 2.5 / 1.3 | 4.9 / 0.9 | 4.2 / 0.6 |
+| handlers | 12.2 / 0.3 | 16.1 / 0.3 | 15.9 / 0.3 |
+| inventory | 1.3 / 0.2 | 2.5 / 0.0 | 5.7 / 0.5 |
+| acceptance | 12.0 / 4.8 | 14.4 / 11.0 | 13.4 / 8.1 |
+| check_verify | 2.9 / 0.8 | 0.5 / 8.6 | 0.3 / 7.3 |
+| 思考合计 / 工具等待合计 | 61.6 / 7.9 | 59.8 / 21.2 | 57.2 / 17.1 |
+| 首次起 dev Runtime(min) | 52.0 | 59.3 | 54.4 |
+| 首轮 IA 通过数 | 33/37 | 0/3(引导即挂) | 30/37 |
+| 修复窗口(首轮 IA→全绿) | 5.8 | 9.2 | **5.2** |
+
+**三条修复的信号**:D1 消失——actor 引导一次通过,注册/登录/verify_pin 首轮全过(bench-15 首轮 0/3 全挂在 500 上);D3 消失——两个报表用例首轮通过,代理报告称骨架里的 page_size 说明"直接用上";D2 一半——Handler 侧按 shared_constraints 把余额/币种/单号放进了 `Parameters`,PRD §9 记了偏差,但验收断言先读了 `body["parameters"]`(线上键是 `params`),6 min。`;sensitive` 继续零成本采用。
+
+**首轮 7 个失败全是新面孔**(实测 5.2 min 修完):4 个 `auth.permission_denied`——骨架建议用 `listFiltered` 回读 visit_item / visit_payment / family_member,而这些子对象前端从不单独列出、没有 Role 持有 `*.read`,改读父对象投影;2 个断言了被平台预占的 `arabic_name_required`(Runtime 先 trim 必填文本,`"   "` 直接是 `backend.validation.required`,骨架的 shadowed 列表只覆盖"缺字段",不覆盖"空白字符串");1 个即 D2 的键名。**dev 上全绿后再跑整套 initial+restart 再 verify(≈5 min)第三轮出现**,规则在文档里但三轮没有一轮遵守。
+
+**代理自报新靶点**(排序看可修性):骨架按 Role 授权矩阵决定回读方式(无 Role 持 read 的子对象改读父投影);"Runtime 在 Handler 之前校验什么"一页(required/trim、coercion、select 域,含 `field_path`/`params.field`);记录级 Handler 的路由 id 在 `caps.Execution.TargetID()` 而非输入结构体;`result_schema` 拒绝文档承诺的 `decimal`(且未说明它嵌在 `object_sql_v1` 内);`dev-runtime.sh ia -run` 时 evidence 检查 36 条噪音;harness 缺 `refusalParameters` 助手;`inventory-from-plan.py` 无 `--project` 时静默写空清单退出 0;SKILL.md 30.8 KB 长行导致工具输出截断。
+
+**结论**:三条文档修复直接命中首轮 IA,修复窗口 −4 min、总时长 −8 min,方向与分阶段信号一致;首轮失败换成了新一批"读回路径/平台预校验"问题。下一轮最值得做的两条:① `dev-runtime.sh ia` 默认只重跑上次失败用例(把三轮都没遵守的规则变成行为);② 骨架按授权矩阵生成回读与 denied Role 断言(bench-15/16 两轮都点名)。
+
