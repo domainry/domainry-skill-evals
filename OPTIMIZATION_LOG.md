@@ -524,3 +524,25 @@ bench-03 的时间线里有**两条 `verify-ok`**:代理发现自己写错了 PR
 **代理自报最贵摩擦**(自报分钟,已知会超发,只看排序):FAPI-AUTH-LOGOUT ~40(bearer 不吊销,而 inventory 规则强制 logout 行带 `durable_result_read_back`/`idempotency_required`/`transaction_required`,代理只能用"下次登录 session_id 变了"当读回);BusinessError.Message 被 code 覆盖、事实只能走 `params` ~20;`initial_credential` 是对象不是字符串 ~15;受管 Runtime 每 Object 一条 baseline 种子行落进 Object SQL Report 窗口、`LIMIT 2` 险些截断 ~15;packet 命令顺序 `full_tree` 排在 `apply compose` 前 ~5;`generate-acceptance-skeletons.py` 不认 `--write` ~1。前四条都是文档/规则缺口,下一轮靶点。
 
 **独立复核**:evaluator 另起端口 `verify --json --project ~/backend-bench-13 --address 127.0.0.1:18210` → `verified_and_stopped`,initial 37/37、restart 37/37,零 failed,与代理自报一致。质量通过,计时持平。
+
+## bench-14(Opus,skill 0.3.50,2026-09-11)——四条摩擦修在"交付会读的地方":70.7 min,追平最佳
+
+**改动**(plane `e24c48f`):① `/auth/` 会话路由免 `durable_result_read_back`(project check、packet 规则文案、inventory-from-plan 及未绑定桩同步);② 骨架注释行加四条事实(message=code、事实走 params;initial_credential 是对象;baseline 种子行进 Report 窗口、LIMIT 留余量;logout 204 且 bearer 仍可读);③ 拒绝码收割支持 `reject("x.y.z", …)` 助手形式(bench-13 全用此形式,76 个码一个没收到);④ 修复循环改为"全量 initial 一次 → 修 → 只重跑修过的 → 直接 verify",dev 上不再跑第二遍全量与 restart。这四条按 bench-13 transcript 逐调用归因合计 ≤11 min(自报 90 min)。
+
+**结果**:07:30:15Z → 08:41:17Z = **70.7 min**(bench-13 84.7,bench-12 83.8;历史最佳 bench-10 70.1)。质量 `verified_and_stopped` 37/37 双阶段,evaluator 另起端口 :18220 独立 verify 复核零 failed。首轮 IA 33/37,四个失败一起修。
+
+| 阶段(think min) | bench-12 | bench-13 | bench-14 |
+|---|---|---|---|
+| model | 11.3 | 5.5 | 2.5 |
+| handlers | 15.7 | 14.7 | 12.2 |
+| acceptance | 18.6 | 15.6 | **12.0** |
+| other | 11.7 | 9.0 | 24.4(含 verify 后台轮询) |
+| 思考合计 | 68.2 | 59.9 | 61.6 |
+| **工具等待合计** | 15.6 | 22.6 | **7.9** |
+| 修复窗口(首轮 IA 失败→全绿) | — | 11.0 | **5.8** |
+
+**四条修复的直接证据**:dev 上 restart 阶段未跑(IA 只两轮 initial,各 2 min);login/logout 行只有三项观测,报告零提及 logout;拒绝码菜单这次收到并被转成 31 条 live `mustReject`(bench-13 手写 29、bench-12 手写 27),代理称骨架"省了一个多小时"、shadowed 分流直接用上;message/params 事实读到了,但仍花 ~10 min 确认非自身 bug(前端契约与 Skill 说法相反,根治要 runtime 发布 Message)。骨架文件本身仍被删、拆成 10 个文件,契约注释行未保留(bench-13 保留 25 处)——留下的是断言不是注释。未完全照做"只重跑修过的用例",修完仍跑了一次全量 initial(2 min)。
+
+**代理自报新靶点**(自报分钟,已知超发,只看排序):Object SQL v1 无字符串字面量/UNION/子查询,两个 Report 改为 append-only 账本 Object 双写 month/year 行 ~35;生成类型四个坑(relation 输入是裸 `schema.XID`、select 输入是值类型、可选 relation 需 `NewXIDReference`、mutation 内部不导出只能 `ValidateConditionalMutation`)~45;Object 字段默认全 Role 可读致 `pin_fingerprint` 泄漏,一行 `field_permissions` 因 evolution 门 + packet 被 compose 删掉花 ~12;`apply model` 返回 evolution_review_required 仍 exit 0;`inventory-sync.py` 无 `--write`;`dev-runtime.sh ia` 不复用 start 记录的地址。
+
+**结论**:bench-13→14 −14 min,其中工具等待 −14.7 直接对应"去重复 IA";思考量持平。噪声带 ±10 仍在,但方向与分阶段信号一致。下一轮靶点按剖析定,不按自报。
