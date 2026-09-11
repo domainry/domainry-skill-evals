@@ -522,3 +522,5 @@ bench-03 的时间线里有**两条 `verify-ok`**:代理发现自己写错了 PR
 **骨架生成器判据(直接证据)**:生成文件被删,但契约注释行保留进 9/10 个手写文件(25 处),路由调用形式和 evidence 块沿用;拒绝码菜单 0 处保留。代理原话:留下的是"声明输入契约的那行注释、Output contract guarantees 行、路由形式、evidence 块、只读 Action 不能 actionRecord 的提示";扔掉的是全部 TODO 体和单文件布局。三轮一致 → 生成器现在的形状就是它的终态,不再加东西。
 
 **代理自报最贵摩擦**(自报分钟,已知会超发,只看排序):FAPI-AUTH-LOGOUT ~40(bearer 不吊销,而 inventory 规则强制 logout 行带 `durable_result_read_back`/`idempotency_required`/`transaction_required`,代理只能用"下次登录 session_id 变了"当读回);BusinessError.Message 被 code 覆盖、事实只能走 `params` ~20;`initial_credential` 是对象不是字符串 ~15;受管 Runtime 每 Object 一条 baseline 种子行落进 Object SQL Report 窗口、`LIMIT 2` 险些截断 ~15;packet 命令顺序 `full_tree` 排在 `apply compose` 前 ~5;`generate-acceptance-skeletons.py` 不认 `--write` ~1。前四条都是文档/规则缺口,下一轮靶点。
+
+**独立复核**:evaluator 另起端口 `verify --json --project ~/backend-bench-13 --address 127.0.0.1:18210` → `verified_and_stopped`,initial 37/37、restart 37/37,零 failed,与代理自报一致。质量通过,计时持平。
