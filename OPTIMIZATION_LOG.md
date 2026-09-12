@@ -1143,3 +1143,44 @@ mini-11 是 68.1 min。三条修复(`readback` 回程、集成库从空开始、
   harness 原语发起请求。**用 mini-12 的 11 个骨架重新生成并 `go vet` 过整个包验证。**
 - **常驻 Runtime 账号会把上一轮的行带进下一轮**,被产品自己的唯一性/重叠规则拒掉。
   nonce 规则原本只覆盖标签,现在覆盖业务键(登录名、日期区间)。
+
+## mini-13(需求 B 设备报修,0.3.71→0.3.74,2026-09-12 18:03–21:0x)
+
+**计时作废,不进时间序列。** 这一轮被两个平台歪斜打断两次,后端段里混着平台排障与清磁盘。
+它提供的是质量证据和缺陷清单,不是速度读数。
+
+独立 verify(全新数据库,我自己跑):backend IA **10/10 initial + 10/10 restart**(各 48 s),
+runtime 浏览器 **11/11**(153 s),**同一个库再跑一次仍 11/11**(145 s),mock **11/11**,theme `passed`。
+
+### 歪斜一:SDK 与 Runtime 模块的 runtimeext 契约哈希不一致(整轮 runtime 段报废)
+
+Plane 生成 SDK 要求 `d9990bc8…`,而它用来构建项目 Runtime 模块的**本机 domainry-runtime 检出落后 8 个提交**,
+仍发布 `d7d20947…`。于是它生成的每个项目都带着没有任何 Runtime 能满足的 SDK,
+症状只有启动那一刻的一句 `domain SDK runtimeext contract hash mismatch`。
+
+**这是我的判断失误,证据当时就在手上。** 开跑前 `go test ./...` 有两个失败,其中一个直接打印了
+`runtimeext-v34/d7d20947…` —— 正是后来杀死这一轮的哈希。我把它判成"上游 main 坏了、只影响文件能力 codegen",
+写进分析计划的"嫌疑变量"就开跑了。既不是上游坏了(拉一下就好),也不局限于文件能力。
+
+已修:检出更新,重新打包;**打包时比对两边哈希,不一致直接拒绝并给出修复命令**(提交 1da5de4,反例验证过)。
+
+### 歪斜二:交付物仍在登录体里发 `application_key`,而 Runtime 已经拒收
+
+我自己复验:带该字段 → `400 backend.invalid_json`;不带 → `403 auth.invalid_credentials`(进到凭据校验)。
+方向确认:项目 Runtime 自己从 `IDENTITY_AUDIENCE` 解析 Identity 受众(`identity_integration.go:21`)。
+三处交付物还在发:交付的 `@domainry/identity-client`、接口验收 harness 模板的两个登录点、
+实现包的 `verification.auth.login_fields`;`static-product-ui` 的交接文档还反过来要求产品必须发。
+全部已修(提交 373176d),并解包 `domainry-frontend-product_0.3.74.tar.gz` 核对登录体里确实没有了。
+
+### 本轮从代理报告里采纳的四条修复(提交 999cd1b)
+
+- **链式加载的页面会骗过验收的"空闲"判断**:`/my-orders` 先解析登录者档案、再查该维修工的看板,
+  两步之间没有 busy,于是"等 busy 消失"这一次就返回,取样到空列表 —— 而真实用户也会先看到
+  "暂时没有指派给你的工单"。现在等到安静后**再看一眼**才认(helpers 的 `quiesce` 与 quality 的 `settle`)。
+- **`dev-runtime.sh ia` 进入 finalize 之前的必做清单**:编译什么证据都不证明,而 finalize 之后每修一个用例
+  都要重走整套 focused/compile/finalize。它在这一轮里自己付清了两次。
+- **跨版本 `frontend install` 的拒绝不给修复动作**,现在写明:挪走 `frontend/domainry`、重装、重链依赖、
+  并删掉 `frontend/node_modules/.vite` —— 那个预打包缓存会让重装后的新客户端静默不生效,
+  源码 grep 看着是对的,浏览器里还在发旧字段,极易误判成"平台没修好"。
+- **Runtime 输入校验先于 Handler**:声明契约已经守住的字段,Handler 自己的 `*_required` 码永远到不了网线上
+  (空白必填文本是 `backend.validation.required`)。写进契约阶段那份 Runtime 事实清单。
