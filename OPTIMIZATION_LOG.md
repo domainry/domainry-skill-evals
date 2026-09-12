@@ -779,3 +779,68 @@ mini-04 归因的五条(CORS 凭据、`initial_credential` 类型、改密永久
 
 Mock 对传输与权限失明;同一条业务规则在四处重复表达(模型 roles → 前端 mock 权限数组手抄 →
 导航 permission → PRD §7);验收断言前后端各写一遍;dev-runtime 生命周期知识散在三份文档且都不全。
+
+## mini-06(skill 0.3.63 + runtime v0.1.33,需求 A 复测)
+
+对照 mini-04(同需求 A,skill 0.3.60):**98.9 min / 125.7 M / 520 次调用 → 85.3 min / 106.6 M / 447 次**。
+**时间 -13.8%,上下文 -15.2%,调用 -14%**;独立 verify 全绿。这是本目标第一次时间与上下文同时下降。
+
+| 阶段 | mini-04 | mini-06 | 说明 |
+|---|---|---|---|
+| contract | 6.0 | 10.3(+0.5 reopen) | 5 次 `model plan` **全部首轮 valid** |
+| frontend | 23.8 | 24.9 | mock ui-check 21 s 一次过 |
+| backend | 29.7(17 FAPI) | **37.7**(16 FAPI) | 其中约 19 min 是授权模型的发现循环 |
+| runtime | 26.3 | **7.8** | 4 轮 ui-check,3 轮失败全是 mock/runtime 真实差异,无产品逻辑错 |
+| 合计 | 98.9 | 85.3(剖析)/ 81.2(阶段日志) | 761 KB skill 文档 |
+
+独立 verify(全新数据库,我自己跑):backend IA **16/16 initial + 16/16 restart**,
+runtime 浏览器 **10/10**,mock **10/10**。抽查代理自述的两处绕法均非弱化:`readback` 在"该 principal
+只有一个目的地"时回落为整页 reload —— 丢弃全部 SPA 状态并重新取数,比"离开再回来"更强;
+`quality.spec.ts` 的零控制台错误基线原样保留。
+
+隔离核对:代理确实读了 `~/.claude/projects/.../tool-results/` 下三个文件,但三者都是 harness 把
+**它自己**的超长工具输出落盘后的回读(时间戳 03:58/03:59/05:02,全在本轮窗口内,内容是它自己的
+model 文件、自己 cat 的 Skill 文档、自己的 Go 测试输出)。禁区约束没有被破坏,但任务书里
+"不要读 ~/.claude/projects/" 这条在当前 harness 下无法严格成立,下一轮改为"只允许回读本轮自己的
+tool-results 文件"。
+
+### 三条预注册判定的结果(规则写在 /tmp/mini06-analysis-plan.md,开跑前落盘)
+
+**1. 总时长 < 88 min:达成(85.3)。** 但省下来的钱不在预期的地方:runtime 阶段 -18.5 min,
+backend 阶段 +8.0 min。规则写的后续动作是"把减法用到后端阶段的文档量",而实测后端的成本**不是**
+文档量(281 KB,与 mini-04 同量级),是授权模型的发现循环。规则的动作与数据不符,按数据走。
+
+**2. runtime 阶段 < 15 min:达成(7.8,mini-05 是 41.6)。** 这确认了 mini-05 的结论:
+runtime 阶段变长的主因是平台自相矛盾(`action_only` 播种、交接文档打架),不是"文档事实不够"。
+该方向收束,不再往 runtime 阶段补文档。
+
+**3. 两条修复各自命中:达成。** 全程 5 次 `model plan` 全部首次提交即 valid(mini-04 同需求返工多轮),
+`backend.identity.profile_binding_target_invalid` 一次都没出现。`ux.config` 契约补全与 `Status` 默认
+`active` 两条可以标记为已关闭。
+
+### 本轮暴露的新的最大单项:授权规则没有单一来源
+
+后端阶段 37.7 min 里约 19 min 消耗在同一个环路:改授权 → Runtime 403 → 探针定位 → 改模型 →
+`plan/apply/compose/重启/重跑`(每轮约 8 min)。两个根因:
+
+- **`backend.record.outside_scope` 的 `params` 是 `null`**,不说是哪个 Object、哪个字段。代理只能自己
+  写探针脚本逐调用定位。这是可以在 Runtime 源码里修的:拒绝时把对象键与字段键放进 params。
+- **关系字段目标的可写性走的是调用者对目标 Object 的读授权,不是 Action grant 的 scope**。
+  `actions-and-transactions.md` 写的是 "`all` adds no data-scope predicate",照此理解必然踩坑;
+  `identity-handler-delivery.md` 还把一条走不通的方案("通过 identity 关系解析调用方 Profile")
+  与可用方案并列,代价是一整轮。
+
+同一条授权决定要改 6 处:`backend/model` roles、`navigation-role-menus.json`、前端 `navigation.ts`
+的 `permission`、`App.tsx` 的 `<Protected>`、mock 的 `demoAccounts.permissions`、以及 Go 与浏览器两侧
+的断言。漏改任一处都在不同检查点以完全不同的形式失败。代理自己给出的首选建议与此一致:
+由 `backend/model` 的 roles 生成前端可消费的权限清单,同时喂导航校验与 mock 账户。
+
+### 代理报告里其它值得修的(按代价)
+
+`project check` 的 `project.source_call_result_discarded` 与 `backend-runtime.md` 明确写的豁免条款冲突
+(四个 Handler 各中一次);`prd-from-plan.py` 生成的 §9 自相矛盾(同一张表一行说平台先拒、另一行要求断言
+Handler code)、§10 表头分隔行多一列、§6 计算行只渲染 15 格而表头声明 18 列、§8 首格不是裸 `AUTHOR`;
+`apply-model.sh` 的第二种停点(`project_source_conflicts`,把上一轮的实现文件记成 seed)没有任何文档;
+`compile-project-navigation.mjs` 的必填参数与菜单 label 形状没写;`bootstrap-static-product.mjs` 与
+`frontend-install` 的命令顺序互斥;`date` 类型在 Action 输出是 RFC 3339 而在 Report 列与 Mock 里是
+`YYYY-MM-DD`(mock 绿、runtime 才炸)。
