@@ -899,3 +899,51 @@ runtime 41.6 → 15.2,后端在分母 +44% 的情况下还略降。多出来的�
 - **工具链三连**:pnpm 12 的 `allowBuilds` 写法(Skill 文档停留在 pnpm 9/10)、runner 依赖未被 scaffold
   声明的 `playwright` 包、scaffold 钉的 Playwright 版本与机器缓存里的浏览器 revision 对不上。
 - **`prd-from-plan.py` 把四条绑定了后端的路由一律写成 `frontend_only`**,需要人工改回 `backend_bound`。
+
+## mini-08(需求 A 请假审批,0.3.66 + runtime v0.1.36,2026-09-12 08:03–09:17)
+
+**78.9 min / 79.7 M ctx / 381 次工具调用 / 617 KB skill 文档。**
+对照 mini-06(同需求,0.3.63 + v0.1.34)85.3 / 106.6 M / 447 次;
+对照 mini-04(同需求,基线)98.9 / 125.7 M / 520 次。
+**相对基线:时间 −20%,上下文 −37%,调用次数 −27%。**
+
+| 阶段 | mini-04 | mini-06 | mini-08 | 说明 |
+|---|---|---|---|---|
+| contract | 17.5 | 10.3 | **8.9** | `model plan` 一轮过;两次 reopen 合计 41 s |
+| frontend | 31.2 | 24.9 | **22.2** | 三次 mock 全过(21/22/22 s) |
+| backend | 23.9(17 FAPI) | 37.7(16 FAPI) | **38.2**(12 FAPI) | backend-check 一次过 198 s |
+| runtime | 26.3 | 7.8 | **4.5** | 1 次失败(产品自身用例缺陷)+ 1 次通过 |
+
+独立 verify(全新数据库,我自己跑):backend IA **12/12 initial + 12/12 restart**(各 47 s),
+runtime 浏览器 **10/10**,mock **10/10**。没有任何断言被放宽。
+
+### 三条预注册判定的结果(规则写在 /tmp/mini08-analysis-plan.md,开跑前落盘)
+
+**1. 总时长 < 80 min:达成(78.9)。** 按规则"继续沿当前方向做减法"。
+可指认的计数:contract 少了一轮 `model plan` 返工,runtime 段从 2 次失败降到 1 次,
+且那 1 次是产品自己的用例写错(切回成员时 `switchAccount` 登的是固定 member 账号),不是平台缺陷。
+
+**2. FAPI 分母落在 12,预测区间是 15–18 —— 规则判"约束无效",但数据说的是另一回事。**
+翻出 mini-06 的 inventory 对比才看清:mini-06 的 16 行里只有 **10 个互不相同的接口**,
+`leave_request.submit` 一个接口被拆成 SUBMIT / SUBMIT-OVERLAP / SUBMIT-REFUSED 三行,
+approve 拆两行,两个 Report 各拆两行。mini-08 的 12 行是 **12 个互不相同的接口**(比 mini-06 多 2 个)。
+也就是说任务书里的粒度约束**生效了**,失效的是我那个 15–18 的预测区间 —— 它是拿"含场景重复的行数"当基准算的。
+每行的观测数没降(5.2 → 5.0),越权、匿名、业务否决(重叠请假、空理由、超长理由、重复邮箱、超大分页)
+全部还在断,只是从"一个场景一行"折进了"一个接口一个测试"。**覆盖没被削弱,分母被修正了。**
+
+规则里"改为用机器检查"这一条照做了,而且它本来就不只是评估卫生问题:inventory 的行数是每次审计
+对外报的分母("N of M live interfaces verified")。一个接口挂在多个 FAPI ID 下,会让交付报出
+16 个已验证接口而前端其实只调了 10 个。plane 侧 `interface_acceptance.go` 现在拒绝第二行去认领
+前一行已经认领过的前端 surface,并直接说明场景该折到哪里;两条不同前端路径打同一个 runtime 操作
+(别名)仍然合法,因为那确实是前端真会调的第二个 surface。提交 8758bdc。
+
+**3. Report 分桶:该类关闭。** 全程没有"mock 通过但 runtime 读到空值"这一类失败;
+产品用了 0.3.66 脚手架里的 `reportValue` 跨桶读法。这是 mini-05 与 mini-07 两个需求各自唯一一次
+runtime 失败的根因,两个需求现在都不再复现。
+
+### 本轮新暴露的
+
+- **验收用例里的"切账号"没有对象化**:唯一一次 runtime 失败是用例自己把 `switchAccount` 登成了
+  固定 member 账号,而不是该用例新建的那个成员。mock 轮发现不了(mock 不区分身份)。
+- **skill 文档读取仍有重复**:`verification.md` 读 2 次、`backend-model.md` 读 3 次、
+  `domainry-builder-v1/SKILL.md` 读 2 次,617 KB 里约三分之一是重读。这是下一个可指认的上下文成本。
