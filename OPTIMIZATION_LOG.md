@@ -1184,3 +1184,92 @@ Plane 生成 SDK 要求 `d9990bc8…`,而它用来构建项目 Runtime 模块的
   源码 grep 看着是对的,浏览器里还在发旧字段,极易误判成"平台没修好"。
 - **Runtime 输入校验先于 Handler**:声明契约已经守住的字段,Handler 自己的 `*_required` 码永远到不了网线上
   (空白必填文本是 `backend.validation.required`)。写进契约阶段那份 Runtime 事实清单。
+
+## mini-14(需求 A 请假审批,0.3.75 + runtimeext `9d2996b3…`,2026-09-12 20:47–22:17)
+
+**92.2 min / 108.8 M ctx / 474 次调用 / 627 KB 文档 / 12 个接口。**
+对照 mini-12(需求 A 至今最快):67.9 / 87.1 / 405 / 1032 / 11。**慢了 24.3 min。**
+
+独立 verify(全新数据库,我自己跑):backend IA **12/12 initial + 12/12 restart**,
+runtime 浏览器 **10/10**,**同一个库再跑一次仍 10/10**,mock **10/10**,theme `passed`。
+断言一条没动过。
+
+### 阶段对照(两轮都用同一个剖析器)
+
+| 阶段 | mini-12 | mini-14 | 差 |
+|---|---|---|---|
+| 契约 | 7.1 | 7.9 | +0.8 |
+| 前端 | 24.0 | 24.6 | +0.6 |
+| **后端** | **22.9** | **37.9** | **+15.0** |
+| **runtime 验收** | **9.1** | **16.8** | **+7.7** |
+| 收尾 | 2.7 | 3.5 | +0.8 |
+
+**契约与前端持平 —— 这一轮变慢的全部在后端与 runtime 两段。**
+
+### 四条预注册判定的结果
+
+**1. 总时长 > 75,按规则先查 runtime 段有没有回涨:涨了(9.1 → 16.8),但更大的一块在后端。** 见下。
+
+**2. runtime 验收 16.8,落在"指认是哪一次失败"的 10–20 带。**
+失败是登录后的过渡路由:产品先跳 `/`(决策点)再跳 `/change-password`,
+而测试助手把"离开 `/login`"当成已落地,于是跳过了强制改密,之后每条断言都在等超时。
+**但真正值钱的不是这条失败,是它的单价** —— 见下面那节。
+
+**3. 文档读入 627 KB(mini-12 是 1032 KB),`builder-v1/SKILL.md` 在本轮的读取清单里根本没出现**
+(mini-12 读了 6 次,34 KB/次)。导航角色菜单义务从 SKILL.md 正文挪进实现包的
+`before_finalize` 这条**决定性生效**,这一类结案。
+
+**4. `before_finalize` 里新增的 `ia` 被照做了:** finalize 之前跑过,finalize 之后没有因为用例问题返工。
+
+### 本轮最有价值的一条:会话准备的失败单价是普通断言失败的 7 倍
+
+对齐两轮的 stage-log,同一件事看得很清楚:
+
+| | mini-12 的三次 runtime ui-check | mini-14 的两次 |
+|---|---|---|
+| 每次耗时 | 80 s(失败)/ 93 s(失败)/ 61 s(通过) | **569 s(失败)** / 132 s(通过) |
+
+mini-12 的失败是**普通断言失败**(驳回后行状态没刷新):断言立刻判假,几秒结束。
+mini-14 的失败在 **`prepareSession`**:会话没准备好,于是**每一条 spec 都各自等满 120 s 的 test timeout**,
+12 条并行跑下来就是 569 s。**一个登录路径的缺陷,代价比任何别的缺陷高一个数量级,
+因为它的失败形态是"等",不是"判假"。**
+
+我 53e8125 为这条加的是 `prepareSession` 里的一句注释(要等会话真正落定的路由,
+而不是只等"离开 `/login`")。注释在 TODO 骨架里,只劝,不拦。
+**下一轮的减法目标就是把这种"等"变成"判假"**:给骨架一个有界的
+`awaitAuthenticatedRoute(page, routes, {timeout})`,超时就抛出点名当前卡在哪条路由、
+以及三个候选原因的错误。12 条 spec × 120 s 会变成 12 × ~15 s,
+而且抛出的那句话,正是代理在 22:09 花两次 `sed` 读 helpers.ts 才自己想明白的东西。
+
+### 后端段 +15 min:一次 backend-check 占掉 13.6 min,其中有我可以省掉的部分
+
+backend-check 21:45:34 发起,21:59:10 拿到结果。12 个 FAPI × 两个 phase 的真实
+Runtime 验收本身就重(mini-12 是 11 个 FAPI、162 s),但这中间有 **6 次纯轮询调用**
+(`ps aux | grep -c`、`wc -c` 输出文件、两次 `date -u; ps -eo etime`、一次 `echo waiting-for-backend-check`),
+才终于改用 `tail -f --pid` 阻塞等待。这 6 次不产出任何信息,也不缩短等待。
+
+### 本轮修复的平台缺陷
+
+**叶子层的拒绝被发布成 500(runtime,本轮末尾自查发现,不是代理报的)。**
+`GET /records/<object>?filters={"not_a_field":"x"}` 应当是 400
+`backend.validation.filter_field_unknown` 并点名那个键,实测是
+**500 `backend.internal`,`params: null`**,键被丢掉了。
+
+原因链是完整的:foundation 把 `apperror.CodedError` 定义为"叶子边界上不带 kind 的稳定客户码,
+由 Application 层赋予 kind";而 `apperror.KindOf` 对任何不是 `*AppError` 的错误一律回答
+`KindInternal` —— `application/` 与 `transport/` 里**没有任何一处**做那个映射。
+于是过滤校验的拒绝一路裸奔到 HTTP 边界,被默认成服务器故障。
+
+**我上一轮(e9bf871)修错了位置。** 那次改的是 `recordInternalError`(仓储分支),
+而过滤校验在仓储调用**之前**就返回了,根本走不到那个函数。
+我当时没有端到端验证,是这一轮补做的探针把它证伪的。
+
+现修:`recordClassifyLeafRefusal` 在拒绝被抛出的地方给它 kind —— 已带 kind 的错误原样透传
+(策略拒绝仍是 403,不会被改写成 400),不是编码拒绝的真实故障也原样透传(仍是 500)。
+并加了一条走真实路由、真实装配、真实库的端到端测试
+(`TestRuntimeUnknownListFilterIsABadRequest`),**撤掉修复反向验证过它会以那句一模一样的 500 失败。**
+
+**顺带记一条工作方法的教训:** 交付项目的 `backend/go.mod` 依赖的是**已发布的** runtime 版本
+(`v0.0.0-source-326a5fa4…`),不是我的本机检出。所以任何本机 runtime 改动都不会在
+交付项目的 dev-runtime 上显形 —— 想端到端验证 runtime 修复,要么发版,
+要么在 runtime 仓库里用 `bootstrap/integrationtest` 的真实装配验。这一轮用的是后者。
