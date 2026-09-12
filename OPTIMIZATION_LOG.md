@@ -1056,3 +1056,45 @@ runtime 浏览器 **10/10**(172 s),mock **10/10**(26 s),theme 门 `passed`。
 冻结时 `test_path` 只校验"在 `backend/` 下且以 `_test.go` 结尾",而 builder-v1 只编译
 `backend/tests/interfaceacceptance/` 这一个包。代理按自然命名冻结了 `backend/tests/interface/`,
 到后端阶段才发现,代价是一次 full reopen。已改成冻结时就要求那个目录(同一提交)。
+
+## mini-11(需求 B 设备报修,0.3.69 + runtime v0.1.37,2026-09-12 13:30–15:48)
+
+**143.1 min / 167.5 M ctx / 615 次调用 / 840 KB 文档 / 11 个接口。**
+对照 mini-09(同需求,0.3.67 + v0.1.36)104.6 / 256.0 M / 898 次 / 901 KB / 10 个接口。
+**上下文 −35%,调用 −32%;时间 +37%。**
+
+独立 verify(全新数据库,我自己跑):backend IA **11/11 initial + 11/11 restart**(48 s / 52 s),
+runtime 浏览器 **11/11**(142 s),mock **11/11**(20 s),theme 门 `passed`。11 行 = 11 个互不相同接口。
+
+### 五条预注册判定的结果(规则写在 /tmp/mini11-analysis-plan.md)
+
+**1. 文档读入:主改动成立。`verification.md` 从 5 次降到 1 次。**
+总文档 840 KB,略高于 800 KB 的线,但这一轮多跑了 6 次 runtime 诊断轮,其它文档因此被反复回查
+(`project-mutation.md` 4 次、`domainry-project-builder/SKILL.md` 4 次)。
+**那句"每次进入都整篇重读"确实是驱动因素,改掉它就是 −4 次 × 55 KB。**
+
+**2. 上下文 167.5 M,落在 120–180 的"部分改善"区间。** 从 256 M 降下来主要靠两件事:
+文档重读减少,以及 runtime 诊断轮里不再反复回读同一份大文档。剩下的大头是 runtime 段本身。
+
+**3. 总时长 143.1 min,超过 105 的上限。按规则先隔离 v0.1.37 —— 不是它。**
+runtime 验收段单独占 **68 min(49%)**,6 次诊断轮 + 2 次完整跑失败。失败原因逐条都不是平台契约问题:
+强制改密表单还没渲染就被探测、集成库是空的而用例假设有数据、`a[href="/technicians"]` 在响应式导航下
+命中桌面与折叠两套、`switchAccount` 在已登录状态下走 `/login` 被重定向、以及 `readback` 在列表还在
+加载时找不到回链**退化成 goForward 后一直等 URL 直到 120 s 超时**。
+
+**4. `;org` 陷阱:文档修复生效。** 模型里 `technician_profile.read;all`,runtime 轮没有出现空列表这一类。
+
+**5. `readback` 的 runtime 回退:验到了,但修得不全。**
+需求 B 的维修工导航确实只有一项,`no in-app link leaves this route` 没有再出现(离开那一半修对了);
+**但回来那一半根本没有回退** —— 找不到 `a[href=path]` 就 `goForward()`,然后 `waitForURL` 无超时,
+整个用例挂死到 120 s。这一条单独吃掉了那次 468 s 的 runtime 轮。
+
+### 本轮的修复(提交 9ccecbc)
+
+- **接口唯一性再前移到 `freeze`**:mini-11 的 `freeze` 放行了 `work_order.register` 上的两条绑定,
+  派生时才拒,赔了两次 reopen + 两次 mock 重跑。现在冻结时就按 (source, operation) 全计划去重。
+  这条规则的位置终于回到我最初预注册时写的地方 —— 我把它放低过两级,每低一级就多赔一个阶段的返工。
+- **`readback` 回来那一半**:先等回链挂载(5 s),再失败时 runtime 模式直接 `goto`,mock 模式抛出
+  说得清的错;`waitForURL` 加 10 s 上限,不再靠测试超时兜底。
+- **"集成库是空的"写进 helpers 既有的那条 nonce 规则旁边**:Mock 发的是预置场景,Runtime 从空开始,
+  用例要断言的行必须自己造 —— 包括那些只被指派、从不登录的账号。mini-09 与 mini-11 两轮都栽在这里。
