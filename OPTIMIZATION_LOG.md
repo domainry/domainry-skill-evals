@@ -947,3 +947,58 @@ runtime 失败的根因,两个需求现在都不再复现。
   固定 member 账号,而不是该用例新建的那个成员。mock 轮发现不了(mock 不区分身份)。
 - **skill 文档读取仍有重复**:`verification.md` 读 2 次、`backend-model.md` 读 3 次、
   `domainry-builder-v1/SKILL.md` 读 2 次,617 KB 里约三分之一是重读。这是下一个可指认的上下文成本。
+
+## mini-09(需求 B 设备报修,0.3.67 + runtime v0.1.36,2026-09-12 09:43–11:26)
+
+**104.6 min / 256.0 M ctx / 898 次工具调用 / 901 KB skill 文档。**
+对照 mini-07(同需求,0.3.65 + v0.1.34)95.8 / 100.7 M。
+**这一轮是退步:时间 +9%,上下文 +154%,调用次数翻倍。**
+
+独立 verify(全新数据库,我自己跑):backend IA **10/10 initial + 10/10 restart**(各 31 s),
+runtime 浏览器 **10/10**(160 s),mock **10/10**(98 s),theme 门 `passed`、四个 token 无一留在默认值。
+交付质量没问题,退步全在过程。
+
+| 阶段 | mini-07 | mini-09 | 说明 |
+|---|---|---|---|
+| contract | 14.7 | **6.5** | `model plan` 2 轮,但没有 mini-07 那种反复 |
+| frontend | 43.0 | **35.2** | 三次 mock(137/104/97 s),前两次失败都是产品自身缺陷 |
+| backend | 26.6 | **30.1** | backend-check 一次过 170 s |
+| reopen 标记 | — | **2.2** | 两次:`acceptance.backend.source` 词表、16→10 FAPI |
+| runtime + check | 15.2 | **25.3** | runtime 轮 5 次:149/350/353/259/252 s |
+
+### 四条预注册判定的结果(规则写在 /tmp/mini09-analysis-plan.md,开跑前落盘)
+
+**1. 总时长 > 100 → 规则要求先查"登录页前置 / theme"这条唯一没被验证过的改动。查了,不是它。**
+前端阶段反而从 43.0 降到 35.2。超时出在两处:runtime 轮跑了 5 次(mini-07 是 2 次),
+以及我自己上一轮加的唯一性检查逼出的一次 full reopen。
+
+**2. theme 门:通过,但顺序只对了一半。** `tokens_left_at_default` 为空,产品不再是起步调色板。
+按文件时间:`shadcn-theme.css` 10:03、`brand.ts` 10:04,都在 `frontend-install`(10:04)之前 ——
+**视觉体系确实先定了**;但 `LoginPage.tsx` 10:13、`AppShell.tsx` 10:28,都在安装之后。
+即"先定调色板、后写登录页"。用户要的结果(别所有系统一个颜色)拿到了,而且现在是机器在守。
+**不再为同一个结果加第二道顺序门** —— 那是把已经成立的结果再检查一遍。
+
+**3. FAPI 分母:检查有效,但拦得太晚,而且文档在拆台。**
+需求 B 的真实接口数是 **10**。mini-07 报了 23 行,mini-09 报 10 行 —— 两轮覆盖的是**同样 10 个接口**,
+mini-07 只是把同一个接口按场景拆成了多行。mini-09 的 10 个测试里有 14 处 `mustReject`、12 处 `mustDeny`、
+24 处 `mustOK`,位置冲突、301 字描述、非本人开始、已完成不可改、调度员不能代完成、超大分页全部还在断,
+**场景是被折进测试体,不是被删掉**。
+代价是一次 full reopen:`project check` 在 backend 阶段跑了 22 分钟后才拒,PRD 和接口测试都已写完。
+而 `batch-lifecycle.md` 当时还写着"Multiple bindings may prove one requirement",
+`inventory-from-plan.py` 也照样生成了 16 行 —— 文档、生成器、校验器三方打架,是我上一轮改动留下的口子。
+已修:派生时就拒(`inventory-from-plan.py` 点名两个 FAPI ID 和它们共用的 surface),
+文档改成"多条绑定指的是不同接口;同一接口的第二个场景属于那条绑定的测试内部"。提交 24462de。
+
+**4. Report 分桶:在它原本出问题的需求上复验通过。** 全程没有"mock 通过、runtime 读到空值"这一类。
+两个需求各自独立确认,该类关闭。
+
+### 本轮暴露的两个真问题
+
+- **runtime 轮里约 40% 的时间在复证一个没动过的 Mock 原型**:改一处只在 runtime 分支执行的前端测试,
+  就要重跑 97 s 的整套 mock 验收,因为回执是按整棵前端源码树的哈希算的,不是按 mock 实际执行到的东西。
+  5 次 runtime 轮里有 4 次付了这笔钱。**这是目前最大的一块可指认时间成本。**
+- **我的隔离协议把 Plane 弄挂了**:`chmod 000 /home/ubuntu/domainry-plane` 之后 `apply model` 报
+  `application_delivery_unavailable … permission denied`,因为 Plane 要从仓库里的 `.codex-run` 取交付件。
+  代理只好把它改成 `chmod 100` 才能继续。核对过整轮 transcript:**没有读过 plane/runtime 的任何源码或文档,
+  也没碰过其它 mini 目录**,只出现过 plane 日志与二进制的路径。已改为 `~/.claude/handoffs/tools/eval-isolate.sh`:
+  只锁 `internal/`、`skills/`、`docs/`、`assets/`、`scripts/`、`cmd/` 这些"答案目录",仓库根保持可遍历。
