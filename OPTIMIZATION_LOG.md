@@ -1098,3 +1098,48 @@ runtime 验收段单独占 **68 min(49%)**,6 次诊断轮 + 2 次完整跑失败
   说得清的错;`waitForURL` 加 10 s 上限,不再靠测试超时兜底。
 - **"集成库是空的"写进 helpers 既有的那条 nonce 规则旁边**:Mock 发的是预置场景,Runtime 从空开始,
   用例要断言的行必须自己造 —— 包括那些只被指派、从不登录的账号。mini-09 与 mini-11 两轮都栽在这里。
+
+## mini-12(需求 A 请假审批,0.3.70 + runtime v0.1.37,2026-09-12 16:34–17:39)
+
+**67.9 min / 87.1 M ctx / 405 次调用 / 1031 KB 文档 / 11 个接口。**
+对照 mini-10(同需求,0.3.68)86.4 / 90.8 M / 423 次 / 1132 KB:**时间 −21%**。
+对照此前需求 A 的最好成绩 mini-08(78.9 min):**−14%,是需求 A 至今最快的一轮。**
+
+独立 verify(全新数据库,我自己跑):backend IA **11/11 initial + 11/11 restart**(各 28 s),
+runtime 浏览器 **10/10**(64 s),theme 门 `passed`。
+**另外我在同一个库上又跑了一次 runtime**(不 `--fresh`),仍然 10/10 —— 可重跑性成立。
+
+| 阶段 | mini-08 | mini-10 | mini-12 |
+|---|---|---|---|
+| contract | 8.9 | ~10 | **7.1** |
+| frontend + mock | 22.2 | ~24.5 | **24.0** |
+| backend | 38.2 | ~32.8 | **22.9** |
+| **runtime** | 4.5 | 13.8 | **9.4** |
+
+### 四条预注册判定的结果(规则写在 /tmp/mini12-analysis-plan.md)
+
+**1. runtime 验收段(主指标)= 9.4 min,落在 "< 10 min 算修复生效" 的区间。**
+mini-11 是 68.1 min。三条修复(`readback` 回程、集成库从空开始、接口唯一性前移)直接打在这一段上。
+本轮 runtime 轮 2 次失败 + 1 次通过,两次失败都是产品自身缺陷(过滤切换时旧行未被丢弃导致读到陈旧
+`data-request-id`;成员表没有用 Alert 原语所以 `getByRole('alert')` 找不到),**没有一次是 helper 挂死**。
+
+**2. 总时长 67.9 < 80,明显改善。** 后端段从 32.8 降到 22.9 是最大的一块。
+
+**3. 文档 1031 KB、`verification.md` 读 3 次 —— 按规则"需求 A 的驱动因素与需求 B 不同",逐个文件看:
+本轮最大的重读是 `domainry-builder-v1/SKILL.md` 读了 6 次(34 KB/次)。**
+原因代理说得很清楚:`backend/config/navigation-role-menus.json` 是后端阶段的硬义务,
+但它的 schema 只在 `SKILL.md` 正文的一句话里,实现包(`stage_boundary.before_finalize`)完全没提,
+于是整个后端写完后才被 `project.navigation_invalid` 拦下,只能回头一遍遍 grep SKILL.md。
+**下一轮的减法目标就是它。**
+
+**4. 接口唯一性在 freeze:结案。本轮零 reopen。** 位置从 `project check`(24 min)→ 派生(2 min)→ freeze(0)。
+
+### 本轮修复的平台缺陷(提交 60d9e3a)
+
+- **`generate-acceptance-skeletons.py` 为 `/auth/change-password` 生成不能编译的 Go**:
+  该路径不匹配任何路由模式,落到 `call_expression` 的默认分支返回裸名 `response`,于是写出
+  `response := response`;同一个文件还对这一个变量既断 2xx 又断 401,证据 source 归到了 `runtime.records`。
+  现在它是第三条 Identity 会话路由:单独分类、归到 `runtime.identity`、自己的代码块里点名该用哪个
+  harness 原语发起请求。**用 mini-12 的 11 个骨架重新生成并 `go vet` 过整个包验证。**
+- **常驻 Runtime 账号会把上一轮的行带进下一轮**,被产品自己的唯一性/重叠规则拒掉。
+  nonce 规则原本只覆盖标签,现在覆盖业务键(登录名、日期区间)。
