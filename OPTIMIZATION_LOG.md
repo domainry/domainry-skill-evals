@@ -712,3 +712,70 @@ mini-01 分阶段:契约 9.7 min / 1.6 M ctx;前端 24.3 / 34.2 M;后端合计 4
 - Plane:identity-delivery 的 `initial_credential` 生成为 `{ initial_password, must_change_password }` 对象类型;packet 的 stage_boundary 写明 `apply model` 后要 `apply compose`;`apply-model.sh` 不再打印它自己不接受的 `--reason` 用法。
 - PB:acceptance scaffold 增加 `RUNTIME_ADMIN`(读 dev-runtime 的 `DOMAINRY_MANAGED_RUNTIME_*` 导出)与 `rotatedPasswordFor()`(按 login id 派生,可跨轮复现),`prepareSession`/`switchAccount` 注释写明改密永久生效、enrol 幂等回落、worker 重启会丢 registry;runtime 的 `next_action` 改成先 `eval dev-runtime.sh env --with-secrets`;freeze 新增两条 oracle 警告(logout 撤销、降序+游标);所有权审计的 raw transport 消息说明如何把传输注入交付客户端。
 - 文档:verification.md(filter 键契约、Runtime 用 `params.field` 而 Handler 用自己的 params)、backend-model.md(Action 入参上的长度修饰符是落库约束,不校验 Action payload)、两个前端交接文档(凭据对象形状、改密永久、enrol 非幂等、CORS 凭据)、batch-acceptance.md(nonce 标签要放进需求本来就渲染的字段,不要为验收给产品加列)。
+
+## mini-05(skill 0.3.62 + runtime v0.1.32,需求 B 复测)
+
+对照 mini-03(同需求 B,skill 0.3.59):**104.8 min / 129 M → 106.4 min / 96.7 M**。
+时间基本持平,**上下文降 25%**;reopen **3 → 0**;独立 verify 全绿。
+
+| 阶段 | mini-03 | mini-05 | 说明 |
+|---|---|---|---|
+| contract | 14.9 | **10.6** | `model plan` 2 轮(mini-03 是 3 轮 + reopen) |
+| frontend | — | 23.1 | mock ui-check 一次过,28 s |
+| backend | 40.6(19 FAPI) | **27.7**(16 FAPI) | backend-check 一次过 189 s |
+| runtime | 27.8 | **41.6** | 3 次 runtime ui-check(133 s 失败 / 108 s 失败 / 113 s 通过)+ 2 次强制回跑 mock |
+| 合计 | 104.8 | 103.2(阶段日志)/ 106.4(剖析口径) | 405 次工具调用,715 KB skill 文档 |
+
+独立 verify(我在全新数据库上自己跑,不信代理自报):backend IA **16/16 initial + 16/16 restart**,
+runtime 浏览器验收 **10/10**,mock **10/10**。抽查代理自称"绕过"的两处均非弱化:排序断言只把平台
+自相矛盾的种子行 `WO-001` 排除,产品登记的行仍全量断"紧急程度降序 + 登记时间倒序";
+`quality.spec.ts` 的零控制台错误基线原样保留。
+
+### 三条预注册判定的结果(规则写在 /tmp/mini05-analysis-plan.md,开跑前落盘)
+
+**1. 契约阶段文档:生效。** 按阶段归因转录里的文档读取:`verification.md` 契约阶段 **0 次**、后端 2 次;
+`backend-runtime.md` 契约阶段 **0 次**、后端 1 次。这正是 0.3.62 把九条 Runtime 事实搬进
+`contract-stage.md` 想要的效果。按预注册规则,**同样手法用到后端阶段**(那里仍整份读 54 KB 的
+verification.md 两次)。
+但契约阶段文档量反而从 412 KB 涨到 473 KB:`model capability` 的 `read_order` 本身要求读
+`backend-model.md`(46 KB,**读了 5 次** ≈ 230 KB),这是契约阶段现在最大的单项。
+
+**2. reopen:0(mini-03 是 3)。** freeze 新增的两条 oracle 警告本轮没派上用场,按规则**不把警告升级成硬拒绝**。
+
+**3. runtime 阶段 41.6 min > 20 min → 按规则判定"归因错了"。** 需要说清楚它错在哪:
+mini-04 归因的五条(CORS 凭据、`initial_credential` 类型、改密永久、enrol 非幂等、nonce 逼加列)
+**本轮一条都没有复发**,修复都命中了。但 runtime 阶段反而更长,因为两条**新的平台自相矛盾**填了进来:
+
+- **托管 Runtime 给 `action_only` 对象播种了产品路径不可能产生的行。** `work_order` 是 `action_only`
+  (状态、工单号、`urgency_rank` 全由 Handler 派生),种子行却是 `urgency=low` + `urgency_rank=3`
+  两者互斥。验收断"按紧急程度降序"必挂,而这行永远不可能由产品产生。
+- **static-product-ui 交接文档的两条要求在全新数据库上不可能同时满足。** 它要求 `prepareSession`
+  "先试轮换口令,失败回落一次性凭据",又要求静态质量基线"零控制台错误";全新库上第一次登录必然
+  `403`,浏览器必然记一条控制台错误。
+
+所以真正的结论不是"某几条事实没写进文档",而是:**runtime 阶段是整条流水线里第一次真正跨进程集成的
+地方,任何平台侧的不一致都只能在这里被发现,再补多少文档事实也不会缩短它。** 减少它的唯一办法是让
+不一致更早暴露(Mock 层做传输/权限仿真),以及把平台自身的不一致修掉。
+
+### 本轮修在源码的(按实测代价排序)
+
+代理报告里的流程问题共 10 条,按它实际付出的代价排:
+
+1. `EnrollIdentityUserMutation.Status` 不写 `"active"` → 整条 identity 交付 `400
+   backend.identity.profile_binding_target_invalid`,`params` 是 `null`,Runtime 日志零匹配;
+   15/16 用例同时红。唯一写了这条的文档属于 model 阶段阅读计划,后端实现阶段根本不读它。
+2. `dev-runtime.sh start` 对已运行实例复用**旧二进制**且只提示 `--fresh`,改完 Handler 重跑看起来像
+   "修复没生效",浪费整整一轮。
+3. `model capability` 内联的 `schema.object.ux.config` 机器契约缺 `cardinality` /
+   `business_identity` / `default_visibility`,而文档正文是对的 —— 机器契约被明确要求"只用它返回的
+   exact keys",却是三方里唯一错的一方,`model plan` 因此多返一轮。
+4. 上面两条平台自相矛盾(种子行、交接文档)。
+5. `project.navigation_invalid` 的"全有或全无"规则只在后端阶段暴露;交接文档写的是 "may author",实为 must。
+6. `project.source_binary_float_forbidden` 拦的是标识符而非语义,而生成代码自己遍地 `float64`
+   (`CompleteInput.ActualHours`),项目里也没有它建议的 `schema.NumberFromDecimalString`,只能靠不写出类型名绕过。
+7. Runtime 日志 `http_request` 的 `path` 恒为 `"/"`,排障时无法定位是哪个路由被拒。
+
+### 仍未动的结构性项
+
+Mock 对传输与权限失明;同一条业务规则在四处重复表达(模型 roles → 前端 mock 权限数组手抄 →
+导航 permission → PRD §7);验收断言前后端各写一遍;dev-runtime 生命周期知识散在三份文档且都不全。
