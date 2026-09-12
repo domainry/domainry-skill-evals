@@ -1002,3 +1002,57 @@ mini-07 只是把同一个接口按场景拆成了多行。mini-09 的 10 个测
   代理只好把它改成 `chmod 100` 才能继续。核对过整轮 transcript:**没有读过 plane/runtime 的任何源码或文档,
   也没碰过其它 mini 目录**,只出现过 plane 日志与二进制的路径。已改为 `~/.claude/handoffs/tools/eval-isolate.sh`:
   只锁 `internal/`、`skills/`、`docs/`、`assets/`、`scripts/`、`cmd/` 这些"答案目录",仓库根保持可遍历。
+
+## mini-10(需求 A 请假审批,0.3.68 + runtime v0.1.37,2026-09-12 11:47–13:08)
+
+**86.4 min / 90.8 M ctx / 423 次工具调用 / 1132 KB skill 文档。**
+对照 mini-08(同需求,0.3.66 + v0.1.36)78.9 / 79.7 M / 381 次 / 617 KB。
+**时间 +9.5%,上下文 +14%,文档读入几乎翻倍。**
+
+独立 verify(全新数据库,我自己跑):backend IA **10/10 initial + 10/10 restart**(各 41 s),
+runtime 浏览器 **10/10**(172 s),mock **10/10**(26 s),theme 门 `passed`。
+10 个接口、50 项观测,测试体里 20 处 `mustReject` + 14 处 `mustDeny` + 30 处 `mustOK`。
+
+| 阶段 | mini-08 | mini-10 | 说明 |
+|---|---|---|---|
+| contract | 8.9 | **~10** | `apply model` 一次过;三次 reopen 的重入合计 2 min |
+| frontend + mock | 22.2 | **~24.5** | mock 四轮各 23–28 s |
+| backend | 38.2 | **~32.8** | backend-check 200–210 s,两轮 |
+| runtime | 4.5 | **~13.8** | 两次失败 + 一次模型演进,全部出自同一个根因 |
+
+### 四条预注册判定的结果(规则写在 /tmp/mini10-analysis-plan.md,开跑前落盘)
+
+**1. 总时长 86.4,落在 80–90 的"持平"区间,规则要求指到具体阶段计数才下结论。指得到:**
+后端段降了 5.4 min,runtime 段涨了 9.3 min,而 runtime 段的全部增量出自下面那个 `;org` 根因。
+去掉它,这一轮与 mini-08 持平或更低。
+
+**2. 上下文 90.8 M,落在 90–120 的"报事实"区间。吃掉它的是文档读入:1132 KB,mini-08 是 617 KB。**
+按段看,前端构建段 30.2 M、后端两段 21.3 + 11.3 M。下一轮的减法目标就是这条。
+
+**3. 接口唯一性:结案。** FAPI 10 行 = 10 个互不相同接口,**三次 reopen 没有一次是唯一性引起的**。
+派生时就拒(mini-09 的修复)生效了 —— mini-09 那种"跑到 backend 22 分钟才被拒"没有重演。
+
+**4. `readback` 与"只被提及的账号":两个症状都没再出现。** 但需求 A 的角色导航不止一项,
+所以 `readback` 的 runtime 回退**没有被真正触发**,只能记为"未复现",不能记为"已验证"。
+
+### 本轮最贵的发现:`;org` 对引导管理员是空集(约 15 min)
+
+`contract-stage.md` 教的是"identity-delivery Action 创建的 Profile 归调用者所有,所以给 Profile 授 `;org`"。
+实际行为:`;org` 比的是**记录的组织与调用者自己的组织**(identity SDK 里 `$subject.org_id`),
+而 `target_organization: explicit_or_sole_authorized_store` 把 Profile 建在门店组织里 ——
+引导工作区管理员挂在工作区根上,于是 `GET /records/member_profile` 对它返回 `total: 0`。
+三个浏览器用例同时炸(成员列表、申请列表、月度汇总,后两个因为 Report JOIN 了 `member_profile`)。
+
+**放大伤害的是 Mock 不施加任何 data scope**:mock 全绿、runtime 全红,而且后端接口验收也看不见它
+(接口用例用的是产品自己开通的 manager,人格正确)。这是"平台自相矛盾"这一类的再次出现 ——
+我在 mini-06/07 之后宣布它结案,结论下早了:**关掉的是那一批具体矛盾,不是这一类**。
+
+已修(提交 7250048):`contract-stage.md` 在讲 `;org` 的那一段就地补上组织归属这件事,
+并说明 Mock 看不见;顺带改正同一段里 `params.email` 这个 Runtime 根本不发布的键(实际是
+`params.actual` + `params.field_path`),这条 mini-08 与 mini-10 两轮都观测到过。
+
+### 另一条可机器化的返工
+
+冻结时 `test_path` 只校验"在 `backend/` 下且以 `_test.go` 结尾",而 builder-v1 只编译
+`backend/tests/interfaceacceptance/` 这一个包。代理按自然命名冻结了 `backend/tests/interface/`,
+到后端阶段才发现,代价是一次 full reopen。已改成冻结时就要求那个目录(同一提交)。
