@@ -844,3 +844,58 @@ Handler code)、§10 表头分隔行多一列、§6 计算行只渲染 15 格而
 `compile-project-navigation.mjs` 的必填参数与菜单 label 形状没写;`bootstrap-static-product.mjs` 与
 `frontend-install` 的命令顺序互斥;`date` 类型在 Action 输出是 RFC 3339 而在 Report 列与 Mock 里是
 `YYYY-MM-DD`(mock 绿、runtime 才炸)。
+
+## mini-07(skill 0.3.64 + runtime v0.1.34,需求 B 复测)
+
+对照 mini-05(同需求 B,0.3.62):**106.4 min / 96.7 M / 405 次 → 95.8 min / 100.7 M / 419 次**。
+时间 **-10.0%**,上下文 **+4.1%**。独立 verify 全绿。
+
+**分母变了,必须先说**:同一需求 B,本轮代理把它拆成 **23 条 FAPI**(mini-05 是 16 条),
+ui-check 11 个用例(mini-05 是 10 个)。所以"时间降、上下文略升"是在多做 44% 接口覆盖的前提下发生的。
+这是跨轮对照的一个真实噪声源:分母由代理的分解粒度决定,不由需求决定。下一轮的任务书要把
+"FAPI 分解粒度"这件事显式约束住,否则总时长不可比。
+
+| 阶段 | mini-05 | mini-07 | 说明 |
+|---|---|---|---|
+| contract | 10.6 | **14.7** | `model plan` 2 轮(第 1 轮被 `deletion_record` 拒) |
+| frontend | 23.1 | **43.0** | 三次 mock:458 s 失败 + 28 s 失败(端口占用)+ 26 s 通过 |
+| backend | 27.7(16 FAPI) | **26.6**(23 FAPI) | backend-check 一次过 241 s |
+| runtime | **41.6** | **15.2** | 2 次 runtime ui-check:167 s 失败 + 149 s 通过 |
+| 合计 | 106.4 | 95.8(剖析)/ 99.5(阶段日志) | 591 KB skill 文档(mini-05 是 715 KB) |
+
+独立 verify(全新数据库,我自己跑):backend IA **23/23 initial + 23/23 restart**,
+runtime 浏览器 **11/11**,mock **11/11**。`quality.spec.ts` 的零控制台错误基线原样保留。
+
+### 三条预注册判定的结果(规则写在 /tmp/mini07-analysis-plan.md,开跑前落盘)
+
+**1. 总时长 < 95 min:差一点没达到(95.8)。** 落在"部分成立"区间。但分阶段看方向是对的:
+runtime 41.6 → 15.2,后端在分母 +44% 的情况下还略降。多出来的时间几乎全在 frontend(23.1 → 43.0),
+而那一段的三次 mock 里,458 s 那次是**产品自身缺陷**(登录页在 `/` 上多调一次 `navigate("/")`,
+与 Landing 的 `<Navigate>` 相互抵消,路由停在 `/` 渲染空白),28 s 那次是**代理自己的环境失误**
+(上一次诊断留下的 vite 还占着 5774)。两者都不是 Skill 缺陷。
+
+**2. runtime 阶段 15.2 min:落在 15–25 的"仍有剩余摩擦"区间,但性质已经变了。**
+本轮唯一一次 runtime 失败不再是平台自相矛盾,而是 **Mock 保真度缺口**:
+`@domainry/business-client` 的 `ReportRow` 只有 `dimensions` / `measures` 两个桶,**没有任何文档说
+哪一列落在哪个桶**;代理按"聚合列 = measure"写产品并据此造 mock 数据,mock 11/11 全过,
+真实 Object SQL 报表却把非聚合数值列 `actual_hours_tenths` 发布在 `dimensions` 里。
+配合 mini-06(需求 A,runtime 7.8 min)看,**"平台自相矛盾"这一类可以结案**,
+剩下的是 Mock 与真实 Runtime 的语义差 —— 也就是一直被推迟的那个结构性项。
+
+**3. 授权发现循环:已关闭。** 全程没有 `backend.record.outside_scope`,没有探针脚本,
+授权相关的模型返工 0 轮(`model plan` 的 2 轮里唯一一次失败是 `deletion_record`)。
+
+### 本轮新暴露的(按代价)
+
+- **`backend-model.md` 教的业务流水号写法会被 `model plan` 直接拒**:它让 `handler.access` 声明
+  `deletion_record: ["list"]` 以免序号复用,而 `model capability` 根本不发布这个 Object,
+  返回 `model.action_data_object_not_found`。文档与编译器矛盾,代价是一轮 plan。
+- **`generate-acceptance-skeletons.py` 的"平台预检"清单不准**:它断言声明式输入契约的守卫在 HTTP
+  上观察不到,点名让人改断 `backend.validation.*`;但 `object_field` 上的 `max_length` **不在**这层预检里,
+  第 301 个字符是进到 Handler 才被拦。需要区分"必填/闭值域"(确实预检)与"长度/范围"(不预检)。
+- **ui-check 不对验收套件做类型检查**:`frontend/tsconfig.json` 的 `include` 不含 `tests`,
+  helpers.ts 里引用未定义的符号在 mock 轮全过(mock 分支不执行),到 runtime 轮才以 `ReferenceError` 炸。
+  `scaffold-acceptance` 生成 tsconfig 时应把 `tests/acceptance` 纳入 typecheck。
+- **工具链三连**:pnpm 12 的 `allowBuilds` 写法(Skill 文档停留在 pnpm 9/10)、runner 依赖未被 scaffold
+  声明的 `playwright` 包、scaffold 钉的 Playwright 版本与机器缓存里的浏览器 revision 对不上。
+- **`prd-from-plan.py` 把四条绑定了后端的路由一律写成 `frontend_only`**,需要人工改回 `backend_bound`。
