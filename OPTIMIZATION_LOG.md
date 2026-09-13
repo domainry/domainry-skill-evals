@@ -1919,3 +1919,82 @@ Runtime 分支承载业务 oracle,Mock 干脆不断这一段,**而不是另写�
   password 是机密不许塞 nonce。代价是一整轮 189 s 的 runtime ui-check。
 - `_ "time/tzdata"` 被 import 白名单禁止,宿主无 zoneinfo 时 `LoadLocation` 静默回落 UTC,
   工单号可能发错业务日 —— 项目对此无法自我保障。
+
+## mini-24(需求 A 请假审批,0.3.90 + runtimeext `a69b96a5…`,2026-09-13 15:34–17:07)
+
+**93.1 min / 134.8 M ctx / 533 次调用 / 662 KB 文档 / 12 个接口 / 10 个浏览器用例。**
+需求 A:mini-18 70.2/99.4/11 → mini-20 85.9/111.4/12 → mini-22 **63.7/101.6/11** → **mini-24 93.1/134.8/12**。
+**每接口 7.8 min / 11.2 M**(mini-20 是 7.2/9.3,mini-22 是 5.8/9.2)。**本轮是需求 A 最差的一轮。**
+
+三次 reopen + 两个 model 轮次;代理自己的归因:
+"时间大头是**授权与时间戳这两个平台语义的试错**(两个 model 轮次 + 两次 runtime 失败 ≈ 25 分钟),不是写业务代码。"
+
+### 独立 verify:全绿
+
+backend IA **12/12 initial + 12/12 restart**(各 43.8 s);
+runtime 同一个库**连跑三次:10/10(95 s)、10/10(92 s)、10/10(95 s)**;
+mock 10/10(28 s),`project check --scope all` = `valid`。
+
+### 那 25 分钟里,授权那一半是我自己造成的
+
+代理报告说关系授权的数据域规则又错了 —— **而且方向和 mini-22 正好相反**:
+mini-22 是"放宽 Action 没用,放宽目标对象才对";mini-24 是"放宽目标对象到 `;all` 没用
+(12 个里 7 个仍红、报错一字不变),放宽 Action 才 12/12 全绿"。
+
+**两边都对,是同一条规则的两面。** 我核过 mini-24 的模型:
+`leave_request.submit` 的 `handler.access` 里有 `member_profile: ["list"]`,即声明了读效果,
+于是 `ReadEffectAuthority` 命中:
+- **写关系字段**(mini-24 的 `applicant`)走关系校验 → 投影 **Action 自己的**数据域 → 放宽 Action 才有用;
+- **Handler 自己 List/Get 目标对象**(mini-22)→ 走**调用者自己的** `<target>.read` → 放宽目标才有用。
+
+这正是我在 mini-22 之后写进 `contract-stage.md` 的那段话。**所以那次改正是对的 —— 错在我只发了一半。**
+当时我扫的是 `references/*.md`,**漏了 `references/capabilities/`**,
+`actions-and-transactions.md:258` 里那句老话原封不动地留着:
+"Widening the Action from `;owner` to `;all` therefore does not fix it" ——
+而它描述的恰恰就是关系校验那一面,是错的;`identity-handler-delivery.md` 又按引用复述了一遍。
+代理读的正是这两份。
+
+**代价:两个 model 轮次(plan + apply + compose + 重启 + 重跑验收)。**
+已修(提交 b690024):两处都改成给出分支,并写明哪一侧该动哪个授权。
+
+**教训升级:改正一条错误事实时,必须把同一条说法在整棵文档树里扫干净,包括子目录。**
+这是连续第三轮由我自己的改动引出的问题(mini-21:修复没考虑某分支;mini-22:作用域写宽;mini-24:只发了一半)。
+
+### 另一半:datetime 不归一化 UTC,静默吞行
+
+生成的 mutation 把 `time.Time` 原样按 RFC3339Nano 交给 Runtime,Object SQL 按**字符串**比较。
+Handler 按文档用 `ApplicationTimeZone()` 打戳 → 库里是 `2026-09-14T00:50:17+08:00`,
+页面按 UTC 问 `...T23:59:59Z` → **当天所有行被排除,列表全空,而每个请求都是 200,没有任何报错。**
+更值得记的是:**它自己的 12 个接口验收全绿也没发现**,因为时间窗开的是 ±48h,刚好把一个时区的误差吞掉。
+已写进 `reports.md`(同一提交):datetime 一律 UTC 持久化,且时间窗用例的窗口要窄到
+"一个时区大小的误差会落在窗外"。
+
+### 预注册判定
+
+- **规则 1 可重跑:通过**(三次 10/10)。
+- **规则 2 归一化:已执行**(每接口 7.8 min / 11.2 M,需求 A 最差)。
+- **规则 3 逐用例耗时:拿到了。** 最后一次通过的 runtime ui-check 共 91.6 s:
+  static UI 质量基线 17.2 s、`[PB:5]` 14.4、`[PB:4]` 12.4、`[PB:6]` 11.5、`[PB:3]` 11.0、
+  `[PB:1]` 7.2、`[PB:2]` 6.6、`[PB:7]` 6.2、runtime-identity 1.7、runtime-unavailable 1.5。
+  **没有单个用例是异常值,时间是均匀摊在 7 个业务用例上的** —— 也就是说
+  mini-23 那次 70 s → 190 s 不是某一个用例失控。**仍不动手,等 C 之后再看。**
+  另记:`ui-check` **只在失败时**写 `pb-ui-check-summary.json`,通过时逐用例耗时只存在于
+  `.domainry/development/evidence/000-runtime-*.json` 的 `report` 字段里。
+- **规则 4 0.3.90 两条:4a binding `source`/`test_path` 通过**(本轮没因此丢轮次);
+  **4b 导航七字段:部分未被检验**,但暴露了相邻的一个坑(见下)。
+- **规则 5 mock 分支形状:通过**,没有出现弱化断言;两处测试修复都是"断言对象错了",改完更严。
+- **规则 6 时间/上下文:全部失败**(93.1 > 63.7;134.8 > 101.6;文档 662 KB > 600 KB 阈值)。
+- **规则 7 未修项再付代价:无新增**(本轮的代价来自我自己的半成品修复)。
+
+### 记下、未修(等第二次代价)
+
+- **骨架生成器漏生成一个 FAPI 的 stub**(12 行里生成 11 行),而它自己的 `--check` 事后又说
+  "matches the inventory denominator: 12 row(s)"。不逐行核对 `inventory.json` 就会一直缺到 `verify` 才炸。
+- **前端编译产物失效只有后端阶段才发现**:改了 `navigation.ts` 之后 mock 连过两轮无意见,
+  到 `project check` 才报 `compiled project navigation source sha256 differs`;
+  重编译又动了前端源码树,于是 `backend-check` 拒 `Acceptance source changed`,必须再跑一遍 mock。
+  **这个环完全可以在 mock 阶段闭掉**(mock 已经在扫 `src` 做 identity audit)。
+- `reopen` 之后 `record-skill` 与 `frontend-install` 的先后顺序无处可查,错了就一直失败;
+  `reopen` 不接受 `--reason`,而文档到处让人"记录重开理由"。
+- `handler.access` 的算子集合(`get`/`list`/`get_for_update`/`conditional_update`)没有任何枚举。
+- Handler 单测无法断言 mutation 内容(字段未导出,唯一出路 `unsafe` 又在 import 黑名单里)。
