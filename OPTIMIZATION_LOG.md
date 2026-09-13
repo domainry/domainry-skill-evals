@@ -1546,3 +1546,65 @@ pnpm 不把 `playwright` 提到项目根,裸 specifier 解析不到。
   `created_records[]`,d.ts 里没有这个字段。**mock 下看不出来**(Mock 的 `runObjectAction` 同样不返回引用),
   只在 runtime 验收才炸。代理用一次窄类型断言绕过。这条值得下一轮修。
 - `prd-from-plan.py` 把 `authorization` 一律默认成 `role_scoped`,`auth.login`/`auth.logout` 实际是 `public`。
+
+## mini-19(需求 B 设备报修,0.3.81 + runtimeext `a69b96a5…`,2026-09-13 06:32–07:49)
+
+**80.5 min / 109.0 M ctx / 453 次调用 / 1121 KB 文档 / 11 个接口。**
+需求 B 序列:mini-11 143.1 → mini-15 81.2/115.9/9 接口 → mini-17 85.7/108.3/10 接口 →
+**mini-19 80.5/109.0/11 接口**。**需求 B 至今最快,而且接口数比前两轮都多。**
+
+阶段:契约 7.7 / 前端 29.1 / 后端 28.4 / runtime 验收 9.2 / 收尾 3.4。
+
+### 独立 verify:全绿,并且第一次按新口径连跑三次
+
+backend IA **11/11 initial + 11/11 restart**(各 38.6 s,evidence=ok);
+runtime 浏览器**全新库 10/10(131 s),同一个库再跑 10/10(120 s),第三次仍 10/10(122 s)**;
+mock **10/10**(31 s),theme 与 source_audit `passed`,`project check --scope all` = `valid`。断言一条没动过。
+
+**主判定(上一轮的质量失败)通过:连跑三次全过。** nonce 规则那条改动生效。
+
+### 一次我自己的操作错误,记下来免得下次又当成交付缺陷
+
+第一轮三次重跑全部 **0/10**,失败点都在登录按钮 disabled。
+差点当成交付坏了 —— 读了错误才发现:**是我漏了 `PB_RUNTIME_WORKSPACE_ID`**,
+而这个产品的 `runtimeConfigurationError()` 在缺工作区标识时会禁用登录提交。
+Skill 的 runtime 阶段指引里本来就写了要带这个变量。补上后三次全过。
+**教训:先读错误再下结论 —— 这次如果按"代理交付坏了"写进日志,就是一条错误的归因。**
+
+### playwright 依赖:第五轮,这次找到了第三个也是最后一个点
+
+前两次我修的是 runner 的 CLI 解析(0.3.78)和生成的 TypeScript 类型导入(0.3.81),
+**漏掉的是 fixture shim 自己**:`createRequire(cwd/package.json)('playwright/test')`。
+pnpm 不把 `playwright` 提到项目根,于是第一条用例还没跑就
+`Cannot find module 'playwright/test'`,**连续五轮每轮手工装依赖**。
+
+已修(提交 8ee64ed):把这个 require 锚定到 `@playwright/test`,specifier 保持不变
+(仍是 CLI 加载的同一个模块),只是从包真正所在的位置解析。
+**端到端验证:把交付项目根部的 `playwright` 移走,旧 shim 以那句一模一样的错误失败,
+新 shim 拿到真正的 test/expect,整套 mock 10/10 通过 —— 项目根部完全没有 `playwright`。**
+
+### 另外三条"靠实验才知道"的事实已写进文档
+
+- **Object 的 `write_policy` 是编译出来的,不是写出来的**,而它决定 Runtime 会不会往这个对象里
+  种一条基线行 —— 就是那条会污染报表和整页列表断言的幽灵行。
+  `verification.md` 用一大段讲这条行的危害,却不说**怎么知道自己的对象是哪一类**。
+  现在指向 `runtime-manifest.json` 的 `objects[].config.write_policy`。
+  我自己核过:`technician_profile: direct_crud`、`work_order: action_only`,与代理的观察一致。
+  代理称这是本轮最大的一次猜。
+- **阅读计划把 `project-mutation.md` 归在 model 阶段**,但那份文件里装着实现阶段被打分的
+  "project check source rules"(动作查询要字面量 page size、能力不跟随 helper 间接调用、
+  条件写必须与守卫同体、import 白名单)。代理走到实现阶段手上没有这份清单,只好回头重读。
+  现在它的 purpose 里写明这一点 —— 目的是**留住**那一节,而不是再读一遍。
+- **导航目录的 marker 之间只能有 JSON 值本身**。代理把整个 `const NAVIGATION_CATALOG = {...}`
+  包了进去(这是最自然的读法),拿到 `Unexpected token 'c', "const NAVI"...`。
+
+### 代理报告里记下但未修的
+
+- **`project.source_binary_float_forbidden` 与平台自己的代码生成冲突**:工时建模成 `number`,
+  平台生成 `ActualHours float64`,而规则禁止业务源码出现 `float64` 标识符;
+  文档给的唯一出路"整数分 + big.Rat"是金额方案,对非金额的 `number` 没有答案。
+  **连着两轮(mini-15、mini-19)各自绕了一次。下一轮修。**
+- **`verify` 之前同一套 11 个用例要跑三遍**(`ia` 一遍 + verify 的 initial/restart 各一遍),
+  即使遵守了"不要在开发 Runtime 上重复跑完整 pass"。
+- **`status.remaining_requirement_ids` 只在 done 时清空**,后端段结束时它仍列着全部需求,
+  第一眼像"后端一条都没过"。
