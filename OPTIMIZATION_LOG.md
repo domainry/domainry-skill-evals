@@ -1998,3 +1998,81 @@ Handler 按文档用 `ApplicationTimeZone()` 打戳 → 库里是 `2026-09-14T00
   `reopen` 不接受 `--reason`,而文档到处让人"记录重开理由"。
 - `handler.access` 的算子集合(`get`/`list`/`get_for_update`/`conditional_update`)没有任何枚举。
 - Handler 单测无法断言 mutation 内容(字段未导出,唯一出路 `unsafe` 又在 import 黑名单里)。
+
+## mini-25(**需求 C 供应商合同台账 —— 留出集**,0.3.91,2026-09-13 17:28–19:32)
+
+**124.4 min / 17 个接口 / 11 个浏览器用例。这是第一个"没做完"的轮次,而这正是它的价值。**
+
+设立目的见 `/tmp/mini25-analysis-plan.md`:A 和 B 的章节几乎逐条对应(登录/建账号/建记录/列表分页/
+状态机/月度汇总/本地校验),**交替 A/B 只防住了拟合域名词,没防住拟合这一类产品**。
+C 故意建在 `workflow` / `scheduler` / `in-app-notifications` / 离线导出这四块上 ——
+**这四个词在前 12 轮的优化日志和四个交付模型里出现次数都是 0。**
+
+### 结果
+
+- 后端:**我自己在全新库上跑,17/17 initial + 17/17 restart,evidence=ok**(各 62 s)。接口数是 A/B 的 1.5 倍。
+- 浏览器:**9 过 2 挂**,`terminal_state: not_done`,**没有 completion token**。
+  两个失败同一个根因(离线导出),代理**没有**用前端合成 CSV 或假任务列表把它弄绿 —— 断言原样挂着。
+
+### 规则 2:我写进 Skill 的规则,换个形状还成立吗 —— **成立,没有一条被推翻**
+
+被检验且成立:playwright 依赖(零解析失败)、写完成才返回、不会失败的断言、Mock 同步 vs Runtime 异步
+(**mock 一次就过,45 s**)、截图代价(零图片)、nonce 值域、binding `source` 闭集(代理明确引用了这条)、
+`field_permissions` 三布尔、报表 dimensions/measures、非金额 number。
+未被检验:最后一页分页(本产品队列不分页)、关系授权数据域(本轮没踩)。
+**结论:12 条里 10 条在一个从没测过的形状上照样成立,0 条被推翻。**
+
+### 规则 3:四块新能力面各有一个坑,而且都不是小坑
+
+**(1) Workflow —— 平台要求的路径,产品根本驱动不了。**
+文档(`workflow.md` + `contract-stage.md`)规定"任何人工 approve/reject 等待必须建 Workflow 节点",
+但交付给产品的 `WorkflowClient` 公共契约**只有 `getProcessRoute` 和 `approveTask`** ——
+没有待办列表,没有 reject。于是产品既列不出待审批、也驳回不了。
+代理 `reopen` 回契约,改成 approve/decline 两个 Action,批准走一次 `ConditionalUpdateBatch`
+(合同 `RequireExpiryDateEqual` + `WithExpectedUpdatedAt`,申请 `RequireRequestStateEqual(pending)`),
+"决定前到期日一个字不变"因此仍然可证,PB:4 通过。
+**换句话说:C 在这一点上被迫退化成了 A/B 的形状。**
+
+**(2) Scheduler —— 租户角色拿不到任何调度权限,定时执行在验收窗口内不可观测。**
+以工作区初始管理员身份:`GET /scheduler/definitions` 与 `/scheduler/state` 都是 `auth.permission_denied`,
+`model plan` 里也没有可授权的 scheduler 权限键。定时任务定义保留了,但"08:00 会不会真的触发"**未被验证**。
+
+**(3) 通知 —— 模板变量的类型契约完全没有文档,而错误体是空的。**
+`date!` 变量用 `TimestampValue` 被拒:`400 backend.notification.template_variable_invalid`,
+**`params: null`** —— 不说哪个变量、哪个字段、期望什么。正确写法是 `StringValue` + `YYYY-MM-DD`,
+且同一变量只能设一个指针。两条都没有任何文档写过。
+另有一处自相矛盾:packet 的 `evidence_contract.check.allowed_sources` **含** `runtime.notification`,
+而 runner 的校验器拒绝它,只能退回 `runtime.records`。
+
+**(4) 离线导出 —— 唯一没能交付的一块,而且我核到了平台缺陷的确切位置。**
+代理报告三件事:prepare 的 `audit_id` 必须指向调用者自己已创建的审计行(两步协议,无文档);
+`data_exchange.jobs.list` 这个 grant 文档里根本不存在;
+以及**工作区里一旦有作业,`GET /data-exchange/jobs` 就 403 `backend.workspace_scope_required`**,
+而角色语法里**没有** `workspace` 这个数据域取值(`model plan` 只接受 all/owner/org/org_child/target_org)。
+
+**我自己复现并读了 runtime 源码,机制比"闭环矛盾"更具体:**
+`GET /data-exchange/jobs` 空工作区返回 `200 {"items":[]}`(我实测);一旦有作业需要投影,
+`report_export_data_exchange_provider.go:135` 调 `QueryScopeForPrincipal(principal)`,
+而该函数在 `!principal.Known` 时直接报错 → 403。
+构造这个 principal 的 `record_data_exchange_providers.go:106` 只填了
+`WorkspaceID / UserID / RequestID`,**`Known` 只在 `p.resolve` 恰好设置时才为真**。
+**所以这是作业投影路径上的主体重建缺陷,不是建模时的数据域选错** ——
+交付无论怎么改授权都修不好,而那句 `workspace_scope_required` 还在把人往一个不存在的数据域上引。
+**按留出协议,本轮不修。** 记在这里,等第二次 C 或它在 A/B 上复现。
+
+### 一次隔离违规(代理自述),以及我自己的工具缺口
+
+代理在排查那条 `params: null` 的通知错误时,**读了 `~/go/pkg/mod` 下的平台源码**,
+这违反简报硬约束 1。它自己发现后停止并在报告里如实写明,最终修复是之后靠 400 逐个试出来的。
+**污染评估:只影响通知那一条发现的"发现路径",不影响其余三块,也不影响任何计时数字。**
+**真正该改的是我的工具:**`eval-isolate.sh` 的 ANSWER_DIRS 只锁两个仓库,**没锁 Go module cache** ——
+平台源码在那里有第二份可读副本。这是我的隔离设置漏了,不是代理找到的漏洞。已修(见下)。
+
+### 对"是不是只对评估示例特化"的回答
+
+- **正面证据**:12 条规则里 10 条在一个从未测过的形状上被检验且全部成立,0 条被推翻;
+  mock 一次过、零 playwright 失败、零截图 —— 这些都是前 12 轮挣来的,而且迁移了。
+- **反面证据**:C 做不完。四块新能力面**每一块都有坑**,其中两块(Workflow 可驱动性、导出作业投影)
+  是平台缺陷而不是文档缺陷。**前 12 轮的优化完全没有触及这片区域,因为 A/B 根本不会走到这里。**
+- **所以诚实的结论是**:优化本身没有过拟合到 A/B 的**域**,但**覆盖面**确实被 A/B 的形状限定了。
+  Skill 在这两类产品上已经相当顺,在这四块能力上则基本是空白 —— 而空白处的文档质量未经任何检验。
