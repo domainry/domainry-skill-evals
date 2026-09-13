@@ -1273,3 +1273,71 @@ Runtime 验收本身就重(mini-12 是 11 个 FAPI、162 s),但这中间有 **6 
 (`v0.0.0-source-326a5fa4…`),不是我的本机检出。所以任何本机 runtime 改动都不会在
 交付项目的 dev-runtime 上显形 —— 想端到端验证 runtime 修复,要么发版,
 要么在 runtime 仓库里用 `bootstrap/integrationtest` 的真实装配验。这一轮用的是后者。
+
+## mini-15(需求 B 设备报修,0.3.77 + runtimeext `a69b96a5…`,2026-09-12 23:36–01:00)
+
+**81.2 min / 115.9 M ctx / 500 次调用 / 822 KB 文档 / 9 个接口。**
+需求 B 唯一对照是 mini-11(143.1 / 167.5 / 1132 / 11 个接口;mini-13 作废),**快了 61.9 min**。
+基线弱,所以逐段对齐:
+
+| 阶段 | mini-11 | mini-15 |
+|---|---|---|
+| 契约 | 6.7 | 7.5 |
+| 前端 | 30.9 | 21.9 |
+| 后端(含反复 check) | ~60 | 27.7 |
+| runtime 验收 | 11.2 | 5.5 |
+
+独立 verify(全新数据库,我自己跑):backend IA **9/9 initial + 9/9 restart**(各 28 s,evidence=ok),
+runtime 浏览器 **10/10**(302 s),**同一个库再跑一次仍 10/10**(298 s),mock **10/10**(60 s),
+theme 与 source_audit 均 `passed`,`project check --scope all` = `valid`。断言一条没动过。
+
+### 预注册判定的结果:主判定不成立,不得宣称生效
+
+**1. 主判定(runtime 段第一次会话准备失败的耗时 < 150 s)——本轮 runtime 段根本没出现会话准备类失败**
+(ui-check runtime 一次通过,301 s)。按开跑前写死的规则:**本判定不成立,顺延到下一轮。**
+
+有一个相关但不能当作证据的数据点:mock 阶段第一次失败 19 s,原因是
+**代理把脚手架自带的 `awaitAuthenticatedRoute` 连同 TODO 区域一起删了**,10 条全部 `ReferenceError`。
+它恢复之后 `prepareSession` 确实以它收尾(`await awaitAuthenticatedRoute(page, LANDING_ROUTES)`)—— 被采纳了,但没被考到。
+
+**2. 总时长 81.2 < 110:记录,不据此下结论**(基线只有 mini-11 一轮,且那一轮本身是灾难轮)。
+
+**3. 纯轮询判定:触发得非常彻底 —— 68 次。** 阈值是 4。
+
+### 本轮最有价值的一条:runtime 段 5.5 min 却烧掉 29.9 M 上下文
+
+runtime 段只有 5.5 分钟墙钟,却有 **119 次调用、29.9 M 上下文** —— 逼近后端段 27.7 min 的 42.1 M。
+其中约 60 次集中在 76–78 分钟之间,**每三秒一次 `date -u; grep -c http_request …`**,
+只为等一次它自己放到后台的 ui-check。**一秒都没缩短,却比那一段所有真实工作还贵。**
+
+这是"时间"与"上下文"两个指标第一次明显分叉:光看墙钟,runtime 段是历史最好的一次;
+看上下文,它是这一轮第二贵的一段。
+
+### 又一次"失败的形态是等":736 s 的 mock 失败
+
+产品外壳里 `a[href="/"]` 出现两次(窄屏头部 + 侧边栏),`readback` 的 `.first()` 在桌面视口下
+点到了 `lg:hidden` 的那一个。点击没有导航,于是 PB:2~7 六条各等满 120 s。
+
+根因不在产品,在生成的 Playwright 配置:**`actionTimeout` 没有设置,Playwright 自己的默认值是 0 ——
+动作永远等下去,只有 120 s 的 test timeout 能结束它。** 于是任何一次点不动的点击都等于两分钟静默,
+而且输出里没有任何一句指向那个元素。
+
+已修(提交 a6eaf6c):`actionTimeout: 15_000` + `navigationTimeout: 30_000`;`readback` 改点
+`a[href="…"]:visible`。**用一张带隐藏孪生元素的页面实测:裸 `.first()` 现在 15,009 ms 失败并点名可见性**
+(此前是等满 test timeout);`:visible` 在同一张页面上只命中 1 个。
+把新配置套回本轮交付的产品跑,10 条浏览器用例仍然全过。
+
+### 同一次提交里修掉的另外两条
+
+- **`awaitAuthenticatedRoute` 放错了位置**:上一轮我把它放在 `TODO(scaffold): product accounts`
+  标记**下面**,正是实现者会整段覆盖的区域。挪到 `quiesce` 与 `readback` 旁边 —— 那是本就该留存的一组助手。
+- **两个长任务阶段的指引现在写明**:这些检查跑几分钟并把进度打到 stderr,请前台跑;
+  真要放后台,就用一次阻塞等待,不要轮询。
+
+### 代理报告里值得单独记的两条
+
+- **`generate-acceptance-skeletons.py` 生成的"该被拒绝的角色"注释是错的**:它给每个 role_scoped 行
+  都写 "sign in as the Role this row must refuse (technician)",而 `work_order.start/finish`
+  恰恰只有 technician 有授权、该被拒的是 dispatcher。照抄必错,只能回模型里数 Role 授权。**未修,记下一轮。**
+- **`verification.md` 的 "Runtime behaviour facts" 让 9 个接口用例两个阶段一次通过、零修复轮。**
+  这是目前性价比最高的一节文档 —— 减法要绕开它。
