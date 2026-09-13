@@ -1766,3 +1766,76 @@ mini-21 的 `batch-plan.json` 里 **`frontend.routes` 这个键根本不存在**
 - `_ "time/tzdata"` 被 import 白名单禁止,与"禁止固定偏移"互顶,Handler 只能隐式依赖宿主 zoneinfo。
 - records 列表 `filters` 的线格式没文档,代理靠读前端 record-client 源码才确定是扁平等值 map。
 - `EnrollTargetOrganization.Resolve()` 该不该调仍无依据(mini-20 选择调用,mini-21 选择不调用,两轮都过)。
+
+## mini-22(需求 A 请假审批,0.3.87 + runtimeext `a69b96a5…`,2026-09-13 12:35–13:39)
+
+**63.7 min / 101.6 M ctx / 476 次调用 / 1326 KB 文档 / 11 个接口 / 10 个浏览器用例。**
+需求 A:mini-12 67.9/87.1 → mini-14 92.2/108.8 → mini-16 76.5/100.3 → mini-18 70.2/99.4/11 →
+mini-20 85.9/111.4/12 → **mini-22 63.7/101.6/11**。
+
+**按规则 2 归一(接口数相同,11 对 11,可以直接比):**
+对 mini-18:**时间 70.2 → 63.7(−9.3%)**,ctx 99.4 → 101.6(+2.2%)。
+对 mini-20(12 接口):每接口 7.2 → **5.8 min**、9.3 → 9.2 M。
+**这是需求 A 至今最快的一轮,比保持了 10 轮的 mini-12(67.9)还快 4.2 min。**
+
+阶段:契约 6.5 / 前端 19.1 / 后端 28.7 / **重冻结回环 1.0** / 后端二轮 6.4 / runtime 验收 2.0 / 收尾 3.1。
+**前端 19.1 min 是所有轮次最低**(mini-20 26.6、mini-21 27.6),mock 一次就过。
+
+### 独立 verify:全绿
+
+backend IA **11/11 initial + 11/11 restart**(各 33 s);
+runtime 同一个库**连跑三次:10/10(75 s)、10/10(74 s)、10/10(73 s)**;
+mock 10/10(27 s),`project check --scope all` = `valid`。
+
+### 最重要的一条:**我自己写的那段文档是错的,而且它自称"这段最贵"**
+
+`contract-stage.md` 里那段关系授权规则(我在 9030a7c 改的)写着:
+Action 声明了对目标对象的读效果时,Runtime **不看**目标自己的读数据域,
+会丢掉 `<target>.read` 的 Allow 策略并把 Action 自己的数据域投影上去 —— 所以"要放宽的是 Action,不是目标"。
+
+**mini-22 照做,建模成 `member_profile.read;owner` + `leave_request.submit;org`,
+11 个接口用例挂了 6 个**(`leave_request.member_profile_missing`);
+**只把目标对象的读权限改成 `;org`(Action 一个字没动)就 11/11 全过。**
+
+**我没有采信报告,自己去读了 runtime 源码:**
+投影逻辑在 `relationReadEffectPrincipal`,**唯一的调用者是 `canAccessPersistedRecord`
+→ `record_relation_validation.go`**,而且函数自己的注释就写着
+"the derived principal is local to this check, so ordinary record browsing keeps the caller's scope"。
+列表/取单路径(`NormalizeListQuery` / `CanAccessRecord`)根本拿不到这个投影。
+
+**所以规则是真的,但作用域被我写宽了:它管的是"Handler 写关系字段时 Runtime 校验目标可读",
+不管"Handler 自己 List/Get 目标对象"。后者走调用者自己的 `<target>.read`。**
+而且失败长得不像授权问题 —— 读不到行,Handler 报的是业务拒绝而不是 403。
+
+已改(提交 04e8f31),并写明它此前说反了、代价是多少。
+另外补了一条让 `;owner` 显得更危险的事实:**身份交付 Action 建出来的档案行,owner 是执行交付的那个经理,
+不是它描述的那个人**,所以 `;owner` 下成员连自己的档案都读不到。
+
+**教训:一段自信写错的文档比没有这段更糟。**上一轮我刚因为"我的修复没考虑某个分支"栽过一次,
+这轮是"我的修复把作用域写宽了"。两次都是我自己改的东西,两次都是下一轮的交付替我发现的。
+
+### 其它三条本轮换来的(同一提交)
+
+- **重复交付同一个人时,档案对象上的 unique 业务字段会抢在 Identity 之前拒绝**:
+  同邮箱同 `display_name` 拿到的是 `backend.unique.field`(`params.field`),
+  不是文档笃定写的 `backend.identity.user_email_exists` —— 后者只在"邮箱重复但业务字段不同"时出现。
+- **报表分页是 `cursor`/`next_cursor`,不是记录列表的 `after_id`**;harness 的 helper 不传 cursor,
+  要证"相邻两页不重不漏"只能自己包一层。**报表行还把列拆进 `dimensions`/`measures` 两个 map**,
+  消费端两边都要查,前后端各写一遍。三条都没有任何文档写过,代理是去读路由分片的 schema 才知道的。
+- **`field_permissions` 条目必须三个布尔齐全**(`read`/`write`/`export`),只写一个方向
+  会让 `model plan` 第一轮直接吐 40 条 `schema.required`。
+
+### 预注册判定
+
+- **规则 1 可重跑:通过**(三次 10/10)。
+- **规则 2 归一化:已执行**(见开头,11 对 11 可直接比)。
+- **规则 3a 路由表:通过(有 routes 分支)。** 计划声明了 routes,PRD 52 个 AUTHOR 全是判断列,生成内容无误。
+  0.3.87 的"没声明 routes"分支本轮未被触发,记未被检验。
+- **规则 3b 浮点门禁覆盖 `_test.go`:未被检验**(本轮天数仍是 integer)。
+- **规则 3c Mock/Runtime 异步:通过** —— runtime 段 2.0 min,一次过,没有出现抢答类失败。
+- **规则 4 截图:通过**(profiler 里没有任何图片读取)。
+- **规则 5 时间/上下文:时间通过且刷新纪录;ctx 101.6 略高于 mini-20 的每接口值以下、但绝对值未低于 mini-18。**
+  文档读取 1326 KB 是近几轮最高(mini-21 是 931),主因是契约段 420 KB + 后端段 583 KB。
+- **规则 6 mock 重复(第三次测量):形状没变。** 本轮真正的缺陷(数据域)是 `ia` 抓到的,mock 全绿放过。
+  **连续三轮同一结论,下一轮开始动 mock 阶段的定位。**
+- **规则 7 `freeze` 漏掉未绑定调用点:本轮没有因此回环**(回环是数据域引起的)。记未发生。
