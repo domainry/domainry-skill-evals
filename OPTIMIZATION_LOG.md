@@ -1408,3 +1408,71 @@ read effect 时(Handler 只要读那个 Object 就会声明),调用
   照单全收的话 inventory 分母会是 0。
 - **mock 验收作为后端阶段的授权门,结构上盖不住它要授权的风险**:本轮 runtime 的两个失败
   (跨用例数据污染、读取失败未渲染)在 mock 里**原理上不可能出现**。代理提了两条可静态检查的规则,值得评估。
+
+## mini-17(需求 B 设备报修,0.3.79 + runtimeext `a69b96a5…`,2026-09-13 03:11–04:34)
+
+**85.7 min / 108.3 M ctx / 455 次调用 / 577 KB 文档 / 10 个接口。**
+对照 mini-15(需求 B):81.2 / 115.9 / 500 / 822 / 9。
+**慢 4.5 min,上下文少 7.6 M,调用少 45 次,文档少 245 KB。**
+
+独立 verify(全新数据库,我自己跑):backend IA **10/10 initial + 10/10 restart**(各 42.2 s,evidence=ok),
+runtime 浏览器 **11/11**(162 s),**同一个库再跑一次仍 11/11**(152 s),mock **11/11**(31 s),
+theme 与 source_audit 均 `passed`,`project check --scope all` = `valid`。断言一条没动过。
+
+### 预注册判定
+
+**1. 关系授权返工:没有发生(全程零次 `outside_scope`,只调用了一次 `apply-model.sh`)。
+但本轮不能算作证明。** 模型里确实有跨 Object 的关系写入(`work_order.assignee -> technician`),
+可这个产品的调度员天然需要 `;all`(`work_order.register;all`),而 mini-16 的失败需要一个**更窄**的
+Action scope 才会触发。**改正后的规则没有被考到** —— 与"文档修对了"一致,但区分不开"这个产品根本不需要窄 scope"。
+
+**2. Handler 拒绝码:生效。** 零次 `expected code "<object>.<field>_required", got …` 返工,
+交付的用例直接用 `backend.validation.required`。
+一个观察(非弱化,但值得记):它写成了 `mustRejectAny(..., "backend.validation.required", "work_order.resolution_required")` ——
+两个码任一都算过。下一轮考虑让骨架直接写死平台码。
+
+**3. 纯轮询:68 → 1 → **0**;runtime 段上下文 29.9 M → 6.8 M → 9.3 M(阈值 12 M)。**这一类结案。**
+
+**4. 文档读入 822 → 577 KB**(阈值 < 900),是 mini-14 以来最低。契约段 364 KB。
+
+**本轮变慢的是前端段:21.9 → 31.5 min。** 代理连撞三次质量基线对比度失败,
+三次都来自交付的 shadcn 原语而不是它自己的代码(`hover:bg-primary/90` 半透明 + 质量核向上找到第一个
+alpha ≥ 0.95 的祖先 = 白底测白字;`bg-sidebar-background` 根本不是生成的 Tailwind 类;
+`sheet.tsx` 关闭按钮 1.01)。**这是下一轮的归因目标。**
+
+### 本轮修复的五条(提交 1b5ab4e),四条是"报告了系统并不具备的状态"
+
+- **`dev-runtime.sh ia` 为 `verify` 会拒绝的证据打绿灯。** verify 要求每个接口**恰好一个** check 的
+  operation 等于 inventory 行的 `runtime_operation`,而 `ia` 只检查"至少一个";harness 注释也写成了下限。
+  代理照读为下限,给每个接口加了第二个 check 放次要断言,`ia` 十个全绿 `evidence=ok`,
+  `backend-check` 随后拒绝,**赔掉一整轮 focused/compile/finalize/backend-check**。
+  `ia` 现在用同一条规则,并写明替代做法。**用漏过去的那个证据形状做了单元验证,合法证据零问题。**
+- **`ui-check` 从项目根解析 `playwright`。** npm 会提升,所以一直没事;pnpm 不提升,
+  **连着三轮**都撞 `Cannot find module 'playwright/package.json'`,每轮都手工加依赖,
+  而且要**猜版本**去对上镜像里已有的浏览器(没有任何文档写这个映射)。
+  改为经 `@playwright/test` 锚定解析 —— 它本来就依赖 `playwright` 并钉好了版本,无需猜也无需装。
+  **把交付项目里手工加的那个依赖移开实测:旧写法抛错,新写法正常解析。**
+- **backend-check 通过后不覆盖上一次失败的 summary**,而那正是所有报错信息指向的路径:
+  绿了的一轮读起来仍是"失败在一个早已修好的错误上"。现在成功会覆盖。
+- **两个 markdown 表读取端都不认自己写出端的转义。** `cell` 把值里的 `|` 写成 `\|`,
+  PRD 校验器却按裸字符切 —— `select![low:a|medium:b]` 被报成"10 列表头下有 12 格",
+  输出是对的、抱怨是假的,而一位代理照着假抱怨手工改了行。
+  `lifecycle-todo.md` 是同一个 bug 的更糟版本:行宽校验不过,**整条手写 Notes 在下一次 render 时被静默丢弃**,
+  一个 `pending->approved|rejected` 就够了。两处都改为按转义切分。
+  **验证:失败的那行 DSL 现在零问题,真正列数不符的表仍被抓到,Notes 带 `|` 往返一致。**
+- **`backend-model.md` 要求生成序列号的 Handler 声明 `deletion_record: ["list"]` 并从中读被清理的号段。**
+  `handler.data_access` 只能命名本模型声明的 Object,所以必然
+  `model.action_data_object_not_found`;而且整个 Runtime 里**根本不存在** `deletion_record` 这个概念,
+  没有任何审计面可读。现在改为从存活行取 `max(suffix)+1`、写明为什么计数法仍然错、
+  以及产品若真有硬删除就给序列号自己一个 Object(那是可声明的)。
+
+### 代理报告里记下但未修的
+
+- **Runtime 在 `--fresh` 工作区里种了一条示例记录**进项目自己的 Object
+  (`Technician Display Label`,electrician),会出现在花名册和周报里;mock 模式永远看不到它。
+  它那个不可断行的英文长名正是 390 px 质量基线溢出的触发器(真正的缺陷是代理自己的
+  `Card` 栅格项默认 `min-width:auto`,但触发器来自没有文档的种子数据)。
+- **`prd-from-plan.py` 把 Report 支撑的路由判成 `frontend_only`、backend operations 写 "none",
+  并整条漏掉 `/my-orders`** —— 连着四轮都要手改 disposition。
+- **`prepareSession` 只为"你会登录成"的账号做登记**,而 helpers 的契约要求"包括只被指派工作的账号";
+  差额表现为一次不透明的 Playwright 超时。代理自己导出了 `ensureTechnicianAccount` 补上。
