@@ -1694,3 +1694,75 @@ runtime 侧 `go.sum` 留了 6 个包的旧版本哈希,`verify_runtime_compositi
 没有删除项,没有既有类目的操作数变化 —— 正好解释 64→65 与 386→399,
 而且 13 个全是 authenticated,正好解释 378→391,anonymous 与 signed 各 4 不变。
 提交 57a6e0c(plane)、5e8d594(runtime)。
+
+## mini-21(需求 B 设备报修,0.3.86 + runtimeext `a69b96a5…`,2026-09-13 10:59–12:10)
+
+**70.5 min / 92.0 M ctx / 398 次调用 / 931 KB 文档 / 9 个接口 / 11 个浏览器用例。**
+需求 B:mini-11 143.1 → mini-15 81.2/115.9/9 → mini-17 85.7/108.3/10 → mini-19 80.5/109.0/11 →
+**mini-21 70.5/92.0/9**。
+
+**上下文 109.0 → 92.0 M,降 15.6%,是 B 系列最低;文档 1121 → 931 KB。**
+阶段:契约 9.5(其中 `freeze` 被拒回环一次)/ 前端 27.6 / reopen 回环 2.2 / 后端 24.9 / **runtime 验收 6.1**。
+
+### 独立 verify:全绿
+
+backend IA **9/9 initial + 9/9 restart**(各 34 s,evidence=ok);
+runtime 同一个库**连跑三次:11/11(73 s)、11/11(69 s)、11/11(70 s)**;
+mock 11/11(39 s),theme 与 source_audit `passed`,`project check --scope all` = `valid`。
+**浏览器一轮 70 s,mini-20 是 132–147 s。**
+
+### 规则 7(接口数归一)必须先说,否则会得出错误结论
+
+**本轮 9 个接口,mini-19 是 11 个。**按接口归一:
+mini-19 = 7.3 min/接口、9.9 M/接口;**mini-21 = 7.8 min/接口、10.2 M/接口 —— 每接口反而略差。**
+所以"B 系列最快"这个说法只在绝对值上成立。**这正是我预注册规则 7 的原因,mini-20 就是被 12 对 11 误导过一次。**
+唯一可以无条件说的是上下文那条:92.0 M 是 B 系列最低,而截图归零(见规则 3)与它直接相关。
+
+### 预注册判定
+
+- **规则 1 可重跑:通过**(三次 11/11,两次在复用库上)。
+- **规则 2a 写完成 / 2b 最后一页:本轮没有发生这两类失败,但也无法证明是规则挡住的。** 记"未发生",不记通过。
+- **规则 2c 白过的断言:通过(我自己读的交付 spec,没采信报告)。**
+  所有 `toHaveCount(0)` 都针对 `data-*` 稳定属性,**而且每一条都有正向对照**
+  (board/technicians/weekly-stats 对经理 `toBeVisible`、对维修工 `toHaveCount(0)`,my-orders 反过来);
+  唯一的 `hasText` 传的是单行 nonce。正是"先让它失败一次"那条要的形状。
+- **规则 3 截图:通过,而且是压倒性的。本轮读进上下文的图片 0 KB(mini-20 是 454 KB)。**
+- **规则 4 非金额 number:通过 —— mini-20"未被检验"的那条,这轮检验了。**
+  5 次出现全部是**读文档**和代理自己的报告行文,**门禁一次都没被触发**;
+  交付按文档的逃生路径做(类型推断 + `FormatFloat` + ×10 四舍五入判一位小数),没有为非金额 number 引入整数最小单位。
+  我的规则写成"出现 ≤1 次"是个坏代理指标 —— 读文档恰恰是我希望它做的。
+- **规则 5 PRD 路由表:失败,而且是我上一轮那个修复没想到的分支。** 见下。
+- **规则 6 时间/上下文:时间 70.5 ≤ 80.5 通过,ctx 92.0 ≤ 109.0 通过 —— 但都要按规则 7 打折看。**
+- **规则 8 mock 价值(只记录):**`isRuntime` 在 requirements.spec.ts 出现 9 次(mini-20 是 8 次)。
+  连续两轮都是"大部分用例被写两遍"。**下一轮开始考虑动 mock 阶段。**
+
+### 规则 5 失败的真相:冻结计划可以完全不声明 routes
+
+mini-21 的 `batch-plan.json` 里 **`frontend.routes` 这个键根本不存在**,而 `freeze` 接受了。
+于是路由表渲染成一个只有表头的空表,快照行写着 `(routes: none)` ——
+**产品有 6 条路由,这是一句假话**,而且两处都没有 `AUTHOR` 标记,Confirmation 清单不会拦。
+我 mini-20 的修复让"有 routes 时绑定正确"(那轮 5 条全对),**但没考虑过它可以没有**。
+已修(提交 1b2296b):两处都改成要求作者填写,并说明"冻结计划没有声明 `frontend.routes`"。
+加了回归测试并做了反向验证(旧代码下该测试失败)。
+
+### 另外两条本轮换来的规则
+
+- **浮点门禁同样读 Handler 的 `_test.go`,没有任何文档说过。**
+  表驱动测试用 `[]float64{...}` 字面量,被当成生产源码一样拒绝。改成生成的输入类型即可。
+- **Mock 从内存作答,Runtime 是一次网络往返。** 任何"请求之后立刻读状态"的断言在 Mock 永远过、在 Runtime 抢答。
+  本轮唯一一次 runtime 失败(70 s)就是两条这种:打开下拉后立刻读 option;
+  以及 `expect.poll(rows.count() > 0)` 在**上一个筛选条件的旧行**上抢答,随后读到上一位维修工的行。
+  handoff 详细警告了 nonce 与跨运行留存,却从没警告这一类。
+  已写进 helpers 模板,和另外两条"等待"规则放在一起,并给出这两个具体形状。
+
+### 代理报告里记下、本轮未动的
+
+- `freeze` 里 `source` 一词两义(需求出处 vs Runtime 界面),损失一轮。
+- **前端调用点没绑定,只有后端阶段的 `prd-from-plan.py` 能发现**,`freeze` 和 mock ui-check 都放行,
+  代价是 reopen→freeze→install→scaffold→mock 全链重跑(本轮 2.2 min)。**校验应前移到 `freeze`。**
+- `navigation-role-menus.json` 的 schema 只存在于 SKILL.md 一行里,references 下 17 个文档都没有。
+- 生成的 mutation/query 字段全非导出,单元测试无法断言"Handler 到底写了什么";
+  同一 Action 家族里两个 Handler 的可断言强度因此不同(带 `time.Now()` 的那个只能靠接口验收读回)。
+- `_ "time/tzdata"` 被 import 白名单禁止,与"禁止固定偏移"互顶,Handler 只能隐式依赖宿主 zoneinfo。
+- records 列表 `filters` 的线格式没文档,代理靠读前端 record-client 源码才确定是扁平等值 map。
+- `EnrollTargetOrganization.Resolve()` 该不该调仍无依据(mini-20 选择调用,mini-21 选择不调用,两轮都过)。
