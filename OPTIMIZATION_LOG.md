@@ -2056,6 +2056,9 @@ C 故意建在 `workflow` / `scheduler` / `in-app-notifications` / 离线导出�
 而该函数在 `!principal.Known` 时直接报错 → 403。
 构造这个 principal 的 `record_data_exchange_providers.go:106` 只填了
 `WorkspaceID / UserID / RequestID`,**`Known` 只在 `p.resolve` 恰好设置时才为真**。
+> **【2026-09-13 更正,见文末 D-07 更正条】这一句把缺陷点指错了。`p.resolve` 不是"恰好"设置的,
+> 它在 `DataExchangeProviders != nil` 时必然被 `ConfigureResolver` 绑成 `ResolveBatchPrincipal`。
+> 403 的链路我复核后确认成立,但 `Known:false` 的来源不在这两行。**
 **所以这是作业投影路径上的主体重建缺陷,不是建模时的数据域选错** ——
 交付无论怎么改授权都修不好,而那句 `workspace_scope_required` 还在把人往一个不存在的数据域上引。
 **按留出协议,本轮不修。** 记在这里,等第二次 C 或它在 A/B 上复现。
@@ -2165,3 +2168,45 @@ mock **10/10**,`project check --scope all` = `valid`,0 条诊断。**全绿。**
 从现在起,A/B 序列里**单轮 10% 以内的时间差、20% 以内的上下文差,一律不作为改进证据**,
 要么拿多轮中位数说话,要么就说"没测出来"。
 前面那些"快了 2 分钟""省了 8 M"的说法,凡是低于这个幅度的,**都退回未证实。**
+
+## D-07 更正:我给 data-exchange 403 记的根因指错了地方(2026-09-13,mini-26 之后复核)
+
+mini-25 把这条记成"作业投影路径上的主体重建缺陷",并指向
+`record_data_exchange_providers.go:106` "只填三个字段、没设 `Known`"。**这个定位是错的。**
+我这次是从源码一条条读下来的,不是从代理报告抄的:
+
+**成立的部分(复核后确认):**
+`report_export_data_exchange_provider.go` 的 `principal()` 调 `QueryScopeForPrincipal`,
+后者在 `!principal.Known` 时返回 `ErrPrincipalScopeRequired`(`principal_workspace_scope.go:104`),
+`principal()` 把它包成 `workspaceError` → `report_export_data_exchange_provider.go:337`
+= `403 backend.workspace_scope_required`。**链路对,错误码对得上,符号也对得上。**
+
+**错的部分:**
+`record_data_exchange_providers.go` 的 `principal()` 确实只填三个字段,但它前一行就调了
+`p.resolve(ctx, scope.ActorID, scope.RoleKey)`,而 `p.resolve` **不是可有可无的** ——
+`record_application_service.go:318` 只要 `DataExchangeProviders != nil` 就把它绑成
+`ResolveBatchPrincipal`。所以"没人设 `Known`"不成立。
+
+**`Known:false` 的真实来源:** `ResolveBatchPrincipal`
+(`runtime_services_record_dependencies.go:75`)有三条显式返回 `Known:false` 的分支:
+`identityPrincipals == nil`、`identityPrincipals.Resolve` 报错、`ResolveBusinessPrincipal` 报错。
+我逐条排掉了第三条:`ResolveBusinessPrincipal` 在 `!principal.Known` 时原样返回、
+在查不到档案行时 `continue`,**它不会把 `Known` 从真变假**。剩下第二条最可能。
+
+**而第二条在本机的实现是 testkit 的 `manifestIdentityBinding.Resolve`
+(`bootstrap/testkit/manifest_identity_sdk.go:254`):**
+`RoleKey` 为空时回落到 `firstUserRole(subject)`,若该 subject 在 manifest 里没有角色,
+`binding.roles[""]` 查不到 → `identity.role_not_found` 403 → 上游拿到 error → `Known:false` → 我们看到的那个 403。
+
+**这条更正最要紧的后果:出错的解析器是 dev-runtime 用的 manifest/testkit 身份绑定,
+所以它很可能是本机验收环境的缺陷,而不是生产 Plane 的缺陷。优先级因此大幅下降 ——
+mini-25 把它记成平台缺陷是抬高了。**
+
+**仍然不改源码。** 我把机制缩到了两行以内,但没有复现证明那次失败的作业带的是哪个 subject/role;
+在没有复现的情况下改 `ResolveBatchPrincipal` 的回落或 testkit 的解析器,是拿平台源码赌一个假设。
+**下一轮 C 的复现配方(已登记):403 发生的同一时刻,在 runtime.log 里抓
+`identity.role_not_found` 或 `identity.application_scope_mismatch`,并记下作业的 `ActorID`/`RoleKey`。
+抓到哪一个,就能一次定死是回落缺陷还是作业没存住角色。**
+
+顺带核过:这个错说法**没有进任何 Skill 文档**(`skills/` 下 0 处匹配),只在本日志里,
+所以不存在 mini-24 那种"改了一处漏了一处"的风险。按扫全树的规矩,这次是扫过才下的结论。
