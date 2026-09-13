@@ -1476,3 +1476,73 @@ alpha ≥ 0.95 的祖先 = 白底测白字;`bg-sidebar-background` 根本不是�
   并整条漏掉 `/my-orders`** —— 连着四轮都要手改 disposition。
 - **`prepareSession` 只为"你会登录成"的账号做登记**,而 helpers 的契约要求"包括只被指派工作的账号";
   差额表现为一次不透明的 Playwright 超时。代理自己导出了 `ensureTechnicianAccount` 补上。
+
+## mini-18(需求 A 请假审批,0.3.80 + runtimeext `a69b96a5…`,2026-09-13 04:59–06:05)
+
+**70.2 min / 99.4 M ctx / 438 次调用 / 1146 KB 文档 / 11 个接口。**
+需求 A 序列:mini-12 **67.9 / 87.1 / 405 / 1032**(最快)→ mini-14 92.2 / 108.8 → mini-16 76.5 / 100.3
+→ **mini-18 70.2 / 99.4**。**第二快,仍比 mini-12 慢 2.3 min、上下文多 12.3 M。**
+
+阶段对照 mini-12 → mini-18:契约 7.1 → **7.0**;前端 24.0 → 26.3;后端 22.9 → 24.9;
+**runtime 验收 9.1 → 2.9**(压得最狠的一段);收尾 2.7 → 3.8。
+
+### 独立 verify:**这一轮没有全绿 —— 复用库重跑不稳定**
+
+我自己在全新数据库上跑:backend IA **11/11 initial + 11/11 restart**(各 32 s,evidence=ok),
+runtime 浏览器**全新库 10/10**(92 s),mock **10/10**(28 s),theme 与 source_audit `passed`。
+
+**但同一个库重跑:run2 失败、run3 通过、run4 失败(3 个用例)。约一半概率。**
+代理自己那轮通过,是因为运气好。
+
+追因(我查了库里的行,不是采信报告):`periodFor(label, monthOffset, span)` 把 nonce 哈希成
+**某个固定月份里的一天**,再取 3 天区间。run1 的 `pb3` 占了 2026-12-07→09,
+run2 的哈希落进同一个十二月并与之重叠,被产品自己的重叠规则拒掉 —— 提交没落地,断言自然数不到行。
+`pb5`/`pb6` 同理。**月份是按用例写死的,只有日在变**,所以两次 run 抢同一个月的日子。
+
+这是 Skill 规则的缺口,不只是这次交付的 bug:nonce 规则要求"有争议的业务键从 nonce 派生",
+交付**照做了**,但派生进了一个小到会撞的值域。已修(提交 652e0aa):
+**派生是必要不充分条件 —— 派生出的值必须落在大到两次 run 不会相遇的空间里**,并把这次失败写进规则。
+
+### 预注册判定
+
+**1. playwright 依赖:**否**,连续第四轮撞上。** 上一轮我只修了 runner 的解析路径,
+而生成的 TypeScript 里还有 `import type { Locator, Page } from 'playwright'` ——
+pnpm 不把 `playwright` 提到项目根,裸 specifier 解析不到。
+已修:helpers 从 `@playwright/test` 取类型并再导出,两个 spec 模板从 helpers 取,
+这样 spec 里不出现任何 Playwright 模块名,fixture 守卫不受影响。
+**把交付项目里手工加的包移开实测:旧写法 TS2307,新写法三个模板全部类型检查通过。**
+
+**2. `ia` 证据形状:不成立,顺延。** 本轮两次 `ia` 失败都不是证据形状问题
+(一次重复邮箱的 params 键,一次必填校验 trim),没有出现多 check 的写法。
+
+**3. 前端段 26.3 min**(mini-15 21.9 / mini-16 24.6 / mini-17 31.5),落在 25–28 之间,
+两条阈值都没踩到。如实记录,不下结论。
+
+**4. 文档读入 1146 KB(阈值 ≥1100 要拆)。** 分布:契约段 472 KB、**后端段 575 KB**。
+与 mini-16 不同 —— 那轮是契约段 536 KB 最大。**下一轮的减法目标是后端段。**
+
+**5. 纯轮询 5 次**(mini-17 是 0,mini-16 是 1)。略有回涨但都是诊断式调用,不是等待循环。
+
+### 本轮修复的三条文档错误 —— 每条都是我自己从决定它的源码里读出来的,不是照抄代理报告
+
+- **`verification.md` 说重复邮箱带 `params.email`。** Identity 契约声明的是
+  `ParameterKeys: ["actual"]`,实际回 `params.actual` 加一个被 Action 嵌套的 `field_path`。赔掉一轮 `ia`。
+- **没有任何地方说必填校验会先 trim。** `RecordIsEmptyValue` 就是 `strings.TrimSpace(text) == ""`,
+  所以只有空白的必填字段拿到的是平台的 `backend.validation.required`,
+  而 Handler 自己的"空白"规则在 HTTP 面上**永远执行不到**。连着两轮把该码写进了验收用例。
+- **`project-mutation.md` 说 `--scope actions` 看不见 navigation。** 它会组合整个项目,
+  因此也会撞上 navigation 拒绝并报 `project.navigation_invalid` —— plane 自己的测试注释就是这么写的。
+
+### 查证后未采纳的一条
+
+代理报告称 `lifecycle-todo.md` 在 `done` 时渲染成空表、7 行需求与全部 Notes 一起消失。
+**我看了交付的文件:7 行和全部 Notes 都在。** 复现不了,就不改 —— 表格行来自
+`plan['requirements']` 而不是当前批次,`Current batch: -` 在 done 时本来就是正常的。
+
+### 代理报告里记下但未修的
+
+- **交付的 `@domainry/record-client` 的 `RecordActionResult` 契约与对象级 Action 的真实回执不符**:
+  契约只声明 `record_id?` / `record?`,而 `POST /records/{obj}/actions/{key}` 返回的是
+  `created_records[]`,d.ts 里没有这个字段。**mock 下看不出来**(Mock 的 `runObjectAction` 同样不返回引用),
+  只在 runtime 验收才炸。代理用一次窄类型断言绕过。这条值得下一轮修。
+- `prd-from-plan.py` 把 `authorization` 一律默认成 `role_scoped`,`auth.login`/`auth.logout` 实际是 `public`。
