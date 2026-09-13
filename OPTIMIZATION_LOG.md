@@ -1341,3 +1341,70 @@ runtime 段只有 5.5 分钟墙钟,却有 **119 次调用、29.9 M 上下文** �
   恰恰只有 technician 有授权、该被拒的是 dispatcher。照抄必错,只能回模型里数 Role 授权。**未修,记下一轮。**
 - **`verification.md` 的 "Runtime behaviour facts" 让 9 个接口用例两个阶段一次通过、零修复轮。**
   这是目前性价比最高的一节文档 —— 减法要绕开它。
+
+## mini-16(需求 A 请假审批,0.3.78 + runtimeext `a69b96a5…`,2026-09-13 01:31–02:47)
+
+**76.5 min / 100.3 M ctx / 450 次调用 / 1172 KB 文档 / 11 个接口。**
+需求 A 对照:mini-12 **67.9 / 87.1 / 405 / 1032 / 11**(至今最快),mini-14 **92.2 / 108.8 / 474 / 627 / 12**。
+**比 mini-14 快 15.7 min,比 mini-12 慢 8.6 min。**
+
+独立 verify(全新数据库,我自己跑):backend IA **11/11 initial + 11/11 restart**(各 36.5 s,evidence=ok),
+runtime 浏览器 **10/10**(73 s),**同一个库再跑一次仍 10/10**(75 s),mock **10/10**(33 s),
+theme 与 source_audit 均 `passed`。断言一条没动过。
+
+### 预注册判定:上下文那条赢得非常干净
+
+**1. 纯轮询调用数:68 → 1。** 阈值是 ≤ 4。而且那唯一一次是 `ss -ltnp | grep 5484` 的端口排查,不是等待循环;
+**全程没有把任何检查放到后台**,完全照着"前台跑、读 stderr"执行。
+
+**2. runtime 验收段上下文:29.9 M / 119 次 → 6.8 M / 33 次**(阈值 < 12 M),墙钟 5.5 → 4.7 min。
+**上一轮"墙钟最好、上下文第二贵"的分叉被消掉了。**
+
+**3. ui-check 失败形态:不成立,不得宣称生效。** 本轮唯一一次 runtime 失败是 111 s,在 180 s 阈值内,
+但它是一次**普通断言失败**(跨用例数据污染 + 审批页没渲染读取失败),根本没走到动作超时那条路径。
+可以记下的旁证:**本轮没有任何一条用例撞上 120 s test timeout**,而 mini-15 有六条、mini-14 有十二条;
+最慢的一次失败 111 s,对照 736 s / 569 s。**与预期一致,但不是证明。**
+
+**4. `awaitAuthenticatedRoute` 活到了验收:** 交付的 helpers.ts 里在,`prepareSession` 两处以它收尾。
+位置问题解决。**额外的信号:代理把 `:visible` 这个写法推广到了自己的代码里**
+(`a[href="/members"]:visible`、`[data-sign-out]:visible`、`[data-nav-toggle]:visible`),
+说明这条约定被理解成了规则而不是一次性修补。
+
+**5. 总时长慢于 mini-12 8.6 min,上下文多 13.2 M。** 文档读入 1032 → **1172 KB**,是 mini-10 以来最高。
+契约段一段就读了 536 KB。下一轮的减法目标在这里。
+
+### 本轮修复的平台缺陷:一句写反的规则,值一整轮模型演进
+
+`contract-stage.md` 写着:写关系字段时"把 Action 放宽到 `;all` 没有用 —— 缺的是 `<target>.read`"。
+代理严格照办,给 `member` 配了 `member_profile.read;org`,然后六个用例齐刷刷挂在
+`403 backend.record.outside_scope`,而同一个成员在同一个 Runtime 上**既能列出也能 Get 该档案**。
+
+我自己追到源码确认,**事实与文档相反**:
+`record_query_policy_domain_wiring.go:98` 的 `relationReadEffectPrincipal` 在 Action 声明了对目标 Object 的
+read effect 时(Handler 只要读那个 Object 就会声明),调用
+`identitysdk.DeriveExecutionAccess`;而 `deriveExecutionDataPolicies`
+**先丢掉 `(target, read)` 的全部 Allow 数据策略,再把 Action 自己的数据策略投影上去**。
+于是 `member_profile.read;org` 在那条路径上是**惰性的**,真正决定可见性的是
+`leave_request.submit` 的 scope —— 放宽 Action 才有用,放宽读授权没有用。
+只有 Action **没有**声明该 Object 的 read effect 时,目标自己的 scope 才说了算,那才是原文描述的情形。
+
+已修(提交 9030a7c):两个分支都写下来,并写明各自适用的条件。
+
+同一提交里修掉验收骨架生成器的两处误导:
+- **"该被拒绝的角色"是靠 `roles[1:]` 猜的**,而这个列表并不按授权排序 —— mini-15 那轮它把**唯一有授权**的角色
+  指成了该被拒的角色。现在它列出声明的角色、明说这个列表回答不了这个问题、并指向 `backend/model`。
+- **头注释承诺"Handler 发布的拒绝码"却没说 Runtime 输入校验在前**:空必填文本永远是
+  `backend.validation.required`,Handler 自己的 `<object>.<field>_required` 到不了网线上。
+  连着两轮(mini-15、mini-16)各踩一次。
+  **用交付项目的 inventory 在临时副本里重新生成全部 11 个骨架验证:gofmt 干净、`go vet` 通过、两处新注释都在。**
+
+### 代理报告里记下但未修的三条
+
+- **`|` 会静默吃掉内容**:`lifecycle-todo.md` 的 Notes 和 `prd-from-plan.py` 生成的 PRD 表格,
+  都把用户内容直接拼进 markdown 表格且不转义管道符 —— 字段 DSL 里的
+  `select![annual:年假|sick:病假]` 把 10 格表头撑成 14 格,Notes 里的 `pending->approved|rejected` 整条消失。
+  **同一类 bug 至少两处,下一轮修。**
+- **`prd-from-plan.py` 把每一条路由都标成 `frontend_only`**(mini-14/15/16 连着三轮都要手改),
+  照单全收的话 inventory 分母会是 0。
+- **mock 验收作为后端阶段的授权门,结构上盖不住它要授权的风险**:本轮 runtime 的两个失败
+  (跨用例数据污染、读取失败未渲染)在 mock 里**原理上不可能出现**。代理提了两条可静态检查的规则,值得评估。
