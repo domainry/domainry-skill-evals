@@ -1608,3 +1608,89 @@ pnpm 不把 `playwright` 提到项目根,于是第一条用例还没跑就
   即使遵守了"不要在开发 Runtime 上重复跑完整 pass"。
 - **`status.remaining_requirement_ids` 只在 done 时清空**,后端段结束时它仍列着全部需求,
   第一眼像"后端一条都没过"。
+
+## mini-20(需求 A 请假审批,0.3.83 + runtimeext `a69b96a5…`,2026-09-13 08:42–10:08)
+
+**85.9 min / 111.4 M ctx / 495 次调用 / 756 KB 文档 / 12 个接口。**
+需求 A 序列:mini-12 **67.9 / 87.1** → mini-14 92.2 / 108.8 → mini-16 76.5 / 100.3 →
+mini-18 70.2 / 99.4 → **mini-20 85.9 / 111.4**。**时间比上一轮 A 慢 22%,规则 6 判失败,规则 7 触发。**
+
+阶段对照 mini-18 → mini-20:契约 7.0 → 10.2;前端 26.3 → 26.6;后端 24.9 → 25.3;
+**runtime 验收 2.9 → 23.7**;收尾 3.8 → 3.7。**整个回退就是 runtime 验收这一段,其它三段几乎没动。**
+
+### 独立 verify:全绿
+
+backend IA **12/12 initial + 12/12 restart**(各 48 s,evidence=ok);
+runtime 浏览器同一个库**连跑三次:10/10(132 s)、10/10(147 s)、10/10(146 s)**;
+mock 10/10(29 s),theme 与 source_audit `passed`,`project check --scope all` = `valid`。
+
+**主判定(规则 1,可重跑)通过 —— 这是 mini-18 失败的那条。** nonce 值域那条改动经住了第二轮需求 A。
+
+### 规则 7:先查清楚,不是"为需求 B 过拟合"
+
+查的结果:mini-19 改的四处(playwright shim、三条文档事实)没有一处碰到本轮慢的那一段。
+runtime 验收的 23.7 min 花在**发现三件 Skill 从来没说过的事**上,而这三件都不是需求 B 带来的:
+
+1. **写操作的 helper 在"点击"就返回了,不是在"完成"才返回。** 下一步导航把飞行中的请求打断,
+   或者去重填一个正在被 resolve 的提交清空的表单 —— 记录悄悄没写进去,
+   而失败出现在三个用例之后,离原因很远。本轮最贵的一次。
+2. **id 升序 keyset 分页 ⇒ 新建的记录在最后一页的最后一行。** 五份文档讲分页,没有一份讲这个后果。
+   于是队列用例在第 1 页找自己刚提交的行,**队列短的时候过,一旦前面的用例(或上一次 run)
+   填满一页就挂** —— 这正是 mini-18 那个"跑一次过、重跑挂"的坑换了身衣服。
+3. **一条永远不会失败的断言。** 用 `hasText` 传多行字符串去 filter 行,
+   而 `innerText` 用制表符连接单元格,filter 永远匹配不到,`toHaveCount(0)` 一直白过。
+
+**另外:mini-18 不是一个干净的时间基线。** 它 runtime 段只用 2.9 min,
+部分原因正是它把一个潜伏缺陷发出去了 —— 那个缺陷是我的重跑检查抓出来的。
+拿 85.9 直接对 70.2 并不公平:本轮多做了 12 个接口(mini-18 是 11),而且真的把上面三件事修对了。
+
+三条都已写进 Skill(提交 1973d15),并按模板渲染进真实项目 tsconfig 做了类型检查,0 错误。
+
+### 预注册判定
+
+- **规则 1 可重跑:通过**(三次全绿,其中两次在复用库上)。
+- **规则 2 playwright:实质通过,但我的规则写错了。**
+  `Cannot find module 'playwright/test'` 这一类**六轮来第一次为 0** —— 三处 require 解析确实修干净了。
+  但我把判定写成"全程不手工安装任何 playwright 包",而 **Skill 自己就要求
+  交付去 pin `@playwright/test` 到与已装浏览器匹配的版本**。是我的判定条件写错了,不是交付的问题。
+  真正剩下的小成本:handoff 说了"pin 到匹配版本"却没说怎么查,交付为此试了好几条命令。已补上那一条命令。
+- **规则 3a 非金额 number:未被检验。** 本轮 `day_count` 是 `integer!;min=1`,模型里一个 `number` 字段都没有。
+  记"未被检验",不记通过。
+- **规则 3b PRD 路由表:通过。** 五条业务路由全部直接是 `backend_bound`,
+  其中 Report 支撑的 `/summary` 正确绑到两个 report query,代理没有手改这张表。**修复第一轮就生效。**
+- **规则 4a 导航 marker:通过。** transcript 里那两处"strict JSON"都是在读文档和读编译器源码,
+  错误本身一次都没触发(mini-19 触发过)。
+- **规则 4b write_policy:未被检验。** 三处 `runtime-manifest.json` 都是目录列表,代理没去查过基线行类别。
+- **规则 4c project-mutation.md 不重读:通过**(全程只读一次)。
+- **规则 5 上下文:一半。文档总量 1146 → 756 KB(降 34%),后端段 311 KB 远低于 550 阈值;
+  但总 ctx 99.4 → 111.4 M 反而上去了。** 归因:契约/前端段读进了约 454 KB 的截图 PNG
+  (`approvals.png` 199 KB、`summary.png` 100 KB、`approvals-mobile.png` 96 KB、`login-desktop.png` 59 KB),
+  外加 runtime 段 5 次重跑。**下一轮盯这条:截图应当只看不进上下文,或者缩图。**
+- **规则 6 时间:失败**(85.9 > 70.2)。
+- **规则 7 反过拟合:触发,已查清,结论是"不是过拟合"**(见上)。
+
+### 代理报告里值得记、但本轮没动的
+
+- **Mock 证明不了什么。** `requirements.spec.ts` 里 `isRuntime` 分支出现 8 次(7 个需求用例),
+  也就是大部分用例被写了两遍;交付的 Mock client 不建记录、Mock report 忽略参数/分页/scope。
+  **本轮三个真缺陷全部活着穿过了绿的 mock 套件。**(我核过源码,不是采信报告。)
+- 同一份需求句子被重打五遍;12 行接口清单有四份机器可读副本;每个拒绝码写在六个地方。
+- `member_profile.enroll` 的 action context 说 Handler 没有任何对象能力(`"data_api": []`),
+  而这个 Action 的全部目的就是建 `member_profile`;正确的 API 只出现在生成的 `.gen.go` 符号表里,
+  散文文档把人往反方向指。
+- 生成的骨架种子测试(`TestSubmitSeedFailsClosed` 断言 `not_implemented`)与实现完的 Handler 必然冲突,
+  没有任何文档说该删。
+- 失败的 `ui-check` 诊断会被下一次运行删掉,失败没有durable 回执(代理因此漏记了四条 check 行)。
+
+### 平台线:上游 release 把两个 gate 弄红了,我修了
+
+上游 `a275369`(发布 runtime v0.1.53)把编译能力注册表从 143579 涨到 150286 字节,
+但没更新被钉住的审计分母,`capabilitysource` 三个守卫测试全红;
+runtime 侧 `go.sum` 留了 6 个包的旧版本哈希,`verify_runtime_composition.sh` 直接失败。
+**两个都先在上游 HEAD、不带我的提交的 worktree 里复现过,确认与本轮无关,然后才动手。**
+守卫测试的用意就是"分母变了就得有人复核",所以我做了复核而不是改数字:
+跨 release diff 编译注册表,**新增的恰好是 agent 模块下一个新类目 `agent.collaboration`,带 13 个操作**
+(agents / delegations / decisions / deliveries / disagreements / messages / requirements 这些路由),
+没有删除项,没有既有类目的操作数变化 —— 正好解释 64→65 与 386→399,
+而且 13 个全是 authenticated,正好解释 378→391,anonymous 与 signed 各 4 不变。
+提交 57a6e0c(plane)、5e8d594(runtime)。
