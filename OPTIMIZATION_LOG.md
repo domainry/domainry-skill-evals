@@ -2267,3 +2267,103 @@ mini-25 把它记成平台缺陷是抬高了。**
 所以下一轮 C 该不该跑得完,现在是可证伪的。** 这是下一轮要回答的问题。
 
 装到 0.3.94(plane 73 绿、runtime 153 绿),提交 `18de3e5`、`fafdbdd`。
+
+## mini-27(**需求 C 第二轮 —— 留出集**,0.3.94,2026-09-14 01:07–02:38)
+
+**94.7 min / 141.3 M ctx / 527 次调用 / 886 KB 文档 / 13 个接口**(7.28 min/接口、10.87 M/接口)。
+按预注册第 6 条,**时间只记录不判**:C 只有一个历史样本(mini-25,而且没跑完),没有可比基线。
+
+### 主判定:**C 跑到了 `done` —— 成立**
+
+`terminal_state: done`,completion token 已写。我自己在全新库上验:
+backend IA **initial 13/13 + restart 13/13**,两相位 `evidence=ok`(28.8s / 27.8s);
+mock **10/10** `audit=passed`;`project check --scope all` = `valid`,0 诊断。
+
+mini-25 停在 §3 审批,mini-27 同一份需求走完全程。**两轮之间变的是文档,不是平台。**
+
+### 但独立 verify 抓到了代理自己那轮看不见的东西:**同库重跑 1/3 失败**
+
+runtime ui-check 同库连跑三次:**run1 10/10 通过(106s)、run2 失败(120s,`expected=9 unexpected=1`)、run3 10/10 通过(108s)。**
+失败的是 `[PB:5]` 离线导出:`[data-testid="exports-banner"][role="status"]` **元素根本不存在**。
+
+根因我从源码读了,不是猜的:`ExportsPage.tsx:248` 是
+`{banner ? <StatusBanner … /> : null}` —— **条件渲染,banner 为空时元素从 DOM 里消失**,
+所以断言拿到的是 "element(s) not found" 而不是文本不匹配。
+
+**更要紧的是它为什么会为空。** 导出授权(`contract_export_audit`)是一次性的,
+每跑一轮就留下一条已被消费的行。用例要驱动"本轮自己那一条",而
+`ExportsPage.tsx:372` 的行只渲染 `id / report_key / scope_hash / status` ——
+**没有任何一列承载 run nonce**。于是用例只能翻到最后一页取最后一行(位置选择),
+而这正是我在 mini-18 之后写进规则里要禁止的那种写法。
+
+**交付并没有违规** —— 它明确照做了 keyset 规则,注释里还引用了"id 升序 keyset,新行在最后一页的最后一行"。
+问题在我的规则本身:
+
+> **`helpers.ts` 写着"按 run nonce 过滤,永远不要断言第一行",
+> 但当产品界面对那个对象根本没有承载 nonce 的字段时,这条规则是不可执行的。**
+> 导出授权由一个按钮创建,没有任何用户输入字段,**没地方放 nonce**。
+
+这是规则的完备性缺口,源码里核实过,**登记待修**(不在本轮改 —— 预注册最后一条)。
+
+**所以我不把这一轮记成干净的通过。** `done` 属实,但交付不可重跑;
+按"质量不打折"的口径,2/3 概率过的交付不算过。代理那轮只跑了一次,所以它看不见。
+**这正是"同库连跑三次"这条规矩存在的理由,今天第二次兑现。**
+
+### 逐条预注册判定
+
+**1. C 必须跑到 done —— 成立**(见上)。
+
+**2. 审批路径应当用上 `runtime-client` —— 未成立,而且它让我对因果的说法必须收回一半。**
+代理**根本没走 Workflow**。它的理由不是"client 不能 reject",而是一条结构性约束:
+冻结计划的 `acceptance.backend[].source` 是四值闭集
+(`runtime.action|identity|records|report`),而 Workflow 任务决策的 evidence source 是
+`runtime.workflow` —— **它在 evidence 契约的 `allowed_sources` 里存在,却在计划的 `source` 里不存在**。
+§3 的三条硬性接口拒绝因此没法绑进验收。代理改用
+`renewal_request.state` + 三个 Handler Action(PRD D-03,已公开偏离并写进 Notes)。
+
+**后果:C 这一轮跑完,不能归功于我那笔 workflow 文档修正 —— 它压根没被走到。**
+我上一轮说"C 没跑完主因是文档劝退",**现在只能说对了一部分**:
+劝退那句话确实错、确实该改,但真正挡住 Workflow 路径的是**计划 `source` 闭集与 evidence
+`allowed_sources` 不同步**,那是契约层的缺口,不是文档措辞。**这条是本轮最重要的发现。**
+
+**3. 通知 `date` 变量不该再靠猜 —— 成立,而且是直接命中。**
+代理原文引用了我 `fafdbdd` 新写的那段("`date` 是唯一一个会多花一轮的类型…用 `StringValue` 承载 `YYYY-MM-DD`"),
+并写"我直接照做"。`SubjectVersion` 那条也照做了。**这笔文档修改被读到并生效。**
+
+**4. 定时任务 —— 成立。** service-role + `run_as` + `target_type: workflow`,
+"一次通过,没有返工",全程没有再报"租户角色没有 scheduler 权限"。
+证实上一轮那条是阅读问题,文档内容本来就对。
+
+**5. data-exchange —— 复现了,而且拿回了比我要的更具体的证据。**
+不是我预注册的那个 403,是导出 worker 必然失败(代理记作 DX-01):
+job 建得出来、`total` 算得对,4–5 秒后变 `status: failed / error_code: processing_failed`,
+`attempt_count=3` 三次重试全败,**Runtime 日志里一条错误都没有**。
+代理排除了 `field_projection`、`freshness`、甚至把窗口挪到 `total=0` 的空结果集 —— **空集也失败**,
+所以与报表 SQL、计算列、join、字段权限都无关。
+它找到的唯一具体异常:**`_report_export_prepare_receipts.audit_id` 有值,
+而同一条 job 的 `request_payload.audit_id = ""`** —— audit id 在
+"prepare receipt → Data Exchange job payload"这一步被丢空。
+**这条我下一步自己去源码里核实**(代理的归因我不采信,D-07 的教训)。
+
+**6. 时间不判 —— 照办。** 记录如上,不下任何提速结论。
+
+**7. 质量口径不放松 —— 照办,并因此没有给这一轮记干净通过。**
+另外代理在 `[PB:5]` 上没有弱化断言:DX-01 让"完成才能下载"的正向一半不可达,
+它改成绑定本轮 job id + 断言终态只能是 `failed` + 下载键始终 disabled,
+**Runtime 修好那天用例会自动走回 `completed` 分支**,断言一条没减。这个处理是对的。
+
+### 本轮新登记(都不在本轮改)
+
+- **N-01 nonce 规则不可执行**:产品界面没有承载 nonce 的列时,"按 nonce 过滤"落不了地。**已在源码中核实。**
+- **N-02 计划 `source` 闭集 ⊂ evidence `allowed_sources`**:`runtime.workflow` / `runtime.notification`
+  能写进 evidence 却写不进冻结计划,导致 Workflow 审批与通知收件箱**无法绑定验收**。
+  代理为此各绕了一次(D-03 改设计、通知证明降级为 observation)。**这条是结构性的,优先级最高。**
+- **N-03 `navigation-role-menus.json` 无任何 schema 文档**:代理靠
+  `grep -ao 'domainry-[a-z0-9_-]*' domainry-cli` 从二进制里捞出 `domainry-project-role-menu-sets-v1`,
+  字段名靠 `json: unknown field` 逐个试。本轮最费时的一条。
+- **N-04 `NotificationRecipient` 返回的是 record owner**,而 identity profile extension 的 record owner
+  是**开通者**不是本人 —— 直觉实现会把"你的合同要到期了"发给管理员,且 2xx、单测全过,
+  只有端到端断言收件人才抓得到。
+- **N-05 一个 FAPI 案例只能有一条 check**(PB 下),与 `verification.md` 鼓励多 check 相矛盾。
+- **N-06 `POST /records/{object}` 要 `{"data":{…}}` 信封**,无文档,报 `backend.invalid_json` 不提示字段。
+
