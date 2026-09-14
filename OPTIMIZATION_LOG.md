@@ -2367,3 +2367,63 @@ job 建得出来、`total` 算得对,4–5 秒后变 `status: failed / error_cod
 - **N-05 一个 FAPI 案例只能有一条 check**(PB 下),与 `verification.md` 鼓励多 check 相矛盾。
 - **N-06 `POST /records/{object}` 要 `{"data":{…}}` 信封**,无文档,报 `backend.invalid_json` 不提示字段。
 
+
+## DX-01 与 D-07 是同一个缺陷(2026-09-14,我自己读源码,不采信代理归因)
+
+mini-27 的代理把离线导出必然失败记作 DX-01,并给出"唯一具体异常":
+`_report_export_prepare_receipts.audit_id` 有值,而同一条 job 的 `request_payload.audit_id = ""`。
+**这条是红鲱鱼,我在源码里核掉了。**
+
+`report_export_data_exchange_application.go:140` 的 `submitClaimedReportExport`:
+
+```go
+canonical := payload
+canonical.AuditID = ""            // 故意清空
+options, _ := json.Marshal(canonical)
+… SubmitExport(… ReferenceID: payload.AuditID, Options: options)
+```
+
+**audit id 是被有意从 options 里挪进 `ReferenceID` 的**,所以 `request_payload.audit_id: ""` 是设计,不是 bug。
+`exchangePayload(request.Options, request.ReferenceID)` 在读回时再把它合回来。
+**代理的归因不能直接采信,这是 D-07 之后第二次兑现这条规矩。**
+
+### 真正的失败路径:和 D-07 是同一段代码
+
+`PlanExport`(`provider.go:195`)和 `ReadExportPage`(`:215`)**开头第一件事都是**
+`p.principal(ctx, request.Scope)` —— 正是我查 D-07 时追到的那个函数:
+`QueryScopeForPrincipal` 在 `!principal.Known` 时返回 `ErrPrincipalScopeRequired`,
+包成 `workspaceError` → `403 backend.workspace_scope_required`,job 记 `processing_failed`。
+
+**这解释了代理排除法里最关键的那一条:空结果集也失败。** 因为失败发生在读任何一行之前。
+也解释了为什么日志里一条错误都没有 —— provider 返回的是 error,Data Exchange 只记 `error_code`。
+
+**所以 DX-01 和 D-07 不是两条,是一条。** 积压合并。
+
+### 分支已收敛到一条
+
+`ResolveBatchPrincipal` 有三条返回 `Known:false` 的分支:
+- `identityPrincipals == nil` —— **排除**,`service_assembly.go:376` 实际注入了。
+- `ResolveBusinessPrincipal` 报错 —— **排除**,它在 `!Known` 时原样返回、查不到档案行时 `continue`,不会把 `Known` 从真变假。
+- **`identityPrincipals.Resolve` 报错 —— 只剩这条。**
+
+而且平台**本来就把 `Known:false` 当作吊销语义**:
+`report_export_identity_integration_test.go:160` 正面断言 `recovered.Known`,
+`:271` 在吊销之后反面断言 `recovered.Known` 为假。**job 因此失败是设计,问题是它为什么该真的时候为假。**
+
+本机的解析器是 testkit 的 `manifestIdentityBinding.Resolve`,只有两条 403 分支:
+`identity.application_scope_mismatch` 与 `identity.role_not_found`(`binding.roles[roleKey]` 查不到)。
+**最可能的是后者:dev-runtime 的 manifest 身份绑定不携带项目自定义角色,
+于是任何以项目角色为 actor 的后台作业都重解析不出来。**
+若成立,**DX-01/D-07 是本机验收环境的缺陷,不是生产 Plane 的缺陷** —— 与我在 D-07 更正条里的降级一致。
+
+### 仍然不改源码,还差最后一个实验
+
+我把机制收敛到了一条分支,但**没有观测到失败那一刻的 `RoleKey` 与 manifest 的角色表**。
+在没有这个观测之前改 `ResolveBatchPrincipal` 的回落或 testkit 的解析器,还是赌。
+
+**剩下的唯一实验(已登记):** 起一个 dev runtime,触发一次导出,
+把作业携带的 `scope.RoleKey` 与 `binding.roles` 的键集同时打出来。
+两者对不上就定死是 `role_not_found`,对得上就回头查 `application_scope_mismatch`。
+这个实验要写一次性探针,不改产品代码,下一轮做。
+
+**积压状态:D-07 与 DX-01 合并为一条,红鲱鱼已剔除,分支从三条收敛到一条,生产/本机的定性待最后一个实验。**
