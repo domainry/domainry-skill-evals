@@ -2504,3 +2504,43 @@ mini-28、mini-29 的独立 verify 全绿(IA 两相位、同库 runtime ui-check
 
 mini-30 运行期间根分区一度到 99%,它自己的 backend-check 因 `no space left on device` 失败一次并清了 go build cache。
 这会让 mini-30 的时间偏**高**而不是偏低,而它恰好是中位数,所以对结论方向无害。事后我清到 42%(释放 47G)。
+
+## Gate 例外第二条:上游漏交的 028 fixture(2026-09-14,查清后决定不合成)
+
+拉取上游 `50359f3c`(upload subject binding)后 runtime gate 由 153 绿变成 151 绿 / 7 失败。
+按规矩逐条查,**两条都是上游那一条提交没带齐审计产物,不是行为回归:**
+
+**(a) `TestRuntimeWorkspaceFallbackReviewBaseline` —— 我已修,提交 `69ac94d0`。**
+该提交让审计清单长了 4 条却没更新基线。基线自己的规矩是"必须逐条 adjudication 才能写进去",
+所以我读了源码:`UploadSubjectRegistry.Register` 拒绝空 user 与工作区不匹配的 artifact、
+`Authorize` 拒绝空 workspace/user,两者回 `backend.upload.subject_binding_denied`;
+`FindUploadSubject`/`SubjectUploadReferences` 拒绝空 workspace/identifier 并且所有读都走
+`NewWorkspaceSelectBuilder(..., workspace)` 限定。**四条全是拒绝,没有一条代入默认工作区**,
+符合判准,该进基线。
+
+过程中我自己犯过一个错,记下来:第一次改基线我用集合去重,而清单里**有重复行**
+(`operations_store.go|aa60dbbb…` 等出现两次),而比较是按行的,越改越错。
+还原原文件、改用列表保留重复才对。**审计清单不是集合。**
+
+**(b) `TestEverySupportedRuntimeSchemaVersionUpgradesToCurrent/028_subject_execution_evidence` —— 不修。**
+`50359f3c` 把 `"028_subject_execution_evidence"` 加进 `SupportedRuntimeSchemaUpgradeVersions()`,
+却没提交 `testdata/runtime_schema_upgrades/028_subject_execution_evidence.sql`(该目录只到 026)。
+
+我查到了足以合成它的全部条件:当前版本是 `029_upload_subject_bindings`,
+`5399af81` 时的 `CurrentRuntimeSchemaVersion` 正是 028,测试对 028 没有版本专属断言,
+只要求通用的两条种子行(`audit-028` workspace-primary、`workflow-028` lease 为空)。
+**但我仍然决定不合成,理由具体:** fixture 不是 schema dump —— 026 那份只有 8 张手工裁剪的表、
+没有 `_schema_migrations` 版本声明,迁移靠探测表/列存在来推进。
+**所以造 028 必须自己判断"028→029 这一步涉及哪些表";判错就得到一个"绿但没真正验到升级路径"的测试,
+那比红着更糟 —— 它把可见的缺口变成隐形的假保证。**
+
+**例外范围已量清,很窄:** 该包 **66 个子测试通过,只有这 1 个失败**;
+其余 152 个包全绿;plane 73/73 全绿;契约哈希对两边都是 `478644a8…`。
+
+**它让什么处于未验证状态:从 schema 028 升级到 029 这一条路径。**
+我的评测循环全程 `--fresh` 建库,不走升级路径,所以不掩盖任何我依赖的东西 —— 但这句话是限定,不是豁免。
+
+**新的 runtime gate 定义(与既有的 `bootstrap/integrationtest` 超时例外并列):**
+`go test $(go list ./... | grep -v 'bootstrap/integrationtest')`,
+允许且仅允许 `migration` 包因缺少 028 fixture 失败,**并且每次都要确认该包其余 66 个子测试仍全过** ——
+一旦失败数不是 1,例外作废,必须重查。
