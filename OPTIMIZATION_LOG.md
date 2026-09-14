@@ -2210,3 +2210,60 @@ mini-25 把它记成平台缺陷是抬高了。**
 
 顺带核过:这个错说法**没有进任何 Skill 文档**(`skills/` 下 0 处匹配),只在本日志里,
 所以不存在 mini-24 那种"改了一处漏了一处"的风险。按扫全树的规矩,这次是扫过才下的结论。
+
+## mini-25 积压四条的复核结果(2026-09-14,0.3.92→0.3.94)
+
+对照轮把判据抬高之后,我先去校准积压而不是再跑一轮。**四条里只有一条是真缺陷,而且是文档缺陷。**
+每一条都是我自己从源码读出来的,拉过最新代码(plane `12839e0`、runtime `5399af81`,契约对 `478644a8…`)之后复核过。
+
+| # | mini-25 记的 | 复核结果 |
+|---|---|---|
+| 1 | Workflow client 不可驱动(只有 `getProcessRoute`+`approveTask`,没法 reject) | **现象属实,结论错。已修文档** |
+| 2 | data-exchange `Known` 缺陷 → 403 | **定位错,已更正降级**(见 D-07 更正条) |
+| 3 | 租户角色拿不到 scheduler 权限 | **不是缺陷,是设计。文档本来就写了** |
+| 4 | 通知模板变量要 `StringValue`+`YYYY-MM-DD`,拒绝时 `params: null` | **真缺口。已补文档** |
+
+### 第 1 条:平台没坏,是我的文档让交付放弃了
+
+`business-client` 的 `WorkflowClient` 到最新 HEAD 确实只有两个方法,而且是故意的
+(最后动它的提交是 `6a26cec … increment C5.5`,范围就是路由读 + 带 `next_step` 的审批)。
+**但同一个 `domainry-frontend-product` tarball 里还交付了 `runtime-client`**,
+它有 `listWorkflowTasks`、`listTeamWorkflowTasks`、
+`decideWorkflowTask(taskID, 'approved'|'rejected'|'returned', …)`(`index.ts:1593` 就是
+`approve|reject|return` 的映射)、`withdrawWorkflowProcess`、`retryWorkflowProcess`;
+另有 11 个方法的 `scheduler-client`。**而 Skill 文档里这两个包一次都没出现过(各 0 处)。**
+
+`domainry-frontend-product.md` 结尾原本写着
+"a required rejection or return is **a delivery gap to report**, not a raw transport call" ——
+文档直接教代理"缺了就记下来别自己接",代理照做,需求 C 的 §3 就停在那儿。
+**所以"C 没跑完"的主因不是平台缺能力,是文档把人劝退了。**
+两侧都改(mini-24 的教训:只改一处等于没改),并加了一条通用规则:
+**在把某个能力记成"平台没有"之前,先列 `admin/packages/` 读拥有该能力的那个包。**
+
+查这条的中途我自己判断错过一次:先查了 `runtime-client` 就宣布"彻底证伪",
+而文档说的是 `business-client`,两个包不是一回事。查清后结论反过来。记在这里当教训 ——
+**跨包的能力主张,必须先对齐"文档说的是哪个包"再下结论。**
+
+### 第 3 条:文档本来就是对的
+
+`scheduler.md:28-33` 明写:定时 Workflow 用内部执行 Role,经 Workflow `run_as` 绑定,
+声明 `audience: "service"` + `assignment_mode: "system_managed"`,
+且 "Scheduler does not turn that Role into a tenant-login actor"。
+**"租户角色拿不到 scheduler 权限"正是设计本身,不是缺陷。** 这条不改任何东西。
+
+### 第 4 条:七个 DSL 类型落在四个 Go 指针上,而 `date` 没有自己的指针
+
+`runtimeext.NotificationVariable{Key, StringValue, NumberValue, BooleanValue, TimestampValue}`,
+`valid()` 要求**恰好一个**非 nil(零个或两个都判废),`Value()` 把 `TimestampValue` 渲染成
+`UTC().Format(RFC3339Nano)`。文档此前只写了 DSL 侧的七个类型名,**没有任何地方提过这个结构体**。
+`date` 是要命的那个:它看着该有自己的指针,`TimestampValue` 又渲染成整个时刻而不是一天,
+**只能走 `StringValue` 并自己格式化成 `YYYY-MM-DD`**。已补映射表和 `params: null` 的拒绝形状。
+
+### 这轮的性质
+
+**这四条都不是"提速",是把 Skill 说错/没说的地方补上。** 对时间和 token 的影响未测,
+按对照轮定下的判据,我也不会拿单轮去声称它省了多少。
+它的价值在另一处:**需求 C 上一轮没跑完,四条归因里两条不成立、一条是设计、只有一条是真缺口 ——
+所以下一轮 C 该不该跑得完,现在是可证伪的。** 这是下一轮要回答的问题。
+
+装到 0.3.94(plane 73 绿、runtime 153 绿),提交 `18de3e5`、`fafdbdd`。
